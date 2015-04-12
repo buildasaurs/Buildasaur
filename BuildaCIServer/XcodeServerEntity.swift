@@ -1,35 +1,35 @@
 //
-//  GitHubEntity.swift
+//  XcodeServerEntity.swift
 //  Buildasaur
 //
-//  Created by Honza Dvorsky on 13/12/2014.
+//  Created by Honza Dvorsky on 14/12/2014.
 //  Copyright (c) 2014 Honza Dvorsky. All rights reserved.
 //
 
 import Foundation
 
-public protocol GitHub {
+public protocol XcodeRead {
     init(json: NSDictionary)
 }
 
-public class GitHubEntity : GitHub {
+public class XcodeServerEntity : XcodeRead {
     
-    public let htmlUrl: String?
-    public let url: String?
-    public let id: Int?
+    public let id: String!
+    public let rev: String!
+    public let tinyID: String!
     
     //initializer which takes a dictionary and fills in values for recognized keys
     public required init(json: NSDictionary) {
         
-        self.htmlUrl = json.optionalStringForKey("html_url")
-        self.url = json.optionalStringForKey("url")
-        self.id = json.optionalIntForKey("id")
+        self.id = json.optionalStringForKey("_id")
+        self.rev = json.optionalStringForKey("_rev")
+        self.tinyID = json.optionalStringForKey("tinyID")
     }
     
     public init() {
-        self.htmlUrl = nil
-        self.url = nil
         self.id = nil
+        self.rev = nil
+        self.tinyID = nil
     }
     
     public func dictionarify() -> NSDictionary {
@@ -37,17 +37,16 @@ public class GitHubEntity : GitHub {
         return NSDictionary()
     }
     
-    public class func optional<T: GitHubEntity>(json: NSDictionary?) -> T? {
+    public class func optional<T: XcodeRead>(json: NSDictionary?) -> T? {
         if let json = json {
             return T(json: json)
         }
         return nil
     }
-    
 }
 
 //parse an array of dictionaries into an array of parsed entities
-public func GitHubArray<T where T:GitHub>(jsonArray: NSArray!) -> [T] {
+public func XcodeServerArray<T where T:XcodeRead>(jsonArray: NSArray!) -> [T] {
     
     let array = jsonArray as! [NSDictionary]!
     let parsed = array.map {
@@ -56,5 +55,4 @@ public func GitHubArray<T where T:GitHub>(jsonArray: NSArray!) -> [T] {
     }
     return parsed
 }
-
 

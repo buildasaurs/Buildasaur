@@ -1,15 +1,15 @@
 //
-//  GitSourcePublic.swift
+//  CIServer.swift
 //  Buildasaur
 //
-//  Created by Honza Dvorsky on 12/12/2014.
+//  Created by Honza Dvorsky on 14/12/2014.
 //  Copyright (c) 2014 Honza Dvorsky. All rights reserved.
 //
 
 import Foundation
 import BuildaUtils
 
-public class GitServer : HTTPServer {
+public class CIServer : HTTPServer {
     
 }
 

@@ -8,21 +8,13 @@
 
 import Foundation
 
-public class PullRequest : GitHubEntity {
+public class PullRequest : Issue {
     
-    public let number: Int
-    public let body: String
-    public let title: String
-    public let assignee: User?
     public let head: PullRequestBranch
     public let base: PullRequestBranch
     
     public required init(json: NSDictionary) {
         
-        self.number = json.intForKey("number")
-        self.body = json.stringForKey("body")
-        self.title = json.stringForKey("title")
-        self.assignee = GitHubEntity.optional(json.optionalDictionaryForKey("assignee"))
         self.head = PullRequestBranch(json: json.dictionaryForKey("head"))
         self.base = PullRequestBranch(json: json.dictionaryForKey("base"))
         

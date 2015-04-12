@@ -7,19 +7,33 @@
 //
 
 import Foundation
+import BuildaUtils
 
 public class GitHubEndpoints {
     
     public enum Endpoint {
-        case Users, Repos, PullRequests, Branches
+        case Users
+        case Repos
+        case PullRequests
+        case Issues
+        case Branches
+        case Commits
+        case Statuses
+        case IssueComments
+        case Merges
     }
     
-    public typealias URLRequestBody = [String: AnyObject]
-
-    private let baseURL: String
-    private let token: String
+    public enum MergeResult {
+        case Success(NSDictionary)
+        case NothingToMerge
+        case Conflict
+        case Missing(String)
+    }
     
-    init(baseURL: String, token: String) {
+    private let baseURL: String
+    private let token: String?
+    
+    init(baseURL: String, token: String?) {
         self.baseURL = baseURL
         self.token = token
     }
@@ -35,6 +49,7 @@ public class GitHubEndpoints {
                 return "/user"
             }
         
+            //FYI - repo must be in its full name, e.g. czechboy0/Buildasaur, not just Buildasaur
         case .Repos:
             
             if let repo = params?["repo"] {
@@ -46,12 +61,26 @@ public class GitHubEndpoints {
             
         case .PullRequests:
             
-            let repo = params!["repo"]!
+            assert(params?["repo"] != nil, "A repo must be specified")
+            let repo = self.endpointURL(.Repos, params: params)
+            let pulls = "\(repo)/pulls"
             
             if let pr = params?["pr"] {
-                return "/repos/\(repo)/pulls/\(pr)"
+                return "\(pulls)/\(pr)"
             } else {
-                return "/repos/\(repo)/pulls"
+                return pulls
+            }
+            
+        case .Issues:
+            
+            assert(params?["repo"] != nil, "A repo must be specified")
+            let repo = self.endpointURL(.Repos, params: params)
+            let issues = "\(repo)/issues"
+            
+            if let issue = params?["issue"] {
+                return "\(issues)/\(issue)"
+            } else {
+                return issues
             }
             
         case .Branches:
@@ -65,22 +94,70 @@ public class GitHubEndpoints {
                 return branches
             }
             
+        case .Commits:
+            
+            let repo = self.endpointURL(.Repos, params: params)
+            let commits = "\(repo)/commits"
+            
+            if let commit = params?["commit"] {
+                return "\(commits)/\(commit)"
+            } else {
+                return commits
+            }
+            
+        case .Statuses:
+            
+            let sha = params!["sha"]!
+            let method = params?["method"]
+            if let method = method {
+                if method == HTTP.Method.POST.rawValue {
+                    //POST, we need slightly different url
+                    let repo = self.endpointURL(.Repos, params: params)
+                    return "\(repo)/statuses/\(sha)"
+                }
+            }
+            
+            //GET, default
+            let commits = self.endpointURL(.Commits, params: params)
+            return "\(commits)/\(sha)/statuses"
+            
+        case .IssueComments:
+            
+            let issues = self.endpointURL(.Issues, params: params)
+            let comments = "\(issues)/comments"
+            
+            if let comment = params?["comment"] {
+                return "\(comments)/\(comment)"
+            } else {
+                return comments
+            }
+            
+        case .Merges:
+            
+            assert(params?["repo"] != nil, "A repo must be specified")
+            let repo = self.endpointURL(.Repos, params: params)
+            return "\(repo)/merges"
+            
         default:
             assertionFailure("Unsupported endpoint")
         }
     }
     
-    public func createRequest(method:HTTPMethod, endpoint:Endpoint, params: [String : String]? = nil, body:URLRequestBody? = nil) -> NSMutableURLRequest? {
+    
+    public func createRequest(method:HTTP.Method, endpoint:Endpoint, params: [String : String]? = nil, query: [String : String]? = nil, body:NSDictionary? = nil) -> NSMutableURLRequest? {
         
         let endpointURL = self.endpointURL(endpoint, params: params)
-        let wholePath = "\(self.baseURL)\(endpointURL)"
+        let queryString = HTTP.stringForQuery(query)
+        let wholePath = "\(self.baseURL)\(endpointURL)\(queryString)"
         
         let url = NSURL(string: wholePath)!
         
         var request = NSMutableURLRequest(URL: url)
         
         request.HTTPMethod = method.rawValue
-        request.setValue("token \(self.token)", forHTTPHeaderField:"Authorization")
+        if let token = self.token {
+            request.setValue("token \(token)", forHTTPHeaderField:"Authorization")
+        }
         
         if let body = body {
             
@@ -97,6 +174,4 @@ public class GitHubEndpoints {
         
         return request
     }
-
-    
 }

@@ -1,5 +1,5 @@
 //
-//  Branch.swift
+//  Comment.swift
 //  Buildasaur
 //
 //  Created by Honza Dvorsky on 13/12/2014.
@@ -8,15 +8,17 @@
 
 import Foundation
 
-public class Branch : GitHubEntity {
+public class Comment : GitHubEntity {
     
-    public let name: String
-    public let commit: Commit
+    public let body: String
+    public let author: User
     
     public required init(json: NSDictionary) {
         
-        self.name = json.stringForKey("name")
-        self.commit = Commit(json: json.dictionaryForKey("commit"))
+        self.body = json.stringForKey("body")
+        self.author = User(json: json.dictionaryForKey("user"))
+
         super.init(json: json)
     }
 }
+
