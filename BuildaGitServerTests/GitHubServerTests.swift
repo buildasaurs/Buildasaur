@@ -56,9 +56,13 @@ class GitHubSourceTests: XCTestCase {
         self.tryEndpoint(.GET, endpoint: .PullRequests, params: params) { (body, error) -> () in
             
             XCTAssertNotNil(body, "Body must be non-nil")
-            let prs: [PullRequest] = GitHubArray(body as! NSArray)
-            XCTAssertGreaterThan(prs.count, 0, "We need > 0 items to test parsing")
-            Log.verbose("Parsed PRs: \(prs)")
+            if let body = body as? NSArray {
+                let prs: [PullRequest] = GitHubArray(body as! NSArray)
+                XCTAssertGreaterThan(prs.count, 0, "We need > 0 items to test parsing")
+                Log.verbose("Parsed PRs: \(prs)")
+            } else {
+                XCTFail("Body nil")
+            }
         }
     }
     
@@ -71,9 +75,13 @@ class GitHubSourceTests: XCTestCase {
         self.tryEndpoint(.GET, endpoint: .Branches, params: params) { (body, error) -> () in
             
             XCTAssertNotNil(body, "Body must be non-nil")
-            let branches: [Branch] = GitHubArray(body as! NSArray)
-            XCTAssertGreaterThan(branches.count, 0, "We need > 0 items to test parsing")
-            Log.verbose("Parsed branches: \(branches)")
+            if let body = body as? NSArray {
+                let branches: [Branch] = GitHubArray(body)
+                XCTAssertGreaterThan(branches.count, 0, "We need > 0 items to test parsing")
+                Log.verbose("Parsed branches: \(branches)")
+            } else {
+                XCTFail("Body nil")
+            }
         }
     }
 
