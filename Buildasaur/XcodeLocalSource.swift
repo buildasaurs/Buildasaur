@@ -16,7 +16,8 @@ extension LocalSource {
         let projectWCCIdentifier = self.projectWCCIdentifier!
         let wccName = self.projectWCCName!
         let projectName = self.projectName!
-        let projectURL = self.projectURL!.absoluteString!
+        let projectURLOrig = self.projectURL!
+        let projectURL = projectURLOrig.absoluteString!
         let projectPath = self.projectPath!
         let publicSSHKey = self.publicSSHKey
         let privateSSHKey = self.privateSSHKey

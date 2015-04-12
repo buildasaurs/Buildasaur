@@ -60,7 +60,27 @@ public class LocalSource : JSONSerializable {
     var projectURL: NSURL? {
         get {
             if let urlString = self.pullValueForKey("IDESourceControlProjectURL") {
-                return NSURL(string: urlString)
+                
+                var finalUrlString = urlString
+                let type = self.checkoutType!
+                if type == .SSH {
+                    if !finalUrlString.hasPrefix("git@") {
+                        finalUrlString = "git@\(finalUrlString)"
+                    }
+                }
+
+                return NSURL(string: finalUrlString)
+            }
+            return nil
+        }
+    }
+    
+    var checkoutType: AllowedCheckoutTypes? {
+        get {
+            if
+                let meta = self.workspaceMetadata,
+                let type = LocalSource.parseCheckoutType(meta) {
+                    return type
             }
             return nil
         }

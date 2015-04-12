@@ -81,7 +81,11 @@ public class SourceControlBlueprint : XcodeServerEntity {
         
         let repoId = self.projectWCCIdentifier
         let remoteUrl = self.projectURL
-        let workingCopyPath = self.projectName
+        var workingCopyPath = self.projectName
+        //ensure a trailing slash
+        if !workingCopyPath.hasSuffix("/") {
+            workingCopyPath = workingCopyPath + "/"
+        }
         let relativePathToProject = self.projectPath
         let blueprintName = self.wCCName
         let branch = self.branch
