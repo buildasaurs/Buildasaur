@@ -226,7 +226,7 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
         self.schemesComboBox.delegate = self
         
         self.fetchDevices { () -> () in
-            println("Finished fetching devices")
+            Log.verbose("Finished fetching devices")
         }
     }
     

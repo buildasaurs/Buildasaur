@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import BuildaUtils
 
 class Persistence {
     
@@ -66,7 +67,7 @@ class Persistence {
                 return buildaAppSupport
                 
             } else {
-                println("Failed to create Builda's Application Support folder, error \(error)")
+                Log.error("Failed to create Builda's Application Support folder, error \(error)")
             }
         }
         
@@ -81,7 +82,7 @@ class Persistence {
         if let contents = fm.contentsOfDirectoryAtURL(folderUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions.SkipsHiddenFiles | NSDirectoryEnumerationOptions.SkipsSubdirectoryDescendants, error: &error) as? [NSURL] {
             contents.map { visit(url: $0) }
         } else {
-            println("Couldn't read folder \(folderUrl), error \(error)")
+            Log.error("Couldn't read folder \(folderUrl), error \(error)")
         }
         
     }

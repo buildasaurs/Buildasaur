@@ -119,7 +119,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
                 
                 let status: AvailabilityCheckState
                 if let error = error {
-                    println("Error: \(error)")
+                    Log.error("Checking github availability error: \(error)")
                     status = AvailabilityCheckState.Failed(error)
                 } else {
                     status = .Succeeded

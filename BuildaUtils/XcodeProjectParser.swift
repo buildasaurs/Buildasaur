@@ -193,7 +193,7 @@ public class XcodeProjectParser {
                 return absolutePaths
             }
         }
-        println("Couldn't load contents of workspace \(url)")
+        Log.error("Couldn't load contents of workspace \(url)")
         return nil
     }
     

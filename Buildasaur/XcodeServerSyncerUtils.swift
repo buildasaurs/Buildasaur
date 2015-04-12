@@ -43,12 +43,12 @@ class XcodeServerSyncerUtils {
             //print success/failure etc
             if let error = error {
                 outError = error
-                println("Failed to create bot with name \(botName) and json \(newBot.dictionarify()), error \(error)")
+                Log.error("Failed to create bot with name \(botName) and json \(newBot.dictionarify()), error \(error)")
             } else if let bot = bot {
-                println("Successfully created bot \(bot.name)")
+                Log.info("Successfully created bot \(bot.name)")
             } else {
                 outError = Errors.errorWithInfo("Failed to return bot after creation even after error was nil!")
-                println(outError)
+                Log.error(outError?.description ?? "")
             }
             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
                 completion(bot: bot, error: outError)
