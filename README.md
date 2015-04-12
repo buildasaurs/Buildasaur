@@ -61,7 +61,7 @@ In addition to automatic bot management with syncers, you can create bots from a
 
 Contributing
 ------------
-Please create an issue with a description of a problem or a pull request with a fix. I'll see what I can do.
+Please create an issue with a description of a problem or a pull request with a fix. I'll see what I can do ;-)
 
 License
 -------
