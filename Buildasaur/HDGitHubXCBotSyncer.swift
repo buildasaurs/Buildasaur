@@ -283,7 +283,7 @@ public class HDGitHubXCBotSyncer : Syncer {
                         //not enabled, make sure the PR reflects that and the instructions are clear
                         Log.verbose("Bot \(bot.name) is not yet enabled, ignoring...")
                         
-                        let status = Status(state: .Pending, description: "Waiting for \"lttm\" to start testing", targetUrl: nil, context: nil)
+                        let status = self.createStatusFromState(.Pending, description: "Waiting for \"lttm\" to start testing")
                         let notYetEnabled = GitHubStatusAndComment(status: status, comment: nil)
                         self.updatePRStatusIfNecessary(notYetEnabled, prNumber: pr.number, completion: completion)
                     }
@@ -681,7 +681,14 @@ public class HDGitHubXCBotSyncer : Syncer {
     private func createStatusFromState(state: Status.State, description: String?) -> Status {
         
         //TODO: add useful targetUrl and potentially have multiple contexts to show multiple stats on the PR
-        return Status(state: state, description: description, targetUrl: nil, context: nil)
+        let context = "Buildasaur"
+        let newDescription: String?
+        if let description = description {
+            newDescription = "\(context): \(description)"
+        } else {
+            newDescription = nil
+        }
+        return Status(state: state, description: newDescription, targetUrl: nil, context: context)
     }
     
     //probably make these a bit more generic, something like an async reduce which calls completion when all finish
