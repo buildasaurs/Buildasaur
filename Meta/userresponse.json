@@ -1,0 +1,43 @@
+{
+    "avatar_url" = "https://avatars.githubusercontent.com/u/2182121?v=3";
+    bio = "<null>";
+    blog = "honzadvorsky.com";
+    collaborators = 0;
+    company = "<null>";
+    "created_at" = "2012-08-20T08:41:23Z";
+    "disk_usage" = 1920;
+    email = "<null>";
+    "events_url" = "https://api.github.com/users/czechboy0/events{/privacy}";
+    followers = 4;
+    "followers_url" = "https://api.github.com/users/czechboy0/followers";
+    following = 13;
+    "following_url" = "https://api.github.com/users/czechboy0/following{/other_user}";
+    "gists_url" = "https://api.github.com/users/czechboy0/gists{/gist_id}";
+    "gravatar_id" = "";
+    hireable = 0;
+    "html_url" = "https://github.com/czechboy0";
+    id = 2182121;
+    location = "<null>";
+    login = czechboy0;
+    name = "Honza Dvorsky";
+    "organizations_url" = "https://api.github.com/users/czechboy0/orgs";
+    "owned_private_repos" = 5;
+    plan =     {
+        collaborators = 0;
+        name = micro;
+        "private_repos" = 5;
+        space = 614400;
+    };
+    "private_gists" = 0;
+    "public_gists" = 1;
+    "public_repos" = 8;
+    "received_events_url" = "https://api.github.com/users/czechboy0/received_events";
+    "repos_url" = "https://api.github.com/users/czechboy0/repos";
+    "site_admin" = 0;
+    "starred_url" = "https://api.github.com/users/czechboy0/starred{/owner}{/repo}";
+    "subscriptions_url" = "https://api.github.com/users/czechboy0/subscriptions";
+    "total_private_repos" = 5;
+    type = User;
+    "updated_at" = "2014-12-12T23:34:37Z";
+    url = "https://api.github.com/users/czechboy0";
+}
