@@ -58,6 +58,10 @@ Manual Bot Management
 ---------------------
 In addition to automatic bot management with syncers, you can create bots from an existing Build Template and a branch by clicking *Manual Bot Management* when your syncer is setup. This is useful for creating one-off bots based on e.g. release branches with a different Build Template than you use for PRs.
 
+Troubleshooting
+---------------
+In case Builda crashes (God forbid), you can find crash logs at `~/Library/Logs/DiagnosticReports/Buildasaur-*`. Please let me know if that happens and I'll take a look. Also, Builda logs (pretty verbosely) to `~/Library/Application Support/Buildasaur/Builda.log`, so this is another place to watch in case of any problems.
+
 Contributing
 ------------
 Please create an issue with a description of a problem or a pull request with a fix. I'll see what I can do ;-)
