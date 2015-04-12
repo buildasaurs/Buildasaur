@@ -5,7 +5,6 @@ Buildasaur
 [![Twitter Czechboy0](https://img.shields.io/badge/twitter-czechboy0-green.svg)](http://twitter.com/czechboy0)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://en.wikipedia.org/wiki/MIT_License)
 [![Latest Buildasaur Release](https://img.shields.io/github/release/czechboy0/buildasaur.svg)](https://github.com/czechboy0/Buildasaur/releases/latest)
-[![Travis](https://travis-ci.org/czechboy0/Buildasaur.svg)](https://travis-ci.org/czechboy0/Buildasaur)
 
 ![](https://raw.githubusercontent.com/czechboy0/Buildasaur/master/Buildasaur/Images.xcassets/AppIcon.appiconset/builda_icon%40128x.png)
 
@@ -15,7 +14,7 @@ Getting Buildasaur
 ------------------
 You have multiple options of getting started with Buildasaur, from source code to downloading the App.
 - get the app for the [latest release](https://github.com/czechboy0/Buildasaur/releases/latest)
-- check out code and build and run in Xcode
+- check out code and build and run in Xcode (requires Xcode 6.3 with Swift 1.2, thus OS X 10.10.3) - which is why the build is "failing" - Travis is still [working on Swift 1.2 support](https://github.com/travis-ci/travis-ci/issues/3216).
 
 Installation Steps
 ------------------
