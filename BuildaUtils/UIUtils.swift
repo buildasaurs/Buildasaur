@@ -78,7 +78,7 @@ public class UIUtils {
 //            alert.beginSheetModalForWindow(window, completionHandler: completion)
         } else {
             //no window to present in, at least print
-            println("Alert: \(alert.messageText)")
+            Log.info("Alert: \(alert.messageText)")
         }
     }
 }

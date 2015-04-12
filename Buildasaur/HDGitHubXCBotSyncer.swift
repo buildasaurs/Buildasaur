@@ -120,7 +120,7 @@ public class HDGitHubXCBotSyncer : Syncer {
         let prsDescription = prs.map({ "\n\tPR \($0.number): \($0.title) [\($0.head.ref) -> \($0.base.ref))]" }) + ["\n"]
         let botsDescription = bots.map({ "\n\t\($0.name)" }) + ["\n"]
         
-        println("Resolving prs:\n\(prsDescription) \nand bots:\n\(botsDescription)")
+        Log.verbose("Resolving prs:\n\(prsDescription) \nand bots:\n\(botsDescription)")
         
         if let repoName = self.repoName() {
             
@@ -207,7 +207,7 @@ public class HDGitHubXCBotSyncer : Syncer {
         
         pairs.mapVoidAsync({ (pair, itemCompletion) -> () in
             self.tryToSyncPRWithBot(pair.pr, bot: pair.bot, completion: { () -> () in
-                println("Synced up PR #\(pair.pr.number) with bot \(pair.bot.name)")
+                Log.verbose("Synced up PR #\(pair.pr.number) with bot \(pair.bot.name)")
                 itemCompletion()
             })
         }, completion: completion)
@@ -246,7 +246,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             }
 
         } else {
-            println("No repo name, cannot find the GitHub repo!")
+            Log.error("No repo name, cannot find the GitHub repo!")
             completion(isEnabled: false)
         }
     }
@@ -281,7 +281,7 @@ public class HDGitHubXCBotSyncer : Syncer {
                     } else {
                         
                         //not enabled, make sure the PR reflects that and the instructions are clear
-                        println("Bot \(bot.name) is not yet enabled, ignoring...")
+                        Log.verbose("Bot \(bot.name) is not yet enabled, ignoring...")
                         
                         let status = Status(state: .Pending, description: "Waiting for \"lttm\" to start testing", targetUrl: nil, context: nil)
                         let notYetEnabled = GitHubStatusAndComment(status: status, comment: nil)
@@ -372,7 +372,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             if integration.currentStep == .Completed {
                 if let result = integration.result {
                     if result == .CheckoutError {
-                        println("Integration #\(integration.number) finished with a checkout error - please check that your SSH keys setup in Buildasaur are correct! If you need to fix them, please do so and then you need to recreate the bot - e.g. by closing the Pull Request, waiting for a sync (bot will disappear) and then reopening the Pull Request - should do the job!")
+                        Log.error("Integration #\(integration.number) finished with a checkout error - please check that your SSH keys setup in Buildasaur are correct! If you need to fix them, please do so and then you need to recreate the bot - e.g. by closing the Pull Request, waiting for a sync (bot will disappear) and then reopening the Pull Request - should do the job!")
                         return true
                     }
                 }
@@ -426,7 +426,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             self.xcodeServer.postIntegration(bot.id, completion: { (integration, error) -> () in
                 
                 if let integration = integration where error == nil {
-                    println("Bot \(bot.name) successfully enqueued Integration #\(integration.number)")
+                    Log.info("Bot \(bot.name) successfully enqueued Integration #\(integration.number)")
                 } else {
                     self.notifyError(error, context: "Bot \(bot.name) failed to enqueue an integration")
                 }
@@ -503,7 +503,7 @@ public class HDGitHubXCBotSyncer : Syncer {
                         let oldStatus = status?.description ?? "[no status]"
                         let newStatus = statusWithComment
                         let comment = newStatus.comment ?? "[no comment]"
-                        println("Updating status of commit \(headCommit) in PR #\(pr.number) from \(oldStatus) to \(newStatus), will add comment \(comment)")
+                        Log.info("Updating status of commit \(headCommit) in PR #\(pr.number) from \(oldStatus) to \(newStatus), will add comment \(comment)")
                         
                         //we need to update status
                         self.postStatusWithComment(statusWithComment, commit: headCommit, repo: repoName, pr: pr, completion: { () -> () in
@@ -593,7 +593,7 @@ public class HDGitHubXCBotSyncer : Syncer {
 
                 } else {
                     //this shouldn't happen.
-                    println("LOGIC ERROR! This shouldn't happen, there are no completed integrations!")
+                    Log.error("LOGIC ERROR! This shouldn't happen, there are no completed integrations!")
                     let status = self.createStatusFromState(.Error, description: "* UNKNOWN STATE, Builda ERROR *")
                     statusWithComment = (status: status, "Builda error, unknown state!")
                 }
@@ -693,7 +693,7 @@ public class HDGitHubXCBotSyncer : Syncer {
                 if error != nil {
                     self.notifyError(error, context: "Failed to cancel integration \(integration.number)")
                 } else {
-                    println("Successfully cancelled integration \(integration.number)")
+                    Log.info("Successfully cancelled integration \(integration.number)")
                 }
                 itemCompletion()
             })
@@ -710,7 +710,7 @@ public class HDGitHubXCBotSyncer : Syncer {
                 if error != nil {
                     self.notifyError(error, context: "Failed to delete bot with name \(bot.name)")
                 } else {
-                    println("Successfully deleted bot \(bot.name)")
+                    Log.info("Successfully deleted bot \(bot.name)")
                 }
                 itemCompletion()
             })

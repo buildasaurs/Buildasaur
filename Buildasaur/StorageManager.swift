@@ -55,7 +55,7 @@ class StorageManager {
     func addSyncer(syncInterval: NSTimeInterval, project: LocalSource, serverConfig: XcodeServerConfig) -> HDGitHubXCBotSyncer? {
 
         if syncInterval <= 0 {
-            println("Sync interval must be > 0 seconds.")
+            Log.error("Sync interval must be > 0 seconds.")
             return nil
         }
         
@@ -151,7 +151,7 @@ class StorageManager {
             let allConfigs = json.map { XcodeServerConfig(json: $0) }
             let parsedConfigs = allConfigs.filter { $0 != nil }.map { $0! }
             if allConfigs.count != parsedConfigs.count {
-                println("Some configs failed to parse, will be ignored.")
+                Log.error("Some configs failed to parse, will be ignored.")
                 //maybe show a popup
             }
             parsedConfigs.map { self.servers.append($0) }
@@ -160,7 +160,7 @@ class StorageManager {
         
         //file not found
         if error?.code != 260 {
-            println("Failed to read ServerConfigs, error \(error). Will be ignored. Please don't play with the persistence :(")
+            Log.error("Failed to read ServerConfigs, error \(error). Will be ignored. Please don't play with the persistence :(")
         }
     }
     
@@ -175,7 +175,7 @@ class StorageManager {
             let allProjects = json.map { LocalSource(json: $0) }
             let parsedProjects = allProjects.filter { $0 != nil }.map { $0! }
             if allProjects.count != parsedProjects.count {
-                println("Some projects failed to parse, will be ignored.")
+                Log.error("Some projects failed to parse, will be ignored.")
                 //maybe show a popup
             }
             parsedProjects.map { self.projects.append($0) }
@@ -183,7 +183,7 @@ class StorageManager {
         }
         //file not found
         if error?.code != 260 {
-            println("Failed to read Projects, error \(error). Will be ignored. Please don't play with the persistence :(")
+            Log.error("Failed to read Projects, error \(error). Will be ignored. Please don't play with the persistence :(")
         }
     }
     
@@ -198,7 +198,7 @@ class StorageManager {
             let allSyncers = json.map { HDGitHubXCBotSyncer(json: $0, storageManager: self) }
             let parsedSyncers = allSyncers.filter { $0 != nil }.map { $0! }
             if allSyncers.count != parsedSyncers.count {
-                println("Some syncers failed to parse, will be ignored.")
+                Log.error("Some syncers failed to parse, will be ignored.")
                 //maybe show a popup
             }
             parsedSyncers.map { self.syncers.append($0) }
@@ -206,7 +206,7 @@ class StorageManager {
         }
         //file not found
         if error?.code != 260 {
-            println("Failed to read Syncers, error \(error). Will be ignored. Please don't play with the persistence :(")
+            Log.error("Failed to read Syncers, error \(error). Will be ignored. Please don't play with the persistence :(")
         }
     }
     
@@ -225,7 +225,7 @@ class StorageManager {
                     return
                 }
             }
-            println("Couldn't parse Build Template at url \(url), error \(error)")
+            Log.error("Couldn't parse Build Template at url \(url), error \(error)")
         })
     }
     

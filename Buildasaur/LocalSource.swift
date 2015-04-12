@@ -119,7 +119,7 @@ public class LocalSource : JSONSerializable {
                     //SVN
                 }
                 
-                println("HTTPS or SVN not yet supported, please create an issue on GitHub if you want it added (czechboy0/Buildasaur)")
+                Log.error("HTTPS or SVN not yet supported, please create an issue on GitHub if you want it added (czechboy0/Buildasaur)")
                 return nil
             default:
                 return nil
@@ -169,7 +169,7 @@ public class LocalSource : JSONSerializable {
             }
             let (success, error) = self.refreshMetadata()
             if !success {
-                println("Error parsing: \(error)")
+                Log.error("Error parsing: \(error)")
                 return nil
             }
             
@@ -242,10 +242,10 @@ public class LocalSource : JSONSerializable {
             if let key = NSString(contentsOfURL: url, encoding: NSASCIIStringEncoding, error: &error) {
                 return key as String
             }
-            println("Couldn't load key at url \(url) with error \(error)")
+            Log.error("Couldn't load key at url \(url) with error \(error)")
             return nil
         }
-        println("Couldn't load key at nil url")
+        Log.error("Couldn't load key at nil url")
         return nil
     }
     

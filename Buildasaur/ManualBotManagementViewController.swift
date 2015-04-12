@@ -124,7 +124,7 @@ class ManualBotManagementViewController: NSViewController {
             })
 
         } else {
-            println("Failed to satisfy some bot dependencies, ignoring...")
+            Log.error("Failed to satisfy some bot dependencies, ignoring...")
         }
     }
     

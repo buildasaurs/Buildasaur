@@ -87,18 +87,18 @@ public protocol SyncerDelegate: class {
 
         if self.isSyncing {
             //already is syncing, wait till it's finished
-            println("Trying to sync again even though the previous sync hasn't finished. You might want to consider making the sync interval longer. Just sayin'")
+            Log.info("Trying to sync again even though the previous sync hasn't finished. You might want to consider making the sync interval longer. Just sayin'")
             return
         }
         
-        println("\n------------------------------------\n")
+        Log.untouched("\n------------------------------------\n")
         
         self.isSyncing = true
         self.currentSyncError = nil
         self.reports.removeAll(keepCapacity: true)
         
         let start = NSDate()
-        println("Sync starting at \(start)")
+        Log.info("Sync starting at \(start)")
         
         self.sync { () -> () in
             
@@ -112,7 +112,7 @@ public protocol SyncerDelegate: class {
                 self.lastSyncError = nil
                 self.lastSuccessfulSyncFinishedDate = NSDate()
             }
-            println("Sync finished \(finishState) at \(end), took \(end.timeIntervalSinceDate(start)) seconds.")
+            Log.info("Sync finished \(finishState) at \(end), took \(end.timeIntervalSinceDate(start)) seconds.")
             self.isSyncing = false
         }
     }
@@ -127,7 +127,7 @@ public protocol SyncerDelegate: class {
         if let context = context {
             message += "Context: \(context)"
         }
-        println(message)
+        Log.error(message)
         self.currentSyncError = error
         self.delegate?.syncerEncounteredError(self, error: Errors.errorWithInfo(message))
     }

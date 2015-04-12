@@ -122,7 +122,7 @@ public class XcodeServerEndPoints {
                 let data = NSJSONSerialization.dataWithJSONObject(body, options: .allZeros, error: &error)
                 if let error = error {
                     //parsing error
-                    println("Parsing error \(error.description)")
+                    Log.error("Parsing error \(error.description)")
                     return nil
                 }
                 

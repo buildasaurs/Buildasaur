@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import BuildaUtils
 
-class Persistence {
+public class Persistence {
     
-    class func loadJSONFromUrl(url: NSURL) -> (AnyObject?, NSError?) {
+    public class func loadJSONFromUrl(url: NSURL) -> (AnyObject?, NSError?) {
         
         var error: NSError?
         if let data = NSData(contentsOfURL: url, options: NSDataReadingOptions.allZeros, error: &error) {
@@ -22,7 +23,7 @@ class Persistence {
         return (nil, error)
     }
     
-    class func saveJSONToUrl(json: AnyObject, url: NSURL) -> (Bool, NSError?) {
+    public class func saveJSONToUrl(json: AnyObject, url: NSURL) -> (Bool, NSError?) {
         
         var error: NSError?
         if let data = NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted, error: &error) {
@@ -34,7 +35,7 @@ class Persistence {
         return (false, error)
     }
     
-    class func getFileInAppSupportWithName(name: String, isDirectory: Bool) -> NSURL {
+    public class func getFileInAppSupportWithName(name: String, isDirectory: Bool) -> NSURL {
         
         let root = self.buildaApplicationSupportFolderURL()
         let url = root.URLByAppendingPathComponent(name, isDirectory: isDirectory)
@@ -44,7 +45,7 @@ class Persistence {
         return url
     }
         
-    class func createFolderIfNotExists(url: NSURL) {
+    public class func createFolderIfNotExists(url: NSURL) {
         
         let fm = NSFileManager.defaultManager()
         
@@ -53,7 +54,7 @@ class Persistence {
         assert(success, "Failed to create a folder in Builda's Application Support folder \(url), error \(error)")
     }
     
-    class func buildaApplicationSupportFolderURL() -> NSURL {
+    public class func buildaApplicationSupportFolderURL() -> NSURL {
         
         let fm = NSFileManager.defaultManager()
         if let appSupport = fm.URLsForDirectory(NSSearchPathDirectory.ApplicationSupportDirectory, inDomains:NSSearchPathDomainMask.UserDomainMask).first as? NSURL {
@@ -66,7 +67,7 @@ class Persistence {
                 return buildaAppSupport
                 
             } else {
-                println("Failed to create Builda's Application Support folder, error \(error)")
+                Log.error("Failed to create Builda's Application Support folder, error \(error)")
             }
         }
         
@@ -74,14 +75,14 @@ class Persistence {
         return NSURL()
     }
     
-    class func iterateThroughFilesInFolder(folderUrl: NSURL, visit: (url: NSURL) -> ()) {
+    public class func iterateThroughFilesInFolder(folderUrl: NSURL, visit: (url: NSURL) -> ()) {
         
         let fm = NSFileManager.defaultManager()
         var error: NSError?
         if let contents = fm.contentsOfDirectoryAtURL(folderUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions.SkipsHiddenFiles | NSDirectoryEnumerationOptions.SkipsSubdirectoryDescendants, error: &error) as? [NSURL] {
             contents.map { visit(url: $0) }
         } else {
-            println("Couldn't read folder \(folderUrl), error \(error)")
+            Log.error("Couldn't read folder \(folderUrl), error \(error)")
         }
         
     }

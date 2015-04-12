@@ -8,6 +8,7 @@
 
 import Foundation
 import Cocoa
+import BuildaUtils
 
 class StorageUtils {
     
@@ -25,11 +26,12 @@ class StorageUtils {
         switch clicked {
         case NSFileHandlingPanelOKButton:
             let url = openPanel.URL
-            println("Project: \(url)")
+            let urlOrEmpty = url ?? NSURL()
+            Log.info("Project: \(urlOrEmpty)")
             return url
         default:
             //do nothing
-            println("Dismissed open dialog")
+            Log.verbose("Dismissed open dialog")
         }
         return nil
     }
@@ -49,11 +51,11 @@ class StorageUtils {
         switch clicked {
         case NSFileHandlingPanelOKButton:
             let url = openPanel.URL
-            println("Key: \(url)")
+            Log.info("Key: \(url)")
             return url
         default:
             //do nothing
-            println("Dismissed open dialog")
+            Log.verbose("Dismissed open dialog")
         }
         return nil
     }

@@ -126,17 +126,8 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         super.viewDidAppear()
         
         if let syncer = self.syncer() {
-            println("We have a syncer \(syncer)")
-            
-            //test
-//            syncer.xcodeServer.getDevices({ (devices, error) -> () in
-//                
-//                println()
-//            })
+            Log.info("We have a syncer \(syncer)")
         }
-        
-        
-        
     }
     
     override func reloadStatus() {
