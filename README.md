@@ -8,6 +8,7 @@ Buildasaur
 
 
 
+
 ![](https://raw.githubusercontent.com/czechboy0/Buildasaur/master/Buildasaur/Images.xcassets/AppIcon.appiconset/builda_icon%40128x.png)
 
 Free, local and automatic testing of GitHub Pull Requests with Xcode Bots. Keep your team productive and safe. Get up and running in minutes.
