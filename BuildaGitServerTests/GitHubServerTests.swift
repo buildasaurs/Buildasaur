@@ -57,7 +57,7 @@ class GitHubSourceTests: XCTestCase {
             
             XCTAssertNotNil(body, "Body must be non-nil")
             if let body = body as? NSArray {
-                let prs: [PullRequest] = GitHubArray(body as! NSArray)
+                let prs: [PullRequest] = GitHubArray(body)
                 XCTAssertGreaterThan(prs.count, 0, "We need > 0 items to test parsing")
                 Log.verbose("Parsed PRs: \(prs)")
             } else {
