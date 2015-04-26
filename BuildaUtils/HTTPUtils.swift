@@ -13,6 +13,11 @@ public class HTTP {
     public var session: NSURLSession
     
     public init(session: NSURLSession = NSURLSession.sharedSession()) {
+        
+        //disable all caching
+        session.configuration.requestCachePolicy = .ReloadIgnoringLocalCacheData
+        session.configuration.URLCache = nil
+        
         self.session = session
     }
     

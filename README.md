@@ -41,7 +41,7 @@ Installation Steps
     + Paste your GitHub token
     + Select the path to your SSH keys
     + Click Done, which validates the settings and GitHub access
-- In the bottom part, choose the sync interval (default is 1 minute, which works pretty well, don't decrease it too much, GitHub rate-limits access)
+- In the bottom part, choose the sync interval (default is now 15 seconds, which works pretty well, don't decrease it too much, GitHub rate-limits access to 5000 requests per hour, when authenticated and only 60 when unauthenticated)
 - If both Server and Project configs say *Verified access, all is well*, click **Start** to start syncing your pull requests with bots.
 
 ![](https://raw.githubusercontent.com/czechboy0/Buildasaur/master/Meta/builda_screenshot.png)

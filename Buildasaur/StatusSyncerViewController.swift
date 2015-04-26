@@ -146,7 +146,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
             self.updateIntervalFromUIToValue(syncer.syncInterval)
             
         } else {
-            self.updateIntervalFromUIToValue(60) //default
+            self.updateIntervalFromUIToValue(15) //default
         }
     }
     
