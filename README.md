@@ -40,7 +40,7 @@ Installation Steps
     + Click on *Pick a template to build*, which will guide you through setting up of a new template
     + Paste your GitHub token
     + Select the path to your SSH keys
-    + Make sure that your account has read and write access to the repository
+    + Make sure that your account has read and write access to the GitHub repository (Buildasaur needs to be able to read Pull Requests, read PR comments, add a PR comment, read commit statuses, add a commit status)
     + Click Done, which validates the settings and GitHub access
 - In the bottom part, choose the sync interval (default is now 15 seconds, which works pretty well, don't decrease it too much, GitHub rate-limits access to 5000 requests per hour, when authenticated and only 60 when unauthenticated)
 - If both Server and Project configs say *Verified access, all is well*, click **Start** to start syncing your pull requests with bots.
