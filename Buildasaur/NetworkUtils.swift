@@ -22,15 +22,26 @@ class NetworkUtils {
         if let repoName = project.githubRepoName() {
             
             //we have a repo name
-            server.getOpenPullRequests(repoName, completion: { (prs, error) -> () in
+            server.getRepo(repoName, completion: { (repo, error) -> () in
                 
                 if error != nil {
                     completion(success: false, error: error)
                     return
                 }
                 
-                //seems like we got PRs!
-                completion(success: true, error: nil)
+                if
+                    let repo = repo,
+                    let readPermission = repo.permissions["pull"] as? Bool,
+                    let writePermission = repo.permissions["push"] as? Bool
+                {
+
+                    let hasPermissions = readPermission && writePermission
+                    
+                    //look at the permissions in the PR metadata
+                    completion(success: hasPermissions, error: nil)
+                } else {
+                    completion(success: false, error: nil)
+                }
             })
             
         } else {

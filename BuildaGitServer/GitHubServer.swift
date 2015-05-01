@@ -428,4 +428,36 @@ extension GitHubServer {
             }
         }
     }
+    
+    /**
+    *   GET repo metadata
+    */
+    public func getRepo(repo: String, completion: (repo: Repo?, error: NSError?) -> ()) {
+        
+        let params = [
+            "repo": repo
+        ]
+        
+        self.sendRequestWithMethod(.GET, endpoint: .Repos, params: params, query: nil, body: nil) {
+            (response, body, error) -> () in
+            
+            if error != nil {
+                completion(repo: nil, error: error)
+                return
+            }
+            
+            if let body = body as? NSDictionary {
+                let repository: Repo = Repo(json: body)
+                completion(repo: repository, error: nil)
+            } else {
+                completion(repo: nil, error: Errors.errorWithInfo("Wrong body \(body)"))
+            }
+        }
+    }
+    
 }
+
+
+
+
+
