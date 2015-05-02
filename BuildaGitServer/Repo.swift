@@ -22,7 +22,12 @@ public class Repo : GitHubEntity {
         self.fullName = json.stringForKey("full_name")
         self.repoUrlHTTPS = json.stringForKey("clone_url")
         self.repoUrlSSH = json.stringForKey("ssh_url")
-        self.permissions = json.dictionaryForKey("permissions")
+        
+        if let permissions = json.optionalDictionaryForKey("permissions") {
+            self.permissions = permissions
+        } else {
+            self.permissions = NSDictionary()
+        }
         
         super.init(json: json)
     }
