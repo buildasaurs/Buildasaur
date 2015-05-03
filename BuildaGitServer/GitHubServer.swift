@@ -118,9 +118,44 @@ extension GitHubServer {
         
         self.http.sendRequest(request, completion: { (response, body, error) -> () in
             
+            if let error = error {
+                completion(response: response, body: body, error: error)
+                return
+            }
+            
             if response == nil {
                 completion(response: nil, body: body, error: Errors.errorWithInfo("Nil response"))
                 return
+            }
+            
+            if let response = response {
+                let headers = response.allHeaderFields
+                let now = NSDate().timeIntervalSince1970
+                
+                if
+                    let resetTime = (headers["X-RateLimit-Reset"] as? NSString)?.doubleValue,
+                    let limit = (headers["X-RateLimit-Limit"] as? NSString)?.integerValue,
+                    let remaining = (headers["X-RateLimit-Remaining"] as? NSString)?.integerValue {
+                        
+                        let resetInterval = 3600.0 //reset interval is 1 hour
+                        let startTime = resetTime - resetInterval
+                        let remainingTime = resetTime - now
+                        let consumed = limit - remaining
+                        let consumedTime = now - startTime
+                        let rateOfConsumption = Double(consumed) / consumedTime
+                        let rateOfConsumptionPretty = rateOfConsumption.clipTo(2)
+                        let maxRateOfConsumption = Double(limit) / resetInterval
+                        let maxRateOfConsumptionPretty = maxRateOfConsumption.clipTo(2)
+                        
+                        //how much faster we can be consuming requests before we hit the maximum rate of 5000/hour
+                        let extraRateOfConsumption = (maxRateOfConsumption - rateOfConsumption).clipTo(2)
+                        let usedRatePercent = (100.0 * rateOfConsumption / maxRateOfConsumption).clipTo(2)
+                        
+                        Log.info("GitHub Rate limit; count: \(consumed)/\(limit), renews in \(Int(remainingTime)) seconds, rate: \(rateOfConsumptionPretty)/\(maxRateOfConsumptionPretty), using \(usedRatePercent)% of requests per time.")
+                        
+                } else {
+                    Log.error("No X-RateLimit info provided by GitHub in headers: \(headers), we're unable to detect the remaining number of allowed requests. GitHub might fail to return data any time now :(")
+                }
             }
             
             if
@@ -131,6 +166,19 @@ extension GitHubServer {
                     let url = request.URL ?? ""
                     completion(response: nil, body: nil, error: Errors.errorWithInfo("Not found: \(url)"))
                     return
+            }
+            
+            //error out on special HTTP status codes
+            let statusCode = response!.statusCode
+            switch statusCode {
+                
+            case 400 ... 500:
+                let message = (body as? NSDictionary)?["message"] as? String ?? "Unknown error"
+                let resultString = "\(statusCode): \(message)"
+                completion(response: response, body: body, error: Errors.errorWithInfo(resultString, internalError: error))
+                return
+            default:
+                break
             }
             
             completion(response: response, body: body, error: error)

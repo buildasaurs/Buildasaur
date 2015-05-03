@@ -123,7 +123,8 @@ class StatusViewController: NSViewController {
             self.lastConnectionView.stringValue = "Checking access to server..."
         case .Failed(let error):
             self.progressIndicator.stopAnimation(nil)
-            self.lastConnectionView.stringValue = "Failed to access server, error: \(error?.localizedDescription)"
+            let desc = error?.localizedDescription ?? "Unknown error"
+            self.lastConnectionView.stringValue = "Failed to access server, error: \n\(desc)"
         case .Succeeded:
             self.progressIndicator.stopAnimation(nil)
             self.lastConnectionView.stringValue = "Verified access, all is well!"
