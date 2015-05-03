@@ -575,7 +575,6 @@ public class HDGitHubXCBotSyncer : Syncer {
         } else {
             
             //there's no pending integration, it's down to running and completed possibly being there
-            
             if let running = running {
                 
                 //there is a running integration. 
