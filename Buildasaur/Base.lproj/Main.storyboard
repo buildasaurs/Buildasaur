@@ -1835,9 +1835,9 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8VZ-bw-dT5">
-                                <rect key="frame" x="212" y="8" width="401" height="120"/>
+                                <rect key="frame" x="212" y="8" width="401" height="135"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="120" id="JhA-5r-PLq"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="135" id="JhA-5r-PLq"/>
                                 </constraints>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Multiline Label" id="4Nm-0d-uud">
                                     <font key="font" metaFont="system"/>
@@ -1846,7 +1846,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JKR-Sp-m8Y">
-                                <rect key="frame" x="20" y="109" width="169" height="19"/>
+                                <rect key="frame" x="20" y="124" width="169" height="19"/>
                                 <buttonCell key="cell" type="roundTextured" title="Manual Bot Management" bezelStyle="texturedRounded" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hR5-Ym-8aa">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
@@ -1857,7 +1857,7 @@
                             </button>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="8VZ-bw-dT5" firstAttribute="top" secondItem="zNe-bD-Pj4" secondAttribute="top" constant="20" id="Idf-Wk-1a9"/>
+                            <constraint firstItem="8VZ-bw-dT5" firstAttribute="top" secondItem="zNe-bD-Pj4" secondAttribute="top" constant="5" id="Idf-Wk-1a9"/>
                             <constraint firstAttribute="trailing" secondItem="8VZ-bw-dT5" secondAttribute="trailing" constant="7" id="KhO-CN-dKQ"/>
                             <constraint firstAttribute="centerY" secondItem="Fkq-gK-hvs" secondAttribute="centerY" id="Tyj-fy-PKg"/>
                             <constraint firstAttribute="bottom" secondItem="8VZ-bw-dT5" secondAttribute="bottom" constant="8" id="VKM-vY-EPh"/>

@@ -96,7 +96,17 @@ public class HDGitHubXCBotSyncer : Syncer {
                             
                             self.reports["All Bots"] = "\(bots.count)"
                             
-                            self.resolvePRsAndBots(repoName: repoName, prs: prs, bots: bots, completion: completion)
+                            self.resolvePRsAndBots(repoName: repoName, prs: prs, bots: bots, completion: {
+                                
+                                if let rateLimitInfo = self.github.latestRateLimitInfo {
+                                    
+                                    let report = rateLimitInfo.getReport()
+                                    self.reports["GitHub Rate Limit"] = report
+                                    Log.info("GitHub Rate Limit: \(report)")
+                                }
+                                
+                                completion()
+                            })
                         } else {
                             self.notifyError(Errors.errorWithInfo("Nil bots even when error was nil"), context: "Fetching Bots")
                             completion()
