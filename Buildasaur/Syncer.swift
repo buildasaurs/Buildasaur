@@ -112,7 +112,7 @@ public protocol SyncerDelegate: class {
                 self.lastSyncError = nil
                 self.lastSuccessfulSyncFinishedDate = NSDate()
             }
-            Log.info("Sync finished \(finishState) at \(end), took \(end.timeIntervalSinceDate(start)) seconds.")
+            Log.info("Sync finished \(finishState) at \(end), took \(end.timeIntervalSinceDate(start).clipTo(3)) seconds.")
             self.isSyncing = false
         }
     }
