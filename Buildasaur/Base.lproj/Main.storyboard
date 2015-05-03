@@ -1793,7 +1793,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Fkq-gK-hvs" userLabel="Edit Button">
-                                <rect key="frame" x="14" y="57" width="97" height="32"/>
+                                <rect key="frame" x="14" y="77" width="97" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="85" id="EMb-CS-lfh"/>
                                 </constraints>
@@ -1806,7 +1806,7 @@
                                 </connections>
                             </button>
                             <progressIndicator horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="cYi-gZ-3MX">
-                                <rect key="frame" x="113" y="58" width="32" height="32"/>
+                                <rect key="frame" x="119" y="78" width="32" height="32"/>
                             </progressIndicator>
                             <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XOz-yR-q3G">
                                 <rect key="frame" x="174" y="5" width="19" height="27"/>
@@ -1855,11 +1855,28 @@
                                     <action selector="manualBotManagementTapped:" target="RHg-5W-Hb1" id="u8a-Hh-JeY"/>
                                 </connections>
                             </button>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SL5-bS-Lf1">
+                                <rect key="frame" x="46" y="42" width="130" height="18"/>
+                                <buttonCell key="cell" type="check" title="Wait for &quot;lttm&quot;" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="Qky-j0-ffo">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BkU-KL-lMX">
+                                <rect key="frame" x="18" y="36" width="25" height="25"/>
+                                <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Pce-dC-RwH">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="helpLttmButtonTapped:" target="RHg-5W-Hb1" id="HyJ-tw-2fB"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="8VZ-bw-dT5" firstAttribute="top" secondItem="zNe-bD-Pj4" secondAttribute="top" constant="5" id="Idf-Wk-1a9"/>
                             <constraint firstAttribute="trailing" secondItem="8VZ-bw-dT5" secondAttribute="trailing" constant="7" id="KhO-CN-dKQ"/>
-                            <constraint firstAttribute="centerY" secondItem="Fkq-gK-hvs" secondAttribute="centerY" id="Tyj-fy-PKg"/>
+                            <constraint firstAttribute="centerY" secondItem="Fkq-gK-hvs" secondAttribute="centerY" constant="20" id="Tyj-fy-PKg"/>
                             <constraint firstAttribute="bottom" secondItem="8VZ-bw-dT5" secondAttribute="bottom" constant="8" id="VKM-vY-EPh"/>
                             <constraint firstItem="Fkq-gK-hvs" firstAttribute="centerY" secondItem="cYi-gZ-3MX" secondAttribute="centerY" constant="-0.5" id="Vmg-bM-hj9"/>
                             <constraint firstItem="Fkq-gK-hvs" firstAttribute="leading" secondItem="5mg-80-kNh" secondAttribute="leading" id="cG9-Du-imO"/>
@@ -1870,10 +1887,11 @@
                             <constraint firstItem="A9h-Jh-CP9" firstAttribute="baseline" secondItem="5mg-80-kNh" secondAttribute="baseline" id="n8b-gL-QIi"/>
                             <constraint firstItem="A9h-Jh-CP9" firstAttribute="leading" secondItem="5mg-80-kNh" secondAttribute="trailing" constant="12" id="s3n-tF-0xA"/>
                             <constraint firstItem="Fkq-gK-hvs" firstAttribute="leading" secondItem="zNe-bD-Pj4" secondAttribute="leading" constant="20" id="tAH-BV-LCf"/>
-                            <constraint firstItem="cYi-gZ-3MX" firstAttribute="leading" secondItem="Fkq-gK-hvs" secondAttribute="trailing" constant="8" id="wg4-z7-3io"/>
+                            <constraint firstItem="cYi-gZ-3MX" firstAttribute="leading" secondItem="Fkq-gK-hvs" secondAttribute="trailing" constant="14" id="wg4-z7-3io"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="lttmToggle" destination="SL5-bS-Lf1" id="0d3-tb-sVO"/>
                         <outlet property="startStopButton" destination="Fkq-gK-hvs" id="5Ba-3L-5FZ"/>
                         <outlet property="statusActivityIndicator" destination="cYi-gZ-3MX" id="5l5-14-v81"/>
                         <outlet property="statusTextField" destination="8VZ-bw-dT5" id="Uav-J8-RH3"/>
