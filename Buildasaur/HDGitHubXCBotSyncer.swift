@@ -581,7 +581,7 @@ public class HDGitHubXCBotSyncer : Syncer {
                 //there is a running integration. 
                 //TODO: estimate, based on the average running time of this bot and on the started timestamp, when it will finish. add that to the description.
                 let currentStepString = running.currentStep.rawValue
-                let status = self.createStatusFromState(.Pending, description: "Integration is \(currentStepString)...")
+                let status = self.createStatusFromState(.Pending, description: "Integration step: \(currentStepString)...")
                 statusWithComment = (status: status, comment: nil)
 
             } else {
