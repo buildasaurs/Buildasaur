@@ -16,14 +16,16 @@ public class HDGitHubXCBotSyncer : Syncer {
     let github: GitHubServer!
     let xcodeServer: XcodeServer!
     let localSource: LocalSource!
+    let waitForLttm: Bool
     
     typealias GitHubStatusAndComment = (status: Status, comment: String?)
     
-    init(integrationServer: XcodeServer, sourceServer: GitHubServer, localSource: LocalSource, syncInterval: NSTimeInterval) {
+    init(integrationServer: XcodeServer, sourceServer: GitHubServer, localSource: LocalSource, syncInterval: NSTimeInterval, waitForLttm: Bool) {
         
         self.github = sourceServer
         self.xcodeServer = integrationServer
         self.localSource = localSource
+        self.waitForLttm = waitForLttm
         super.init(syncInterval: syncInterval)
     }
     
@@ -39,6 +41,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             self.localSource = project
             self.github = GitHubFactory.server(project.githubToken)
             self.xcodeServer = XcodeServerFactory.server(serverConfig)
+            self.waitForLttm = json.optionalBoolForKey("wait_for_lttm") ?? true
             super.init(syncInterval: syncInterval)
             
         } else {
@@ -46,6 +49,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             self.github = nil
             self.xcodeServer = nil
             self.localSource = nil
+            self.waitForLttm = true
             super.init(syncInterval: 0)
             return nil
         }
@@ -57,6 +61,7 @@ public class HDGitHubXCBotSyncer : Syncer {
         dict["sync_interval"] = self.syncInterval
         dict["project_path"] = self.localSource.url.absoluteString
         dict["server_host"] = self.xcodeServer.config.host
+        dict["wait_for_lttm"] = self.waitForLttm
         return dict
     }
     
@@ -228,9 +233,9 @@ public class HDGitHubXCBotSyncer : Syncer {
         //bot is enabled if (there are any integrations) OR (there is a recent comment with a keyword to enable the bot in the pull request's conversation)
         //which means that there are two ways of enabling a bot. 
         //a) manually start an integration through Xcode, API call or in Builda's GUI (TBB)
-        //b) comment an agreed keyword in the Pull Request, e.g. "lttm" - 'looks testable to me' is a frequent one
+        //b) (optional) comment an agreed keyword in the Pull Request, e.g. "lttm" - 'looks testable to me' is a frequent one
         
-        if integrations.count > 0 {
+        if integrations.count > 0 || !self.waitForLttm {
             completion(isEnabled: true)
             return
         }

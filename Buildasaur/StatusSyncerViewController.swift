@@ -18,6 +18,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
     @IBOutlet weak var statusActivityIndicator: NSProgressIndicator!
     @IBOutlet weak var syncIntervalStepper: NSStepper!
     @IBOutlet weak var syncIntervalTextField: NSTextField!
+    @IBOutlet weak var lttmToggle: NSButton!
     
     var isSyncing: Bool {
         set {
@@ -134,6 +135,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
 
         self.startStopButton.title = self.isSyncing ? "Stop" : "Start"
         self.syncIntervalStepper.enabled = !self.isSyncing
+        self.lttmToggle.enabled = !self.isSyncing
         
         if self.isSyncing {
             self.statusActivityIndicator.startAnimation(nil)
@@ -144,9 +146,10 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         if let syncer = self.syncer() {
             
             self.updateIntervalFromUIToValue(syncer.syncInterval)
-            
+            self.lttmToggle.state = syncer.waitForLttm ? NSOnState : NSOffState
         } else {
             self.updateIntervalFromUIToValue(15) //default
+            self.lttmToggle.state = NSOnState //default is true
         }
     }
     
@@ -180,6 +183,14 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         }
     }
     
+    @IBAction func helpLttmButtonTapped(sender: AnyObject) {
+        
+        let urlString = "https://github.com/czechboy0/Buildasaur/blob/master/README.md#the-lttm-barrier"
+        if let url = NSURL(string: urlString) {
+            NSWorkspace.sharedWorkspace().openURL(url)
+        }
+    }
+    
     override func prepareForSegue(segue: NSStoryboardSegue, sender: AnyObject?) {
         
         if let manual = segue.destinationController as? ManualBotManagementViewController {
@@ -196,11 +207,12 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
             self.storageManager.removeSyncer(syncer)
         }
         
+        let waitForLttm = self.lttmToggle.state == NSOnState
         let syncInterval = self.syncIntervalTextField.doubleValue
         let project = self.delegate.getProjectStatusViewController().project()!
         let serverConfig = self.delegate.getServerStatusViewController().serverConfig()!
         
-        if let syncer = self.storageManager.addSyncer(syncInterval, project: project, serverConfig: serverConfig) {
+        if let syncer = self.storageManager.addSyncer(syncInterval, waitForLttm: waitForLttm, project: project, serverConfig: serverConfig) {
             
             syncer.active = true
             

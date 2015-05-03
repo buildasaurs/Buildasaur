@@ -51,10 +51,20 @@ Installation Steps
 Default workflow
 ----------------
 The default workflow is as follows:
-- a Pull Request is created by an author, Builda creates an inactive Bot
-- when someone comments "lttm" (looks testable to me) in the Pull Request conversation, Builda activates the bot, runs tests on it and reports back to GitHub with the result, by changing the status and posting a comment
-- the "lttm" barrier is so that reviewers have a chance to go back and forth with the author before they are both happy with the code, at which point it makes sense to test it
+- a Pull Request is created by the author, Builda creates a bot
+- if the "lttm" barrier (see below) is disabled, an integration is started immediately. if the "lttm" barrier is enabled, Builda waits until someone comments "lttm" in the Pull Request conversation (the "lttm" barrier is **enabled** by default, can be disabled in the UI)
+- an integration is performed on the PR's branch
+- result of the integration is reported back to GitHub by changing the status of the latest commit of the branch and posting a comment in the PR conversation
+- if any additional commits are pushed, another integration gets performed and reported back
+- when a PR is closed, the bot gets deleted
 - if you require a different workflow, create an issue and we'll figure something out
+
+The "lttm" barrier
+------------------
+- an optional extra step in the workflow (**enabled** by default)
+- instead of integrating immediately after a PR is created, the reviewer first has a chance to look at the code and request any fixes of the code from the author
+- when the reviewer is happy with the code visually, she comments "lttm" in the PR and the bot is activated and performs and integration on the code
+- from that point on, if any additional commits are pushed, they get integrated as with the basic workflow
 
 Manual Bot Management
 ---------------------
