@@ -14,6 +14,7 @@
 		3A32CD181A3D01E300861A34 /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A32CD171A3D01E300861A34 /* Issue.swift */; };
 		3A32CD1E1A3D2ADD00861A34 /* GitHubServerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A32CD1D1A3D2ADD00861A34 /* GitHubServerExtensions.swift */; };
 		3A331C411A940C8D0005AA98 /* CommonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A331C401A940C8D0005AA98 /* CommonExtensions.swift */; };
+		3A3BDC1D1AF6C51900D2CD99 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3BDC1C1AF6C51900D2CD99 /* Extensions.swift */; };
 		3A4770A21A745F470016E170 /* StorageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4770A11A745F470016E170 /* StorageUtils.swift */; };
 		3A4770A41A745FFA0016E170 /* XcodeProjectParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4770A31A745FFA0016E170 /* XcodeProjectParser.swift */; };
 		3A5591561A913C0A00FB19F2 /* XcodeLocalSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5591551A913C0A00FB19F2 /* XcodeLocalSource.swift */; };
@@ -156,6 +157,7 @@
 		3A32CD1D1A3D2ADD00861A34 /* GitHubServerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubServerExtensions.swift; sourceTree = "<group>"; };
 		3A331C401A940C8D0005AA98 /* CommonExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonExtensions.swift; sourceTree = "<group>"; };
 		3A38CF951A3CE94C00F41AFA /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Status.swift; path = BuildaGitServer/Status.swift; sourceTree = SOURCE_ROOT; };
+		3A3BDC1C1AF6C51900D2CD99 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		3A4770A11A745F470016E170 /* StorageUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageUtils.swift; sourceTree = "<group>"; };
 		3A4770A31A745FFA0016E170 /* XcodeProjectParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeProjectParser.swift; sourceTree = "<group>"; };
 		3A4770A51A746BC00016E170 /* Buildasaur.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Buildasaur.entitlements; sourceTree = "<group>"; };
@@ -422,6 +424,7 @@
 				3AAF6E781A3CE4CC00C657FB /* BuildaUtils.h */,
 				3AAF6E761A3CE4CC00C657FB /* Supporting Files */,
 				3AAA1B731AABBD3A00FA1598 /* Errors.swift */,
+				3A3BDC1C1AF6C51900D2CD99 /* Extensions.swift */,
 			);
 			path = BuildaUtils;
 			sourceTree = "<group>";
@@ -753,6 +756,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3AAF6F091A3CE75600C657FB /* HTTPUtils.swift in Sources */,
+				3A3BDC1D1AF6C51900D2CD99 /* Extensions.swift in Sources */,
 				3A808A1D1ADB063F0073145D /* Persistence.swift in Sources */,
 				3AAA1B741AABBD3A00FA1598 /* Errors.swift in Sources */,
 				3A7B91361A3E41980060A21A /* Server.swift in Sources */,

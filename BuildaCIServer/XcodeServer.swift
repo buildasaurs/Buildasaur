@@ -147,7 +147,8 @@ public extension XcodeServer {
             self.http.sendRequest(request, completion: { (response, body, error) -> () in
                 
                 if response == nil {
-                    completion(response: nil, body: body, error: Errors.errorWithInfo("Nil response"))
+                    let e = error ?? Errors.errorWithInfo("Nil response")
+                    completion(response: nil, body: body, error: e)
                     return
                 }
                 
@@ -384,7 +385,7 @@ public extension XcodeServer {
                 if let canCreateBots = body["result"] as? Bool where canCreateBots == true {
                     completion(canCreateBots: true, error: nil)
                 } else {
-                    completion(canCreateBots: false, error: nil)
+                    completion(canCreateBots: false, error: Errors.errorWithInfo("Specified user cannot create bots"))
                 }
             } else {
                 completion(canCreateBots: false, error: Errors.errorWithInfo("Wrong body \(body)"))

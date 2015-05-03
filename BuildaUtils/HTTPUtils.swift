@@ -87,8 +87,8 @@ public class HTTP {
                     completion(response: httpResponse, body: code, error: error)
                 }
             } else {
-                let error = Errors.errorWithInfo("Response is nil")
-                completion(response: nil, body: nil, error: error)
+                let e = error ?? Errors.errorWithInfo("Response is nil")
+                completion(response: nil, body: nil, error: e)
             }
             
             
