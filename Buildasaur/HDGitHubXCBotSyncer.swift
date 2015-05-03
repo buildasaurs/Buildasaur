@@ -357,7 +357,8 @@ public class HDGitHubXCBotSyncer : Syncer {
             
             //when an integration is Pending, Preparing or Checking out, it doesn't have a blueprint, but it is, by definition, a headCommit
             //integration (because it will check out the latest commit on the branch when it starts running)
-            if integration.currentStep == .Pending ||
+            if
+                integration.currentStep == .Pending ||
                 integration.currentStep == .Preparing ||
                 integration.currentStep == .Checkout
             {
@@ -574,13 +575,12 @@ public class HDGitHubXCBotSyncer : Syncer {
         } else {
             
             //there's no pending integration, it's down to running and completed possibly being there
-            
             if let running = running {
                 
                 //there is a running integration. 
                 //TODO: estimate, based on the average running time of this bot and on the started timestamp, when it will finish. add that to the description.
-                
-                let status = self.createStatusFromState(.Pending, description: "Build running...")
+                let currentStepString = running.currentStep.rawValue
+                let status = self.createStatusFromState(.Pending, description: "Integration step: \(currentStepString)...")
                 statusWithComment = (status: status, comment: nil)
 
             } else {
