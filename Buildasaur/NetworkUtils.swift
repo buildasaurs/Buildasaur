@@ -35,12 +35,16 @@ class NetworkUtils {
                     let writePermission = repo.permissions["push"] as? Bool
                 {
 
-                    let hasPermissions = readPermission && writePermission
-                    
                     //look at the permissions in the PR metadata
-                    completion(success: hasPermissions, error: nil)
+                    if !readPermission {
+                        completion(success: false, error: Errors.errorWithInfo("Missing read permission for repo"))
+                    } else if !writePermission {
+                        completion(success: false, error: Errors.errorWithInfo("Missing write permission for repo"))
+                    } else {
+                        completion(success: true, error: nil)
+                    }
                 } else {
-                    completion(success: false, error: nil)
+                    completion(success: false, error: Errors.errorWithInfo("Couldn't find repo permissions in GitHub response"))
                 }
             })
             
