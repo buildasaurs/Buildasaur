@@ -118,11 +118,15 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
             NetworkUtils.checkAvailabilityOfGitHubWithCurrentSettingsOfProject(self.project()!, completion: { (success, error) -> () in
                 
                 let status: AvailabilityCheckState
-                if let error = error {
-                    Log.error("Checking github availability error: \(error)")
-                    status = AvailabilityCheckState.Failed(error)
-                } else {
+                if success {
                     status = .Succeeded
+                } else {
+                    if let error = error {
+                        Log.error("Checking github availability error: \(error)")
+                    } else {
+                        Log.error("Checking github availability error: Unknown error")
+                    }
+                    status = AvailabilityCheckState.Failed(error)
                 }
                 
                 NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
