@@ -80,13 +80,7 @@ Please create an issue with a description of a problem or a pull request with a 
 
 Xcode Server Reverse Engineering
 --------------------------------
-If you're feeling brave and would like to dig into how Xcode Server works under the hood, you might find these useful:
-- `/Applications/Xcode.app/Contents/Developer/usr/share/xcs` - this is where all Xcode Server files live inside of Xcode
-- `http://localhost:10355/_utils/` - browse Xcode Server's CouchDB database, where it stores all the information about bots, integrations etc. It also uses its map-reduce capabilities to quickly filter data for an API request (e.g. give me all successful integrations of this bot)
-- `/Applications/Xcode.app/Contents/Developer/usr/share/xcs/xcsd` - the source of Xcode Server's Express Node.js app, which is its API server.
-- `/Applications/Xcode.app/Contents/Developer/usr/share/xcs/xcsd/routes/routes.js` - all of Xcode Server's API endpoints, this is what we talk to from Buildasaur to create bots, start integrations and find out results of builds
-- `$ redis-cli -p 10356` - a way to connect to Xcode Server's Redis database, which it uses as an in-memory cache for all of its jobs. You can see running integration metadata etc.
-- `/Applications/Xcode.app/Contents/Developer/usr/share/xcs/xcswebui/` - this is where Xcode Server's UI files live. You can find the javascript and HTML files for the browser UI, including the dashboard big screen.
+If you're feeling brave and would like to dig into how Xcode Server works under the hood, you might find this article I wrote useful: [Under the Hood of Xcode Server](http://honzadvorsky.com/blog/2015/5/4/under-the-hood-of-xcode-server). Recommended reading if you want to extend Buildasaur to take a greater advantage of Xcode Server (there are still a plenty of unused APIs.)
 
 If you end up modifying any of the files mentioned above, in order for Xcode Server to reload them, you need to go to OS X Server, to the Xcode section and with the giant green button turn it off and back on. This restarts all the tasks and reloads source files from disk.
 
