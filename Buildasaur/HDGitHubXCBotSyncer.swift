@@ -761,11 +761,31 @@ public class HDGitHubXCBotSyncer : Syncer {
         let schedule = BotSchedule.manualBotSchedule()
         let botName = self.nameForBotWithPR(pr, repoName: self.repoName()!)
         let template = self.currentBuildTemplate()
-        let project = self.localSource
+        
+        //to handle forks
+        let headOriginUrl = pr.head.repo.repoUrlSSH
+        let localProjectOriginUrl = self.localSource.projectURL!.absoluteString
+        
+        let project: LocalSource
+        if headOriginUrl != localProjectOriginUrl {
+            
+            //we have a fork, duplicate the metadata with the fork's origin
+            if let source = self.localSource.duplicateForForkAtOriginURL(headOriginUrl) {
+                project = source
+            } else {
+                self.notifyError(Errors.errorWithInfo("Couldn't create a LocalSource for fork with origin at url \(headOriginUrl)"), context: "Creating a bot from a PR")
+                completion()
+                return
+            }
+        } else {
+            //a normal PR in the same repo, no need to duplicate, just use the existing localSource
+            project = self.localSource
+        }
+        
         let xcodeServer = self.xcodeServer
         let branch = pr.head.ref
 
-        XcodeServerSyncerUtils.createBotFromBuildTemplate(botName, template: template, project: self.localSource, branch: branch, scheduleOverride: schedule, xcodeServer: xcodeServer) { (bot, error) -> () in
+        XcodeServerSyncerUtils.createBotFromBuildTemplate(botName, template: template, project: project, branch: branch, scheduleOverride: schedule, xcodeServer: xcodeServer) { (bot, error) -> () in
             
             if error != nil {
                 self.notifyError(error, context: "Failed to create bot with name \(botName)")
