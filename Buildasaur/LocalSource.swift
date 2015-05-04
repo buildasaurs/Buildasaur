@@ -34,7 +34,8 @@ public class LocalSource : JSONSerializable {
     var availabilityState: AvailabilityCheckState
     
     private(set) var workspaceMetadata: NSDictionary?
-
+    let forkOriginURL: String?
+    
     //convenience getters
     var projectName: String? { get { return self.pullValueForKey("IDESourceControlProjectName") }}
     var projectPath: String? { get { return self.pullValueForKey("IDESourceControlProjectPath") }}
@@ -61,7 +62,8 @@ public class LocalSource : JSONSerializable {
         get {
             if let urlString = self.pullValueForKey("IDESourceControlProjectURL") {
                 
-                var finalUrlString = urlString
+                //if we have a fork, chose its URL, otherwise fallback to the loaded URL from the Checkout file
+                var finalUrlString = self.forkOriginURL ?? urlString
                 let type = self.checkoutType!
                 if type == .SSH {
                     if !finalUrlString.hasPrefix("git@") {
@@ -91,6 +93,8 @@ public class LocalSource : JSONSerializable {
     }
     
     init?(url: NSURL) {
+        
+        self.forkOriginURL = nil
         self.url = url
         self.preferredTemplateId = nil
         self.githubToken = nil
@@ -101,6 +105,26 @@ public class LocalSource : JSONSerializable {
         if !parsed {
             return nil
         }
+    }
+    
+    private init?(original: LocalSource, forkOriginURL: String) {
+        
+        self.forkOriginURL = forkOriginURL
+        self.url = original.url
+        self.preferredTemplateId = original.preferredTemplateId
+        self.githubToken = original.githubToken
+        self.availabilityState = original.availabilityState
+        self.publicSSHKeyUrl = original.publicSSHKeyUrl
+        self.privateSSHKeyUrl = original.privateSSHKeyUrl
+        let (parsed, error) = self.refreshMetadata()
+        if !parsed {
+            return nil
+        }
+    }
+    
+    public func duplicateForForkAtOriginURL(forkURL: String) -> LocalSource? {
+        
+        return LocalSource(original: self, forkOriginURL: forkURL)
     }
     
     public class func attemptToParseFromUrl(url: NSURL) -> (Bool, NSDictionary?, NSError?) {
@@ -167,6 +191,7 @@ public class LocalSource : JSONSerializable {
     
     public required init?(json: NSDictionary) {
         
+        self.forkOriginURL = nil
         self.availabilityState = .Unchecked
         
         if
