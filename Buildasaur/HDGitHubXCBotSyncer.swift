@@ -549,8 +549,11 @@ public class HDGitHubXCBotSyncer : Syncer {
                 return
             }
             
+            //TODO: pipe this out, into the syncer prefs and into the UI
+            let postStatusComments = false //temp hack to disable posting comments
+            
             //optional there can be a comment to be posted as well
-            if let comment = statusWithComment.comment {
+            if let comment = statusWithComment.comment where postStatusComments {
                 
                 //we have a comment, post it
                 self.github.postCommentOnIssue(comment, issueNumber: pr.number, repo: repo, completion: { (comment, error) -> () in
