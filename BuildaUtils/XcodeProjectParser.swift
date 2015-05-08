@@ -62,7 +62,7 @@ public class XcodeProjectParser {
         
         return self.firstItemMatchingTestRecursive(workspaceUrl, test: { (itemUrl: NSURL) -> Bool in
             
-            return itemUrl.pathExtension == "xccheckout";
+            return itemUrl.pathExtension == "xccheckout"
         })
     }
     
