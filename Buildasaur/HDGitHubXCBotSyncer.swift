@@ -576,11 +576,11 @@ public class HDGitHubXCBotSyncer : Syncer {
         if let pending = pending {
             
             //TODO: show how many builds are ahead in the queue and estimate when it will be
-            //started and when finished? (there is an average running time on each bot, we it should be easy)
+            //started and when finished? (there is an average running time on each bot, it should be easy)
             let status = self.createStatusFromState(.Pending, description: "Build waiting in the queue...")
             statusWithComment = (status: status, comment: nil)
             
-            //also, cancel the running integration, if it's there
+            //also, cancel the running integration, if it's there any
             if let running = running {
                 dispatch_group_enter(group)
                 self.cancelIntegrations([running], completion: { () -> () in
@@ -589,7 +589,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             }
         } else {
             
-            //there's no pending integration, it's down to running and completed possibly being there
+            //there's no pending integration, it's down to running and completed
             if let running = running {
                 
                 //there is a running integration. 
@@ -620,11 +620,58 @@ public class HDGitHubXCBotSyncer : Syncer {
         }
     }
     
+    private func pluralizeStringIfNecessary(string: String, number: Int) -> String {
+        if number > 1 {
+            return "\(string)s"
+        }
+        return string
+    }
+    
+    private func formattedDurationOfIntegration(integration: Integration) -> String? {
+        
+        if let seconds = integration.duration {
+            
+            let intSeconds = Int(seconds)
+            let minutes = intSeconds / 60
+            let remainderSeconds = intSeconds % 60
+            let hours = minutes / 60
+            let remainderMinutes = minutes % 60
+            
+            let formattedSeconds = self.pluralizeStringIfNecessary("second", number: remainderSeconds)
+            
+            var result = "\(remainderSeconds) \(formattedSeconds)"
+            if remainderMinutes > 0 {
+                
+                let formattedMinutes = self.pluralizeStringIfNecessary("minute", number: remainderMinutes)
+                result = "\(remainderMinutes) \(formattedMinutes) and " + result
+            }
+            if hours > 0 {
+                
+                let formattedHours = self.pluralizeStringIfNecessary("hours", number: hours)
+                result = "\(hours) \(formattedHours), " + result
+            }
+            return result
+            
+        } else {
+            Log.error("No duration provided in integration \(integration)")
+            return "[NOT PROVIDED]"
+        }
+    }
+    
+    private func baseCommentFromIntegration(integration: Integration) -> String {
+
+        var comment = "Result of integration \(integration.number)\n"
+        if let duration = self.formattedDurationOfIntegration(integration) {
+            comment += "Integration took " + duration + ".\n"
+        }
+        return comment
+    }
+
     private func resolveStatusFromCompletedIntegrations(integrations: Set<Integration>) -> GitHubStatusAndComment {
         
         //get integrations sorted by number
         let sortedDesc = Array(integrations).sorted { $0.number > $1.number }
-        
+
         //if there are any succeeded, it wins - iterating from the end
         if let passingIntegration = sortedDesc.filter({
             (integration: Integration) -> Bool in
@@ -636,7 +683,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             }
         }).first {
             
-            let baseComment = "Result of integration \(passingIntegration.number)\n"
+            let baseComment = self.baseCommentFromIntegration(passingIntegration)
             let comment: String
             let status = self.createStatusFromState(.Success, description: "Build passed!")
             let summary = passingIntegration.buildResultSummary!
@@ -655,7 +702,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             $0.result! == Integration.Result.TestFailures
         }).first {
             
-            let baseComment = "Result of integration \(testFailingIntegration.number)\n"
+            let baseComment = self.baseCommentFromIntegration(testFailingIntegration)
             let status = self.createStatusFromState(.Failure, description: "Build failed tests!")
             let summary = testFailingIntegration.buildResultSummary!
             let comment = baseComment + "Build failed \(summary.testFailureCount) tests out of \(summary.testsCount)"
@@ -666,7 +713,8 @@ public class HDGitHubXCBotSyncer : Syncer {
         if let erroredIntegration = sortedDesc.filter({
             $0.result! != Integration.Result.Canceled
         }).first {
-            let baseComment = "Result of integration \(erroredIntegration.number)\n"
+            
+            let baseComment = self.baseCommentFromIntegration(erroredIntegration)
             let errorCount: String
             if let summary = erroredIntegration.buildResultSummary {
                 errorCount = "\(summary.errorCount)"
@@ -682,7 +730,8 @@ public class HDGitHubXCBotSyncer : Syncer {
         if let canceledIntegration = sortedDesc.filter({
             $0.result! == Integration.Result.Canceled
         }).first {
-            let baseComment = "Result of integration \(canceledIntegration.number)\n"
+            
+            let baseComment = self.baseCommentFromIntegration(canceledIntegration)
             let status = self.createStatusFromState(.Error, description: "Build canceled!")
             let comment = baseComment + "Build was manually canceled."
             return (status: status, comment: comment)
