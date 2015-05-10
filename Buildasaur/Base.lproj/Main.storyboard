@@ -1856,20 +1856,37 @@
                                 </connections>
                             </button>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SL5-bS-Lf1">
-                                <rect key="frame" x="46" y="42" width="130" height="18"/>
+                                <rect key="frame" x="68" y="57" width="130" height="18"/>
                                 <buttonCell key="cell" type="check" title="Wait for &quot;lttm&quot;" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="Qky-j0-ffo">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BkU-KL-lMX">
-                                <rect key="frame" x="18" y="36" width="25" height="25"/>
+                                <rect key="frame" x="8" y="51" width="25" height="25"/>
                                 <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Pce-dC-RwH">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="helpLttmButtonTapped:" target="RHg-5W-Hb1" id="HyJ-tw-2fB"/>
+                                </connections>
+                            </button>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I34-eZ-a6k">
+                                <rect key="frame" x="38" y="34" width="160" height="18"/>
+                                <buttonCell key="cell" type="check" title="Post status comments" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="iGN-fv-G4G">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="t3o-Ag-QHY">
+                                <rect key="frame" x="8" y="30" width="25" height="25"/>
+                                <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hoN-6R-mFO">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="helpLttmButtonTapped:" target="RHg-5W-Hb1" id="1MD-I4-KLk"/>
                                 </connections>
                             </button>
                         </subviews>

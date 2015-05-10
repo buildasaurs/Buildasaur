@@ -17,15 +17,17 @@ public class HDGitHubXCBotSyncer : Syncer {
     let xcodeServer: XcodeServer!
     let localSource: LocalSource!
     let waitForLttm: Bool
+    let postStatusComments: Bool
     
     typealias GitHubStatusAndComment = (status: Status, comment: String?)
     
-    init(integrationServer: XcodeServer, sourceServer: GitHubServer, localSource: LocalSource, syncInterval: NSTimeInterval, waitForLttm: Bool) {
+    init(integrationServer: XcodeServer, sourceServer: GitHubServer, localSource: LocalSource, syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool) {
         
         self.github = sourceServer
         self.xcodeServer = integrationServer
         self.localSource = localSource
         self.waitForLttm = waitForLttm
+        self.postStatusComments = postStatusComments
         super.init(syncInterval: syncInterval)
     }
     
@@ -42,6 +44,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             self.github = GitHubFactory.server(project.githubToken)
             self.xcodeServer = XcodeServerFactory.server(serverConfig)
             self.waitForLttm = json.optionalBoolForKey("wait_for_lttm") ?? true
+            self.postStatusComments = json.optionalBoolForKey("post_status_comments") ?? true
             super.init(syncInterval: syncInterval)
             
         } else {
