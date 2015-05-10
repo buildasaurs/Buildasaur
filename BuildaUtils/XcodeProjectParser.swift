@@ -61,15 +61,8 @@ public class XcodeProjectParser {
     private class func findCheckoutUrl(workspaceUrl: NSURL) -> NSURL? {
         
         return self.firstItemMatchingTestRecursive(workspaceUrl, test: { (itemUrl: NSURL) -> Bool in
-            let url: NSURL = itemUrl
-            let lastPathComponent = url.lastPathComponent
-            let pathExtension = url.pathExtension
-            if let ex = pathExtension {
-                if ex == "xccheckout" {
-                    return true
-                }
-            }
-            return false
+            
+            return itemUrl.pathExtension == "xccheckout"
         })
     }
     
