@@ -5,4 +5,4 @@ If you're using Buildasaur and you wouldn't get fired for admitting it, I'd be g
 - [Buildasaur](https://github.com/czechboy0/buildasaur), (04/2015-...), yes, Pull Requests in this repo are tested by a Builda running on my home Mac
 - [SwiftKey for iOS](http://swiftkey.com/en/keyboard/ios/), (03/2015-...), the original workflow was custom built for our team
 
-- (your team here)
+- (your team here, just fork the repo, add yourself and send a PR. Thanks for taking the time!)
