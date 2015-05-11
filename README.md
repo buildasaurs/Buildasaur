@@ -5,9 +5,6 @@ Buildasaur
 [![Twitter Buildasaur](https://img.shields.io/badge/twitter-Buildasaur-green.svg)](http://twitter.com/buildasaur)
 [![Twitter Czechboy0](https://img.shields.io/badge/twitter-czechboy0-green.svg)](http://twitter.com/czechboy0)
 
-[![Stars](https://img.shields.io/github/stars/badges/shields.svg)]()
-[![Forks](https://img.shields.io/github/forks/badges/shields.svg)]()
-[![Issues](https://img.shields.io/github/issues-raw/badges/shields.svg)]()
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://en.wikipedia.org/wiki/MIT_License)
 [![Latest Buildasaur Release](https://img.shields.io/github/release/czechboy0/buildasaur.svg)](https://github.com/czechboy0/Buildasaur/releases/latest)
 
