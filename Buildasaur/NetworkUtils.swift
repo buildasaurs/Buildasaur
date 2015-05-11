@@ -17,6 +17,7 @@ class NetworkUtils {
         
         let token = project.githubToken
         let server = GitHubFactory.server(token)
+        let sshKeyPath = project.privateSSHKeyUrl?.path ?? ""
         
         //check if we can get PRs, that should be representative enough
         if let repoName = project.githubRepoName() {
@@ -41,7 +42,13 @@ class NetworkUtils {
                     } else if !writePermission {
                         completion(success: false, error: Errors.errorWithInfo("Missing write permission for repo"))
                     } else {
-                        completion(success: true, error: nil)
+                        //now test ssh keys
+                        //TODO: pass in the
+                        self.checkValidityOfSSHKeys(sshKeyPath, completion: { (success, error) -> () in
+                            
+                            //now complete
+                            completion(success: success, error: error)
+                        })
                     }
                 } else {
                     completion(success: false, error: Errors.errorWithInfo("Couldn't find repo permissions in GitHub response"))
@@ -76,5 +83,22 @@ class NetworkUtils {
                 completion(success: canCreateBots, error: nil)
             })
         }
+    }
+    
+    //TODO: take the path to the private key probs
+    class func checkValidityOfSSHKeys(path: String, completion: (success: Bool, error: NSError?) -> ()) {
+        
+        //create the validation bash script to run in temp folder
+        //something like GIT_SSH_COMMAND='ssh -i /path/to/keys' git ls-remote git@github.com:owner/repo.git
+        //also wrap in logic for returning just success/error codes instead of full output
+        
+        //run it
+        
+        //depending on the return value, either succeed or fail
+        
+        //delete the script
+        
+        assertionFailure("not yet implemented")
+        completion(success: false, error: Errors.errorWithInfo("Not implemented yet"))
     }
 }
