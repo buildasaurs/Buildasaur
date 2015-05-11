@@ -11,6 +11,9 @@ Buildasaur
 
 Free, local and automatic testing of GitHub Pull Requests with Xcode Bots. Keep your team productive and safe. Get up and running in minutes. (Follow Builda [on Twitter](http://twitter.com/buildasaur) for infrequent updates.)
 
+**Thinking of trying Buildasaur**? Check out the list of [teams and projects](./PROJECTS_USING_BUILDASAUR.md) already using it.<br>
+**Already using Buildasaur**? Please consider [adding yourself](./PROJECTS_USING_BUILDASAUR.md)!
+
 Getting Buildasaur
 ------------------
 You have multiple options of getting started with Buildasaur, from source code to downloading the App.
