@@ -10,7 +10,6 @@
 		3A1546461B02A0C6001EEB45 /* Script.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1546451B02A0C6001EEB45 /* Script.swift */; };
 		3A1546511B02A32C001EEB45 /* BuildaUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AAF6E741A3CE4CC00C657FB /* BuildaUtils.framework */; };
 		3A15465B1B02A37D001EEB45 /* ScriptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A15465A1B02A37D001EEB45 /* ScriptTests.swift */; };
-		3A15465F1B02A4CE001EEB45 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A15465E1B02A4CE001EEB45 /* Info.plist */; };
 		3A2F9D821A8FE5D700B0DB68 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F9D811A8FE5D700B0DB68 /* StorageManager.swift */; };
 		3A2F9D861A8FE64900B0DB68 /* LocalSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F9D841A8FE64900B0DB68 /* LocalSource.swift */; };
 		3A2F9D871A8FE64900B0DB68 /* Syncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F9D851A8FE64900B0DB68 /* Syncer.swift */; };
@@ -83,6 +82,7 @@
 		3AD338B01AAE31D500ECD0F2 /* BuildTemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD338AF1AAE31D500ECD0F2 /* BuildTemplateViewController.swift */; };
 		3AF1B1221AAC621800917EF3 /* UIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF1B1211AAC621800917EF3 /* UIUtils.swift */; };
 		3AF1B1241AAC7CA500917EF3 /* StatusSyncerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF1B1231AAC7CA500917EF3 /* StatusSyncerViewController.swift */; };
+		3AF2B03B1B02C5D700DCF2D6 /* SSHKeyVerification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF2B03A1B02C5D700DCF2D6 /* SSHKeyVerification.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -239,6 +239,7 @@
 		3AD338AF1AAE31D500ECD0F2 /* BuildTemplateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildTemplateViewController.swift; sourceTree = "<group>"; };
 		3AF1B1211AAC621800917EF3 /* UIUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIUtils.swift; sourceTree = "<group>"; };
 		3AF1B1231AAC7CA500917EF3 /* StatusSyncerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusSyncerViewController.swift; sourceTree = "<group>"; };
+		3AF2B03A1B02C5D700DCF2D6 /* SSHKeyVerification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSHKeyVerification.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -471,6 +472,7 @@
 				3AAA1B731AABBD3A00FA1598 /* Errors.swift */,
 				3A3BDC1C1AF6C51900D2CD99 /* Extensions.swift */,
 				3A1546451B02A0C6001EEB45 /* Script.swift */,
+				3AF2B03A1B02C5D700DCF2D6 /* SSHKeyVerification.swift */,
 			);
 			path = BuildaUtils;
 			sourceTree = "<group>";
@@ -755,7 +757,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3A15465F1B02A4CE001EEB45 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -848,6 +849,7 @@
 				3AF1B1221AAC621800917EF3 /* UIUtils.swift in Sources */,
 				3A4770A41A745FFA0016E170 /* XcodeProjectParser.swift in Sources */,
 				3A1546461B02A0C6001EEB45 /* Script.swift in Sources */,
+				3AF2B03B1B02C5D700DCF2D6 /* SSHKeyVerification.swift in Sources */,
 				3AAF6F0A1A3CE75600C657FB /* JSON.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1447,6 +1449,7 @@
 				3A1546571B02A32C001EEB45 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3A56876B1A3B93BD0066DB2B /* Build configuration list for PBXProject "Buildasaur" */ = {
 			isa = XCConfigurationList;
