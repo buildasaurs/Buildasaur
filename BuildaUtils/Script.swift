@@ -8,6 +8,8 @@
 
 import Foundation
 
+//TODO: think about adding support for asynchronous running of scripts as well
+
 public class Script {
     
     public typealias ScriptResponse = (terminationStatus: Int, standardOutput: String, standardError: String)
@@ -32,9 +34,6 @@ public class Script {
     
     private func runResolved(path: String, arguments: [String]) -> ScriptResponse {
         
-        //find path of script "name" with which
-        if name == "/usr/bin"
-        let path =
         let pid = NSProcessInfo.processInfo().processIdentifier
         
         let outputPipe = NSPipe()
@@ -46,8 +45,8 @@ public class Script {
         let task = NSTask()
         task.launchPath = path
         task.arguments = arguments
-        task.standardOutput = pipe
-        task.standardError = pipe
+        task.standardOutput = outputPipe
+        task.standardError = errorPipe
         
         task.launch()
         
@@ -55,11 +54,11 @@ public class Script {
         //TODO: think about edge cases and long running/hangings tasks - some sort of a timeout?
         task.waitUntilExit()
         
-        let data = file.readDataToEndOfFile()
-        file.closeFile()
-        
-        let output = NSString(data: data, encoding: NSUTF8StringEncoding)
-        println("output: \(output)")
+        let terminationStatus = Int(task.terminationStatus)
+        let output = self.stringFromFileAndClose(outputFile)
+        let error = self.stringFromFileAndClose(errorFile)
+    
+        return (terminationStatus, output, error)
     }
     
     private func stringFromFileAndClose(file: NSFileHandle) -> String {
@@ -69,7 +68,5 @@ public class Script {
         let output = NSString(data: data, encoding: NSUTF8StringEncoding) as String?
         return output ?? ""
     }
-    
-
 }
 
