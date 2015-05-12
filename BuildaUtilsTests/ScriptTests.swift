@@ -26,8 +26,12 @@ class ScriptTests: XCTestCase {
         XCTAssert(count(versionString) > 0, "Git version must not be an empty string")
         
         let comps = versionString.componentsSeparatedByString(" ")
-        let version = comps[2]
-        XCTAssertGreaterThanOrEqual(version, "2.3.0", "Git version must be at least 2.3")
+        XCTAssertGreaterThanOrEqual(comps.count, 3)
+        
+        if comps.count >= 3 {
+            let version = comps[2]
+            XCTAssertGreaterThanOrEqual(version, "2.3.0", "Git version must be at least 2.3")            
+        }
     }
     
     func testWhich() {

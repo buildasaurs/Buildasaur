@@ -43,8 +43,7 @@ class NetworkUtils {
                         completion(success: false, error: Errors.errorWithInfo("Missing write permission for repo"))
                     } else {
                         //now test ssh keys
-                        //TODO: pass in the
-                        self.checkValidityOfSSHKeys(sshKeyPath, completion: { (success, error) -> () in
+                        self.checkValidityOfSSHKeys(sshKeyPath, repoSSHUrl: repo.repoUrlSSH, completion: { (success, error) -> () in
                             
                             //now complete
                             completion(success: success, error: error)
@@ -86,19 +85,17 @@ class NetworkUtils {
     }
     
     //TODO: take the path to the private key probs
-    class func checkValidityOfSSHKeys(path: String, completion: (success: Bool, error: NSError?) -> ()) {
+    class func checkValidityOfSSHKeys(path: String, repoSSHUrl: String, completion: (success: Bool, error: NSError?) -> ()) {
         
-        //create the validation bash script to run in temp folder
         //something like GIT_SSH_COMMAND='ssh -i /path/to/keys' git ls-remote git@github.com:owner/repo.git
-        //also wrap in logic for returning just success/error codes instead of full output
+        let r = Script.run("git", arguments: ["ls-remote", repoSSHUrl], environment: [
+            "GIT_SSH_COMMAND": "'ssh -i \(path)'"])
         
-        //run it
-        
-        //depending on the return value, either succeed or fail
-        
-        //delete the script
-        
-        assertionFailure("not yet implemented")
-        completion(success: false, error: Errors.errorWithInfo("Not implemented yet"))
+        //based on the return value, either succeed or fail
+        if r.terminationStatus == 0 {
+            completion(success: true, error: nil)
+        } else {
+            completion(success: false, error: Errors.errorWithInfo(r.standardError))
+        }
     }
 }
