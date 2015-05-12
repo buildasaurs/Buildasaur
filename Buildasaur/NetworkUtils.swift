@@ -44,7 +44,7 @@ class NetworkUtils {
                     } else {
                         //now test ssh keys
                         self.checkValidityOfSSHKeys(sshKeyPath, repoSSHUrl: repo.repoUrlSSH, completion: { (success, error) -> () in
-                            
+                        
                             //now complete
                             completion(success: success, error: error)
                         })
@@ -87,9 +87,20 @@ class NetworkUtils {
     //TODO: take the path to the private key probs
     class func checkValidityOfSSHKeys(path: String, repoSSHUrl: String, completion: (success: Bool, error: NSError?) -> ()) {
         
+        //create a temp script, because NSTask is being difficult and doesn't play nice with environment variables,
+        //which we need for forcing SSH keys from a specific path to verify they are valid for your repo. sigh.
+        let uuid = NSUUID().UUIDString
+        let tempPath = NSTemporaryDirectory().stringByAppendingPathComponent(uuid)
+        let script = "GIT_SSH_COMMAND='ssh -i \(path)' git ls-remote \(repoSSHUrl)\n"
+        
+        var error: NSError?
+        let success = script.writeToFile(tempPath, atomically: true, encoding: NSUTF8StringEncoding, error: &error)
+        
         //something like GIT_SSH_COMMAND='ssh -i /path/to/keys' git ls-remote git@github.com:owner/repo.git
-        let r = Script.run("git", arguments: ["ls-remote", repoSSHUrl], environment: [
-            "GIT_SSH_COMMAND": "'ssh -i \(path)'"])
+        let r = Script.run("bash", arguments: [tempPath])
+        
+        //delete the temp script
+        NSFileManager.defaultManager().removeItemAtPath(tempPath, error: nil)
         
         //based on the return value, either succeed or fail
         if r.terminationStatus == 0 {
