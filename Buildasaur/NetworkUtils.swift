@@ -17,6 +17,7 @@ class NetworkUtils {
         
         let token = project.githubToken
         let server = GitHubFactory.server(token)
+        let sshKeyPath = project.privateSSHKeyUrl?.path ?? ""
         
         //check if we can get PRs, that should be representative enough
         if let repoName = project.githubRepoName() {
@@ -41,7 +42,12 @@ class NetworkUtils {
                     } else if !writePermission {
                         completion(success: false, error: Errors.errorWithInfo("Missing write permission for repo"))
                     } else {
-                        completion(success: true, error: nil)
+                        //now test ssh keys
+                        self.checkValidityOfSSHKeys(sshKeyPath, repoSSHUrl: repo.repoUrlSSH, completion: { (success, error) -> () in
+                        
+                            //now complete
+                            completion(success: success, error: error)
+                        })
                     }
                 } else {
                     completion(success: false, error: Errors.errorWithInfo("Couldn't find repo permissions in GitHub response"))
@@ -75,6 +81,19 @@ class NetworkUtils {
                 
                 completion(success: canCreateBots, error: nil)
             })
+        }
+    }
+    
+    //TODO: take the path to the private key probs
+    class func checkValidityOfSSHKeys(path: String, repoSSHUrl: String, completion: (success: Bool, error: NSError?) -> ()) {
+        
+        let r = SSHKeyVerification.verifyKeys(path, repoSSHUrl: repoSSHUrl)
+        
+        //based on the return value, either succeed or fail
+        if r.terminationStatus == 0 {
+            completion(success: true, error: nil)
+        } else {
+            completion(success: false, error: Errors.errorWithInfo(r.standardError))
         }
     }
 }
