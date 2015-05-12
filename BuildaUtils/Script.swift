@@ -16,11 +16,13 @@ public class Script {
     
     //TODO: create a small project for this and github+pod it, I couldn't find a simple library for running
     //terminal scripts from Mac apps in Swift. might be useful to other people.
-    public func run(name: String, arguments: [String]) -> ScriptResponse {
+    public class func run(name: String, arguments: [String]) -> ScriptResponse {
         
         //first resolve the name of the script to a path with `which`
         let resolved = self.runResolved("/usr/bin/which", arguments: [name])
-        let path = resolved.standardOutput
+        
+        //which returns the path + \n, so strip the newline
+        var path = resolved.standardOutput.stripTrailingNewline()
         
         //if resolving failed, just abort and propagate the failed run up
         if (resolved.terminationStatus != 0) || (count(path) == 0) {
@@ -32,7 +34,7 @@ public class Script {
         return result
     }
     
-    private func runResolved(path: String, arguments: [String]) -> ScriptResponse {
+    private class func runResolved(path: String, arguments: [String]) -> ScriptResponse {
         
         let pid = NSProcessInfo.processInfo().processIdentifier
         
@@ -61,7 +63,7 @@ public class Script {
         return (terminationStatus, output, error)
     }
     
-    private func stringFromFileAndClose(file: NSFileHandle) -> String {
+    private class func stringFromFileAndClose(file: NSFileHandle) -> String {
         
         let data = file.readDataToEndOfFile()
         file.closeFile()

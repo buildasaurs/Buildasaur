@@ -16,3 +16,15 @@ public extension Double {
         return Double(Int(self * multiplier)) / multiplier
     }
 }
+
+public extension String {
+    
+    public func stripTrailingNewline() -> String {
+        
+        var stripped = self
+        if stripped.hasSuffix("\n") {
+            stripped.removeAtIndex(stripped.endIndex.predecessor())
+        }
+        return stripped
+    }
+}

@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		3A1546461B02A0C6001EEB45 /* Script.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1546451B02A0C6001EEB45 /* Script.swift */; };
+		3A1546511B02A32C001EEB45 /* BuildaUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AAF6E741A3CE4CC00C657FB /* BuildaUtils.framework */; };
+		3A15465B1B02A37D001EEB45 /* ScriptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A15465A1B02A37D001EEB45 /* ScriptTests.swift */; };
+		3A15465F1B02A4CE001EEB45 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A15465E1B02A4CE001EEB45 /* Info.plist */; };
 		3A2F9D821A8FE5D700B0DB68 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F9D811A8FE5D700B0DB68 /* StorageManager.swift */; };
 		3A2F9D861A8FE64900B0DB68 /* LocalSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F9D841A8FE64900B0DB68 /* LocalSource.swift */; };
 		3A2F9D871A8FE64900B0DB68 /* Syncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F9D851A8FE64900B0DB68 /* Syncer.swift */; };
@@ -83,6 +86,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		3A1546521B02A32C001EEB45 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3A5687681A3B93BD0066DB2B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3AAF6E731A3CE4CB00C657FB;
+			remoteInfo = BuildaUtils;
+		};
 		3AAF6E891A3CE4CC00C657FB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3A5687681A3B93BD0066DB2B /* Project object */;
@@ -152,6 +162,9 @@
 
 /* Begin PBXFileReference section */
 		3A1546451B02A0C6001EEB45 /* Script.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Script.swift; sourceTree = "<group>"; };
+		3A15464B1B02A32C001EEB45 /* BuildaUtilsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BuildaUtilsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A15465A1B02A37D001EEB45 /* ScriptTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptTests.swift; sourceTree = "<group>"; };
+		3A15465E1B02A4CE001EEB45 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A2F9D811A8FE5D700B0DB68 /* StorageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		3A2F9D841A8FE64900B0DB68 /* LocalSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalSource.swift; sourceTree = "<group>"; };
 		3A2F9D851A8FE64900B0DB68 /* Syncer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Syncer.swift; sourceTree = "<group>"; };
@@ -229,6 +242,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		3A1546481B02A32C001EEB45 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A1546511B02A32C001EEB45 /* BuildaUtils.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3A56876D1A3B93BD0066DB2B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -273,6 +294,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3A15464C1B02A32C001EEB45 /* BuildaUtilsTests */ = {
+			isa = PBXGroup;
+			children = (
+				3A15465A1B02A37D001EEB45 /* ScriptTests.swift */,
+				3A15464D1B02A32C001EEB45 /* Supporting Files */,
+			);
+			path = BuildaUtilsTests;
+			sourceTree = "<group>";
+		};
+		3A15464D1B02A32C001EEB45 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3A15465E1B02A4CE001EEB45 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		3A2F9D831A8FE63B00B0DB68 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -294,6 +332,7 @@
 				3AAF6EE51A3CE5BA00C657FB /* BuildaGitServer */,
 				3AAF6EF41A3CE5BA00C657FB /* BuildaGitServerTests */,
 				3AAF6E751A3CE4CC00C657FB /* BuildaUtils */,
+				3A15464C1B02A32C001EEB45 /* BuildaUtilsTests */,
 				3A5687711A3B93BD0066DB2B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -306,6 +345,7 @@
 				3AAF6EBE1A3CE57100C657FB /* BuildaCIServer.framework */,
 				3AAF6EE41A3CE5BA00C657FB /* BuildaGitServer.framework */,
 				3AAF6EEE1A3CE5BA00C657FB /* BuildaGitServerTests.xctest */,
+				3A15464B1B02A32C001EEB45 /* BuildaUtilsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -538,6 +578,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		3A15464A1B02A32C001EEB45 /* BuildaUtilsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3A1546541B02A32C001EEB45 /* Build configuration list for PBXNativeTarget "BuildaUtilsTests" */;
+			buildPhases = (
+				3A1546471B02A32C001EEB45 /* Sources */,
+				3A1546481B02A32C001EEB45 /* Frameworks */,
+				3A1546491B02A32C001EEB45 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3A1546531B02A32C001EEB45 /* PBXTargetDependency */,
+			);
+			name = BuildaUtilsTests;
+			productName = BuildaUtilsTests;
+			productReference = 3A15464B1B02A32C001EEB45 /* BuildaUtilsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		3A56876F1A3B93BD0066DB2B /* Buildasaur */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3A56878C1A3B93BD0066DB2B /* Build configuration list for PBXNativeTarget "Buildasaur" */;
@@ -643,6 +701,9 @@
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Honza Dvorsky";
 				TargetAttributes = {
+					3A15464A1B02A32C001EEB45 = {
+						CreatedOnToolsVersion = 6.3.1;
+					};
 					3A56876F1A3B93BD0066DB2B = {
 						CreatedOnToolsVersion = 6.1.1;
 						SystemCapabilities = {
@@ -684,11 +745,20 @@
 				3AAF6EBD1A3CE57100C657FB /* BuildaCIServer */,
 				3AAF6EE31A3CE5BA00C657FB /* BuildaGitServer */,
 				3AAF6EED1A3CE5BA00C657FB /* BuildaGitServerTests */,
+				3A15464A1B02A32C001EEB45 /* BuildaUtilsTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		3A1546491B02A32C001EEB45 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A15465F1B02A4CE001EEB45 /* Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3A56876E1A3B93BD0066DB2B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -729,6 +799,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		3A1546471B02A32C001EEB45 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A15465B1B02A37D001EEB45 /* ScriptTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3A56876C1A3B93BD0066DB2B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -826,6 +904,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		3A1546531B02A32C001EEB45 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3AAF6E731A3CE4CB00C657FB /* BuildaUtils */;
+			targetProxy = 3A1546521B02A32C001EEB45 /* PBXContainerItemProxy */;
+		};
 		3AAF6E8A1A3CE4CC00C657FB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 3AAF6E731A3CE4CB00C657FB /* BuildaUtils */;
@@ -875,6 +958,59 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		3A1546551B02A32C001EEB45 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = BuildaUtilsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		3A1546561B02A32C001EEB45 /* Testing */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = BuildaUtilsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Testing;
+		};
+		3A1546571B02A32C001EEB45 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = BuildaUtilsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		3A56878A1A3B93BD0066DB2B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1303,6 +1439,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		3A1546541B02A32C001EEB45 /* Build configuration list for PBXNativeTarget "BuildaUtilsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3A1546551B02A32C001EEB45 /* Debug */,
+				3A1546561B02A32C001EEB45 /* Testing */,
+				3A1546571B02A32C001EEB45 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		3A56876B1A3B93BD0066DB2B /* Build configuration list for PBXProject "Buildasaur" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
