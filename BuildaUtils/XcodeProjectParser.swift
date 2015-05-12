@@ -92,10 +92,14 @@ public class XcodeProjectParser {
     
     public class func sharedSchemeUrlsFromProjectOrWorkspaceUrl(url: NSURL) -> [NSURL] {
         
-        let projectUrls: [NSURL]
+        var projectUrls: [NSURL]
         if self.isWorkspaceUrl(url) {
             //first parse project urls from workspace contents
             projectUrls = self.projectUrlsFromWorkspace(url) ?? [NSURL]()
+            
+            //also add the workspace's url, it might own some schemes as well
+            projectUrls.append(url)
+            
         } else {
             //this already is a project url, take just that
             projectUrls = [url]
