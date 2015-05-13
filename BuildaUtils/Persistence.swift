@@ -84,6 +84,6 @@ public class Persistence {
         } else {
             Log.error("Couldn't read folder \(folderUrl), error \(error)")
         }
-        
     }
+    
 }

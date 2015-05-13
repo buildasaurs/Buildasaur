@@ -17,7 +17,7 @@ class NetworkUtils {
         
         let token = project.githubToken
         let server = GitHubFactory.server(token)
-        let sshKeyPath = project.privateSSHKeyUrl?.path ?? ""
+        let credentialValidationBlueprint = project.createSourceControlBlueprintForCredentialVerification()
         
         //check if we can get PRs, that should be representative enough
         if let repoName = project.githubRepoName() {
@@ -43,8 +43,10 @@ class NetworkUtils {
                         completion(success: false, error: Errors.errorWithInfo("Missing write permission for repo"))
                     } else {
                         //now test ssh keys
-                        self.checkValidityOfSSHKeys(sshKeyPath, repoSSHUrl: repo.repoUrlSSH, completion: { (success, error) -> () in
-                        
+                        self.checkValidityOfSSHKeys(credentialValidationBlueprint, completion: { (success, error) -> () in
+                            
+                            Log.verbose("Finished blueprint validation with success: \(success), error: \(error)")
+                            
                             //now complete
                             completion(success: success, error: error)
                         })
@@ -84,10 +86,10 @@ class NetworkUtils {
         }
     }
     
-    //TODO: take the path to the private key probs
-    class func checkValidityOfSSHKeys(path: String, repoSSHUrl: String, completion: (success: Bool, error: NSError?) -> ()) {
+    class func checkValidityOfSSHKeys(blueprint: SourceControlBlueprint, completion: (success: Bool, error: NSError?) -> ()) {
         
-        let r = SSHKeyVerification.verifyKeys(path, repoSSHUrl: repoSSHUrl)
+        let blueprintDict = blueprint.dictionarify()
+        let r = SSHKeyVerification.verifyBlueprint(blueprintDict)
         
         //based on the return value, either succeed or fail
         if r.terminationStatus == 0 {
