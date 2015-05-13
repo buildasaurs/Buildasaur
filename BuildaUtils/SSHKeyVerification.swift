@@ -9,7 +9,21 @@
 import Foundation
 
 public class SSHKeyVerification {
+    
+    private class func findXcodeDeveloperFolder() -> String {
         
+        //first find xcode's developer folder, in case user has a renamed xcode
+        let found = Script.run("xcode-select", arguments: ["-p"])
+        
+        if found.terminationStatus == 0 {
+            let path = found.standardOutput.stripTrailingNewline()
+            return path
+        } else {
+            //if that fails, try the standard path
+            return "/Applications/Xcode.app/Contents/Developer"
+        }
+    }
+    
     public class func verifyBlueprint(blueprint: NSDictionary) -> Script.ScriptResponse {
         
         //convert dictionary into string
@@ -18,7 +32,8 @@ public class SSHKeyVerification {
             
             let scriptString = NSString(data: data, encoding: NSUTF8StringEncoding)!
             
-            let xcsbridgePath = "/Applications/Xcode.app/Contents/Developer/usr/bin/xcsbridge"
+            let xcodePath = self.findXcodeDeveloperFolder()
+            let xcsbridgePath = "\(xcodePath)/usr/bin/xcsbridge"
             let xcsbridgeArgs = "source-control blueprint-preflight --path - --format json"
             let script = "echo '\(scriptString)' | \(xcsbridgePath) \(xcsbridgeArgs)"
             let response = Script.runTemporaryScript(script)
