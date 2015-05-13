@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>69B0DA2F-5930-4961-9871-EF4103C70CA9</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Buildasaur</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>1C5C2A17EEADA6DBF6678501245487A71FBE28BB</key>
+		<string>github.com:czechboy0/Buildasaur.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Buildasaur.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>1C5C2A17EEADA6DBF6678501245487A71FBE28BB</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:czechboy0/Buildasaur.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>1C5C2A17EEADA6DBF6678501245487A71FBE28BB</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>1C5C2A17EEADA6DBF6678501245487A71FBE28BB</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Buildasaur</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D105g" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -953,7 +953,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bS2-PQ-LqY">
-                                        <rect key="frame" x="0.0" y="186" width="282" height="25"/>
+                                        <rect key="frame" x="0.0" y="192" width="282" height="25"/>
                                         <comboBoxCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Pick a template to build" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="DdO-z4-rNA">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -969,7 +969,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cRJ-do-1T6">
-                                        <rect key="frame" x="0.0" y="161" width="290" height="21"/>
+                                        <rect key="frame" x="0.0" y="171" width="290" height="21"/>
                                         <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="Your GitHub Token" drawsBackground="YES" id="Dp2-c1-fdU">
                                             <font key="font" metaFont="cellTitle"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -990,7 +990,7 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hm1-sB-msi" userLabel="Edit Button">
-                                        <rect key="frame" x="-6" y="124" width="302" height="32"/>
+                                        <rect key="frame" x="-6" y="139" width="302" height="32"/>
                                         <buttonCell key="cell" type="push" title="Select SSH Public Key" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="59P-uj-2qD">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -1028,7 +1028,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="91h-XU-pQB" userLabel="Edit Button">
-                                        <rect key="frame" x="-6" y="94" width="302" height="32"/>
+                                        <rect key="frame" x="-6" y="114" width="302" height="32"/>
                                         <buttonCell key="cell" type="push" title="Select SSH Private Key" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wWL-q6-LpY">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -1037,21 +1037,35 @@
                                             <action selector="selectPrivateKeyTapped:" target="A7n-Q1-s2v" id="JYo-8t-iHt"/>
                                         </connections>
                                     </button>
+                                    <secureTextField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gjV-E2-9oC">
+                                        <rect key="frame" x="0.0" y="95" width="290" height="22"/>
+                                        <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Your SSH key passphrase (if you have one)" drawsBackground="YES" usesSingleLineMode="YES" id="Yo3-xf-J7S">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            <allowedInputSourceLocales>
+                                                <string>NSAllRomanInputSourcesLocaleIdentifier</string>
+                                            </allowedInputSourceLocales>
+                                        </secureTextFieldCell>
+                                    </secureTextField>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="YvH-rP-LsF" firstAttribute="bottom" secondItem="pLy-98-uKD" secondAttribute="bottom" id="6eT-1Y-cGx"/>
-                                    <constraint firstItem="Hm1-sB-msi" firstAttribute="top" secondItem="cRJ-do-1T6" secondAttribute="bottom" constant="9" id="8d7-Uo-SI0"/>
+                                    <constraint firstItem="gjV-E2-9oC" firstAttribute="top" secondItem="91h-XU-pQB" secondAttribute="bottom" constant="4" id="6kq-nO-z5T"/>
+                                    <constraint firstItem="gjV-E2-9oC" firstAttribute="leading" secondItem="7qa-tf-Tab" secondAttribute="leading" id="7Or-6q-U2h"/>
+                                    <constraint firstItem="Hm1-sB-msi" firstAttribute="top" secondItem="cRJ-do-1T6" secondAttribute="bottom" constant="4" id="8d7-Uo-SI0"/>
                                     <constraint firstAttribute="bottom" secondItem="t5e-OJ-Qr5" secondAttribute="bottom" constant="3" id="Fnq-Cy-OZO"/>
                                     <constraint firstItem="lPW-lM-p5z" firstAttribute="top" secondItem="K3a-Xn-GsM" secondAttribute="bottom" constant="8" id="I0o-Vf-Yoy"/>
                                     <constraint firstAttribute="trailing" secondItem="K3a-Xn-GsM" secondAttribute="trailing" id="MEy-B8-HWp"/>
-                                    <constraint firstItem="bS2-PQ-LqY" firstAttribute="top" secondItem="Uyj-4j-hit" secondAttribute="bottom" constant="11" id="Pww-b6-RKC"/>
+                                    <constraint firstItem="bS2-PQ-LqY" firstAttribute="top" secondItem="Uyj-4j-hit" secondAttribute="bottom" constant="5" id="Pww-b6-RKC"/>
+                                    <constraint firstAttribute="trailing" secondItem="gjV-E2-9oC" secondAttribute="trailing" id="S8c-ks-8oa"/>
                                     <constraint firstAttribute="trailing" secondItem="lPW-lM-p5z" secondAttribute="trailing" id="ULv-0E-8nq"/>
                                     <constraint firstItem="Hm1-sB-msi" firstAttribute="leading" secondItem="7qa-tf-Tab" secondAttribute="leading" id="UQx-4u-fXA"/>
                                     <constraint firstAttribute="bottom" secondItem="dGX-5y-5nj" secondAttribute="bottom" constant="9" id="VkZ-7h-iGx"/>
-                                    <constraint firstItem="91h-XU-pQB" firstAttribute="top" secondItem="Hm1-sB-msi" secondAttribute="bottom" constant="9" id="WRF-IK-lCh"/>
+                                    <constraint firstItem="91h-XU-pQB" firstAttribute="top" secondItem="Hm1-sB-msi" secondAttribute="bottom" constant="4" id="WRF-IK-lCh"/>
                                     <constraint firstAttribute="trailing" secondItem="t5e-OJ-Qr5" secondAttribute="trailing" id="Wol-0E-UcH"/>
                                     <constraint firstItem="pLy-98-uKD" firstAttribute="leading" secondItem="7qa-tf-Tab" secondAttribute="leading" constant="20" id="X0T-lf-yj7"/>
-                                    <constraint firstItem="cRJ-do-1T6" firstAttribute="top" secondItem="bS2-PQ-LqY" secondAttribute="bottom" constant="8" id="ZRV-zB-ugu"/>
+                                    <constraint firstItem="cRJ-do-1T6" firstAttribute="top" secondItem="bS2-PQ-LqY" secondAttribute="bottom" constant="4" id="ZRV-zB-ugu"/>
                                     <constraint firstItem="t5e-OJ-Qr5" firstAttribute="top" secondItem="pLy-98-uKD" secondAttribute="bottom" constant="14" id="c3J-Jh-Wmr"/>
                                     <constraint firstAttribute="trailing" secondItem="cRJ-do-1T6" secondAttribute="trailing" id="f0b-V4-2Gr"/>
                                     <constraint firstItem="Uyj-4j-hit" firstAttribute="top" secondItem="lPW-lM-p5z" secondAttribute="bottom" constant="8" id="fgw-Bd-BIe"/>
@@ -1093,6 +1107,7 @@
                         <outlet property="projectURLLabel" destination="Uyj-4j-hit" id="cR7-z0-HKm"/>
                         <outlet property="selectSSHPrivateKeyButton" destination="91h-XU-pQB" id="0pW-wA-cfz"/>
                         <outlet property="selectSSHPublicKeyButton" destination="Hm1-sB-msi" id="fDS-Kk-9La"/>
+                        <outlet property="sshPassphraseTextField" destination="gjV-E2-9oC" id="tLk-up-4Li"/>
                         <outlet property="statusContentView" destination="7qa-tf-Tab" id="S0O-6Y-mUm"/>
                         <outlet property="tokenTextField" destination="cRJ-do-1T6" id="Tui-jy-BDq"/>
                     </connections>
