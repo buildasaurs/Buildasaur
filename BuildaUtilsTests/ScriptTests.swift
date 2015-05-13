@@ -12,26 +12,35 @@ import BuildaUtils
 
 class ScriptTests: XCTestCase {
     
-    func testGitVersion() {
+    func testRealGitVersion() {
         
-        //here we have to specify the exact path, unfortunately `which git` leads to the prebundled git in xcode
-        //whereas when you run Buildasaur normally (under your user), `which git` will do what you'd expect, choose
-        //your active git binary (probably in /usr/bin/git or /usr/local/bin/git
-        
-        let response = Script.run("/usr/bin/git", arguments: ["--version"])
+        let response = SSHKeyVerification.getGitVersion()
         XCTAssertEqual(response.terminationStatus, 0)
         XCTAssertEqual(response.standardError, "")
         
-        let versionString = response.standardOutput
-        XCTAssert(count(versionString) > 0, "Git version must not be an empty string")
+        let (success, errorString) = SSHKeyVerification.verifyGitVersion(response)
+        XCTAssertTrue(success)
+        XCTAssertEqual(errorString, "")
+    }
+    
+    func testFakeRightGitVersion() {
         
-        let comps = versionString.componentsSeparatedByString(" ")
-        XCTAssertGreaterThanOrEqual(comps.count, 3)
+        //test we pass higher versions...
+        let response = (0, "git version 2.3.1 bla bla bla", "")
         
-        if comps.count >= 3 {
-            let version = comps[2]
-            XCTAssertGreaterThanOrEqual(version, "2.3.0", "Git version must be at least 2.3")            
-        }
+        let (success, errorString) = SSHKeyVerification.verifyGitVersion(response)
+        XCTAssertTrue(success)
+        XCTAssertEqual(errorString, "")
+    }
+    
+    func testFakeWrongGitVersion() {
+        
+        //test we catch lower versions...
+        let response = (0, "git version 2.1.0 bla bla bla", "")
+        
+        let (success, errorString) = SSHKeyVerification.verifyGitVersion(response)
+        XCTAssertFalse(success)
+        XCTAssertNotEqual(errorString, "")
     }
     
     func testWhich() {
