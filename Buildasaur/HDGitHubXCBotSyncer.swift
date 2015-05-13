@@ -21,7 +21,8 @@ public class HDGitHubXCBotSyncer : Syncer {
     
     typealias GitHubStatusAndComment = (status: Status, comment: String?)
     
-    init(integrationServer: XcodeServer, sourceServer: GitHubServer, localSource: LocalSource, syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool) {
+    init(integrationServer: XcodeServer, sourceServer: GitHubServer, localSource: LocalSource,
+        syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool) {
         
         self.github = sourceServer
         self.xcodeServer = integrationServer
@@ -53,6 +54,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             self.xcodeServer = nil
             self.localSource = nil
             self.waitForLttm = true
+            self.postStatusComments = true
             super.init(syncInterval: 0)
             return nil
         }
@@ -65,6 +67,7 @@ public class HDGitHubXCBotSyncer : Syncer {
         dict["project_path"] = self.localSource.url.absoluteString
         dict["server_host"] = self.xcodeServer.config.host
         dict["wait_for_lttm"] = self.waitForLttm
+        dict["post_status_comments"] = self.postStatusComments
         return dict
     }
     
@@ -552,8 +555,8 @@ public class HDGitHubXCBotSyncer : Syncer {
                 return
             }
             
-            //TODO: pipe this out, into the syncer prefs and into the UI
-            let postStatusComments = false //temp hack to disable posting comments
+            //have a chance to NOT post a status comment...
+            let postStatusComments = self.postStatusComments
             
             //optional there can be a comment to be posted as well
             if let comment = statusWithComment.comment where postStatusComments {

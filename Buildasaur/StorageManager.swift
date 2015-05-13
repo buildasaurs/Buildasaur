@@ -52,7 +52,8 @@ class StorageManager {
         self.servers.append(config)
     }
     
-    func addSyncer(syncInterval: NSTimeInterval, waitForLttm: Bool, project: LocalSource, serverConfig: XcodeServerConfig) -> HDGitHubXCBotSyncer? {
+    func addSyncer(syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool,
+        project: LocalSource, serverConfig: XcodeServerConfig) -> HDGitHubXCBotSyncer? {
 
         if syncInterval <= 0 {
             Log.error("Sync interval must be > 0 seconds.")
@@ -61,7 +62,8 @@ class StorageManager {
         
         let xcodeServer = XcodeServerFactory.server(serverConfig)
         let github = GitHubFactory.server(project.githubToken)
-        let syncer = HDGitHubXCBotSyncer(integrationServer: xcodeServer, sourceServer: github, localSource: project, syncInterval: syncInterval, waitForLttm: waitForLttm)
+        let syncer = HDGitHubXCBotSyncer(integrationServer: xcodeServer, sourceServer: github, localSource: project,
+            syncInterval: syncInterval, waitForLttm: waitForLttm, postStatusComments: postStatusComments)
         self.syncers.append(syncer)
         return syncer
     }
