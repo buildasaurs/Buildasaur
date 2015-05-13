@@ -10,7 +10,35 @@ import Foundation
 
 public class SSHKeyVerification {
     
+    public class func getGitVersion() -> Script.ScriptResponse {
+        
+        let response = Script.run("/usr/bin/git", arguments: ["--version"])
+        return response
+    }
+    
+    public class func verifyGitVersion(response: Script.ScriptResponse) -> (Bool, String) {
+        
+        let versionString = response.standardOutput.stripTrailingNewline()
+        let comps = versionString.componentsSeparatedByString(" ")
+        
+        if comps.count >= 3 {
+            let version = comps[2]
+            if version >= "2.3.0" {
+                return (true, "")
+            }
+            return (false, "Git version >= 2.3 required, found \(version)")
+        }
+        return (false, "Couldn't verify git version")
+    }
+    
     public class func verifyKeys(path: String, repoSSHUrl: String) -> Script.ScriptResponse {
+        
+        let git = self.getGitVersion()
+        let (gitVersionSuccess, gitVersionErrorString) = self.verifyGitVersion(git)
+        if !gitVersionSuccess {
+            Log.error("Insufficient git version. Found \(git.standardOutput.stripTrailingNewline()), we require at least 2.3")
+            return (1, "", gitVersionErrorString)
+        }
         
         //create a temp script, because NSTask is being difficult and doesn't play nice with environment variables,
         //which we need for forcing SSH keys from a specific path to verify they are valid for your repo. sigh.
