@@ -24,7 +24,8 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     @IBOutlet weak var buildTemplateComboBox: NSComboBox!
     @IBOutlet weak var selectSSHPrivateKeyButton: NSButton!
     @IBOutlet weak var selectSSHPublicKeyButton: NSButton!
-    
+    @IBOutlet weak var sshPassphraseTextField: NSSecureTextField!
+
     //GitHub.com: Settings -> Applications -> Personal access tokens - create one for Buildasaur and put it in this text field
     @IBOutlet weak var tokenTextField: NSTextField!
     
@@ -66,9 +67,11 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
             self.editButton.title = self.editing ? "Done" : "Edit"
             self.selectSSHPrivateKeyButton.enabled = self.editing
             self.selectSSHPublicKeyButton.enabled = self.editing
+            self.sshPassphraseTextField.enabled = self.editing
             
             self.selectSSHPublicKeyButton.title = project.publicSSHKeyUrl?.lastPathComponent ?? "Select SSH Public Key"
             self.selectSSHPrivateKeyButton.title = project.privateSSHKeyUrl?.lastPathComponent ?? "Select SSH Private Key"
+            self.sshPassphraseTextField.stringValue = project.sshPassphrase ?? ""
             
             //fill data in
             self.projectNameLabel.stringValue = project.projectName ?? "<NO NAME>"
@@ -92,8 +95,6 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
             {
                 self.buildTemplateComboBox.selectItemWithObjectValue(template.name!)
             }
-            
-            
             
         } else {
             self.statusContentView.hidden = true
@@ -217,6 +218,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
             let successToken = self.pullTokenFromUI()
             let privateUrl = project.privateSSHKeyUrl
             let publicUrl = project.publicSSHKeyUrl
+            let sshPassphrase = self.pullSSHPassphraseFromUI() //can't fail
             let githubToken = project.githubToken
             
             let tokenPresent = githubToken != nil
@@ -231,6 +233,19 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         return false
     }
     
+    func pullSSHPassphraseFromUI() -> Bool {
+        
+        let string = self.sshPassphraseTextField.stringValue
+        if let project = self.project() {
+            if count(string) > 0 {
+                project.sshPassphrase = string
+            } else {
+                project.sshPassphrase = nil
+            }
+        }
+        return true
+    }
+    
     func pullTokenFromUI() -> Bool {
         
         let string = self.tokenTextField.stringValue
@@ -241,8 +256,6 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
                 project.githubToken = nil
             }
         }
-        
-        //token is not required
         return true
     }
     
@@ -250,6 +263,9 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         
         if control == self.tokenTextField {
             self.pullTokenFromUI()
+        }
+        if control == self.sshPassphraseTextField {
+            self.pullSSHPassphraseFromUI()
         }
         return true
     }

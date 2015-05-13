@@ -102,6 +102,7 @@ public class LocalSource : JSONSerializable {
         self.availabilityState = .Unchecked
         self.publicSSHKeyUrl = nil
         self.privateSSHKeyUrl = nil
+        self.sshPassphrase = nil
         let (parsed, error) = self.refreshMetadata()
         if !parsed {
             return nil
@@ -117,6 +118,7 @@ public class LocalSource : JSONSerializable {
         self.availabilityState = original.availabilityState
         self.publicSSHKeyUrl = original.publicSSHKeyUrl
         self.privateSSHKeyUrl = original.privateSSHKeyUrl
+        self.sshPassphrase = original.sshPassphrase
         let (parsed, error) = self.refreshMetadata()
         if !parsed {
             return nil
@@ -213,6 +215,8 @@ public class LocalSource : JSONSerializable {
             } else {
                 self.privateSSHKeyUrl = nil
             }
+            self.sshPassphrase = json.optionalStringForKey("ssh_passphrase")
+            
             let (success, error) = self.refreshMetadata()
             if !success {
                 Log.error("Error parsing: \(error)")
@@ -226,6 +230,7 @@ public class LocalSource : JSONSerializable {
             self.githubToken = nil
             self.publicSSHKeyUrl = nil
             self.privateSSHKeyUrl = nil
+            self.sshPassphrase = nil
             return nil
         }
     }
@@ -239,6 +244,7 @@ public class LocalSource : JSONSerializable {
         json.optionallyAddValueForKey(self.githubToken, key: "github_token")
         json.optionallyAddValueForKey(self.publicSSHKeyUrl?.absoluteString, key: "ssh_public_key_url")
         json.optionallyAddValueForKey(self.privateSSHKeyUrl?.absoluteString, key: "ssh_private_key_url")
+        json.optionallyAddValueForKey(self.sshPassphrase, key: "ssh_passphrase")
         
         return json
     }
@@ -294,9 +300,6 @@ public class LocalSource : JSONSerializable {
         Log.error("Couldn't load key at nil url")
         return nil
     }
-    
-    
 
-    
 }
 
