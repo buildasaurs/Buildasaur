@@ -23,6 +23,16 @@ class ScriptTests: XCTestCase {
         XCTAssertEqual(errorString, "")
     }
     
+    func testFakeRightGitVersion() {
+        
+        //test we pass higher versions...
+        let response = (0, "git version 2.3.1 bla bla bla", "")
+        
+        let (success, errorString) = SSHKeyVerification.verifyGitVersion(response)
+        XCTAssertTrue(success)
+        XCTAssertEqual(errorString, "")
+    }
+    
     func testFakeWrongGitVersion() {
         
         //test we catch lower versions...
