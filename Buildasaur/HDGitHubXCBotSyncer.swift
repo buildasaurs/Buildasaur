@@ -17,15 +17,18 @@ public class HDGitHubXCBotSyncer : Syncer {
     let xcodeServer: XcodeServer!
     let localSource: LocalSource!
     let waitForLttm: Bool
+    let postStatusComments: Bool
     
     typealias GitHubStatusAndComment = (status: Status, comment: String?)
     
-    init(integrationServer: XcodeServer, sourceServer: GitHubServer, localSource: LocalSource, syncInterval: NSTimeInterval, waitForLttm: Bool) {
+    init(integrationServer: XcodeServer, sourceServer: GitHubServer, localSource: LocalSource,
+        syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool) {
         
         self.github = sourceServer
         self.xcodeServer = integrationServer
         self.localSource = localSource
         self.waitForLttm = waitForLttm
+        self.postStatusComments = postStatusComments
         super.init(syncInterval: syncInterval)
     }
     
@@ -42,6 +45,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             self.github = GitHubFactory.server(project.githubToken)
             self.xcodeServer = XcodeServerFactory.server(serverConfig)
             self.waitForLttm = json.optionalBoolForKey("wait_for_lttm") ?? true
+            self.postStatusComments = json.optionalBoolForKey("post_status_comments") ?? true
             super.init(syncInterval: syncInterval)
             
         } else {
@@ -50,6 +54,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             self.xcodeServer = nil
             self.localSource = nil
             self.waitForLttm = true
+            self.postStatusComments = true
             super.init(syncInterval: 0)
             return nil
         }
@@ -62,6 +67,7 @@ public class HDGitHubXCBotSyncer : Syncer {
         dict["project_path"] = self.localSource.url.absoluteString
         dict["server_host"] = self.xcodeServer.config.host
         dict["wait_for_lttm"] = self.waitForLttm
+        dict["post_status_comments"] = self.postStatusComments
         return dict
     }
     
@@ -549,8 +555,11 @@ public class HDGitHubXCBotSyncer : Syncer {
                 return
             }
             
+            //have a chance to NOT post a status comment...
+            let postStatusComments = self.postStatusComments
+            
             //optional there can be a comment to be posted as well
-            if let comment = statusWithComment.comment {
+            if let comment = statusWithComment.comment where postStatusComments {
                 
                 //we have a comment, post it
                 self.github.postCommentOnIssue(comment, issueNumber: pr.number, repo: repo, completion: { (comment, error) -> () in

@@ -1338,7 +1338,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="56" id="7Nb-aF-8GR"/>
                                 </constraints>
-                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="dZ6-jK-9d0">
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="0.5" horizontal="YES" id="dZ6-jK-9d0">
                                     <rect key="frame" x="1" y="117.29037600755692" width="237" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -1434,7 +1434,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="113" id="akl-ae-qWk"/>
                                 </constraints>
-                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="RFK-qC-17J">
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="RFK-qC-17J">
                                     <rect key="frame" x="1" y="117.52239549160004" width="237" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -1860,8 +1860,11 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JKR-Sp-m8Y">
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JKR-Sp-m8Y">
                                 <rect key="frame" x="20" y="124" width="169" height="19"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="169" id="OyQ-h8-Dln"/>
+                                </constraints>
                                 <buttonCell key="cell" type="roundTextured" title="Manual Bot Management" bezelStyle="texturedRounded" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hR5-Ym-8aa">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
@@ -1870,15 +1873,15 @@
                                     <action selector="manualBotManagementTapped:" target="RHg-5W-Hb1" id="u8a-Hh-JeY"/>
                                 </connections>
                             </button>
-                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SL5-bS-Lf1">
-                                <rect key="frame" x="46" y="42" width="130" height="18"/>
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="SL5-bS-Lf1">
+                                <rect key="frame" x="97" y="57" width="109" height="18"/>
                                 <buttonCell key="cell" type="check" title="Wait for &quot;lttm&quot;" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="Qky-j0-ffo">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
-                            <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BkU-KL-lMX">
-                                <rect key="frame" x="18" y="36" width="25" height="25"/>
+                            <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BkU-KL-lMX">
+                                <rect key="frame" x="8" y="51" width="25" height="25"/>
                                 <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Pce-dC-RwH">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -1887,26 +1890,54 @@
                                     <action selector="helpLttmButtonTapped:" target="RHg-5W-Hb1" id="HyJ-tw-2fB"/>
                                 </connections>
                             </button>
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="I34-eZ-a6k">
+                                <rect key="frame" x="41" y="34" width="165" height="18"/>
+                                <buttonCell key="cell" type="check" title="Post Status Comments" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="iGN-fv-G4G">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="t3o-Ag-QHY">
+                                <rect key="frame" x="8" y="30" width="25" height="25"/>
+                                <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hoN-6R-mFO">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="helpPostStatusCommentsButtonTapped:" target="RHg-5W-Hb1" id="EYM-w9-DOh"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="A9h-Jh-CP9" firstAttribute="top" secondItem="I34-eZ-a6k" secondAttribute="bottom" constant="6" id="3dX-AM-Tlf"/>
                             <constraint firstItem="8VZ-bw-dT5" firstAttribute="top" secondItem="zNe-bD-Pj4" secondAttribute="top" constant="5" id="Idf-Wk-1a9"/>
+                            <constraint firstItem="t3o-Ag-QHY" firstAttribute="centerX" secondItem="BkU-KL-lMX" secondAttribute="centerX" id="JBt-fO-4Qt"/>
+                            <constraint firstItem="SL5-bS-Lf1" firstAttribute="trailing" secondItem="I34-eZ-a6k" secondAttribute="trailing" id="K0Z-Rf-B9m"/>
                             <constraint firstAttribute="trailing" secondItem="8VZ-bw-dT5" secondAttribute="trailing" constant="7" id="KhO-CN-dKQ"/>
+                            <constraint firstItem="JKR-Sp-m8Y" firstAttribute="top" secondItem="zNe-bD-Pj4" secondAttribute="top" constant="5" id="P0S-FI-EdB"/>
                             <constraint firstAttribute="centerY" secondItem="Fkq-gK-hvs" secondAttribute="centerY" constant="20" id="Tyj-fy-PKg"/>
                             <constraint firstAttribute="bottom" secondItem="8VZ-bw-dT5" secondAttribute="bottom" constant="8" id="VKM-vY-EPh"/>
                             <constraint firstItem="Fkq-gK-hvs" firstAttribute="centerY" secondItem="cYi-gZ-3MX" secondAttribute="centerY" constant="-0.5" id="Vmg-bM-hj9"/>
+                            <constraint firstItem="SL5-bS-Lf1" firstAttribute="centerY" secondItem="BkU-KL-lMX" secondAttribute="centerY" constant="-1.5" id="arW-Yk-6ql"/>
                             <constraint firstItem="Fkq-gK-hvs" firstAttribute="leading" secondItem="5mg-80-kNh" secondAttribute="leading" id="cG9-Du-imO"/>
                             <constraint firstAttribute="bottom" secondItem="5mg-80-kNh" secondAttribute="bottom" constant="10" id="cJp-rk-CCh"/>
                             <constraint firstItem="8VZ-bw-dT5" firstAttribute="leading" secondItem="XOz-yR-q3G" secondAttribute="trailing" constant="24" id="cwr-61-Au2"/>
                             <constraint firstItem="XOz-yR-q3G" firstAttribute="leading" secondItem="A9h-Jh-CP9" secondAttribute="trailing" constant="3" id="d8B-OU-HKq"/>
+                            <constraint firstItem="t3o-Ag-QHY" firstAttribute="leading" secondItem="zNe-bD-Pj4" secondAttribute="leading" constant="10" id="gL4-h3-Znl"/>
+                            <constraint firstItem="JKR-Sp-m8Y" firstAttribute="leading" secondItem="Fkq-gK-hvs" secondAttribute="leading" id="gvn-Js-kCf"/>
                             <constraint firstItem="A9h-Jh-CP9" firstAttribute="centerY" secondItem="XOz-yR-q3G" secondAttribute="centerY" id="iRF-ex-h9B"/>
+                            <constraint firstItem="I34-eZ-a6k" firstAttribute="top" secondItem="SL5-bS-Lf1" secondAttribute="bottom" constant="9" id="iY6-IQ-EOK"/>
+                            <constraint firstItem="I34-eZ-a6k" firstAttribute="centerY" secondItem="t3o-Ag-QHY" secondAttribute="centerY" constant="0.5" id="idz-E5-OE3"/>
                             <constraint firstItem="A9h-Jh-CP9" firstAttribute="baseline" secondItem="5mg-80-kNh" secondAttribute="baseline" id="n8b-gL-QIi"/>
                             <constraint firstItem="A9h-Jh-CP9" firstAttribute="leading" secondItem="5mg-80-kNh" secondAttribute="trailing" constant="12" id="s3n-tF-0xA"/>
+                            <constraint firstItem="I34-eZ-a6k" firstAttribute="leading" secondItem="t3o-Ag-QHY" secondAttribute="trailing" constant="12" id="shw-I6-mBG"/>
                             <constraint firstItem="Fkq-gK-hvs" firstAttribute="leading" secondItem="zNe-bD-Pj4" secondAttribute="leading" constant="20" id="tAH-BV-LCf"/>
                             <constraint firstItem="cYi-gZ-3MX" firstAttribute="leading" secondItem="Fkq-gK-hvs" secondAttribute="trailing" constant="14" id="wg4-z7-3io"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="lttmToggle" destination="SL5-bS-Lf1" id="0d3-tb-sVO"/>
+                        <outlet property="postStatusCommentsToggle" destination="I34-eZ-a6k" id="DbA-bD-uId"/>
                         <outlet property="startStopButton" destination="Fkq-gK-hvs" id="5Ba-3L-5FZ"/>
                         <outlet property="statusActivityIndicator" destination="cYi-gZ-3MX" id="5l5-14-v81"/>
                         <outlet property="statusTextField" destination="8VZ-bw-dT5" id="Uav-J8-RH3"/>
