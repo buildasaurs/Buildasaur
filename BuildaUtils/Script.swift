@@ -34,6 +34,29 @@ public class Script {
         return result
     }
     
+    public class func inTemporaryScript(script: String, block: (scriptPath: String, error: NSError?) -> ()) {
+        
+        let uuid = NSUUID().UUIDString
+        let tempPath = NSTemporaryDirectory().stringByAppendingPathComponent(uuid)
+        var error: NSError?
+        
+        let success = script.writeToFile(tempPath, atomically: true, encoding: NSUTF8StringEncoding, error: &error)
+        
+        block(scriptPath: tempPath, error: error)
+        
+        //delete the temp script
+        NSFileManager.defaultManager().removeItemAtPath(tempPath, error: nil)
+    }
+    
+    public class func runTemporaryScript(script: String) -> ScriptResponse {
+        
+        var resp: ScriptResponse!
+        self.inTemporaryScript(script, block: { (scriptPath, error) -> () in
+            resp = Script.run("/bin/bash", arguments: [scriptPath])
+        })
+        return resp
+    }
+    
     private class func runResolved(path: String, arguments: [String], environment: [String: String]) -> ScriptResponse {
         
         let pid = NSProcessInfo.processInfo().processIdentifier

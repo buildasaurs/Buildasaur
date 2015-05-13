@@ -28,6 +28,7 @@ public class LocalSource : JSONSerializable {
     var githubToken: String?
     var privateSSHKeyUrl: NSURL?
     var publicSSHKeyUrl: NSURL?
+    var sshPassphrase: String?
     var privateSSHKey: String? { return self.getContentsOfKeyAtUrl(self.privateSSHKeyUrl) }
     var publicSSHKey: String? { return self.getContentsOfKeyAtUrl(self.publicSSHKeyUrl) }
     
