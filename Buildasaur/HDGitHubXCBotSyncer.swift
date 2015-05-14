@@ -638,36 +638,11 @@ public class HDGitHubXCBotSyncer : Syncer {
         }
     }
     
-    private func pluralizeStringIfNecessary(string: String, number: Int) -> String {
-        if number > 1 {
-            return "\(string)s"
-        }
-        return string
-    }
-    
     private func formattedDurationOfIntegration(integration: Integration) -> String? {
         
         if let seconds = integration.duration {
             
-            let intSeconds = Int(seconds)
-            let minutes = intSeconds / 60
-            let remainderSeconds = intSeconds % 60
-            let hours = minutes / 60
-            let remainderMinutes = minutes % 60
-            
-            let formattedSeconds = self.pluralizeStringIfNecessary("second", number: remainderSeconds)
-            
-            var result = "\(remainderSeconds) \(formattedSeconds)"
-            if remainderMinutes > 0 {
-                
-                let formattedMinutes = self.pluralizeStringIfNecessary("minute", number: remainderMinutes)
-                result = "\(remainderMinutes) \(formattedMinutes) and " + result
-            }
-            if hours > 0 {
-                
-                let formattedHours = self.pluralizeStringIfNecessary("hours", number: hours)
-                result = "\(hours) \(formattedHours), " + result
-            }
+            var result = TimeUtils.secondsToNaturalTime(Int(seconds))
             return result
             
         } else {

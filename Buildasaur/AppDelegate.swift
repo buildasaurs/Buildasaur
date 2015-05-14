@@ -19,11 +19,43 @@ import BuildaUtils
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     
+    let menuItemManager = MenuItemManager()
+    
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        // Insert code here to initialize your application
         
         self.setupLogging()
+        self.menuItemManager.setupMenuBarItem()
     }
+
+    func applicationShouldHandleReopen(sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        
+        self.showMainWindow()
+        return true
+    }
+    
+    func applicationDidBecomeActive(notification: NSNotification) {
+        
+        self.showMainWindow()
+    }
+    
+    func applicationWillTerminate(aNotification: NSNotification) {
+        
+        StorageManager.sharedInstance.stop()
+    }
+    
+    //MARK: Showing Window on Reactivation
+    
+    func showMainWindow(){
+        
+        NSApp.activateIgnoringOtherApps(true)
+        
+        //first window. i wish there was a nicer way (please some tell me there is)
+        if let window = NSApplication.sharedApplication().windows.first as? NSWindow {
+            window.makeKeyAndOrderFront(self)
+        }
+    }
+    
+    //MARK: Logging
     
     func setupLogging() {
         
@@ -46,11 +78,5 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         Log.untouched("*\n*\n*\n\(ascii)\nBuildasaur \(version) launched at \(NSDate()).\n*\n*\n*\n")
     }
-    
-    func applicationWillTerminate(aNotification: NSNotification) {
-        
-        StorageManager.sharedInstance.stop()
-    }
-    
 }
 

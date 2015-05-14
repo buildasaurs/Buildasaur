@@ -78,6 +78,8 @@
 		3AB3F0E91A3CEBAC005F717F /* GitHubFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A6355D91A3BBDA500545BF9 /* GitHubFactory.swift */; };
 		3AB3F0EA1A3CEBAC005F717F /* GitHubServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A58B1521A3B967C003E0266 /* GitHubServer.swift */; };
 		3AB3F0EB1A3CEBE9005F717F /* GitServerPublic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAF6F031A3CE66A00C657FB /* GitServerPublic.swift */; };
+		3AB3FDC91B05616A00021197 /* TimeUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB3FDC81B05616A00021197 /* TimeUtils.swift */; };
+		3AB3FDCB1B05644300021197 /* MenuItemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB3FDCA1B05644300021197 /* MenuItemManager.swift */; };
 		3AC553AF1A6313240078CCA6 /* XcodeServerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC553AE1A6313240078CCA6 /* XcodeServerConstants.swift */; };
 		3AD338B01AAE31D500ECD0F2 /* BuildTemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD338AF1AAE31D500ECD0F2 /* BuildTemplateViewController.swift */; };
 		3AF1B1221AAC621800917EF3 /* UIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF1B1211AAC621800917EF3 /* UIUtils.swift */; };
@@ -234,6 +236,8 @@
 		3AAF6EEE1A3CE5BA00C657FB /* BuildaGitServerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BuildaGitServerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AAF6EF61A3CE5BA00C657FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3AAF6F031A3CE66A00C657FB /* GitServerPublic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GitServerPublic.swift; path = BuildaGitServer/GitServerPublic.swift; sourceTree = SOURCE_ROOT; };
+		3AB3FDC81B05616A00021197 /* TimeUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeUtils.swift; sourceTree = "<group>"; };
+		3AB3FDCA1B05644300021197 /* MenuItemManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuItemManager.swift; sourceTree = "<group>"; };
 		3AC553AE1A6313240078CCA6 /* XcodeServerConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeServerConstants.swift; sourceTree = "<group>"; };
 		3ACB831F1A3BB64F00E285FD /* JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
 		3AD338AF1AAE31D500ECD0F2 /* BuildTemplateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildTemplateViewController.swift; sourceTree = "<group>"; };
@@ -445,6 +449,7 @@
 				3A5B04A91AB4ABEB00F60536 /* TriggerViewController.swift */,
 				3A5B04AB1AB4AC0F00F60536 /* SetupViewController.swift */,
 				3A5B04AF1AB5144700F60536 /* ManualBotManagementViewController.swift */,
+				3AB3FDCA1B05644300021197 /* MenuItemManager.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -473,6 +478,7 @@
 				3A3BDC1C1AF6C51900D2CD99 /* Extensions.swift */,
 				3A1546451B02A0C6001EEB45 /* Script.swift */,
 				3AF2B03A1B02C5D700DCF2D6 /* SSHKeyVerification.swift */,
+				3AB3FDC81B05616A00021197 /* TimeUtils.swift */,
 			);
 			path = BuildaUtils;
 			sourceTree = "<group>";
@@ -834,6 +840,7 @@
 				3AD338B01AAE31D500ECD0F2 /* BuildTemplateViewController.swift in Sources */,
 				3A90C4C01A90220F0048C040 /* HDGitHubXCBotSyncer.swift in Sources */,
 				3AAA1B681AAB722600FA1598 /* StatusProjectViewController.swift in Sources */,
+				3AB3FDCB1B05644300021197 /* MenuItemManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -847,6 +854,7 @@
 				3AAA1B741AABBD3A00FA1598 /* Errors.swift in Sources */,
 				3A7B91361A3E41980060A21A /* Server.swift in Sources */,
 				3A808A1B1ADB03640073145D /* Logging.swift in Sources */,
+				3AB3FDC91B05616A00021197 /* TimeUtils.swift in Sources */,
 				3AF1B1221AAC621800917EF3 /* UIUtils.swift in Sources */,
 				3A4770A41A745FFA0016E170 /* XcodeProjectParser.swift in Sources */,
 				3A1546461B02A0C6001EEB45 /* Script.swift in Sources */,

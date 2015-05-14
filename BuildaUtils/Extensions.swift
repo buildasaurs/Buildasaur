@@ -27,4 +27,12 @@ public extension String {
         }
         return stripped
     }
+    
+    public func pluralizeStringIfNecessary(number: Int) -> String {
+        if number > 1 {
+            return "\(self)s"
+        }
+        return self
+    }
 }
+
