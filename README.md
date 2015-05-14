@@ -72,7 +72,7 @@ The "lttm" barrier
 ------------------
 - an optional extra step in the workflow (**enabled** by default)
 - instead of integrating immediately after a PR is created, the reviewer first has a chance to look at the code and request any fixes of the code from the author
-- when the reviewer is happy with the code visually, she comments "lttm" in the PR and the bot is activated and performs and integration on the code
+- when the reviewer is happy with the code visually, she comments "lttm" in the PR and the bot is activated and performs an integration on the code
 - from that point on, if any additional commits are pushed, they get integrated as with the basic workflow
 
 Posting Status Comments
