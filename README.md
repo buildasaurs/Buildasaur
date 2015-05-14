@@ -21,8 +21,8 @@ Free, local and automatic testing of GitHub Pull Requests with Xcode Bots. Keep 
 Getting Buildasaur
 ------------------
 You have multiple options of getting started with Buildasaur, from source code to downloading the App.
-- get the .app for the [latest release](https://github.com/czechboy0/Buildasaur/releases/latest)
--- starting with version 0.2.8, release .app is always signed with my [Developer ID](https://developer.apple.com/developer-id/) (Jan Dvorsky), so that you can be sure you're really launching an official release. Feel free to run Buildasaur yourself from code, just be aware that you will get a warning from OS X if you have [Gatekeeper](http://en.wikipedia.org/wiki/Gatekeeper_(OS_X)) enabled.
+- get the .app of the [latest release](https://github.com/czechboy0/Buildasaur/releases/latest)
+- starting with version 0.2.8, release .app is always signed with my [Developer ID](https://developer.apple.com/developer-id/) (Jan Dvorsky), so that you can be sure you're really launching an official release. Feel free to run Buildasaur yourself from code, just be aware that you will get a warning from OS X if you have [Gatekeeper](http://en.wikipedia.org/wiki/Gatekeeper_(OS_X)) enabled.
 - check out code and build and run in Xcode (requires Xcode 6.3 with Swift 1.2, thus OS X 10.10.3)
 
 Installation Steps
@@ -49,9 +49,10 @@ Installation Steps
     + Click on *Pick a template to build*, which will guide you through setting up of a new template
     + Paste your GitHub token
     + Select the path to your SSH keys
+    + (Optional) Fill in your SSH key passphrase
     + Make sure that your account has read and write access to the GitHub repository (Buildasaur needs to be able to read Pull Requests, read PR comments, add a PR comment, read commit statuses, add a commit status)
-    + Click Done, which validates the settings and GitHub access
-- In the bottom part, choose the sync interval (default is now 15 seconds, which works pretty well, don't decrease it too much, GitHub rate-limits access to 5000 requests per hour, when authenticated and only 60 when unauthenticated)
+    + Click Done, which validates the settings, SSH access and GitHub access
+- In the bottom part, choose the sync interval (default is now 15 seconds, which works pretty well, don't decrease it too much, GitHub rate-limits access to 5000 requests per hour)
 - If both Server and Project configs say *Verified access, all is well*, click **Start** to start syncing your pull requests with bots.
 
 ![](https://raw.githubusercontent.com/czechboy0/Buildasaur/master/Meta/builda_screenshot.png)
