@@ -18,6 +18,18 @@ Free, local and automatic testing of GitHub Pull Requests with Xcode Bots. Keep 
 **Thinking of trying Buildasaur**? Check out the list of [teams and projects](./PROJECTS_USING_BUILDASAUR.md) already using it.<br>
 **Already using Buildasaur**? Please consider [adding yourself](./PROJECTS_USING_BUILDASAUR.md)!
 
+Configurable
+------------
+Buildasaur was designed to be easy to setup, while still giving you all the customization you need. By choosing the right defaults, most projects can get Buildasaur setup in minutes, start it and never have to worry about it again.
+
+![](https://raw.githubusercontent.com/czechboy0/Buildasaur/master/Meta/builda_screenshot.png)
+
+Glanceable
+----------
+Buildasaur runs as a background Mac app, its configuration window goes away when you don't need it. This gives you a chance to quickly peek at the status of your syncers from the menu bar.
+
+![](https://raw.githubusercontent.com/czechboy0/Buildasaur/master/Meta/menu_bar.png)
+
 Getting Buildasaur
 ------------------
 You have multiple options of getting started with Buildasaur, from source code to downloading the App.
@@ -54,8 +66,6 @@ Installation Steps
     + Click Done, which validates the settings, SSH access and GitHub access
 - In the bottom part, choose the sync interval (default is now 15 seconds, which works pretty well, don't decrease it too much, GitHub rate-limits access to 5000 requests per hour)
 - If both Server and Project configs say *Verified access, all is well*, click **Start** to start syncing your pull requests with bots.
-
-![](https://raw.githubusercontent.com/czechboy0/Buildasaur/master/Meta/builda_screenshot.png)
 
 Default workflow
 ----------------
