@@ -26,7 +26,7 @@ You have multiple options of getting started with Buildasaur, from source code t
 
 Installation Steps
 ------------------
-- Install Xcode 6+, Xcode Server 4+ and have a GitHub repo credentials ready
+- Install Xcode 6+, Xcode Server 4+ and have your GitHub repo credentials ready
 
 **Xcode Server Setup**
 - Open Server.app, go to Services -> Xcode and add select your Xcode
