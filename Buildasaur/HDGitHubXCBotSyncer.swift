@@ -386,15 +386,24 @@ public class HDGitHubXCBotSyncer : Syncer {
                 return true
             }
             
-            //if the result doesn't have a SHA yet and isn't pending - take a look at the result
-            //if it's a checkout-error, assume that it is a malformed SSH key bot, so don't keep
-            //restarting integrations - at least until someone fixes it (by closing the PR and fixing
-            //their SSH keys in Buildasaur so that when the next bot gets created, it does so with the right
-            //SSH keys.
             if integration.currentStep == .Completed {
+                
                 if let result = integration.result {
+                    
+                    //if the result doesn't have a SHA yet and isn't pending - take a look at the result
+                    //if it's a checkout-error, assume that it is a malformed SSH key bot, so don't keep
+                    //restarting integrations - at least until someone fixes it (by closing the PR and fixing
+                    //their SSH keys in Buildasaur so that when the next bot gets created, it does so with the right
+                    //SSH keys.
                     if result == .CheckoutError {
                         Log.error("Integration #\(integration.number) finished with a checkout error - please check that your SSH keys setup in Buildasaur are correct! If you need to fix them, please do so and then you need to recreate the bot - e.g. by closing the Pull Request, waiting for a sync (bot will disappear) and then reopening the Pull Request - should do the job!")
+                        return true
+                    }
+                    
+                    if result == .Canceled {
+                        
+                        //another case is when the integration gets doesn't yet have a blueprint AND was cancelled -
+                        //we should assume it belongs to the latest commit, because we can't tell otherwise.
                         return true
                     }
                 }
