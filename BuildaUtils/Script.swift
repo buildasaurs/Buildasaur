@@ -8,14 +8,20 @@
 
 import Foundation
 
-//TODO: think about adding support for asynchronous running of scripts as well
-
+/**
+*   A utility class for running terminal Scripts from your Mac app.
+*/
 public class Script {
     
     public typealias ScriptResponse = (terminationStatus: Int, standardOutput: String, standardError: String)
     
-    //TODO: create a small project for this and github+pod it, I couldn't find a simple library for running
-    //terminal scripts from Mac apps in Swift. might be useful to other people.
+    /**
+    *   Run a script by passing in a name of the script (e.g. if you use just 'git', it will first
+    *   resolve by using the 'git' at path `which git`) or the full path (such as '/usr/bin/git').
+    *   Optional arguments are passed in as an array of Strings and an optional environment dictionary
+    *   as a map from String to String.
+    *   Back you get a 'ScriptResponse', which is a tuple around the termination status and outputs (standard and error).
+    */
     public class func run(name: String, arguments: [String] = [], environment: [String: String] = [:]) -> ScriptResponse {
         
         //first resolve the name of the script to a path with `which`
@@ -34,12 +40,27 @@ public class Script {
         return result
     }
     
-    public class func inTemporaryScript(script: String, block: (scriptPath: String, error: NSError?) -> ()) {
+    /**
+    *   An alternative to Script.run is Script.runInTemporaryScript, which first dumps the passed in script
+    *   string into a temporary file, runs it and then deletes it. More useful for more complex script that involve
+    *   piping data between multiple scripts etc. Might be slower than Script.run, however.
+    */
+    public class func runTemporaryScript(script: String) -> ScriptResponse {
+        
+        var resp: ScriptResponse!
+        self.runInTemporaryScript(script, block: { (scriptPath, error) -> () in
+            resp = Script.run("/bin/bash", arguments: [scriptPath])
+        })
+        return resp
+    }
+    
+    private class func runInTemporaryScript(script: String, block: (scriptPath: String, error: NSError?) -> ()) {
         
         let uuid = NSUUID().UUIDString
         let tempPath = NSTemporaryDirectory().stringByAppendingPathComponent(uuid)
         var error: NSError?
         
+        //write the script to file
         let success = script.writeToFile(tempPath, atomically: true, encoding: NSUTF8StringEncoding, error: &error)
         
         block(scriptPath: tempPath, error: error)
@@ -48,18 +69,7 @@ public class Script {
         NSFileManager.defaultManager().removeItemAtPath(tempPath, error: nil)
     }
     
-    public class func runTemporaryScript(script: String) -> ScriptResponse {
-        
-        var resp: ScriptResponse!
-        self.inTemporaryScript(script, block: { (scriptPath, error) -> () in
-            resp = Script.run("/bin/bash", arguments: [scriptPath])
-        })
-        return resp
-    }
-    
     private class func runResolved(path: String, arguments: [String], environment: [String: String]) -> ScriptResponse {
-        
-        let pid = NSProcessInfo.processInfo().processIdentifier
         
         let outputPipe = NSPipe()
         let errorPipe = NSPipe()
@@ -80,15 +90,12 @@ public class Script {
         task.standardError = errorPipe
         
         task.launch()
-        
-        //blocks until script finishes.
-        //TODO: think about edge cases and long running/hangings tasks - some sort of a timeout?
         task.waitUntilExit()
         
         let terminationStatus = Int(task.terminationStatus)
         let output = self.stringFromFileAndClose(outputFile)
         let error = self.stringFromFileAndClose(errorFile)
-    
+        
         return (terminationStatus, output, error)
     }
     
