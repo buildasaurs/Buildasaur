@@ -18,17 +18,17 @@ Free, local and automatic testing of GitHub Pull Requests with Xcode Bots. Keep 
 **Thinking of trying Buildasaur**? Check out the list of [teams and projects](./PROJECTS_USING_BUILDASAUR.md) already using it.<br>
 **Already using Buildasaur**? Please consider [adding yourself](./PROJECTS_USING_BUILDASAUR.md)!
 
-Quick Glance
-------------
-Buildasaur runs as a background Mac app, the configuration window goes away when you don't need it. This gives you a chance to quickly peek at the status of your syncer from the menu bar.
-
-![](https://raw.githubusercontent.com/czechboy0/Buildasaur/master/Meta/menu_bar.png)
-
 Configurable
 ------------
 Buildasaur was designed to be easy to setup, while still giving you all the customization you need. By choosing the right defaults, most projects can get Buildasaur setup in minutes, start it and never have to worry about it again.
 
 ![](https://raw.githubusercontent.com/czechboy0/Buildasaur/master/Meta/builda_screenshot.png)
+
+Glanceable
+----------
+Buildasaur runs as a background Mac app, its configuration window goes away when you don't need it. This gives you a chance to quickly peek at the status of your syncers from the menu bar.
+
+![](https://raw.githubusercontent.com/czechboy0/Buildasaur/master/Meta/menu_bar.png)
 
 Getting Buildasaur
 ------------------
