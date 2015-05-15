@@ -1,15 +1,16 @@
 Buildasaur
 ==========
 
-[![Blog](https://img.shields.io/badge/blog-honzadvorsky.com-green.svg)](http://honzadvorsky.com)
-[![Twitter Buildasaur](https://img.shields.io/badge/twitter-Buildasaur-green.svg)](http://twitter.com/buildasaur)
-[![Twitter Czechboy0](https://img.shields.io/badge/twitter-czechboy0-green.svg)](http://twitter.com/czechboy0)
-
+[![Build Status](http://178.62.79.155/buildasaur)](https://github.com/czechboy0/Buildasaur/commits/master)
 [![Stars](https://img.shields.io/github/stars/czechboy0/buildasaur.svg)](https://github.com/czechboy0/Buildasaur/stargazers)
 [![Forks](https://img.shields.io/github/forks/czechboy0/buildasaur.svg)](https://github.com/czechboy0/Buildasaur/network/members)
 [![Issues](https://img.shields.io/github/issues-raw/czechboy0/buildasaur.svg)](https://github.com/czechboy0/Buildasaur/issues)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://en.wikipedia.org/wiki/MIT_License)
 [![Latest Buildasaur Release](https://img.shields.io/github/release/czechboy0/buildasaur.svg)](https://github.com/czechboy0/Buildasaur/releases/latest)
+
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://en.wikipedia.org/wiki/MIT_License)
+[![Blog](https://img.shields.io/badge/blog-honzadvorsky.com-green.svg)](http://honzadvorsky.com)
+[![Twitter Buildasaur](https://img.shields.io/badge/twitter-Buildasaur-green.svg)](http://twitter.com/buildasaur)
+[![Twitter Czechboy0](https://img.shields.io/badge/twitter-czechboy0-green.svg)](http://twitter.com/czechboy0)
 
 ![](https://raw.githubusercontent.com/czechboy0/Buildasaur/master/Buildasaur/Images.xcassets/AppIcon.appiconset/builda_icon%40128x.png)
 
