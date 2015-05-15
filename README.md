@@ -109,7 +109,7 @@ Xcode Server Reverse Engineering
 --------------------------------
 If you're feeling brave and would like to dig into how Xcode Server works under the hood, you might find this article I wrote useful: [Under the Hood of Xcode Server](http://honzadvorsky.com/blog/2015/5/4/under-the-hood-of-xcode-server). Recommended reading if you want to extend Buildasaur to take a greater advantage of Xcode Server (there are still a plenty of unused APIs.)
 
-I write about [working on Buildasaur](http://honzadvorsky.com/?tag=buildasaur), the challenges, interesting problems and failures on [my blog](http://honzadvorsky.com/). 
+I also write about [working on Buildasaur](http://honzadvorsky.com/?tag=buildasaur), its challenges, interesting problems and failures on [my blog](http://honzadvorsky.com/). 
 
 License
 -------
