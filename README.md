@@ -1,6 +1,30 @@
 Buildasaur
 ==========
 
+<a id="user-content-buildaLink" href="https://github.com/czechboy0/Buildasaur/commits/master"></a>
+<script src="http://code.jquery.com/jquery-1.11.3.js"></script>
+<script type="text/javascript">
+$.ajax({
+url: "https://api.github.com/repos/czechboy0/buildasaur/commits/master/status",
+data: "",
+success: function(data, textStatus, something) {
+var status = data['state'];
+var imgPath = 'https://img.shields.io/badge/';
+if (status === 'success') {
+  imgPath = imgPath + 'build-passing-green.svg';
+} else if (status === 'failure') {
+  imgPath = imgPath + 'build-failing-red.svg';
+} else { 
+  imgPath = imgPath + 'build-unknown-gray.svg';
+}
+$('<img src="'+ imgPath +'">').load(function() {
+  $(this).width(90).height(20).appendTo('#user-content-buildaLink');
+});
+},
+dataType: "json"
+})
+</script>
+
 [![Blog](https://img.shields.io/badge/blog-honzadvorsky.com-green.svg)](http://honzadvorsky.com)
 [![Twitter Buildasaur](https://img.shields.io/badge/twitter-Buildasaur-green.svg)](http://twitter.com/buildasaur)
 [![Twitter Czechboy0](https://img.shields.io/badge/twitter-czechboy0-green.svg)](http://twitter.com/czechboy0)
