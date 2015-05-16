@@ -81,7 +81,7 @@ extension HDGitHubXCBotSyncer {
             if let source = self.localSource.duplicateForForkAtOriginURL(headOriginUrl) {
                 project = source
             } else {
-                self.notifyError(Errors.errorWithInfo("Couldn't create a LocalSource for fork with origin at url \(headOriginUrl)"), context: "Creating a bot from a PR")
+                self.notifyError(Error.withInfo("Couldn't create a LocalSource for fork with origin at url \(headOriginUrl)"), context: "Creating a bot from a PR")
                 completion()
                 return
             }

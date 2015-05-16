@@ -141,7 +141,7 @@ public class LocalSource : JSONSerializable {
         if self.parseCheckoutType(meta!) == nil {
             //disallowed
             let allowedString = ", ".join([AllowedCheckoutTypes.SSH].map({ $0.rawValue }))
-            let error = Errors.errorWithInfo("Disallowed checkout type, the project must be checked out over one of the supported schemes: \(allowedString)")
+            let error = Error.withInfo("Disallowed checkout type, the project must be checked out over one of the supported schemes: \(allowedString)")
             return (false, nil, error)
         }
         

@@ -38,9 +38,9 @@ class NetworkUtils {
 
                     //look at the permissions in the PR metadata
                     if !readPermission {
-                        completion(success: false, error: Errors.errorWithInfo("Missing read permission for repo"))
+                        completion(success: false, error: Error.withInfo("Missing read permission for repo"))
                     } else if !writePermission {
-                        completion(success: false, error: Errors.errorWithInfo("Missing write permission for repo"))
+                        completion(success: false, error: Error.withInfo("Missing write permission for repo"))
                     } else {
                         //now test ssh keys
                         self.checkValidityOfSSHKeys(credentialValidationBlueprint, completion: { (success, error) -> () in
@@ -52,12 +52,12 @@ class NetworkUtils {
                         })
                     }
                 } else {
-                    completion(success: false, error: Errors.errorWithInfo("Couldn't find repo permissions in GitHub response"))
+                    completion(success: false, error: Error.withInfo("Couldn't find repo permissions in GitHub response"))
                 }
             })
             
         } else {
-            completion(success: false, error: Errors.errorWithInfo("Invalid repo name"))
+            completion(success: false, error: Error.withInfo("Invalid repo name"))
         }
     }
     
@@ -95,7 +95,7 @@ class NetworkUtils {
         if r.terminationStatus == 0 {
             completion(success: true, error: nil)
         } else {
-            completion(success: false, error: Errors.errorWithInfo(r.standardError))
+            completion(success: false, error: Error.withInfo(r.standardError))
         }
     }
 }

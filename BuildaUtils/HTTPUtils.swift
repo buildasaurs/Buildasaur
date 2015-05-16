@@ -74,7 +74,7 @@ public class HTTP {
                         
                         let commonError: NSError? = {
                             if let userInfo = userInfo {
-                                return Errors.errorWithInfo(nil, internalError: nil, userInfo: userInfo)
+                                return Error.withInfo(nil, internalError: nil, userInfo: userInfo)
                             }
                             return nil
                             }()
@@ -87,7 +87,7 @@ public class HTTP {
                     completion(response: httpResponse, body: code, error: error)
                 }
             } else {
-                let e = error ?? Errors.errorWithInfo("Response is nil")
+                let e = error ?? Error.withInfo("Response is nil")
                 completion(response: nil, body: nil, error: e)
             }
             

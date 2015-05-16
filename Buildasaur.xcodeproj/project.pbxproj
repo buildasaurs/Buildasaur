@@ -23,6 +23,10 @@
 		3A46A2C31B07DCCA00F0FA4B /* SyncerBotManipulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2C21B07DCCA00F0FA4B /* SyncerBotManipulation.swift */; };
 		3A46A2C61B07DEAE00F0FA4B /* SyncerGitHubUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2C51B07DEAE00F0FA4B /* SyncerGitHubUtils.swift */; };
 		3A46A2C81B07DF8F00F0FA4B /* SyncerBotUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2C71B07DF8F00F0FA4B /* SyncerBotUtils.swift */; };
+		3A46A2CA1B07E28700F0FA4B /* SyncPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2C91B07E28700F0FA4B /* SyncPair.swift */; };
+		3A46A2CD1B07E38E00F0FA4B /* SyncPair_PR_NoBot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2CC1B07E38E00F0FA4B /* SyncPair_PR_NoBot.swift */; };
+		3A46A2CF1B07E60200F0FA4B /* SyncPair_PR_Bot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2CE1B07E60200F0FA4B /* SyncPair_PR_Bot.swift */; };
+		3A46A2D11B07E64F00F0FA4B /* SyncPair_NoPR_Bot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2D01B07E64F00F0FA4B /* SyncPair_NoPR_Bot.swift */; };
 		3A4770A21A745F470016E170 /* StorageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4770A11A745F470016E170 /* StorageUtils.swift */; };
 		3A4770A41A745FFA0016E170 /* XcodeProjectParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4770A31A745FFA0016E170 /* XcodeProjectParser.swift */; };
 		3A5591561A913C0A00FB19F2 /* XcodeLocalSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5591551A913C0A00FB19F2 /* XcodeLocalSource.swift */; };
@@ -185,6 +189,10 @@
 		3A46A2C21B07DCCA00F0FA4B /* SyncerBotManipulation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerBotManipulation.swift; sourceTree = "<group>"; };
 		3A46A2C51B07DEAE00F0FA4B /* SyncerGitHubUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerGitHubUtils.swift; sourceTree = "<group>"; };
 		3A46A2C71B07DF8F00F0FA4B /* SyncerBotUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerBotUtils.swift; sourceTree = "<group>"; };
+		3A46A2C91B07E28700F0FA4B /* SyncPair.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncPair.swift; sourceTree = "<group>"; };
+		3A46A2CC1B07E38E00F0FA4B /* SyncPair_PR_NoBot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncPair_PR_NoBot.swift; sourceTree = "<group>"; };
+		3A46A2CE1B07E60200F0FA4B /* SyncPair_PR_Bot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncPair_PR_Bot.swift; sourceTree = "<group>"; };
+		3A46A2D01B07E64F00F0FA4B /* SyncPair_NoPR_Bot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncPair_NoPR_Bot.swift; sourceTree = "<group>"; };
 		3A4770A11A745F470016E170 /* StorageUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageUtils.swift; sourceTree = "<group>"; };
 		3A4770A31A745FFA0016E170 /* XcodeProjectParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeProjectParser.swift; sourceTree = "<group>"; };
 		3A4770A51A746BC00016E170 /* Buildasaur.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Buildasaur.entitlements; sourceTree = "<group>"; };
@@ -348,6 +356,17 @@
 				3A46A2C71B07DF8F00F0FA4B /* SyncerBotUtils.swift */,
 			);
 			name = HDGitHubXCBotSyncer;
+			sourceTree = "<group>";
+		};
+		3A46A2CB1B07E33400F0FA4B /* SyncPairs */ = {
+			isa = PBXGroup;
+			children = (
+				3A46A2C91B07E28700F0FA4B /* SyncPair.swift */,
+				3A46A2CC1B07E38E00F0FA4B /* SyncPair_PR_NoBot.swift */,
+				3A46A2CE1B07E60200F0FA4B /* SyncPair_PR_Bot.swift */,
+				3A46A2D01B07E64F00F0FA4B /* SyncPair_NoPR_Bot.swift */,
+			);
+			name = SyncPairs;
 			sourceTree = "<group>";
 		};
 		3A5687671A3B93BD0066DB2B = {
@@ -571,6 +590,7 @@
 			isa = PBXGroup;
 			children = (
 				3A2F9D851A8FE64900B0DB68 /* Syncer.swift */,
+				3A46A2CB1B07E33400F0FA4B /* SyncPairs */,
 				3A46A2C41B07DE1200F0FA4B /* HDGitHubXCBotSyncer */,
 			);
 			name = Syncers;
@@ -844,6 +864,7 @@
 				3A46A2C61B07DEAE00F0FA4B /* SyncerGitHubUtils.swift in Sources */,
 				3A5591561A913C0A00FB19F2 /* XcodeLocalSource.swift in Sources */,
 				3A5687781A3B93BD0066DB2B /* MainViewController.swift in Sources */,
+				3A46A2CA1B07E28700F0FA4B /* SyncPair.swift in Sources */,
 				3A2F9D861A8FE64900B0DB68 /* LocalSource.swift in Sources */,
 				3A46A2C11B07D8D800F0FA4B /* SyncerBotNaming.swift in Sources */,
 				3A46A2C31B07DCCA00F0FA4B /* SyncerBotManipulation.swift in Sources */,
@@ -851,6 +872,7 @@
 				3A5B04AA1AB4ABEB00F60536 /* TriggerViewController.swift in Sources */,
 				3AF1B1241AAC7CA500917EF3 /* StatusSyncerViewController.swift in Sources */,
 				3A5B04B21AB5C42A00F60536 /* XcodeServerSyncerUtils.swift in Sources */,
+				3A46A2CD1B07E38E00F0FA4B /* SyncPair_PR_NoBot.swift in Sources */,
 				3A5B04B01AB5144700F60536 /* ManualBotManagementViewController.swift in Sources */,
 				3A5687761A3B93BD0066DB2B /* AppDelegate.swift in Sources */,
 				3A2F9D821A8FE5D700B0DB68 /* StorageManager.swift in Sources */,
@@ -859,10 +881,12 @@
 				3AAA1B721AABBBB200FA1598 /* NetworkUtils.swift in Sources */,
 				3AAA1B661AAB6E9800FA1598 /* SeparatorView.swift in Sources */,
 				3A2F9D871A8FE64900B0DB68 /* Syncer.swift in Sources */,
+				3A46A2CF1B07E60200F0FA4B /* SyncPair_PR_Bot.swift in Sources */,
 				3A612F011AADA28D00183BCB /* BuildTemplate.swift in Sources */,
 				3A331C411A940C8D0005AA98 /* CommonExtensions.swift in Sources */,
 				3AD338B01AAE31D500ECD0F2 /* BuildTemplateViewController.swift in Sources */,
 				3A90C4C01A90220F0048C040 /* HDGitHubXCBotSyncer.swift in Sources */,
+				3A46A2D11B07E64F00F0FA4B /* SyncPair_NoPR_Bot.swift in Sources */,
 				3AAA1B681AAB722600FA1598 /* StatusProjectViewController.swift in Sources */,
 				3AB3FDCB1B05644300021197 /* MenuItemManager.swift in Sources */,
 			);

@@ -26,15 +26,15 @@ extension HDGitHubXCBotSyncer {
         return Status(state: state, description: newDescription, targetUrl: nil, context: context)
     }
 
-    func updatePRStatusIfNecessary(newStatus: GitHubStatusAndComment, prNumber: Int, completion: () -> ()) {
+    func updatePRStatusIfNecessary(newStatus: GitHubStatusAndComment, prNumber: Int, completion: SyncPair.Completion) {
         
         let repoName = self.repoName()!
         
         self.github.getPullRequest(prNumber, repo: repoName) { (pr, error) -> () in
             
             if error != nil {
-                self.notifyError(error, context: "PR \(prNumber) failed to return data")
-                completion()
+                let e = Error.withInfo("PR \(prNumber) failed to return data", internalError: error)
+                completion(error: e)
                 return
             }
             
@@ -45,8 +45,8 @@ extension HDGitHubXCBotSyncer {
                 self.github.getStatusOfCommit(latestCommit, repo: repoName, completion: { (status, error) -> () in
                     
                     if error != nil {
-                        self.notifyError(error, context: "PR \(prNumber) failed to return status")
-                        completion()
+                        let e = Error.withInfo("PR \(prNumber) failed to return status", internalError: error)
+                        completion(error: e)
                         return
                     }
                     
@@ -55,24 +55,24 @@ extension HDGitHubXCBotSyncer {
                         self.postStatusWithComment(newStatus, commit: latestCommit, repo: repoName, pr: pr, completion: completion)
                         
                     } else {
-                        completion()
+                        completion(error: nil)
                     }
                 })
                 
             } else {
-                self.notifyError(Errors.errorWithInfo("PR is nil and error is nil"), context: "Fetching a PR")
-                completion()
+                let e = Error.withInfo("Fetching a PR", internalError: Error.withInfo("PR is nil and error is nil"))
+                completion(error: e)
             }
         }
     }
 
-    func postStatusWithComment(statusWithComment: GitHubStatusAndComment, commit: String, repo: String, pr: PullRequest, completion: () -> ()) {
+    func postStatusWithComment(statusWithComment: GitHubStatusAndComment, commit: String, repo: String, pr: PullRequest, completion: SyncPair.Completion) {
         
         self.github.postStatusOfCommit(statusWithComment.status, sha: commit, repo: repo) { (status, error) -> () in
             
             if error != nil {
-                self.notifyError(error, context: "Failed to post a status on commit \(commit) of repo \(repo)")
-                completion()
+                let e = Error.withInfo("Failed to post a status on commit \(commit) of repo \(repo)", internalError: error)
+                completion(error: e)
                 return
             }
             
@@ -86,13 +86,15 @@ extension HDGitHubXCBotSyncer {
                 self.github.postCommentOnIssue(comment, issueNumber: pr.number, repo: repo, completion: { (comment, error) -> () in
                     
                     if error != nil {
-                        self.notifyError(error, context: "Failed to post a comment \"\(comment)\" on PR \(pr.number) of repo \(repo)")
+                        let e = Error.withInfo("Failed to post a comment \"\(comment)\" on PR \(pr.number) of repo \(repo)", internalError: error)
+                        completion(error: e)
+                    } else {
+                        completion(error: nil)
                     }
-                    completion()
                 })
                 
             } else {
-                completion()
+                completion(error: nil)
             }
         }
     }

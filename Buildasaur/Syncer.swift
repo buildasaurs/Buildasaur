@@ -118,7 +118,7 @@ public protocol SyncerDelegate: class {
     }
     
     func notifyErrorString(errorString: String, context: String?) {
-        self.notifyError(Errors.errorWithInfo(errorString), context: context)
+        self.notifyError(Error.withInfo(errorString), context: context)
     }
     
     func notifyError(error: NSError?, context: String?) {
@@ -133,7 +133,7 @@ public protocol SyncerDelegate: class {
         }
         Log.error(message)
         self.currentSyncError = error
-        self.delegate?.syncerEncounteredError(self, error: Errors.errorWithInfo(message))
+        self.delegate?.syncerEncounteredError(self, error: Error.withInfo(message))
     }
     
     /**
