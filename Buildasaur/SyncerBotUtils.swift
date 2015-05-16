@@ -7,3 +7,32 @@
 //
 
 import Foundation
+import BuildaCIServer
+import BuildaGitServer
+import BuildaUtils
+
+extension HDGitHubXCBotSyncer {
+    
+    func formattedDurationOfIntegration(integration: Integration) -> String? {
+        
+        if let seconds = integration.duration {
+            
+            var result = TimeUtils.secondsToNaturalTime(Int(seconds))
+            return result
+            
+        } else {
+            Log.error("No duration provided in integration \(integration)")
+            return "[NOT PROVIDED]"
+        }
+    }
+    
+    func baseCommentFromIntegration(integration: Integration) -> String {
+        
+        var comment = "Result of integration \(integration.number)\n"
+        if let duration = self.formattedDurationOfIntegration(integration) {
+            comment += "Integration took " + duration + ".\n"
+        }
+        return comment
+    }
+    
+}

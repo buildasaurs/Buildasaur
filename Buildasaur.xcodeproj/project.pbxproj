@@ -19,6 +19,10 @@
 		3A331C411A940C8D0005AA98 /* CommonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A331C401A940C8D0005AA98 /* CommonExtensions.swift */; };
 		3A3BDC1D1AF6C51900D2CD99 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3BDC1C1AF6C51900D2CD99 /* Extensions.swift */; };
 		3A3BDC1F1AF6D34900D2CD99 /* GitHubRateLimit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3BDC1E1AF6D34900D2CD99 /* GitHubRateLimit.swift */; };
+		3A46A2C11B07D8D800F0FA4B /* SyncerBotNaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2C01B07D8D800F0FA4B /* SyncerBotNaming.swift */; };
+		3A46A2C31B07DCCA00F0FA4B /* SyncerBotManipulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2C21B07DCCA00F0FA4B /* SyncerBotManipulation.swift */; };
+		3A46A2C61B07DEAE00F0FA4B /* SyncerGitHubUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2C51B07DEAE00F0FA4B /* SyncerGitHubUtils.swift */; };
+		3A46A2C81B07DF8F00F0FA4B /* SyncerBotUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2C71B07DF8F00F0FA4B /* SyncerBotUtils.swift */; };
 		3A4770A21A745F470016E170 /* StorageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4770A11A745F470016E170 /* StorageUtils.swift */; };
 		3A4770A41A745FFA0016E170 /* XcodeProjectParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4770A31A745FFA0016E170 /* XcodeProjectParser.swift */; };
 		3A5591561A913C0A00FB19F2 /* XcodeLocalSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5591551A913C0A00FB19F2 /* XcodeLocalSource.swift */; };
@@ -177,6 +181,10 @@
 		3A38CF951A3CE94C00F41AFA /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Status.swift; path = BuildaGitServer/Status.swift; sourceTree = SOURCE_ROOT; };
 		3A3BDC1C1AF6C51900D2CD99 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		3A3BDC1E1AF6D34900D2CD99 /* GitHubRateLimit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubRateLimit.swift; sourceTree = "<group>"; };
+		3A46A2C01B07D8D800F0FA4B /* SyncerBotNaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerBotNaming.swift; sourceTree = "<group>"; };
+		3A46A2C21B07DCCA00F0FA4B /* SyncerBotManipulation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerBotManipulation.swift; sourceTree = "<group>"; };
+		3A46A2C51B07DEAE00F0FA4B /* SyncerGitHubUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerGitHubUtils.swift; sourceTree = "<group>"; };
+		3A46A2C71B07DF8F00F0FA4B /* SyncerBotUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerBotUtils.swift; sourceTree = "<group>"; };
 		3A4770A11A745F470016E170 /* StorageUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageUtils.swift; sourceTree = "<group>"; };
 		3A4770A31A745FFA0016E170 /* XcodeProjectParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeProjectParser.swift; sourceTree = "<group>"; };
 		3A4770A51A746BC00016E170 /* Buildasaur.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Buildasaur.entitlements; sourceTree = "<group>"; };
@@ -320,13 +328,26 @@
 			isa = PBXGroup;
 			children = (
 				3A612F001AADA28D00183BCB /* BuildTemplate.swift */,
-				3A2F9D811A8FE5D700B0DB68 /* StorageManager.swift */,
 				3A2F9D841A8FE64900B0DB68 /* LocalSource.swift */,
-				3A5591551A913C0A00FB19F2 /* XcodeLocalSource.swift */,
-				3A4770A11A745F470016E170 /* StorageUtils.swift */,
 				3AAA1B711AABBBB200FA1598 /* NetworkUtils.swift */,
+				3A2F9D811A8FE5D700B0DB68 /* StorageManager.swift */,
+				3A4770A11A745F470016E170 /* StorageUtils.swift */,
+				3A5591551A913C0A00FB19F2 /* XcodeLocalSource.swift */,
+				3A5B04B11AB5C42A00F60536 /* XcodeServerSyncerUtils.swift */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		3A46A2C41B07DE1200F0FA4B /* HDGitHubXCBotSyncer */ = {
+			isa = PBXGroup;
+			children = (
+				3A90C4BF1A90220F0048C040 /* HDGitHubXCBotSyncer.swift */,
+				3A46A2C21B07DCCA00F0FA4B /* SyncerBotManipulation.swift */,
+				3A46A2C01B07D8D800F0FA4B /* SyncerBotNaming.swift */,
+				3A46A2C51B07DEAE00F0FA4B /* SyncerGitHubUtils.swift */,
+				3A46A2C71B07DF8F00F0FA4B /* SyncerBotUtils.swift */,
+			);
+			name = HDGitHubXCBotSyncer;
 			sourceTree = "<group>";
 		};
 		3A5687671A3B93BD0066DB2B = {
@@ -465,20 +486,20 @@
 		3AAF6E751A3CE4CC00C657FB /* BuildaUtils */ = {
 			isa = PBXGroup;
 			children = (
-				3A808A1C1ADB063F0073145D /* Persistence.swift */,
-				3A808A1A1ADB03640073145D /* Logging.swift */,
-				3AF1B1211AAC621800917EF3 /* UIUtils.swift */,
-				3A4770A31A745FFA0016E170 /* XcodeProjectParser.swift */,
-				3A6355DC1A3BC19800545BF9 /* HTTPUtils.swift */,
-				3ACB831F1A3BB64F00E285FD /* JSON.swift */,
-				3A7B91351A3E41980060A21A /* Server.swift */,
 				3AAF6E781A3CE4CC00C657FB /* BuildaUtils.h */,
-				3AAF6E761A3CE4CC00C657FB /* Supporting Files */,
 				3AAA1B731AABBD3A00FA1598 /* Errors.swift */,
 				3A3BDC1C1AF6C51900D2CD99 /* Extensions.swift */,
+				3A6355DC1A3BC19800545BF9 /* HTTPUtils.swift */,
+				3ACB831F1A3BB64F00E285FD /* JSON.swift */,
+				3A808A1A1ADB03640073145D /* Logging.swift */,
+				3A808A1C1ADB063F0073145D /* Persistence.swift */,
 				3A1546451B02A0C6001EEB45 /* Script.swift */,
+				3A7B91351A3E41980060A21A /* Server.swift */,
 				3AF2B03A1B02C5D700DCF2D6 /* SSHKeyVerification.swift */,
 				3AB3FDC81B05616A00021197 /* TimeUtils.swift */,
+				3AF1B1211AAC621800917EF3 /* UIUtils.swift */,
+				3A4770A31A745FFA0016E170 /* XcodeProjectParser.swift */,
+				3AAF6E761A3CE4CC00C657FB /* Supporting Files */,
 			);
 			path = BuildaUtils;
 			sourceTree = "<group>";
@@ -550,8 +571,7 @@
 			isa = PBXGroup;
 			children = (
 				3A2F9D851A8FE64900B0DB68 /* Syncer.swift */,
-				3A90C4BF1A90220F0048C040 /* HDGitHubXCBotSyncer.swift */,
-				3A5B04B11AB5C42A00F60536 /* XcodeServerSyncerUtils.swift */,
+				3A46A2C41B07DE1200F0FA4B /* HDGitHubXCBotSyncer */,
 			);
 			name = Syncers;
 			sourceTree = "<group>";
@@ -820,9 +840,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				3AAA1B761AAC504700FA1598 /* StatusServerViewController.swift in Sources */,
+				3A46A2C81B07DF8F00F0FA4B /* SyncerBotUtils.swift in Sources */,
+				3A46A2C61B07DEAE00F0FA4B /* SyncerGitHubUtils.swift in Sources */,
 				3A5591561A913C0A00FB19F2 /* XcodeLocalSource.swift in Sources */,
 				3A5687781A3B93BD0066DB2B /* MainViewController.swift in Sources */,
 				3A2F9D861A8FE64900B0DB68 /* LocalSource.swift in Sources */,
+				3A46A2C11B07D8D800F0FA4B /* SyncerBotNaming.swift in Sources */,
+				3A46A2C31B07DCCA00F0FA4B /* SyncerBotManipulation.swift in Sources */,
 				3A5B04AC1AB4AC0F00F60536 /* SetupViewController.swift in Sources */,
 				3A5B04AA1AB4ABEB00F60536 /* TriggerViewController.swift in Sources */,
 				3AF1B1241AAC7CA500917EF3 /* StatusSyncerViewController.swift in Sources */,

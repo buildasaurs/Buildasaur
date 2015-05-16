@@ -7,3 +7,93 @@
 //
 
 import Foundation
+import BuildaCIServer
+import BuildaGitServer
+import BuildaUtils
+
+extension HDGitHubXCBotSyncer {
+    
+    func createStatusFromState(state: Status.State, description: String?) -> Status {
+        
+        //TODO: add useful targetUrl and potentially have multiple contexts to show multiple stats on the PR
+        let context = "Buildasaur"
+        let newDescription: String?
+        if let description = description {
+            newDescription = "\(context): \(description)"
+        } else {
+            newDescription = nil
+        }
+        return Status(state: state, description: newDescription, targetUrl: nil, context: context)
+    }
+
+    func updatePRStatusIfNecessary(newStatus: GitHubStatusAndComment, prNumber: Int, completion: () -> ()) {
+        
+        let repoName = self.repoName()!
+        
+        self.github.getPullRequest(prNumber, repo: repoName) { (pr, error) -> () in
+            
+            if error != nil {
+                self.notifyError(error, context: "PR \(prNumber) failed to return data")
+                completion()
+                return
+            }
+            
+            if let pr = pr {
+                
+                let latestCommit = pr.head.sha
+                
+                self.github.getStatusOfCommit(latestCommit, repo: repoName, completion: { (status, error) -> () in
+                    
+                    if error != nil {
+                        self.notifyError(error, context: "PR \(prNumber) failed to return status")
+                        completion()
+                        return
+                    }
+                    
+                    if status == nil || newStatus.status != status! {
+                        
+                        self.postStatusWithComment(newStatus, commit: latestCommit, repo: repoName, pr: pr, completion: completion)
+                        
+                    } else {
+                        completion()
+                    }
+                })
+                
+            } else {
+                self.notifyError(Errors.errorWithInfo("PR is nil and error is nil"), context: "Fetching a PR")
+                completion()
+            }
+        }
+    }
+
+    func postStatusWithComment(statusWithComment: GitHubStatusAndComment, commit: String, repo: String, pr: PullRequest, completion: () -> ()) {
+        
+        self.github.postStatusOfCommit(statusWithComment.status, sha: commit, repo: repo) { (status, error) -> () in
+            
+            if error != nil {
+                self.notifyError(error, context: "Failed to post a status on commit \(commit) of repo \(repo)")
+                completion()
+                return
+            }
+            
+            //have a chance to NOT post a status comment...
+            let postStatusComments = self.postStatusComments
+            
+            //optional there can be a comment to be posted as well
+            if let comment = statusWithComment.comment where postStatusComments {
+                
+                //we have a comment, post it
+                self.github.postCommentOnIssue(comment, issueNumber: pr.number, repo: repo, completion: { (comment, error) -> () in
+                    
+                    if error != nil {
+                        self.notifyError(error, context: "Failed to post a comment \"\(comment)\" on PR \(pr.number) of repo \(repo)")
+                    }
+                    completion()
+                })
+                
+            } else {
+                completion()
+            }
+        }
+    }
+}

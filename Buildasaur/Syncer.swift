@@ -117,6 +117,10 @@ public protocol SyncerDelegate: class {
         }
     }
     
+    func notifyErrorString(errorString: String, context: String?) {
+        self.notifyError(Errors.errorWithInfo(errorString), context: context)
+    }
+    
     func notifyError(error: NSError?, context: String?) {
         
         var message = "Syncing encountered a problem. "

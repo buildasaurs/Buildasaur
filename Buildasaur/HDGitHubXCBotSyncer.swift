@@ -71,7 +71,7 @@ public class HDGitHubXCBotSyncer : Syncer {
         return dict
     }
     
-    private func repoName() -> String? {
+    func repoName() -> String? {
         return self.localSource.githubRepoName()
     }
     
@@ -107,8 +107,10 @@ public class HDGitHubXCBotSyncer : Syncer {
                             
                             self.reports["All Bots"] = "\(bots.count)"
                             
+                            //we have both PRs and Bots, resolve
                             self.resolvePRsAndBots(repoName: repoName, prs: prs, bots: bots, completion: {
                                 
+                                //everything is done, report the damage of GitHub rate limit
                                 if let rateLimitInfo = self.github.latestRateLimitInfo {
                                     
                                     let report = rateLimitInfo.getReport()
@@ -119,19 +121,19 @@ public class HDGitHubXCBotSyncer : Syncer {
                                 completion()
                             })
                         } else {
-                            self.notifyError(Errors.errorWithInfo("Nil bots even when error was nil"), context: "Fetching Bots")
+                            self.notifyErrorString("Nil bots even when error was nil", context: "Fetching Bots")
                             completion()
                         }
                     })
                     
                 } else {
-                    self.notifyError(Errors.errorWithInfo("PRs are nil and error is nil"), context: "Fetching PRs")
+                    self.notifyErrorString("PRs are nil and error is nil", context: "Fetching PRs")
                     completion()
                 }
             })
             
         } else {
-            self.notifyError(nil, context: "No repo name for GitHub found in URL")
+            self.notifyErrorString("Nil repo name", context: "Syncing")
             completion()
         }
     }
@@ -140,27 +142,26 @@ public class HDGitHubXCBotSyncer : Syncer {
         
         let prsDescription = prs.map({ "\n\tPR \($0.number): \($0.title) [\($0.head.ref) -> \($0.base.ref))]" }) + ["\n"]
         let botsDescription = bots.map({ "\n\t\($0.name)" }) + ["\n"]
-        
         Log.verbose("Resolving prs:\n\(prsDescription) \nand bots:\n\(botsDescription)")
         
         if let repoName = self.repoName() {
             
             //first filter only builda's bots, don't manipulate manually created bots
             //also filter only bots that belong to this project
-            let buildaBots = bots.filter { self.isBuildaBotBelongingToRepoWithName($0, repoName: repoName) }
+            let buildaBots = bots.filter { BotNaming.isBuildaBotBelongingToRepoWithName($0, repoName: repoName) }
             
             //create a map of name -> bot for fast manipulation
             var mappedBots = [String: Bot]()
-            for bot in buildaBots {
-                mappedBots[bot.name] = bot
-            }
+            for bot in buildaBots { mappedBots[bot.name] = bot }
             
-            //keep track of the ones that have a PR
+            //PRs that also have a bot, toSync
             var toSync: [(pr: PullRequest, bot: Bot)] = []
+            
+            //PRs that don't have a bot yet, to create
             var toCreate: [PullRequest] = []
             for pr in prs {
                 
-                let botName = self.nameForBotWithPR(pr, repoName: repoName)
+                let botName = BotNaming.nameForBotWithPR(pr, repoName: repoName)
                 
                 if let bot = mappedBots[botName] {
                     //we found a corresponding bot to this PR, add to toSync
@@ -174,13 +175,14 @@ public class HDGitHubXCBotSyncer : Syncer {
                 }
             }
             
-            //bots that we haven't found a corresponding PR for we delete
+            //bots that don't have a PR, to delete
             let toDelete = mappedBots.values.array
             
             //apply changes
             self.applyResolvedChanges(toSync: toSync, toCreate: toCreate, toDelete: toDelete, completion: completion)
+            
         } else {
-            self.notifyError(Errors.errorWithInfo("Nil repo name"), context: "Resolving PRs and Bots")
+            self.notifyErrorString("Nil repo name", context: "Resolving PRs and Bots")
             completion()
         }
     }
@@ -313,46 +315,6 @@ public class HDGitHubXCBotSyncer : Syncer {
                 self.notifyError(Errors.errorWithInfo("Nil integrations even after returning nil error!"), context: "Getting integrations")
             }
         })
-    }
-    
-    private func updatePRStatusIfNecessary(newStatus: GitHubStatusAndComment, prNumber: Int, completion: () -> ()) {
-        
-        let repoName = self.repoName()!
-        
-        self.github.getPullRequest(prNumber, repo: repoName) { (pr, error) -> () in
-            
-            if error != nil {
-                self.notifyError(error, context: "PR \(prNumber) failed to return data")
-                completion()
-                return
-            }
-            
-            if let pr = pr {
-
-                let latestCommit = pr.head.sha
-                
-                self.github.getStatusOfCommit(latestCommit, repo: repoName, completion: { (status, error) -> () in
-                    
-                    if error != nil {
-                        self.notifyError(error, context: "PR \(prNumber) failed to return status")
-                        completion()
-                        return
-                    }
-                    
-                    if status == nil || newStatus.status != status! {
-                        
-                        self.postStatusWithComment(newStatus, commit: latestCommit, repo: repoName, pr: pr, completion: completion)
-                        
-                    } else {
-                        completion()
-                    }
-                })
-
-            } else {
-                self.notifyError(Errors.errorWithInfo("PR is nil and error is nil"), context: "Fetching a PR")
-                completion()
-            }
-        }
     }
     
     private func syncPRWithBotIntegrations(pr: PullRequest, bot: Bot, integrations: [Integration], completion: () -> ()) {
@@ -554,37 +516,6 @@ public class HDGitHubXCBotSyncer : Syncer {
         dispatch_group_notify(group, dispatch_get_main_queue(), completion)
     }
     
-    private func postStatusWithComment(statusWithComment: GitHubStatusAndComment, commit: String, repo: String, pr: PullRequest, completion: () -> ()) {
-        
-        self.github.postStatusOfCommit(statusWithComment.status, sha: commit, repo: repo) { (status, error) -> () in
-            
-            if error != nil {
-                self.notifyError(error, context: "Failed to post a status on commit \(commit) of repo \(repo)")
-                completion()
-                return
-            }
-            
-            //have a chance to NOT post a status comment...
-            let postStatusComments = self.postStatusComments
-            
-            //optional there can be a comment to be posted as well
-            if let comment = statusWithComment.comment where postStatusComments {
-                
-                //we have a comment, post it
-                self.github.postCommentOnIssue(comment, issueNumber: pr.number, repo: repo, completion: { (comment, error) -> () in
-                    
-                    if error != nil {
-                        self.notifyError(error, context: "Failed to post a comment \"\(comment)\" on PR \(pr.number) of repo \(repo)")
-                    }
-                    completion()
-                })
-                
-            } else {
-                completion()
-            }
-        }
-    }
-    
     private func resolvePRStatusFromLatestIntegrations(#pending: Integration?, running: Integration?, completed: Set<Integration>, completion: (GitHubStatusAndComment) -> ()) {
         
         let group = dispatch_group_create()
@@ -638,28 +569,6 @@ public class HDGitHubXCBotSyncer : Syncer {
         }
     }
     
-    private func formattedDurationOfIntegration(integration: Integration) -> String? {
-        
-        if let seconds = integration.duration {
-            
-            var result = TimeUtils.secondsToNaturalTime(Int(seconds))
-            return result
-            
-        } else {
-            Log.error("No duration provided in integration \(integration)")
-            return "[NOT PROVIDED]"
-        }
-    }
-    
-    private func baseCommentFromIntegration(integration: Integration) -> String {
-
-        var comment = "Result of integration \(integration.number)\n"
-        if let duration = self.formattedDurationOfIntegration(integration) {
-            comment += "Integration took " + duration + ".\n"
-        }
-        return comment
-    }
-
     private func resolveStatusFromCompletedIntegrations(integrations: Set<Integration>) -> GitHubStatusAndComment {
         
         //get integrations sorted by number
@@ -734,172 +643,4 @@ public class HDGitHubXCBotSyncer : Syncer {
         let status = self.createStatusFromState(.NoState, description: nil)
         return (status: status, comment: nil)
     }
-    
-    private func createStatusFromState(state: Status.State, description: String?) -> Status {
-        
-        //TODO: add useful targetUrl and potentially have multiple contexts to show multiple stats on the PR
-        let context = "Buildasaur"
-        let newDescription: String?
-        if let description = description {
-            newDescription = "\(context): \(description)"
-        } else {
-            newDescription = nil
-        }
-        return Status(state: state, description: newDescription, targetUrl: nil, context: context)
-    }
-    
-    //probably make these a bit more generic, something like an async reduce which calls completion when all finish
-    private func cancelIntegrations(integrations: [Integration], completion: () -> ()) {
-        
-        integrations.mapVoidAsync({ (integration, itemCompletion) -> () in
-            
-            self.xcodeServer.cancelIntegration(integration.id, completion: { (success, error) -> () in
-                if error != nil {
-                    self.notifyError(error, context: "Failed to cancel integration \(integration.number)")
-                } else {
-                    Log.info("Successfully cancelled integration \(integration.number)")
-                }
-                itemCompletion()
-            })
-            
-        }, completion: completion)
-    }
-    
-    private func deleteBots(bots: [Bot], completion: () -> ()) {
-        
-        bots.mapVoidAsync({ (bot, itemCompletion) -> () in
-            
-            self.xcodeServer.deleteBot(bot.id, revision: bot.rev, completion: { (success, error) -> () in
-                
-                if error != nil {
-                    self.notifyError(error, context: "Failed to delete bot with name \(bot.name)")
-                } else {
-                    Log.info("Successfully deleted bot \(bot.name)")
-                }
-                itemCompletion()
-            })
-            
-        }, completion: completion)
-    }
-    
-    private func createBotsFromPRs(prs: [PullRequest], completion: () -> ()) {
-        
-        prs.mapVoidAsync({ (item, itemCompletion) -> () in
-            self.createBotFromPR(item, completion: itemCompletion)
-        }, completion: completion)
-    }
-    
-    private func createBotFromPR(pr: PullRequest, completion: () -> ()) {
-        
-        /*
-        synced bots must have a manual schedule, Builda tells the bot to reintegrate in case of a new commit.
-        this has the advantage in cases when someone pushes 10 commits. if we were using Xcode Server's "On Commit"
-        schedule, it'd schedule 10 integrations, which could take ages. Builda's logic instead only schedules one
-        integration for the latest commit's SHA.
-        
-        even though this is desired behavior in this syncer, technically different syncers can have completely different
-        logic. here I'm just explaining why "On Commit" schedule isn't generally a good idea for when managed by Builda.
-        */
-        let schedule = BotSchedule.manualBotSchedule()
-        let botName = self.nameForBotWithPR(pr, repoName: self.repoName()!)
-        let template = self.currentBuildTemplate()
-        
-        //to handle forks
-        let headOriginUrl = pr.head.repo.repoUrlSSH
-        let localProjectOriginUrl = self.localSource.projectURL!.absoluteString
-        
-        let project: LocalSource
-        if headOriginUrl != localProjectOriginUrl {
-            
-            //we have a fork, duplicate the metadata with the fork's origin
-            if let source = self.localSource.duplicateForForkAtOriginURL(headOriginUrl) {
-                project = source
-            } else {
-                self.notifyError(Errors.errorWithInfo("Couldn't create a LocalSource for fork with origin at url \(headOriginUrl)"), context: "Creating a bot from a PR")
-                completion()
-                return
-            }
-        } else {
-            //a normal PR in the same repo, no need to duplicate, just use the existing localSource
-            project = self.localSource
-        }
-        
-        let xcodeServer = self.xcodeServer
-        let branch = pr.head.ref
-
-        XcodeServerSyncerUtils.createBotFromBuildTemplate(botName, template: template, project: project, branch: branch, scheduleOverride: schedule, xcodeServer: xcodeServer) { (bot, error) -> () in
-            
-            if error != nil {
-                self.notifyError(error, context: "Failed to create bot with name \(botName)")
-            }
-            completion()
-        }
-    }
-    
-    private func currentBuildTemplate() -> BuildTemplate! {
-        
-        if
-            let preferredTemplateId = self.localSource.preferredTemplateId,
-            let template = StorageManager.sharedInstance.buildTemplates.filter({ $0.uniqueId == preferredTemplateId }).first {
-                return template
-        }
-
-        assertionFailure("Couldn't get the current build template, this syncer should NOT be running!")
-        return nil
-    }
-    
-    private func isBuildaBot(bot: Bot) -> Bool {
-        return bot.name.hasPrefix(self.prefixForBuildaBot())
-    }
-    
-    private func isBuildaBotBelongingToRepoWithName(bot: Bot, repoName: String) -> Bool {
-        return bot.name.hasPrefix(self.prefixForBuildaBotInRepoWithName(repoName))
-    }
-    
-    private func nameForBotWithPR(pr: PullRequest, repoName: String) -> String {
-        return "\(self.prefixForBuildaBotInRepoWithName(repoName)) PR #\(pr.number)"
-    }
-
-    private func prefixForBuildaBotInRepoWithName(repoName: String) -> String {
-        return "\(self.prefixForBuildaBot()) [\(repoName)]"
-    }
-    
-    private func prefixForBuildaBot() -> String {
-        return "BuildaBot"
-    }
-}
-
-extension Array {
-    
-    func mapVoidAsync(transformAsync: (item: T, itemCompletion: () -> ()) -> (), completion: () -> ()) {
-        self.mapAsync(transformAsync, completion: { (_) -> () in
-            completion()
-        })
-    }
-    
-    func mapAsync<U>(transformAsync: (item: T, itemCompletion: (U) -> ()) -> (), completion: ([U]) -> ()) {
-        
-        let group = dispatch_group_create()
-        var returnedValueMap = [Int: U]()
-
-        for (index, element) in enumerate(self) {
-            dispatch_group_enter(group)
-            transformAsync(item: element, itemCompletion: {
-                (returned: U) -> () in
-                returnedValueMap[index] = returned
-                dispatch_group_leave(group)
-            })
-        }
-        
-        dispatch_group_notify(group, dispatch_get_main_queue()) {
-            
-            //we have all the returned values in a map, put it back into an array of Us
-            var returnedValues = [U]()
-            for i in 0 ..< returnedValueMap.count {
-                returnedValues.append(returnedValueMap[i]!)
-            }
-            completion(returnedValues)
-        }
-    }
-    
 }
