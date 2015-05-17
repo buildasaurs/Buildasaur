@@ -19,7 +19,7 @@ public class HDGitHubXCBotSyncer : Syncer {
     let waitForLttm: Bool
     let postStatusComments: Bool
     
-    typealias GitHubStatusAndComment = (status: Status, comment: String?)
+    public typealias GitHubStatusAndComment = (status: Status, comment: String?)
     
     public init(integrationServer: XcodeServer, sourceServer: GitHubServer, localSource: LocalSource,
         syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool) {

@@ -138,7 +138,6 @@ extension Integration : Hashable {
             return self.number
         }
     }
-    
 }
 
 public func ==(lhs: Integration, rhs: Integration) -> Bool {

@@ -89,6 +89,10 @@
 		3AB3F0EB1A3CEBE9005F717F /* GitServerPublic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAF6F031A3CE66A00C657FB /* GitServerPublic.swift */; };
 		3AB3FDC91B05616A00021197 /* TimeUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB3FDC81B05616A00021197 /* TimeUtils.swift */; };
 		3AB3FDCB1B05644300021197 /* MenuItemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB3FDCA1B05644300021197 /* MenuItemManager.swift */; };
+		3AB4898A1B09073F005C87BE /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB489891B09073F005C87BE /* Mocks.swift */; };
+		3AB4898C1B0912E5005C87BE /* SyncPair_PR_Bot_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB4898B1B0912E5005C87BE /* SyncPair_PR_Bot_Tests.swift */; };
+		3AB4898E1B0929C9005C87BE /* MockHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB4898D1B0929C9005C87BE /* MockHelpers.swift */; };
+		3AB489901B0929F8005C87BE /* sampleFinishedIntegration.json in Resources */ = {isa = PBXBuildFile; fileRef = 3AB4898F1B0929F8005C87BE /* sampleFinishedIntegration.json */; };
 		3AC553AF1A6313240078CCA6 /* XcodeServerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC553AE1A6313240078CCA6 /* XcodeServerConstants.swift */; };
 		3AD338B01AAE31D500ECD0F2 /* BuildTemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD338AF1AAE31D500ECD0F2 /* BuildTemplateViewController.swift */; };
 		3AF1B1221AAC621800917EF3 /* UIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF1B1211AAC621800917EF3 /* UIUtils.swift */; };
@@ -265,6 +269,10 @@
 		3AAF6F031A3CE66A00C657FB /* GitServerPublic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GitServerPublic.swift; path = BuildaGitServer/GitServerPublic.swift; sourceTree = SOURCE_ROOT; };
 		3AB3FDC81B05616A00021197 /* TimeUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeUtils.swift; sourceTree = "<group>"; };
 		3AB3FDCA1B05644300021197 /* MenuItemManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuItemManager.swift; sourceTree = "<group>"; };
+		3AB489891B09073F005C87BE /* Mocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
+		3AB4898B1B0912E5005C87BE /* SyncPair_PR_Bot_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncPair_PR_Bot_Tests.swift; sourceTree = "<group>"; };
+		3AB4898D1B0929C9005C87BE /* MockHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockHelpers.swift; sourceTree = "<group>"; };
+		3AB4898F1B0929F8005C87BE /* sampleFinishedIntegration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sampleFinishedIntegration.json; sourceTree = "<group>"; };
 		3AC553AE1A6313240078CCA6 /* XcodeServerConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeServerConstants.swift; sourceTree = "<group>"; };
 		3ACB831F1A3BB64F00E285FD /* JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
 		3AD338AF1AAE31D500ECD0F2 /* BuildTemplateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildTemplateViewController.swift; sourceTree = "<group>"; };
@@ -390,7 +398,11 @@
 		3A46A2D71B081EF400F0FA4B /* BuildasaurTests */ = {
 			isa = PBXGroup;
 			children = (
+				3AB4898F1B0929F8005C87BE /* sampleFinishedIntegration.json */,
 				3A46A2E21B081F2100F0FA4B /* SyncerTests.swift */,
+				3AB4898B1B0912E5005C87BE /* SyncPair_PR_Bot_Tests.swift */,
+				3AB489891B09073F005C87BE /* Mocks.swift */,
+				3AB4898D1B0929C9005C87BE /* MockHelpers.swift */,
 				3A46A2D81B081EF400F0FA4B /* Supporting Files */,
 			);
 			path = BuildasaurTests;
@@ -871,6 +883,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3AB489901B0929F8005C87BE /* sampleFinishedIntegration.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -926,7 +939,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3AB4898C1B0912E5005C87BE /* SyncPair_PR_Bot_Tests.swift in Sources */,
+				3AB4898E1B0929C9005C87BE /* MockHelpers.swift in Sources */,
 				3A46A2E31B081F2100F0FA4B /* SyncerTests.swift in Sources */,
+				3AB4898A1B09073F005C87BE /* Mocks.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1655,6 +1671,7 @@
 				3A46A2E11B081EF400F0FA4B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3A56876B1A3B93BD0066DB2B /* Build configuration list for PBXProject "Buildasaur" */ = {
 			isa = XCConfigurationList;

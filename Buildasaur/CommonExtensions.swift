@@ -8,6 +8,16 @@
 
 import Foundation
 
+
+func firstNonNil<T>(objects: [T?]) -> T? {
+    for i in objects {
+        if let i = i {
+            return i
+        }
+    }
+    return nil
+}
+
 extension Set {
     
     func filterSet(includeElement: (T) -> Bool) -> Set<T> {
