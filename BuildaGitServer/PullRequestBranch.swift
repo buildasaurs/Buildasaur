@@ -12,18 +12,14 @@ import Foundation
 //normal branches include less information
 public class PullRequestBranch : GitHubEntity {
     
-    public let label: String
     public let ref: String
     public let sha: String
-    public let user: User
     public let repo: Repo
     
     public required init(json: NSDictionary) {
         
-        self.label = json.stringForKey("label")
         self.ref = json.stringForKey("ref")
         self.sha = json.stringForKey("sha")
-        self.user = User(json: json.dictionaryForKey("user"))
         self.repo = Repo(json: json.dictionaryForKey("repo"))
         
         super.init(json: json)

@@ -15,26 +15,14 @@ import Buildasaur
 
 class SyncerTests: XCTestCase {
 
+    var syncer: HDGitHubXCBotSyncer!
+    
+    override func setUp() {
+        super.setUp()
+        self.syncer = self.mockedSyncer()
+    }
+    
     func mockedSyncer() -> HDGitHubXCBotSyncer {
-        class MockXcodeServer: XcodeServer {
-            init() {
-                let config = XcodeServerConfig(host: "", user: "", password: "")
-                super.init(config: config, endpoints: XcodeServerEndPoints(serverConfig: config))
-            }
-        }
-        
-        class MockGitHubServer: GitHubServer {
-            init() {
-                super.init(endpoints: GitHubEndpoints(baseURL: "", token: ""))
-            }
-        }
-        
-        class MockLocalSource: LocalSource {
-            override init() {
-                super.init()
-            }
-            required init?(json: NSDictionary) { fatalError("init(json:) has not been implemented") }
-        }
         
         let xcodeServer = MockXcodeServer()
         let githubServer = MockGitHubServer()
@@ -47,16 +35,65 @@ class SyncerTests: XCTestCase {
         return syncer
     }
     
-    func testCreatingChangeActions() {
+    //MARK: Creating change actions from input data (PRs and Bots)
+    
+    func testCreatingChangeActions_NoPRs_NoBots() {
         
-        let syncer = self.mockedSyncer()
-        let (toSync, toCreate, toDelete) = syncer.resolvePRsAndBots(repoName: "Repo", prs: [], bots: [])
-        XCTAssert(toSync.count == 0)
-        XCTAssert(toCreate.count == 0)
-        XCTAssert(toDelete.count == 0)
+        let (toSync, toCreate, toDelete) = self.syncer.resolvePRsAndBots(repoName: "me/Repo", prs: [], bots: [])
+        XCTAssertEqual(toSync.count, 0)
+        XCTAssertEqual(toCreate.count, 0)
+        XCTAssertEqual(toDelete.count, 0)
     }
     
-    //TODO: figure out an easy way to mock PRs, Bots etc
+    func testCreatingChangeActions_MultiplePR_NoBots() {
+        
+        let prs = [
+            MockPullRequest(number: 4, title: ""),
+            MockPullRequest(number: 7, title: "")
+        ]
+        
+        let (toSync, toCreate, toDelete) = self.syncer.resolvePRsAndBots(repoName: "me/Repo", prs: prs, bots: [])
+        XCTAssertEqual(toSync.count, 0)
+        XCTAssertEqual(toCreate.count, 2)
+        XCTAssertEqual(toDelete.count, 0)
+    }
+    
+    func testCreatingChangeActions_NoPR_Bots() {
+        
+        let bots = [
+            MockBot(name: "bot1"),
+            MockBot(name: "BuildaBot [me/Repo] bot2")
+        ]
+        
+        let (toSync, toCreate, toDelete) = self.syncer.resolvePRsAndBots(repoName: "me/Repo", prs: [], bots: bots)
+        XCTAssertEqual(toSync.count, 0)
+        XCTAssertEqual(toCreate.count, 0)
+        XCTAssertEqual(toDelete.count, 1) //should only be one, because the first bot should get ignored, since it doesn't belong to me/Repo (judging by its name prefix)
+    }
+    
+    func testCreatingChangeActions_PRs_Bots() {
+        
+        let bots = [
+            MockBot(name: "bot1"), //this should get ignored
+            MockBot(name: "BuildaBot [me/Repo] PR #4"),
+            MockBot(name: "BuildaBot [me/Repo] PR #8")
+        ]
+        
+        let prs = [
+            MockPullRequest(number: 4, title: ""),
+            MockPullRequest(number: 7, title: "")
+        ]
+        
+        let (toSync, toCreate, toDelete) = self.syncer.resolvePRsAndBots(repoName: "me/Repo", prs: prs, bots: bots)
+        XCTAssertEqual(toSync.count, 1)
+        XCTAssertEqual(toSync.first!.bot.name, "BuildaBot [me/Repo] PR #4")
+        XCTAssertEqual(toSync.first!.pr.number, 4)
+        XCTAssertEqual(toCreate.count, 1)
+        XCTAssertEqual(toCreate.first!.number, 7)
+        XCTAssertEqual(toDelete.count, 1)
+        XCTAssertEqual(toDelete.first!.name, "BuildaBot [me/Repo] PR #8")
+    }
+    
 }
 
 

@@ -153,7 +153,6 @@ class GitHubSourceTests: XCTestCase {
     func testPullRequestBranchParsing() {
         
         let dictionary = [
-            "label": "aleclarson:fb-loadNode",
             "ref": "fb-loadNode",
             "sha": "7e45fa772565969ee801b0bdce0f560122e34610",
             "user": [
@@ -180,10 +179,8 @@ class GitHubSourceTests: XCTestCase {
         ]
         
         let prbranch = PullRequestBranch(json: dictionary)
-        XCTAssertEqual(prbranch.label, "aleclarson:fb-loadNode")
         XCTAssertEqual(prbranch.ref, "fb-loadNode")
         XCTAssertEqual(prbranch.sha, "7e45fa772565969ee801b0bdce0f560122e34610")
-        XCTAssertEqual(prbranch.user.userName, "aleclarson")
         XCTAssertEqual(prbranch.repo.name, "AsyncDisplayKit")
     }
 
