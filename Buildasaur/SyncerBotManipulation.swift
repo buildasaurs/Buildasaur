@@ -31,28 +31,17 @@ extension HDGitHubXCBotSyncer {
             }, completion: completion)
     }
     
-    func deleteBots(bots: [Bot], completion: () -> ()) {
+    func deleteBot(bot: Bot, completion: () -> ()) {
         
-        bots.mapVoidAsync({ (bot, itemCompletion) -> () in
+        self.xcodeServer.deleteBot(bot.id, revision: bot.rev, completion: { (success, error) -> () in
             
-            self.xcodeServer.deleteBot(bot.id, revision: bot.rev, completion: { (success, error) -> () in
-                
-                if error != nil {
-                    self.notifyError(error, context: "Failed to delete bot with name \(bot.name)")
-                } else {
-                    Log.info("Successfully deleted bot \(bot.name)")
-                }
-                itemCompletion()
-            })
-            
-            }, completion: completion)
-    }
-    
-    func createBotsFromPRs(prs: [PullRequest], completion: () -> ()) {
-        
-        prs.mapVoidAsync({ (item, itemCompletion) -> () in
-            self.createBotFromPR(item, completion: itemCompletion)
-            }, completion: completion)
+            if error != nil {
+                self.notifyError(error, context: "Failed to delete bot with name \(bot.name)")
+            } else {
+                Log.info("Successfully deleted bot \(bot.name)")
+            }
+            completion()
+        })
     }
     
     func createBotFromPR(pr: PullRequest, completion: () -> ()) {

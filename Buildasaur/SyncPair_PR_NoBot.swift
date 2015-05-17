@@ -22,12 +22,23 @@ class SyncPair_PR_NoBot: SyncPair {
     override func sync(completion: Completion) {
         
         //create a bot for this PR
+        let syncer = self.syncer
+        let pr = self.pr
         
-        completion(error: nil)
+        SyncPair_PR_NoBot.createBotForPR(syncer: syncer, pr: pr, completion: completion)
     }
     
     override func syncPairName() -> String {
-        return "PR + No Bot"
+        return "PR (\(self.pr.head.ref)) + No Bot"
+    }
+    
+    //MARK: Internal
+    
+    private class func createBotForPR(#syncer: HDGitHubXCBotSyncer, pr: PullRequest, completion: Completion) {
+        
+        syncer.createBotFromPR(pr, completion: { () -> () in
+            completion(error: nil)
+        })
     }
     
 }

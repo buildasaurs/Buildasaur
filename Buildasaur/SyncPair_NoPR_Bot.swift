@@ -22,11 +22,20 @@ class SyncPair_NoPR_Bot: SyncPair {
     override func sync(completion: Completion) {
         
         //delete the bot
+        let syncer = self.syncer
+        let bot = self.bot
         
-        completion(success: true, error: nil)
+        SyncPair_NoPR_Bot.deleteBot(syncer: syncer, bot: bot, completion: completion)
     }
     
     override func syncPairName() -> String {
-        return "No PR + Bot"
+        return "No PR + Bot (\(self.bot.name))"
+    }
+    
+    private class func deleteBot(#syncer: HDGitHubXCBotSyncer, bot: Bot, completion: Completion) {
+        
+        syncer.deleteBot(bot, completion: { () -> () in
+            completion(error: nil)
+        })
     }
 }

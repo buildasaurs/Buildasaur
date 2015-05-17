@@ -35,7 +35,7 @@ class SyncPair {
         
         self.sync { (error) -> () in
             
-            let duration = start.timeIntervalSinceNow.clipTo(3)
+            let duration = -1 * start.timeIntervalSinceNow.clipTo(3)
             Log.verbose("SyncPair \(self.syncPairName()) finished sync after \(duration) seconds.")
             completion(error: error)
         }

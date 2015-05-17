@@ -30,13 +30,12 @@ class SyncPair_PR_Bot: SyncPair {
         let syncer = self.syncer
         SyncPair_PR_Bot.syncPRWithBot(syncer: syncer, pr: pr, bot: bot) { (error) -> () in
             
-            Log.verbose("Synced up PR #\(pr.number) with bot \(bot.name)")
             completion(error: error)
         }
     }
     
     override func syncPairName() -> String {
-        return "PR + Bot"
+        return "PR (\(self.pr.number):\(self.pr.head.ref)) + Bot (\(self.bot.name))"
     }
     
     //MARK: Internal
@@ -312,7 +311,10 @@ class SyncPair_PR_Bot: SyncPair {
                         Log.info("Updating status of commit \(headCommit) in PR #\(pr.number) from \(oldStatus) to \(newStatus), will add comment \(comment)")
                         
                         //we need to update status
-                        syncer.postStatusWithComment(statusWithComment, commit: headCommit, repo: repoName, pr: pr, completion: { () -> () in
+                        syncer.postStatusWithComment(statusWithComment, commit: headCommit, repo: repoName, pr: pr, completion: { (error) -> () in
+                            if let error = error {
+                                lastGroupError = error
+                            }
                             dispatch_group_leave(group)
                         })
                         
@@ -327,7 +329,7 @@ class SyncPair_PR_Bot: SyncPair {
         
         //when all actions finished, complete
         dispatch_group_notify(group, dispatch_get_main_queue(), {
-            completion(error: nil)
+            completion(error: lastGroupError)
         })
     }
     
@@ -368,7 +370,7 @@ class SyncPair_PR_Bot: SyncPair {
                 if completed.count > 0 {
                     
                     //we have some completed integrations
-                    statusWithComment = self.resolveStatusFromCompletedIntegrations(completed)
+                    statusWithComment = self.resolveStatusFromCompletedIntegrations(syncer: syncer, integrations: completed)
                     
                 } else {
                     //this shouldn't happen.
@@ -384,7 +386,7 @@ class SyncPair_PR_Bot: SyncPair {
         }
     }
     
-    private class func resolveStatusFromCompletedIntegrations(integrations: Set<Integration>) -> HDGitHubXCBotSyncer.GitHubStatusAndComment {
+    private class func resolveStatusFromCompletedIntegrations(#syncer: HDGitHubXCBotSyncer, integrations: Set<Integration>) -> HDGitHubXCBotSyncer.GitHubStatusAndComment {
         
         //get integrations sorted by number
         let sortedDesc = Array(integrations).sorted { $0.number > $1.number }
@@ -400,9 +402,9 @@ class SyncPair_PR_Bot: SyncPair {
             }
         }).first {
             
-            let baseComment = self.baseCommentFromIntegration(passingIntegration)
+            let baseComment = syncer.baseCommentFromIntegration(passingIntegration)
             let comment: String
-            let status = self.createStatusFromState(.Success, description: "Build passed!")
+            let status = syncer.createStatusFromState(.Success, description: "Build passed!")
             let summary = passingIntegration.buildResultSummary!
             if passingIntegration.result == .Succeeded {
                 comment = baseComment + "Perfect build! All \(summary.testsCount) tests passed. :+1:"
@@ -419,8 +421,8 @@ class SyncPair_PR_Bot: SyncPair {
             $0.result! == Integration.Result.TestFailures
         }).first {
             
-            let baseComment = self.baseCommentFromIntegration(testFailingIntegration)
-            let status = self.createStatusFromState(.Failure, description: "Build failed tests!")
+            let baseComment = syncer.baseCommentFromIntegration(testFailingIntegration)
+            let status = syncer.createStatusFromState(.Failure, description: "Build failed tests!")
             let summary = testFailingIntegration.buildResultSummary!
             let comment = baseComment + "Build failed \(summary.testFailureCount) tests out of \(summary.testsCount)"
             return (status: status, comment: comment)
@@ -431,14 +433,14 @@ class SyncPair_PR_Bot: SyncPair {
             $0.result! != Integration.Result.Canceled
         }).first {
             
-            let baseComment = self.baseCommentFromIntegration(erroredIntegration)
+            let baseComment = syncer.baseCommentFromIntegration(erroredIntegration)
             let errorCount: String
             if let summary = erroredIntegration.buildResultSummary {
                 errorCount = "\(summary.errorCount)"
             } else {
                 errorCount = "?"
             }
-            let status = self.createStatusFromState(.Error, description: "Build error!")
+            let status = syncer.createStatusFromState(.Error, description: "Build error!")
             let comment = baseComment + "\(errorCount) build errors: \(erroredIntegration.result!.rawValue)"
             return (status: status, comment: comment)
         }
@@ -448,14 +450,14 @@ class SyncPair_PR_Bot: SyncPair {
             $0.result! == Integration.Result.Canceled
         }).first {
             
-            let baseComment = self.baseCommentFromIntegration(canceledIntegration)
-            let status = self.createStatusFromState(.Error, description: "Build canceled!")
+            let baseComment = syncer.baseCommentFromIntegration(canceledIntegration)
+            let status = syncer.createStatusFromState(.Error, description: "Build canceled!")
             let comment = baseComment + "Build was manually canceled."
             return (status: status, comment: comment)
         }
         
         //hmm no idea, if we got all the way here. just leave it with no state.
-        let status = self.createStatusFromState(.NoState, description: nil)
+        let status = syncer.createStatusFromState(.NoState, description: nil)
         return (status: status, comment: nil)
     }
 }
