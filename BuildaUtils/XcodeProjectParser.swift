@@ -81,12 +81,12 @@ public class XcodeProjectParser {
             if let parsed = self.parseCheckoutFile(checkoutUrl) {
                 return (parsed, nil)
             } else {
-                let error = Errors.errorWithInfo("Cannot parse the checkout file at path \(checkoutUrl)")
+                let error = Error.withInfo("Cannot parse the checkout file at path \(checkoutUrl)")
                 return (nil, error)
             }
         }
         //no checkout, what to do?
-        let error = Errors.errorWithInfo("Cannot find the Checkout file, please make sure to open this project in Xcode at least once (it will generate the required Checkout file). Then try again.")
+        let error = Error.withInfo("Cannot find the Checkout file, please make sure to open this project in Xcode at least once (it will generate the required Checkout file). Then try again.")
         return (nil, error)
     }
     

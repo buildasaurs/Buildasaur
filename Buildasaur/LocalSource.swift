@@ -141,7 +141,7 @@ public class LocalSource : JSONSerializable {
         if self.parseCheckoutType(meta!) == nil {
             //disallowed
             let allowedString = ", ".join([AllowedCheckoutTypes.SSH].map({ $0.rawValue }))
-            let error = Errors.errorWithInfo("Disallowed checkout type, the project must be checked out over one of the supported schemes: \(allowedString)")
+            let error = Error.withInfo("Disallowed checkout type, the project must be checked out over one of the supported schemes: \(allowedString)")
             return (false, nil, error)
         }
         
@@ -233,6 +233,17 @@ public class LocalSource : JSONSerializable {
             self.sshPassphrase = nil
             return nil
         }
+    }
+    
+    public init() {
+        self.forkOriginURL = nil
+        self.availabilityState = .Unchecked
+        self.url = NSURL()
+        self.preferredTemplateId = nil
+        self.githubToken = nil
+        self.publicSSHKeyUrl = nil
+        self.privateSSHKeyUrl = nil
+        self.sshPassphrase = nil
     }
     
     public func jsonify() -> NSDictionary {

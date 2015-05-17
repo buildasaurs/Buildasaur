@@ -147,7 +147,7 @@ public extension XcodeServer {
             self.http.sendRequest(request, completion: { (response, body, error) -> () in
                 
                 if response == nil {
-                    let e = error ?? Errors.errorWithInfo("Nil response")
+                    let e = error ?? Error.withInfo("Nil response")
                     completion(response: nil, body: body, error: e)
                     return
                 }
@@ -156,7 +156,7 @@ public extension XcodeServer {
             })
             
         } else {
-            completion(response: nil, body: nil, error: Errors.errorWithInfo("Couldn't create Request"))
+            completion(response: nil, body: nil, error: Error.withInfo("Couldn't create Request"))
         }
     }
     
@@ -173,11 +173,11 @@ public extension XcodeServer {
                 if response.statusCode == 204 {
                     completion(success: true, error: nil)
                 } else {
-                    completion(success: false, error: Errors.errorWithInfo("Wrong status code: \(response.statusCode)"))
+                    completion(success: false, error: Error.withInfo("Wrong status code: \(response.statusCode)"))
                 }
                 return
             }
-            completion(success: false, error: Errors.errorWithInfo("Nil response"))
+            completion(success: false, error: Error.withInfo("Nil response"))
         }
     }
     
@@ -194,11 +194,11 @@ public extension XcodeServer {
                 if response.statusCode == 204 {
                     completion(success: true, error: nil)
                 } else {
-                    completion(success: false, error: Errors.errorWithInfo("Wrong status code: \(response.statusCode)"))
+                    completion(success: false, error: Error.withInfo("Wrong status code: \(response.statusCode)"))
                 }
                 return
             }
-            completion(success: false, error: Errors.errorWithInfo("Nil response"))
+            completion(success: false, error: Error.withInfo("Nil response"))
         }
     }
 
@@ -217,7 +217,7 @@ public extension XcodeServer {
                 let bot = Bot(json: body as NSDictionary)
                 completion(bot: bot, error: nil)
             } else {
-                completion(bot: nil, error: Errors.errorWithInfo("Wrong body \(body)"))
+                completion(bot: nil, error: Error.withInfo("Wrong body \(body)"))
             }
         }
     }
@@ -239,7 +239,7 @@ public extension XcodeServer {
                 let bot = Bot(json: body)
                 completion(bot: bot, error: nil)
             } else {
-                completion(bot: nil, error: Errors.errorWithInfo("Wrong body \(body)"))
+                completion(bot: nil, error: Error.withInfo("Wrong body \(body)"))
             }
         }
     }
@@ -262,10 +262,10 @@ public extension XcodeServer {
                 if response.statusCode == 204 {
                     completion(success: true, error: nil)
                 } else {
-                    completion(success: false, error: Errors.errorWithInfo("Wrong status code: \(response.statusCode)"))
+                    completion(success: false, error: Error.withInfo("Wrong status code: \(response.statusCode)"))
                 }
             } else {
-                completion(success: false, error: Errors.errorWithInfo("Nil response"))
+                completion(success: false, error: Error.withInfo("Nil response"))
             }
         }
     }
@@ -283,7 +283,7 @@ public extension XcodeServer {
                 let bots: [Bot] = XcodeServerArray(body)
                 completion(bots: bots, error: nil)
             } else {
-                completion(bots: nil, error: Errors.errorWithInfo("Wrong data returned: \(body)"))
+                completion(bots: nil, error: Error.withInfo("Wrong data returned: \(body)"))
             }
         }
     }
@@ -305,7 +305,7 @@ public extension XcodeServer {
                 let integrations: [Integration] = XcodeServerArray(body)
                 completion(integrations: integrations, error: nil)
             } else {
-                completion(integrations: nil, error: Errors.errorWithInfo("Wrong body \(body)"))
+                completion(integrations: nil, error: Error.withInfo("Wrong body \(body)"))
             }
         }
     }
@@ -332,7 +332,7 @@ public extension XcodeServer {
                 let integration = Integration(json: body)
                 completion(integration: integration, error: nil)
             } else {
-                completion(integration: nil, error: Errors.errorWithInfo("Wrong body \(body)"))
+                completion(integration: nil, error: Error.withInfo("Wrong body \(body)"))
             }
         }
     }
@@ -367,7 +367,7 @@ public extension XcodeServer {
                 let devices: [Device] = XcodeServerArray(array)
                 completion(devices: devices, error: error)
             } else {
-                completion(devices: nil, error: Errors.errorWithInfo("Wrong body \(body)"))
+                completion(devices: nil, error: Error.withInfo("Wrong body \(body)"))
             }
         }
     }
@@ -385,10 +385,10 @@ public extension XcodeServer {
                 if let canCreateBots = body["result"] as? Bool where canCreateBots == true {
                     completion(canCreateBots: true, error: nil)
                 } else {
-                    completion(canCreateBots: false, error: Errors.errorWithInfo("Specified user cannot create bots"))
+                    completion(canCreateBots: false, error: Error.withInfo("Specified user cannot create bots"))
                 }
             } else {
-                completion(canCreateBots: false, error: Errors.errorWithInfo("Wrong body \(body)"))
+                completion(canCreateBots: false, error: Error.withInfo("Wrong body \(body)"))
             }
         }
     }

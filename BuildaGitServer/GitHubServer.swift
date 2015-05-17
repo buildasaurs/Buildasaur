@@ -125,7 +125,7 @@ extension GitHubServer {
             }
             
             if response == nil {
-                completion(response: nil, body: body, error: Errors.errorWithInfo("Nil response"))
+                completion(response: nil, body: body, error: Error.withInfo("Nil response"))
                 return
             }
             
@@ -151,7 +151,7 @@ extension GitHubServer {
                 where message == "Not Found" {
                     
                     let url = request.URL ?? ""
-                    completion(response: nil, body: nil, error: Errors.errorWithInfo("Not found: \(url)"))
+                    completion(response: nil, body: nil, error: Error.withInfo("Not found: \(url)"))
                     return
             }
             
@@ -162,7 +162,7 @@ extension GitHubServer {
             case 400 ... 500:
                 let message = (body as? NSDictionary)?["message"] as? String ?? "Unknown error"
                 let resultString = "\(statusCode): \(message)"
-                completion(response: response, body: body, error: Errors.errorWithInfo(resultString, internalError: error))
+                completion(response: response, body: body, error: Error.withInfo(resultString, internalError: error))
                 return
             default:
                 break
@@ -189,7 +189,7 @@ extension GitHubServer {
             
             self.sendRequestWithPossiblePagination(request, accumulatedResponseBody: NSArray(), completion: completion)
         } else {
-            completion(response: nil, body: nil, error: Errors.errorWithInfo("Couldn't create Request"))
+            completion(response: nil, body: nil, error: Error.withInfo("Couldn't create Request"))
         }
     }
     
@@ -212,7 +212,7 @@ extension GitHubServer {
                 let prs: [PullRequest] = GitHubArray(body)
                 completion(prs: prs, error: nil)
             } else {
-                completion(prs: nil, error: Errors.errorWithInfo("Wrong body \(body)"))
+                completion(prs: nil, error: Error.withInfo("Wrong body \(body)"))
             }
         }
     }
@@ -238,7 +238,7 @@ extension GitHubServer {
                 let pr = PullRequest(json: body)
                 completion(pr: pr, error: nil)
             } else {
-                completion(pr: nil, error: Errors.errorWithInfo("Wrong body \(body)"))
+                completion(pr: nil, error: Error.withInfo("Wrong body \(body)"))
             }
         }
     }
@@ -266,7 +266,7 @@ extension GitHubServer {
                 let mostRecentStatus = statuses.sorted({ return $0.created! > $1.created! }).first
                 completion(status: mostRecentStatus, error: nil)
             } else {
-                completion(status: nil, error: Errors.errorWithInfo("Wrong body \(body)"))
+                completion(status: nil, error: Error.withInfo("Wrong body \(body)"))
             }
         }
     }
@@ -293,7 +293,7 @@ extension GitHubServer {
                 let status = Status(json: body)
                 completion(status: status, error: nil)
             } else {
-                completion(status: nil, error: Errors.errorWithInfo("Wrong body \(body)"))
+                completion(status: nil, error: Error.withInfo("Wrong body \(body)"))
             }
         }
     }
@@ -321,7 +321,7 @@ extension GitHubServer {
                 let comments: [Comment] = GitHubArray(body)
                 completion(comments: comments, error: nil)
             } else {
-                completion(comments: nil, error: Errors.errorWithInfo("Wrong body \(body)"))
+                completion(comments: nil, error: Error.withInfo("Wrong body \(body)"))
             }
         }
     }
@@ -351,7 +351,7 @@ extension GitHubServer {
                 let comment = Comment(json: body)
                 completion(comment: comment, error: nil)
             } else {
-                completion(comment: nil, error: Errors.errorWithInfo("Wrong body \(body)"))
+                completion(comment: nil, error: Error.withInfo("Wrong body \(body)"))
             }
         }
     }
@@ -381,7 +381,7 @@ extension GitHubServer {
                 let comment = Comment(json: body)
                 completion(comment: comment, error: nil)
             } else {
-                completion(comment: nil, error: Errors.errorWithInfo("Wrong body \(body)"))
+                completion(comment: nil, error: Error.withInfo("Wrong body \(body)"))
             }
         }
     }
@@ -433,7 +433,7 @@ extension GitHubServer {
                     completion(result: nil, error: error)
                 }
             } else {
-                completion(result: nil, error: Errors.errorWithInfo("Nil response"))
+                completion(result: nil, error: Error.withInfo("Nil response"))
             }
         }
     }
@@ -459,7 +459,7 @@ extension GitHubServer {
                 let branches: [Branch] = GitHubArray(body)
                 completion(branches: branches, error: nil)
             } else {
-                completion(branches: nil, error: Errors.errorWithInfo("Wrong body \(body)"))
+                completion(branches: nil, error: Error.withInfo("Wrong body \(body)"))
             }
         }
     }
@@ -485,7 +485,7 @@ extension GitHubServer {
                 let repository: Repo = Repo(json: body)
                 completion(repo: repository, error: nil)
             } else {
-                completion(repo: nil, error: Errors.errorWithInfo("Wrong body \(body)"))
+                completion(repo: nil, error: Error.withInfo("Wrong body \(body)"))
             }
         }
     }

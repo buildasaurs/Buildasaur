@@ -29,7 +29,7 @@ public extension GitHubServer {
                 let sha = pr.head.sha
                 self.getStatusOfCommit(sha, repo: repo, completion: completion)
             } else {
-                completion(status: nil, error: Errors.errorWithInfo("PR is nil and error is nil"))
+                completion(status: nil, error: Error.withInfo("PR is nil and error is nil"))
             }
         }
     }
@@ -58,7 +58,7 @@ public extension GitHubServer {
                 }
                 completion(foundComments: filtered, error: nil)
             } else {
-                completion(foundComments: nil, error: Errors.errorWithInfo("Nil comments and nil error. Wat?"))
+                completion(foundComments: nil, error: Error.withInfo("Nil comments and nil error. Wat?"))
             }
         }
     }

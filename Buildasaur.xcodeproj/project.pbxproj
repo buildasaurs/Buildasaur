@@ -19,6 +19,15 @@
 		3A331C411A940C8D0005AA98 /* CommonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A331C401A940C8D0005AA98 /* CommonExtensions.swift */; };
 		3A3BDC1D1AF6C51900D2CD99 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3BDC1C1AF6C51900D2CD99 /* Extensions.swift */; };
 		3A3BDC1F1AF6D34900D2CD99 /* GitHubRateLimit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3BDC1E1AF6D34900D2CD99 /* GitHubRateLimit.swift */; };
+		3A46A2C11B07D8D800F0FA4B /* SyncerBotNaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2C01B07D8D800F0FA4B /* SyncerBotNaming.swift */; };
+		3A46A2C31B07DCCA00F0FA4B /* SyncerBotManipulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2C21B07DCCA00F0FA4B /* SyncerBotManipulation.swift */; };
+		3A46A2C61B07DEAE00F0FA4B /* SyncerGitHubUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2C51B07DEAE00F0FA4B /* SyncerGitHubUtils.swift */; };
+		3A46A2C81B07DF8F00F0FA4B /* SyncerBotUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2C71B07DF8F00F0FA4B /* SyncerBotUtils.swift */; };
+		3A46A2CA1B07E28700F0FA4B /* SyncPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2C91B07E28700F0FA4B /* SyncPair.swift */; };
+		3A46A2CD1B07E38E00F0FA4B /* SyncPair_PR_NoBot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2CC1B07E38E00F0FA4B /* SyncPair_PR_NoBot.swift */; };
+		3A46A2CF1B07E60200F0FA4B /* SyncPair_PR_Bot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2CE1B07E60200F0FA4B /* SyncPair_PR_Bot.swift */; };
+		3A46A2D11B07E64F00F0FA4B /* SyncPair_NoPR_Bot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2D01B07E64F00F0FA4B /* SyncPair_NoPR_Bot.swift */; };
+		3A46A2E31B081F2100F0FA4B /* SyncerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A46A2E21B081F2100F0FA4B /* SyncerTests.swift */; };
 		3A4770A21A745F470016E170 /* StorageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4770A11A745F470016E170 /* StorageUtils.swift */; };
 		3A4770A41A745FFA0016E170 /* XcodeProjectParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4770A31A745FFA0016E170 /* XcodeProjectParser.swift */; };
 		3A5591561A913C0A00FB19F2 /* XcodeLocalSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5591551A913C0A00FB19F2 /* XcodeLocalSource.swift */; };
@@ -94,6 +103,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 3AAF6E731A3CE4CB00C657FB;
 			remoteInfo = BuildaUtils;
+		};
+		3A46A2DC1B081EF400F0FA4B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3A5687681A3B93BD0066DB2B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3A56876F1A3B93BD0066DB2B;
+			remoteInfo = Buildasaur;
 		};
 		3AAF6E891A3CE4CC00C657FB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -177,6 +193,17 @@
 		3A38CF951A3CE94C00F41AFA /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Status.swift; path = BuildaGitServer/Status.swift; sourceTree = SOURCE_ROOT; };
 		3A3BDC1C1AF6C51900D2CD99 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		3A3BDC1E1AF6D34900D2CD99 /* GitHubRateLimit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubRateLimit.swift; sourceTree = "<group>"; };
+		3A46A2C01B07D8D800F0FA4B /* SyncerBotNaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerBotNaming.swift; sourceTree = "<group>"; };
+		3A46A2C21B07DCCA00F0FA4B /* SyncerBotManipulation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerBotManipulation.swift; sourceTree = "<group>"; };
+		3A46A2C51B07DEAE00F0FA4B /* SyncerGitHubUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerGitHubUtils.swift; sourceTree = "<group>"; };
+		3A46A2C71B07DF8F00F0FA4B /* SyncerBotUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerBotUtils.swift; sourceTree = "<group>"; };
+		3A46A2C91B07E28700F0FA4B /* SyncPair.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncPair.swift; sourceTree = "<group>"; };
+		3A46A2CC1B07E38E00F0FA4B /* SyncPair_PR_NoBot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncPair_PR_NoBot.swift; sourceTree = "<group>"; };
+		3A46A2CE1B07E60200F0FA4B /* SyncPair_PR_Bot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncPair_PR_Bot.swift; sourceTree = "<group>"; };
+		3A46A2D01B07E64F00F0FA4B /* SyncPair_NoPR_Bot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncPair_NoPR_Bot.swift; sourceTree = "<group>"; };
+		3A46A2D61B081EF400F0FA4B /* BuildasaurTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BuildasaurTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A46A2D91B081EF400F0FA4B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3A46A2E21B081F2100F0FA4B /* SyncerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerTests.swift; sourceTree = "<group>"; };
 		3A4770A11A745F470016E170 /* StorageUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageUtils.swift; sourceTree = "<group>"; };
 		3A4770A31A745FFA0016E170 /* XcodeProjectParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeProjectParser.swift; sourceTree = "<group>"; };
 		3A4770A51A746BC00016E170 /* Buildasaur.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Buildasaur.entitlements; sourceTree = "<group>"; };
@@ -255,6 +282,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3A46A2D31B081EF400F0FA4B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3A56876D1A3B93BD0066DB2B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -320,19 +354,61 @@
 			isa = PBXGroup;
 			children = (
 				3A612F001AADA28D00183BCB /* BuildTemplate.swift */,
-				3A2F9D811A8FE5D700B0DB68 /* StorageManager.swift */,
 				3A2F9D841A8FE64900B0DB68 /* LocalSource.swift */,
-				3A5591551A913C0A00FB19F2 /* XcodeLocalSource.swift */,
-				3A4770A11A745F470016E170 /* StorageUtils.swift */,
 				3AAA1B711AABBBB200FA1598 /* NetworkUtils.swift */,
+				3A2F9D811A8FE5D700B0DB68 /* StorageManager.swift */,
+				3A4770A11A745F470016E170 /* StorageUtils.swift */,
+				3A5591551A913C0A00FB19F2 /* XcodeLocalSource.swift */,
+				3A5B04B11AB5C42A00F60536 /* XcodeServerSyncerUtils.swift */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		3A46A2C41B07DE1200F0FA4B /* HDGitHubXCBotSyncer */ = {
+			isa = PBXGroup;
+			children = (
+				3A90C4BF1A90220F0048C040 /* HDGitHubXCBotSyncer.swift */,
+				3A46A2C21B07DCCA00F0FA4B /* SyncerBotManipulation.swift */,
+				3A46A2C01B07D8D800F0FA4B /* SyncerBotNaming.swift */,
+				3A46A2C51B07DEAE00F0FA4B /* SyncerGitHubUtils.swift */,
+				3A46A2C71B07DF8F00F0FA4B /* SyncerBotUtils.swift */,
+			);
+			name = HDGitHubXCBotSyncer;
+			sourceTree = "<group>";
+		};
+		3A46A2CB1B07E33400F0FA4B /* SyncPairs */ = {
+			isa = PBXGroup;
+			children = (
+				3A46A2C91B07E28700F0FA4B /* SyncPair.swift */,
+				3A46A2CC1B07E38E00F0FA4B /* SyncPair_PR_NoBot.swift */,
+				3A46A2CE1B07E60200F0FA4B /* SyncPair_PR_Bot.swift */,
+				3A46A2D01B07E64F00F0FA4B /* SyncPair_NoPR_Bot.swift */,
+			);
+			name = SyncPairs;
+			sourceTree = "<group>";
+		};
+		3A46A2D71B081EF400F0FA4B /* BuildasaurTests */ = {
+			isa = PBXGroup;
+			children = (
+				3A46A2E21B081F2100F0FA4B /* SyncerTests.swift */,
+				3A46A2D81B081EF400F0FA4B /* Supporting Files */,
+			);
+			path = BuildasaurTests;
+			sourceTree = "<group>";
+		};
+		3A46A2D81B081EF400F0FA4B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3A46A2D91B081EF400F0FA4B /* Info.plist */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		3A5687671A3B93BD0066DB2B = {
 			isa = PBXGroup;
 			children = (
 				3A5687721A3B93BD0066DB2B /* Buildasaur */,
+				3A46A2D71B081EF400F0FA4B /* BuildasaurTests */,
 				3AAF6EBF1A3CE57100C657FB /* BuildaCIServer */,
 				3AAF6EE51A3CE5BA00C657FB /* BuildaGitServer */,
 				3AAF6EF41A3CE5BA00C657FB /* BuildaGitServerTests */,
@@ -351,6 +427,7 @@
 				3AAF6EE41A3CE5BA00C657FB /* BuildaGitServer.framework */,
 				3AAF6EEE1A3CE5BA00C657FB /* BuildaGitServerTests.xctest */,
 				3A15464B1B02A32C001EEB45 /* BuildaUtilsTests.xctest */,
+				3A46A2D61B081EF400F0FA4B /* BuildasaurTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -465,20 +542,20 @@
 		3AAF6E751A3CE4CC00C657FB /* BuildaUtils */ = {
 			isa = PBXGroup;
 			children = (
-				3A808A1C1ADB063F0073145D /* Persistence.swift */,
-				3A808A1A1ADB03640073145D /* Logging.swift */,
-				3AF1B1211AAC621800917EF3 /* UIUtils.swift */,
-				3A4770A31A745FFA0016E170 /* XcodeProjectParser.swift */,
-				3A6355DC1A3BC19800545BF9 /* HTTPUtils.swift */,
-				3ACB831F1A3BB64F00E285FD /* JSON.swift */,
-				3A7B91351A3E41980060A21A /* Server.swift */,
 				3AAF6E781A3CE4CC00C657FB /* BuildaUtils.h */,
-				3AAF6E761A3CE4CC00C657FB /* Supporting Files */,
 				3AAA1B731AABBD3A00FA1598 /* Errors.swift */,
 				3A3BDC1C1AF6C51900D2CD99 /* Extensions.swift */,
+				3A6355DC1A3BC19800545BF9 /* HTTPUtils.swift */,
+				3ACB831F1A3BB64F00E285FD /* JSON.swift */,
+				3A808A1A1ADB03640073145D /* Logging.swift */,
+				3A808A1C1ADB063F0073145D /* Persistence.swift */,
 				3A1546451B02A0C6001EEB45 /* Script.swift */,
+				3A7B91351A3E41980060A21A /* Server.swift */,
 				3AF2B03A1B02C5D700DCF2D6 /* SSHKeyVerification.swift */,
 				3AB3FDC81B05616A00021197 /* TimeUtils.swift */,
+				3AF1B1211AAC621800917EF3 /* UIUtils.swift */,
+				3A4770A31A745FFA0016E170 /* XcodeProjectParser.swift */,
+				3AAF6E761A3CE4CC00C657FB /* Supporting Files */,
 			);
 			path = BuildaUtils;
 			sourceTree = "<group>";
@@ -550,8 +627,8 @@
 			isa = PBXGroup;
 			children = (
 				3A2F9D851A8FE64900B0DB68 /* Syncer.swift */,
-				3A90C4BF1A90220F0048C040 /* HDGitHubXCBotSyncer.swift */,
-				3A5B04B11AB5C42A00F60536 /* XcodeServerSyncerUtils.swift */,
+				3A46A2CB1B07E33400F0FA4B /* SyncPairs */,
+				3A46A2C41B07DE1200F0FA4B /* HDGitHubXCBotSyncer */,
 			);
 			name = Syncers;
 			sourceTree = "<group>";
@@ -602,6 +679,24 @@
 			name = BuildaUtilsTests;
 			productName = BuildaUtilsTests;
 			productReference = 3A15464B1B02A32C001EEB45 /* BuildaUtilsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		3A46A2D51B081EF400F0FA4B /* BuildasaurTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3A46A2DE1B081EF400F0FA4B /* Build configuration list for PBXNativeTarget "BuildasaurTests" */;
+			buildPhases = (
+				3A46A2D21B081EF400F0FA4B /* Sources */,
+				3A46A2D31B081EF400F0FA4B /* Frameworks */,
+				3A46A2D41B081EF400F0FA4B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3A46A2DD1B081EF400F0FA4B /* PBXTargetDependency */,
+			);
+			name = BuildasaurTests;
+			productName = BuildasaurTests;
+			productReference = 3A46A2D61B081EF400F0FA4B /* BuildasaurTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		3A56876F1A3B93BD0066DB2B /* Buildasaur */ = {
@@ -712,6 +807,10 @@
 					3A15464A1B02A32C001EEB45 = {
 						CreatedOnToolsVersion = 6.3.1;
 					};
+					3A46A2D51B081EF400F0FA4B = {
+						CreatedOnToolsVersion = 6.4;
+						TestTargetID = 3A56876F1A3B93BD0066DB2B;
+					};
 					3A56876F1A3B93BD0066DB2B = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 7BJ2984YDK;
@@ -755,12 +854,20 @@
 				3AAF6EE31A3CE5BA00C657FB /* BuildaGitServer */,
 				3AAF6EED1A3CE5BA00C657FB /* BuildaGitServerTests */,
 				3A15464A1B02A32C001EEB45 /* BuildaUtilsTests */,
+				3A46A2D51B081EF400F0FA4B /* BuildasaurTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		3A1546491B02A32C001EEB45 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3A46A2D41B081EF400F0FA4B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -815,18 +922,32 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3A46A2D21B081EF400F0FA4B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A46A2E31B081F2100F0FA4B /* SyncerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3A56876C1A3B93BD0066DB2B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				3AAA1B761AAC504700FA1598 /* StatusServerViewController.swift in Sources */,
+				3A46A2C81B07DF8F00F0FA4B /* SyncerBotUtils.swift in Sources */,
+				3A46A2C61B07DEAE00F0FA4B /* SyncerGitHubUtils.swift in Sources */,
 				3A5591561A913C0A00FB19F2 /* XcodeLocalSource.swift in Sources */,
 				3A5687781A3B93BD0066DB2B /* MainViewController.swift in Sources */,
+				3A46A2CA1B07E28700F0FA4B /* SyncPair.swift in Sources */,
 				3A2F9D861A8FE64900B0DB68 /* LocalSource.swift in Sources */,
+				3A46A2C11B07D8D800F0FA4B /* SyncerBotNaming.swift in Sources */,
+				3A46A2C31B07DCCA00F0FA4B /* SyncerBotManipulation.swift in Sources */,
 				3A5B04AC1AB4AC0F00F60536 /* SetupViewController.swift in Sources */,
 				3A5B04AA1AB4ABEB00F60536 /* TriggerViewController.swift in Sources */,
 				3AF1B1241AAC7CA500917EF3 /* StatusSyncerViewController.swift in Sources */,
 				3A5B04B21AB5C42A00F60536 /* XcodeServerSyncerUtils.swift in Sources */,
+				3A46A2CD1B07E38E00F0FA4B /* SyncPair_PR_NoBot.swift in Sources */,
 				3A5B04B01AB5144700F60536 /* ManualBotManagementViewController.swift in Sources */,
 				3A5687761A3B93BD0066DB2B /* AppDelegate.swift in Sources */,
 				3A2F9D821A8FE5D700B0DB68 /* StorageManager.swift in Sources */,
@@ -835,10 +956,12 @@
 				3AAA1B721AABBBB200FA1598 /* NetworkUtils.swift in Sources */,
 				3AAA1B661AAB6E9800FA1598 /* SeparatorView.swift in Sources */,
 				3A2F9D871A8FE64900B0DB68 /* Syncer.swift in Sources */,
+				3A46A2CF1B07E60200F0FA4B /* SyncPair_PR_Bot.swift in Sources */,
 				3A612F011AADA28D00183BCB /* BuildTemplate.swift in Sources */,
 				3A331C411A940C8D0005AA98 /* CommonExtensions.swift in Sources */,
 				3AD338B01AAE31D500ECD0F2 /* BuildTemplateViewController.swift in Sources */,
 				3A90C4C01A90220F0048C040 /* HDGitHubXCBotSyncer.swift in Sources */,
+				3A46A2D11B07E64F00F0FA4B /* SyncPair_NoPR_Bot.swift in Sources */,
 				3AAA1B681AAB722600FA1598 /* StatusProjectViewController.swift in Sources */,
 				3AB3FDCB1B05644300021197 /* MenuItemManager.swift in Sources */,
 			);
@@ -919,6 +1042,11 @@
 			isa = PBXTargetDependency;
 			target = 3AAF6E731A3CE4CB00C657FB /* BuildaUtils */;
 			targetProxy = 3A1546521B02A32C001EEB45 /* PBXContainerItemProxy */;
+		};
+		3A46A2DD1B081EF400F0FA4B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3A56876F1A3B93BD0066DB2B /* Buildasaur */;
+			targetProxy = 3A46A2DC1B081EF400F0FA4B /* PBXContainerItemProxy */;
 		};
 		3AAF6E8A1A3CE4CC00C657FB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1019,6 +1147,65 @@
 				INFOPLIST_FILE = BuildaUtilsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		3A46A2DF1B081EF400F0FA4B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = BuildasaurTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Buildasaur.app/Contents/MacOS/Buildasaur";
+			};
+			name = Debug;
+		};
+		3A46A2E01B081EF400F0FA4B /* Testing */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = BuildasaurTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Buildasaur.app/Contents/MacOS/Buildasaur";
+			};
+			name = Testing;
+		};
+		3A46A2E11B081EF400F0FA4B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = BuildasaurTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Buildasaur.app/Contents/MacOS/Buildasaur";
 			};
 			name = Release;
 		};
@@ -1459,6 +1646,15 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		3A46A2DE1B081EF400F0FA4B /* Build configuration list for PBXNativeTarget "BuildasaurTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3A46A2DF1B081EF400F0FA4B /* Debug */,
+				3A46A2E01B081EF400F0FA4B /* Testing */,
+				3A46A2E11B081EF400F0FA4B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		3A56876B1A3B93BD0066DB2B /* Build configuration list for PBXProject "Buildasaur" */ = {
 			isa = XCConfigurationList;
