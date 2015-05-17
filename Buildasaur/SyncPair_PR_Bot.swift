@@ -11,7 +11,13 @@ import BuildaCIServer
 import BuildaGitServer
 import BuildaUtils
 
-class SyncPair_PR_Bot: SyncPair {
+public class SyncPair_PR_Bot: SyncPair {
+    
+    public struct Actions {
+        let integrationsToCancel: [Integration]?
+        let githubStatusToSet: HDGitHubXCBotSyncer.GitHubStatusAndComment?
+        let startNewIntegration: Bool?
+    }
     
     let pr: PullRequest
     let bot: Bot
@@ -24,23 +30,69 @@ class SyncPair_PR_Bot: SyncPair {
     
     override func sync(completion: Completion) {
         
-        //sync the PR and the Bot
-        let pr = self.pr
-        let bot = self.bot
-        let syncer = self.syncer
-        SyncPair_PR_Bot.syncPRWithBot(syncer: syncer, pr: pr, bot: bot) { (error) -> () in
-            
-            completion(error: error)
-        }
+        //sync the PR with the Bot
+        self.syncPRWithBot(completion)
     }
     
     override func syncPairName() -> String {
         return "PR (\(self.pr.number):\(self.pr.head.ref)) + Bot (\(self.bot.name))"
     }
     
+    //MARK: Performing Actions
+    
+    private func performActions(actions: Actions, completion: Completion) {
+        
+        let group = dispatch_group_create()
+        var lastGroupError: NSError?
+        
+        if let integrationsToCancel = actions.integrationsToCancel {
+            
+            dispatch_group_enter(group)
+            self.syncer.cancelIntegrations(integrationsToCancel, completion: { () -> () in
+                dispatch_group_leave(group)
+            })
+        }
+        
+        if let newStatus = actions.githubStatusToSet {
+            
+            dispatch_group_enter(group)
+            self.syncer.updatePRStatusIfNecessary(newStatus, prNumber: self.pr.number, completion: { (error) -> () in
+                if let error = error {
+                    lastGroupError = error
+                }
+                dispatch_group_leave(group)
+            })
+        }
+        
+        if let startNewIntegration = actions.startNewIntegration where startNewIntegration {
+            
+            dispatch_group_enter(group)
+            let bot = self.bot
+            self.syncer.xcodeServer.postIntegration(bot.id, completion: { (integration, error) -> () in
+                
+                if let integration = integration where error == nil {
+                    Log.info("Bot \(bot.name) successfully enqueued Integration #\(integration.number)")
+                } else {
+                    let e = Error.withInfo("Bot \(bot.name) failed to enqueue an integration", internalError: error)
+                    lastGroupError = e
+                }
+                
+                dispatch_group_leave(group)
+            })
+        }
+        
+        dispatch_group_notify(group, dispatch_get_main_queue(), {
+            completion(error: lastGroupError)
+        })
+    }
+    
     //MARK: Internal
     
-    private class func syncPRWithBot(#syncer: HDGitHubXCBotSyncer, pr: PullRequest, bot: Bot, completion: Completion) {
+    private func syncPRWithBot(completion: Completion) {
+        
+        let syncer = self.syncer
+        let pr = self.pr
+        let bot = self.bot
         
         /*
         TODO: we should establish some reliable and reasonable plan for how many integrations to fetch.
@@ -61,7 +113,7 @@ class SyncPair_PR_Bot: SyncPair {
             if let integrations = integrations {
                 
                 //first check whether the bot is even enabled
-                self.isBotEnabled(syncer, pr: pr, integrations: integrations, completion: { (isEnabled, error) -> () in
+                SyncPair_PR_Bot.isBotEnabled(syncer, pr: pr, integrations: integrations, completion: { (isEnabled, error) -> () in
                     
                     if let error = error {
                         completion(error: error)
@@ -70,7 +122,12 @@ class SyncPair_PR_Bot: SyncPair {
                     
                     if isEnabled {
                         
-                        self.syncPRWithBotIntegrations(syncer: syncer, pr: pr, bot: bot, integrations: integrations, completion: completion)
+                        let actions = SyncPair_PR_Bot.syncPRWithBotIntegrations(
+                            syncer: syncer,
+                            pr: pr,
+                            bot: bot,
+                            integrations: integrations)
+                        self.performActions(actions, completion: completion)
                         
                     } else {
                         
@@ -88,8 +145,13 @@ class SyncPair_PR_Bot: SyncPair {
             }
         })
     }
-
-    private class func isBotEnabled(syncer: HDGitHubXCBotSyncer, pr: PullRequest, integrations: [Integration], completion: (isEnabled: Bool, error: NSError?) -> ()) {
+    
+    private class func isBotEnabled(
+        syncer: HDGitHubXCBotSyncer,
+        pr: PullRequest,
+        integrations: [Integration],
+        completion: (isEnabled: Bool, error: NSError?) -> ()
+        ) {
         
         //bot is enabled if (there are any integrations) OR (there is a recent comment with a keyword to enable the bot in the pull request's conversation)
         //which means that there are two ways of enabling a bot.
@@ -126,120 +188,115 @@ class SyncPair_PR_Bot: SyncPair {
         }
     }
     
-    private class func syncPRWithBotIntegrations(#syncer: HDGitHubXCBotSyncer, pr: PullRequest, bot: Bot, integrations: [Integration], completion: Completion) {
-        
-        let uniqueIntegrations = Set(integrations)
-        
-        //------------
-        // Split integrations into two groups: 1) for this SHA, 2) the rest
-        //------------
-        
-        let headCommit: String = pr.head.sha
-        
-        //1) for this SHA
-        let headCommitIntegrations = uniqueIntegrations.filterSet {
-            (integration: Integration) -> Bool in
+    public class func syncPRWithBotIntegrations(
+        #syncer: HDGitHubXCBotSyncer,
+        pr: PullRequest,
+        bot: Bot,
+        integrations: [Integration]
+        ) -> Actions {
             
-            //if it's not pending, we need to take a look at the blueprint and inspect the SHA.
-            if let blueprint = integration.blueprint, let sha = blueprint.commitSHA {
-                return sha == headCommit
-            }
+            var integrationsToCancel: [Integration] = []
+            var startNewIntegration: Bool?
             
-            //when an integration is Pending, Preparing or Checking out, it doesn't have a blueprint, but it is, by definition, a headCommit
-            //integration (because it will check out the latest commit on the branch when it starts running)
-            if
-                integration.currentStep == .Pending ||
-                    integration.currentStep == .Preparing ||
-                    integration.currentStep == .Checkout
-            {
-                return true
-            }
+            let uniqueIntegrations = Set(integrations)
             
-            if integration.currentStep == .Completed {
+            //------------
+            // Split integrations into two groups: 1) for this SHA, 2) the rest
+            //------------
+            
+            let headCommit: String = pr.head.sha
+            
+            //1) for this SHA
+            let headCommitIntegrations = uniqueIntegrations.filterSet {
+                (integration: Integration) -> Bool in
                 
-                if let result = integration.result {
+                //if it's not pending, we need to take a look at the blueprint and inspect the SHA.
+                if let blueprint = integration.blueprint, let sha = blueprint.commitSHA {
+                    return sha == headCommit
+                }
+                
+                //when an integration is Pending, Preparing or Checking out, it doesn't have a blueprint, but it is, by definition, a headCommit
+                //integration (because it will check out the latest commit on the branch when it starts running)
+                if
+                    integration.currentStep == .Pending ||
+                        integration.currentStep == .Preparing ||
+                        integration.currentStep == .Checkout
+                {
+                    return true
+                }
+                
+                if integration.currentStep == .Completed {
                     
-                    //if the result doesn't have a SHA yet and isn't pending - take a look at the result
-                    //if it's a checkout-error, assume that it is a malformed SSH key bot, so don't keep
-                    //restarting integrations - at least until someone fixes it (by closing the PR and fixing
-                    //their SSH keys in Buildasaur so that when the next bot gets created, it does so with the right
-                    //SSH keys.
-                    if result == .CheckoutError {
-                        Log.error("Integration #\(integration.number) finished with a checkout error - please check that your SSH keys setup in Buildasaur are correct! If you need to fix them, please do so and then you need to recreate the bot - e.g. by closing the Pull Request, waiting for a sync (bot will disappear) and then reopening the Pull Request - should do the job!")
-                        return true
-                    }
-                    
-                    if result == .Canceled {
+                    if let result = integration.result {
                         
-                        //another case is when the integration gets doesn't yet have a blueprint AND was cancelled -
-                        //we should assume it belongs to the latest commit, because we can't tell otherwise.
-                        return true
+                        //if the result doesn't have a SHA yet and isn't pending - take a look at the result
+                        //if it's a checkout-error, assume that it is a malformed SSH key bot, so don't keep
+                        //restarting integrations - at least until someone fixes it (by closing the PR and fixing
+                        //their SSH keys in Buildasaur so that when the next bot gets created, it does so with the right
+                        //SSH keys.
+                        if result == .CheckoutError {
+                            Log.error("Integration #\(integration.number) finished with a checkout error - please check that your SSH keys setup in Buildasaur are correct! If you need to fix them, please do so and then you need to recreate the bot - e.g. by closing the Pull Request, waiting for a sync (bot will disappear) and then reopening the Pull Request - should do the job!")
+                            return true
+                        }
+                        
+                        if result == .Canceled {
+                            
+                            //another case is when the integration gets doesn't yet have a blueprint AND was cancelled -
+                            //we should assume it belongs to the latest commit, because we can't tell otherwise.
+                            return true
+                        }
                     }
                 }
+                
+                return false
             }
             
-            return false
-        }
-        
-        //2) the rest
-        let otherCommitIntegrations = uniqueIntegrations.subtract(headCommitIntegrations)
-        let noncompletedOtherCommitIntegrations: Set<Integration> = otherCommitIntegrations.filterSet {
-            return $0.currentStep != .Completed
-        }
-        
-        let group = dispatch_group_create()
-        var lastGroupError: NSError?
-
-        //2.1) Ok, now first cancel all unfinished integrations of the non-current commits
-        dispatch_group_enter(group)
-        syncer.cancelIntegrations(Array(noncompletedOtherCommitIntegrations), completion: { () -> () in
-            dispatch_group_leave(group)
-        })
-        
-        //------------
-        // Now we're resolving Integrations for the current commit only
-        //------------
-        /*
-        The resolving logic goes like this now. We have an array of integrations I for the latest commits.
-        A. is array empty?
-        A1. true -> there are no integrations for this commit. kick one off! we're done.
-        A2. false -> keep resolving (all references to "integrations" below mean only integrations of the current commit
-        B. take all pending integrations, keep the most recent one, if it's there, cancel all the other ones.
-        C. take the running integration, if it's there
-        D. take all completed integrations
-        
-        resolve the status of the PR as follows
-        
-        E. is there a latest pending integration?
-        E1. true -> status is ["Pending": "Waiting on the queue"]. also, if there's a running integration, cancel it.
-        E2. false ->
-        F. is there a running integration?
-        F1. true -> status is ["Pending": "Integration in progress..."]. update status and do nothing else.
-        F2. false ->
-        G. are there any completed integrations?
-        G1. true -> based on the result of the integrations create the PR status
-        G2. false -> this shouldn't happen, print a very angry message.
-        */
-        
-        //A. is this array empty?
-        if headCommitIntegrations.count == 0 {
+            //2) the rest
+            let otherCommitIntegrations = uniqueIntegrations.subtract(headCommitIntegrations)
+            let noncompletedOtherCommitIntegrations: Set<Integration> = otherCommitIntegrations.filterSet {
+                return $0.currentStep != .Completed
+            }
             
-            //A1. - it's empty, kick off an integration for the latest commit
-            dispatch_group_enter(group)
-            syncer.xcodeServer.postIntegration(bot.id, completion: { (integration, error) -> () in
-                
-                if let integration = integration where error == nil {
-                    Log.info("Bot \(bot.name) successfully enqueued Integration #\(integration.number)")
-                } else {
-                    let e = Error.withInfo("Bot \(bot.name) failed to enqueue an integration", internalError: error)
-                    lastGroupError = e
-                }
-                
-                dispatch_group_leave(group)
-            })
-            //nothing else to do
+            //2.1) Ok, now first cancel all unfinished integrations of the non-current commits
+            integrationsToCancel += Array(noncompletedOtherCommitIntegrations)
             
-        } else {
+            //------------
+            // Now we're resolving Integrations for the current commit only
+            //------------
+            /*
+            The resolving logic goes like this now. We have an array of integrations I for the latest commits.
+            A. is array empty?
+            A1. true -> there are no integrations for this commit. kick one off! we're done.
+            A2. false -> keep resolving (all references to "integrations" below mean only integrations of the current commit
+            B. take all pending integrations, keep the most recent one, if it's there, cancel all the other ones.
+            C. take the running integration, if it's there
+            D. take all completed integrations
+            
+            resolve the status of the PR as follows
+            
+            E. is there a latest pending integration?
+            E1. true -> status is ["Pending": "Waiting on the queue"]. also, if there's a running integration, cancel it.
+            E2. false ->
+            F. is there a running integration?
+            F1. true -> status is ["Pending": "Integration in progress..."]. update status and do nothing else.
+            F2. false ->
+            G. are there any completed integrations?
+            G1. true -> based on the result of the integrations create the PR status
+            G2. false -> this shouldn't happen, print a very angry message.
+            */
+            
+            //A. is this array empty?
+            if headCommitIntegrations.count == 0 {
+                
+                //A1. - it's empty, kick off an integration for the latest commit
+                startNewIntegration = true
+                //nothing else to do
+                return Actions(
+                    integrationsToCancel: integrationsToCancel,
+                    githubStatusToSet: nil,
+                    startNewIntegration: startNewIntegration)
+                
+            }
             
             //A2. not empty, keep resolving
             
@@ -262,10 +319,7 @@ class SyncPair_PR_Bot: SyncPair {
                 latestPendingIntegration = pendingSortedArray.removeLast()
                 
                 //however, cancel the rest of the pending integrations
-                dispatch_group_enter(group)
-                syncer.cancelIntegrations(pendingSortedArray) {
-                    dispatch_group_leave(group)
-                }
+                integrationsToCancel += pendingSortedArray
             }
             
             //Get the running integration, if it's there
@@ -278,65 +332,32 @@ class SyncPair_PR_Bot: SyncPair {
                 $0.currentStep == .Completed
             }
             
-            //resolve
-            dispatch_group_enter(group)
-            self.resolvePRStatusFromLatestIntegrations(syncer: syncer, pending: latestPendingIntegration, running: runningIntegration, completed: completedIntegrations, completion: { (statusWithComment) -> () in
-                
-                //we now have the status and an optional comment to add.
-                //in order to know what to do, we need to fetch the current status of this commit first.
-                let repoName = syncer.repoName()!
-                syncer.github.getStatusOfCommit(headCommit, repo: repoName, completion: { (status, error) -> () in
-                    
-                    if error != nil {
-                        let e = Error.withInfo("Failed to fetch status of commit \(headCommit) in repo \(repoName)", internalError: error)
-                        lastGroupError = e
-                        dispatch_group_leave(group)
-                        return
-                    }
-                    
-                    let updateStatus: Bool
-                    if let currentStatus = status {
-                        //we have the current status!
-                        updateStatus = (statusWithComment.status != currentStatus)
-                    } else {
-                        //doesn't have a status yet, update
-                        updateStatus = true
-                    }
-                    
-                    if updateStatus {
-                        
-                        let oldStatus = status?.description ?? "[no status]"
-                        let newStatus = statusWithComment
-                        let comment = newStatus.comment ?? "[no comment]"
-                        Log.info("Updating status of commit \(headCommit) in PR #\(pr.number) from \(oldStatus) to \(newStatus), will add comment \(comment)")
-                        
-                        //we need to update status
-                        syncer.postStatusWithComment(statusWithComment, commit: headCommit, repo: repoName, pr: pr, completion: { (error) -> () in
-                            if let error = error {
-                                lastGroupError = error
-                            }
-                            dispatch_group_leave(group)
-                        })
-                        
-                    } else {
-                        //everything is how it's supposed to be
-                        dispatch_group_leave(group)
-                    }
-                })
-            })
+            //resolve to a status
+            let actions = self.resolvePRStatusFromLatestIntegrations(
+                syncer: syncer,
+                pending: latestPendingIntegration,
+                running: runningIntegration,
+                completed: completedIntegrations)
             
-        }
-        
-        //when all actions finished, complete
-        dispatch_group_notify(group, dispatch_get_main_queue(), {
-            completion(error: lastGroupError)
-        })
+            //merge in nested actions
+            return Actions(
+                integrationsToCancel: integrationsToCancel + (actions.integrationsToCancel ?? []),
+                githubStatusToSet: actions.githubStatusToSet,
+                startNewIntegration: (startNewIntegration ?? false) || (actions.startNewIntegration ?? false)
+            )
     }
     
-    private class func resolvePRStatusFromLatestIntegrations(#syncer: HDGitHubXCBotSyncer, pending: Integration?, running: Integration?, completed: Set<Integration>, completion: (HDGitHubXCBotSyncer.GitHubStatusAndComment) -> ()) {
+    //MARK: Pure Logic
+    
+    private class func resolvePRStatusFromLatestIntegrations(
+        #syncer: HDGitHubXCBotSyncer,
+        pending: Integration?,
+        running: Integration?,
+        completed: Set<Integration>
+        ) -> Actions {
         
-        let group = dispatch_group_create()
         let statusWithComment: HDGitHubXCBotSyncer.GitHubStatusAndComment
+        var integrationsToCancel: [Integration] = []
         
         //if there's any pending integration, we're ["Pending" - Waiting in the queue]
         if let pending = pending {
@@ -348,10 +369,7 @@ class SyncPair_PR_Bot: SyncPair {
             
             //also, cancel the running integration, if it's there any
             if let running = running {
-                dispatch_group_enter(group)
-                syncer.cancelIntegrations([running], completion: { () -> () in
-                    dispatch_group_leave(group)
-                })
+                integrationsToCancel.append(running)
             }
         } else {
             
@@ -381,12 +399,17 @@ class SyncPair_PR_Bot: SyncPair {
             }
         }
         
-        dispatch_group_notify(group, dispatch_get_main_queue()) { () -> Void in
-            completion(statusWithComment)
-        }
+        return Actions(
+            integrationsToCancel: integrationsToCancel,
+            githubStatusToSet: statusWithComment,
+            startNewIntegration: nil
+        )
     }
     
-    private class func resolveStatusFromCompletedIntegrations(#syncer: HDGitHubXCBotSyncer, integrations: Set<Integration>) -> HDGitHubXCBotSyncer.GitHubStatusAndComment {
+    private class func resolveStatusFromCompletedIntegrations(
+        #syncer: HDGitHubXCBotSyncer,
+        integrations: Set<Integration>
+        ) -> HDGitHubXCBotSyncer.GitHubStatusAndComment {
         
         //get integrations sorted by number
         let sortedDesc = Array(integrations).sorted { $0.number > $1.number }
