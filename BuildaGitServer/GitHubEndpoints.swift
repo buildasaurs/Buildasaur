@@ -33,7 +33,7 @@ public class GitHubEndpoints {
     private let baseURL: String
     private let token: String?
     
-    init(baseURL: String, token: String?) {
+    public init(baseURL: String, token: String?) {
         self.baseURL = baseURL
         self.token = token
     }

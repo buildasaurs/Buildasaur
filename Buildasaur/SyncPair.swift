@@ -15,7 +15,7 @@ import BuildaUtils
 *   a PR + Bot figures out what to do next, ...)
 *   this is simpler than trying to catch all cases in one giant syncer class (at least I think)
 */
-class SyncPair {
+public class SyncPair {
     
     var syncer: HDGitHubXCBotSyncer!
     

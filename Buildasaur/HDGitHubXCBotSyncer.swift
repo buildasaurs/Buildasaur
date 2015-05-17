@@ -21,7 +21,7 @@ public class HDGitHubXCBotSyncer : Syncer {
     
     typealias GitHubStatusAndComment = (status: Status, comment: String?)
     
-    init(integrationServer: XcodeServer, sourceServer: GitHubServer, localSource: LocalSource,
+    public init(integrationServer: XcodeServer, sourceServer: GitHubServer, localSource: LocalSource,
         syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool) {
         
         self.github = sourceServer
@@ -108,7 +108,7 @@ public class HDGitHubXCBotSyncer : Syncer {
                             self.reports["All Bots"] = "\(bots.count)"
                             
                             //we have both PRs and Bots, resolve
-                            self.resolvePRsAndBots(repoName: repoName, prs: prs, bots: bots, completion: {
+                            self.syncPRsAndBots(repoName: repoName, prs: prs, bots: bots, completion: {
                                 
                                 //everything is done, report the damage of GitHub rate limit
                                 if let rateLimitInfo = self.github.latestRateLimitInfo {
@@ -138,56 +138,60 @@ public class HDGitHubXCBotSyncer : Syncer {
         }
     }
     
-    private func resolvePRsAndBots(#repoName: String, prs: [PullRequest], bots: [Bot], completion: () -> ()) {
+    public func syncPRsAndBots(#repoName: String, prs: [PullRequest], bots: [Bot], completion: () -> ()) {
         
         let prsDescription = prs.map({ "\n\tPR \($0.number): \($0.title) [\($0.head.ref) -> \($0.base.ref))]" }) + ["\n"]
         let botsDescription = bots.map({ "\n\t\($0.name)" }) + ["\n"]
         Log.verbose("Resolving prs:\n\(prsDescription) \nand bots:\n\(botsDescription)")
         
-        if let repoName = self.repoName() {
-            
-            //first filter only builda's bots, don't manipulate manually created bots
-            //also filter only bots that belong to this project
-            let buildaBots = bots.filter { BotNaming.isBuildaBotBelongingToRepoWithName($0, repoName: repoName) }
-            
-            //create a map of name -> bot for fast manipulation
-            var mappedBots = [String: Bot]()
-            for bot in buildaBots { mappedBots[bot.name] = bot }
-            
-            //PRs that also have a bot, toSync
-            var toSync: [(pr: PullRequest, bot: Bot)] = []
-            
-            //PRs that don't have a bot yet, to create
-            var toCreate: [PullRequest] = []
-            for pr in prs {
-                
-                let botName = BotNaming.nameForBotWithPR(pr, repoName: repoName)
-                
-                if let bot = mappedBots[botName] {
-                    //we found a corresponding bot to this PR, add to toSync
-                    toSync.append((pr: pr, bot: bot))
-                    
-                    //and remove from bots mappedBots, because we handled it
-                    mappedBots.removeValueForKey(botName)
-                } else {
-                    //no bot found for this PR, we'll have to create one
-                    toCreate.append(pr)
-                }
-            }
-            
-            //bots that don't have a PR, to delete
-            let toDelete = mappedBots.values.array
-            
-            //apply changes
-            self.applyResolvedChanges(toSync: toSync, toCreate: toCreate, toDelete: toDelete, completion: completion)
-            
-        } else {
-            self.notifyErrorString("Nil repo name", context: "Resolving PRs and Bots")
-            completion()
-        }
+        //create the changes necessary
+        let (toSync, toCreate, toDelete) = self.resolvePRsAndBots(repoName: repoName, prs: prs, bots: bots)
+        
+        //create actions from changes, so called "SyncPairs"
+        let syncPairs = self.createSyncPairsFrom(toSync: toSync, toCreate: toCreate, toDelete: toDelete)
+        
+        //start these actions
+        self.applyResolvedSyncPairs(syncPairs, completion: completion)
     }
     
-    private func applyResolvedChanges(#toSync: [(pr: PullRequest, bot: Bot)], toCreate: [PullRequest], toDelete: [Bot], completion: () -> ()) {
+    public func resolvePRsAndBots(#repoName: String, prs: [PullRequest], bots: [Bot]) -> (toSync: [(pr: PullRequest, bot: Bot)], toCreate: [PullRequest], toDelete: [Bot]) {
+        
+        //first filter only builda's bots, don't manipulate manually created bots
+        //also filter only bots that belong to this project
+        let buildaBots = bots.filter { BotNaming.isBuildaBotBelongingToRepoWithName($0, repoName: repoName) }
+        
+        //create a map of name -> bot for fast manipulation
+        var mappedBots = [String: Bot]()
+        for bot in buildaBots { mappedBots[bot.name] = bot }
+        
+        //PRs that also have a bot, toSync
+        var toSync: [(pr: PullRequest, bot: Bot)] = []
+        
+        //PRs that don't have a bot yet, to create
+        var toCreate: [PullRequest] = []
+        for pr in prs {
+            
+            let botName = BotNaming.nameForBotWithPR(pr, repoName: repoName)
+            
+            if let bot = mappedBots[botName] {
+                //we found a corresponding bot to this PR, add to toSync
+                toSync.append((pr: pr, bot: bot))
+                
+                //and remove from bots mappedBots, because we handled it
+                mappedBots.removeValueForKey(botName)
+            } else {
+                //no bot found for this PR, we'll have to create one
+                toCreate.append(pr)
+            }
+        }
+        
+        //bots that don't have a PR, to delete
+        let toDelete = mappedBots.values.array
+        
+        return (toSync, toCreate, toDelete)
+    }
+    
+    public func createSyncPairsFrom(#toSync: [(pr: PullRequest, bot: Bot)], toCreate: [PullRequest], toDelete: [Bot]) -> [SyncPair] {
         
         //create sync pairs for each action needed
         let deleteBotSyncPairs = toDelete.map({ SyncPair_NoPR_Bot(bot: $0) as SyncPair })
@@ -198,7 +202,7 @@ public class HDGitHubXCBotSyncer : Syncer {
         
         //put them all into one array
         let syncPairsRaw: [SyncPair] = deleteBotSyncPairs + createBotSyncPairs + syncPRBotSyncPairs
-        
+
         //prepared sync pair
         let syncPairs = syncPairsRaw.map({
             (syncPair: SyncPair) -> SyncPair in
@@ -206,7 +210,22 @@ public class HDGitHubXCBotSyncer : Syncer {
             return syncPair
         })
         
-        //actually kick them off
+        if toCreate.count > 0 {
+            self.reports["Created bots"] = "\(toCreate.count)"
+        }
+        if toDelete.count > 0 {
+            self.reports["Deleted bots"] = "\(toDelete.count)"
+        }
+        if toSync.count > 0 {
+            self.reports["Synced bots"] = "\(toSync.count)"
+        }
+        
+        return syncPairs
+    }
+    
+    private func applyResolvedSyncPairs(syncPairs: [SyncPair], completion: () -> ()) {
+        
+        //actually kick the sync pairs off
         let group = dispatch_group_create()
         for i in syncPairs {
             dispatch_group_enter(group)
@@ -218,21 +237,6 @@ public class HDGitHubXCBotSyncer : Syncer {
             })
         }
         
-        //when both, finish this method as well
-        dispatch_group_notify(group, dispatch_get_main_queue()) { () -> Void in
-            
-            if toCreate.count > 0 {
-                self.reports["Created bots"] = "\(toCreate.count)"
-            }
-            if toDelete.count > 0 {
-                self.reports["Deleted bots"] = "\(toDelete.count)"
-            }
-            if toSync.count > 0 {
-                self.reports["Synced bots"] = "\(toSync.count)"
-            }
-
-            completion()
-        }
+        dispatch_group_notify(group, dispatch_get_main_queue(), completion)
     }
-    
 }

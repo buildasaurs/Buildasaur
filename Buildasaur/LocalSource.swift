@@ -235,6 +235,17 @@ public class LocalSource : JSONSerializable {
         }
     }
     
+    public init() {
+        self.forkOriginURL = nil
+        self.availabilityState = .Unchecked
+        self.url = NSURL()
+        self.preferredTemplateId = nil
+        self.githubToken = nil
+        self.publicSSHKeyUrl = nil
+        self.privateSSHKeyUrl = nil
+        self.sshPassphrase = nil
+    }
+    
     public func jsonify() -> NSDictionary {
         
         var json = NSMutableDictionary()
