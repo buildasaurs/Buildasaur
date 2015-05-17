@@ -13,7 +13,7 @@ import BuildaUtils
 
 extension HDGitHubXCBotSyncer {
     
-    func createStatusFromState(state: Status.State, description: String?) -> Status {
+    class func createStatusFromState(state: Status.State, description: String?) -> Status {
         
         //TODO: add useful targetUrl and potentially have multiple contexts to show multiple stats on the PR
         let context = "Buildasaur"

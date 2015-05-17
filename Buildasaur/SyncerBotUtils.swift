@@ -13,7 +13,7 @@ import BuildaUtils
 
 extension HDGitHubXCBotSyncer {
     
-    func formattedDurationOfIntegration(integration: Integration) -> String? {
+    class func formattedDurationOfIntegration(integration: Integration) -> String? {
         
         if let seconds = integration.duration {
             
@@ -26,7 +26,7 @@ extension HDGitHubXCBotSyncer {
         }
     }
     
-    func baseCommentFromIntegration(integration: Integration) -> String {
+    class func baseCommentFromIntegration(integration: Integration) -> String {
         
         var comment = "Result of integration \(integration.number)\n"
         if let duration = self.formattedDurationOfIntegration(integration) {

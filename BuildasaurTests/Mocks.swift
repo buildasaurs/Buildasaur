@@ -54,7 +54,7 @@ class MockRepo: Repo {
 
 class MockPullRequestBranch: PullRequestBranch {
     
-    class func mockDictionary(ref: String = "mock_ref", sha: String = "7e45fa772565969ee801b0bdce0f560122e34610") -> NSDictionary {
+    class func mockDictionary(ref: String = "mock_ref", sha: String = "1234f") -> NSDictionary {
         return [
             "ref": ref,
             "sha": sha,
@@ -149,6 +149,25 @@ class MockBot: Bot {
     }
 }
 
+class MockIntegration: Integration {
+    
+    init(number: Int = 1, step: Step = Step.Completed, sha: String = "head_sha", result: Result = Result.Succeeded) {
+        
+        let dict = MockHelpers.loadSampleIntegration()
+        dict["currentStep"] = step.rawValue
+        dict["number"] = number
+        dict["result"] = result.rawValue
+        var d1 = dict["revisionBlueprint"] as! NSMutableDictionary
+        var d2 = d1["DVTSourceControlWorkspaceBlueprintLocationsKey"] as! NSMutableDictionary
+        var d3 = d2["CEE8472CC4AB69CD27173B930EB93B6B4AA4BAFC"] as! NSMutableDictionary
+        d3["DVTSourceControlLocationRevisionKey"] = sha
+        super.init(json: dict)
+    }
+
+    required init(json: NSDictionary) {
+        super.init(json: json)
+    }
+}
 
 
 

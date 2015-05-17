@@ -14,15 +14,15 @@ import BuildaUtils
 public class SyncPair_PR_Bot: SyncPair {
     
     public struct Actions {
-        let integrationsToCancel: [Integration]?
-        let githubStatusToSet: HDGitHubXCBotSyncer.GitHubStatusAndComment?
-        let startNewIntegration: Bool?
+        public let integrationsToCancel: [Integration]?
+        public let githubStatusToSet: HDGitHubXCBotSyncer.GitHubStatusAndComment?
+        public let startNewIntegration: Bool?
     }
     
     let pr: PullRequest
     let bot: Bot
     
-    init(pr: PullRequest, bot: Bot) {
+    public init(pr: PullRequest, bot: Bot) {
         self.pr = pr
         self.bot = bot
         super.init()
@@ -123,7 +123,6 @@ public class SyncPair_PR_Bot: SyncPair {
                     if isEnabled {
                         
                         let actions = SyncPair_PR_Bot.syncPRWithBotIntegrations(
-                            syncer: syncer,
                             pr: pr,
                             bot: bot,
                             integrations: integrations)
@@ -134,7 +133,7 @@ public class SyncPair_PR_Bot: SyncPair {
                         //not enabled, make sure the PR reflects that and the instructions are clear
                         Log.verbose("Bot \(bot.name) is not yet enabled, ignoring...")
                         
-                        let status = syncer.createStatusFromState(.Pending, description: "Waiting for \"lttm\" to start testing")
+                        let status = HDGitHubXCBotSyncer.createStatusFromState(.Pending, description: "Waiting for \"lttm\" to start testing")
                         let notYetEnabled: HDGitHubXCBotSyncer.GitHubStatusAndComment = (status: status, comment: nil)
                         syncer.updatePRStatusIfNecessary(notYetEnabled, prNumber: pr.number, completion: completion)
                     }
@@ -189,8 +188,7 @@ public class SyncPair_PR_Bot: SyncPair {
     }
     
     public class func syncPRWithBotIntegrations(
-        #syncer: HDGitHubXCBotSyncer,
-        pr: PullRequest,
+        #pr: PullRequest,
         bot: Bot,
         integrations: [Integration]
         ) -> Actions {
@@ -334,7 +332,6 @@ public class SyncPair_PR_Bot: SyncPair {
             
             //resolve to a status
             let actions = self.resolvePRStatusFromLatestIntegrations(
-                syncer: syncer,
                 pending: latestPendingIntegration,
                 running: runningIntegration,
                 completed: completedIntegrations)
@@ -350,8 +347,7 @@ public class SyncPair_PR_Bot: SyncPair {
     //MARK: Pure Logic
     
     private class func resolvePRStatusFromLatestIntegrations(
-        #syncer: HDGitHubXCBotSyncer,
-        pending: Integration?,
+        #pending: Integration?,
         running: Integration?,
         completed: Set<Integration>
         ) -> Actions {
@@ -364,7 +360,7 @@ public class SyncPair_PR_Bot: SyncPair {
             
             //TODO: show how many builds are ahead in the queue and estimate when it will be
             //started and when finished? (there is an average running time on each bot, it should be easy)
-            let status = syncer.createStatusFromState(.Pending, description: "Build waiting in the queue...")
+            let status = HDGitHubXCBotSyncer.createStatusFromState(.Pending, description: "Build waiting in the queue...")
             statusWithComment = (status: status, comment: nil)
             
             //also, cancel the running integration, if it's there any
@@ -379,7 +375,7 @@ public class SyncPair_PR_Bot: SyncPair {
                 //there is a running integration.
                 //TODO: estimate, based on the average running time of this bot and on the started timestamp, when it will finish. add that to the description.
                 let currentStepString = running.currentStep.rawValue
-                let status = syncer.createStatusFromState(.Pending, description: "Integration step: \(currentStepString)...")
+                let status = HDGitHubXCBotSyncer.createStatusFromState(.Pending, description: "Integration step: \(currentStepString)...")
                 statusWithComment = (status: status, comment: nil)
                 
             } else {
@@ -388,12 +384,12 @@ public class SyncPair_PR_Bot: SyncPair {
                 if completed.count > 0 {
                     
                     //we have some completed integrations
-                    statusWithComment = self.resolveStatusFromCompletedIntegrations(syncer: syncer, integrations: completed)
+                    statusWithComment = self.resolveStatusFromCompletedIntegrations(integrations: completed)
                     
                 } else {
                     //this shouldn't happen.
                     Log.error("LOGIC ERROR! This shouldn't happen, there are no completed integrations!")
-                    let status = syncer.createStatusFromState(.Error, description: "* UNKNOWN STATE, Builda ERROR *")
+                    let status = HDGitHubXCBotSyncer.createStatusFromState(.Error, description: "* UNKNOWN STATE, Builda ERROR *")
                     statusWithComment = (status: status, "Builda error, unknown state!")
                 }
             }
@@ -407,8 +403,7 @@ public class SyncPair_PR_Bot: SyncPair {
     }
     
     private class func resolveStatusFromCompletedIntegrations(
-        #syncer: HDGitHubXCBotSyncer,
-        integrations: Set<Integration>
+        #integrations: Set<Integration>
         ) -> HDGitHubXCBotSyncer.GitHubStatusAndComment {
         
         //get integrations sorted by number
@@ -425,9 +420,9 @@ public class SyncPair_PR_Bot: SyncPair {
             }
         }).first {
             
-            let baseComment = syncer.baseCommentFromIntegration(passingIntegration)
+            let baseComment = HDGitHubXCBotSyncer.baseCommentFromIntegration(passingIntegration)
             let comment: String
-            let status = syncer.createStatusFromState(.Success, description: "Build passed!")
+            let status = HDGitHubXCBotSyncer.createStatusFromState(.Success, description: "Build passed!")
             let summary = passingIntegration.buildResultSummary!
             if passingIntegration.result == .Succeeded {
                 comment = baseComment + "Perfect build! All \(summary.testsCount) tests passed. :+1:"
@@ -444,8 +439,8 @@ public class SyncPair_PR_Bot: SyncPair {
             $0.result! == Integration.Result.TestFailures
         }).first {
             
-            let baseComment = syncer.baseCommentFromIntegration(testFailingIntegration)
-            let status = syncer.createStatusFromState(.Failure, description: "Build failed tests!")
+            let baseComment = HDGitHubXCBotSyncer.baseCommentFromIntegration(testFailingIntegration)
+            let status = HDGitHubXCBotSyncer.createStatusFromState(.Failure, description: "Build failed tests!")
             let summary = testFailingIntegration.buildResultSummary!
             let comment = baseComment + "Build failed \(summary.testFailureCount) tests out of \(summary.testsCount)"
             return (status: status, comment: comment)
@@ -456,14 +451,14 @@ public class SyncPair_PR_Bot: SyncPair {
             $0.result! != Integration.Result.Canceled
         }).first {
             
-            let baseComment = syncer.baseCommentFromIntegration(erroredIntegration)
+            let baseComment = HDGitHubXCBotSyncer.baseCommentFromIntegration(erroredIntegration)
             let errorCount: String
             if let summary = erroredIntegration.buildResultSummary {
                 errorCount = "\(summary.errorCount)"
             } else {
                 errorCount = "?"
             }
-            let status = syncer.createStatusFromState(.Error, description: "Build error!")
+            let status = HDGitHubXCBotSyncer.createStatusFromState(.Error, description: "Build error!")
             let comment = baseComment + "\(errorCount) build errors: \(erroredIntegration.result!.rawValue)"
             return (status: status, comment: comment)
         }
@@ -473,14 +468,14 @@ public class SyncPair_PR_Bot: SyncPair {
             $0.result! == Integration.Result.Canceled
         }).first {
             
-            let baseComment = syncer.baseCommentFromIntegration(canceledIntegration)
-            let status = syncer.createStatusFromState(.Error, description: "Build canceled!")
+            let baseComment = HDGitHubXCBotSyncer.baseCommentFromIntegration(canceledIntegration)
+            let status = HDGitHubXCBotSyncer.createStatusFromState(.Error, description: "Build canceled!")
             let comment = baseComment + "Build was manually canceled."
             return (status: status, comment: comment)
         }
         
         //hmm no idea, if we got all the way here. just leave it with no state.
-        let status = syncer.createStatusFromState(.NoState, description: nil)
+        let status = HDGitHubXCBotSyncer.createStatusFromState(.NoState, description: nil)
         return (status: status, comment: nil)
     }
 }
