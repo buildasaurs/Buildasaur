@@ -244,6 +244,116 @@ extension GitHubServer {
     }
     
     /**
+    *   GET all open issues of a repo (full name).
+    */
+    public func getOpenIssues(repo: String, completion: (issues: [Issue]?, error: NSError?) -> ()) {
+        
+        let params = [
+            "repo": repo
+        ]
+        self.sendRequestWithMethod(.GET, endpoint: .Issues, params: params, query: nil, body: nil) { (response, body, error) -> () in
+            
+            if error != nil {
+                completion(issues: nil, error: error)
+                return
+            }
+            
+            if let body = body as? NSArray {
+                let issues: [Issue] = GitHubArray(body)
+                completion(issues: issues, error: nil)
+            } else {
+                completion(issues: nil, error: Error.withInfo("Wrong body \(body)"))
+            }
+        }
+    }
+    
+    /**
+    *   GET an issue of a repo (full name) by its number.
+    */
+    public func getIssue(issueNumber: Int, repo: String, completion: (issue: Issue?, error: NSError?) -> ()) {
+        
+        let params = [
+            "repo": repo,
+            "issue": issueNumber.description
+        ]
+        
+        self.sendRequestWithMethod(.GET, endpoint: .Issues, params: params, query: nil, body: nil) { (response, body, error) -> () in
+            
+            if error != nil {
+                completion(issue: nil, error: error)
+                return
+            }
+            
+            if let body = body as? NSDictionary {
+                let issue = Issue(json: body)
+                completion(issue: issue, error: nil)
+            } else {
+                completion(issue: nil, error: Error.withInfo("Wrong body \(body)"))
+            }
+        }
+    }
+    
+    /**
+    *   POST a new Issue
+    */
+    public func postNewIssue(issueTitle: String, issueBody: String?, repo: String, completion: (issue: Issue?, error: NSError?) -> ()) {
+        
+        let params = [
+            "repo": repo,
+        ]
+        
+        let body = [
+            "title": issueTitle,
+            "body": issueBody ?? ""
+        ]
+        
+        self.sendRequestWithMethod(.POST, endpoint: .Issues, params: params, query: nil, body: body) { (response, body, error) -> () in
+            
+            if error != nil {
+                completion(issue: nil, error: error)
+                return
+            }
+            
+            if let body = body as? NSDictionary {
+                let issue = Issue(json: body)
+                completion(issue: issue, error: nil)
+            } else {
+                completion(issue: nil, error: Error.withInfo("Wrong body \(body)"))
+            }
+        }
+    }
+    
+    /**
+    *   POST a new Issue
+    */
+    public func closeIssue(issueNumber: Int, repo: String, completion: (issue: Issue?, error: NSError?) -> ()) {
+        
+        let params = [
+            "repo": repo,
+            "issue": issueNumber.description
+        ]
+        
+        let body = [
+            "state": "closed"
+        ]
+        
+        self.sendRequestWithMethod(.PATCH, endpoint: .Issues, params: params, query: nil, body: body) { (response, body, error) -> () in
+            
+            if error != nil {
+                completion(issue: nil, error: error)
+                return
+            }
+            
+            if let body = body as? NSDictionary {
+                let issue = Issue(json: body)
+                completion(issue: issue, error: nil)
+            } else {
+                completion(issue: nil, error: Error.withInfo("Wrong body \(body)"))
+            }
+        }
+    }
+    
+    /**
     *   GET the status of a commit (sha) from a repo.
     */
     public func getStatusOfCommit(sha: String, repo: String, completion: (status: Status?, error: NSError?) -> ()) {
