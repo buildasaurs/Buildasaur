@@ -324,7 +324,7 @@ extension GitHubServer {
     }
     
     /**
-    *   POST a new Issue
+    *   Close an Issue by its number and repo (full name).
     */
     public func closeIssue(issueNumber: Int, repo: String, completion: (issue: Issue?, error: NSError?) -> ()) {
         
