@@ -13,11 +13,6 @@ import BuildaUtils
 
 public class SyncPair_PR_Bot: SyncPair {
     
-    public struct Actions {
-        public let integrationsToCancel: [Integration]?
-        public let githubStatusToSet: HDGitHubXCBotSyncer.GitHubStatusAndComment?
-        public let startNewIntegration: Bool?
-    }
     
     let pr: PullRequest
     let bot: Bot
@@ -36,54 +31,6 @@ public class SyncPair_PR_Bot: SyncPair {
     
     override func syncPairName() -> String {
         return "PR (\(self.pr.number):\(self.pr.head.ref)) + Bot (\(self.bot.name))"
-    }
-    
-    //MARK: Performing Actions
-    
-    private func performActions(actions: Actions, completion: Completion) {
-        
-        let group = dispatch_group_create()
-        var lastGroupError: NSError?
-        
-        if let integrationsToCancel = actions.integrationsToCancel {
-            
-            dispatch_group_enter(group)
-            self.syncer.cancelIntegrations(integrationsToCancel, completion: { () -> () in
-                dispatch_group_leave(group)
-            })
-        }
-        
-        if let newStatus = actions.githubStatusToSet {
-            
-            dispatch_group_enter(group)
-            self.syncer.updatePRStatusIfNecessary(newStatus, prNumber: self.pr.number, completion: { (error) -> () in
-                if let error = error {
-                    lastGroupError = error
-                }
-                dispatch_group_leave(group)
-            })
-        }
-        
-        if let startNewIntegration = actions.startNewIntegration where startNewIntegration {
-            
-            dispatch_group_enter(group)
-            let bot = self.bot
-            self.syncer.xcodeServer.postIntegration(bot.id, completion: { (integration, error) -> () in
-                
-                if let integration = integration where error == nil {
-                    Log.info("Bot \(bot.name) successfully enqueued Integration #\(integration.number)")
-                } else {
-                    let e = Error.withInfo("Bot \(bot.name) failed to enqueue an integration", internalError: error)
-                    lastGroupError = e
-                }
-                
-                dispatch_group_leave(group)
-            })
-        }
-        
-        dispatch_group_notify(group, dispatch_get_main_queue(), {
-            completion(error: lastGroupError)
-        })
     }
     
     //MARK: Internal
@@ -194,7 +141,7 @@ public class SyncPair_PR_Bot: SyncPair {
         ) -> Actions {
             
             var integrationsToCancel: [Integration] = []
-            var startNewIntegration: Bool?
+            var startNewIntegration: Bool = false
             
             let uniqueIntegrations = Set(integrations)
             
@@ -287,13 +234,11 @@ public class SyncPair_PR_Bot: SyncPair {
             if headCommitIntegrations.count == 0 {
                 
                 //A1. - it's empty, kick off an integration for the latest commit
-                startNewIntegration = true
-                //nothing else to do
                 return Actions(
                     integrationsToCancel: integrationsToCancel,
                     githubStatusToSet: nil,
-                    startNewIntegration: startNewIntegration)
-                
+                    startNewIntegrationBot: bot
+                )
             }
             
             //A2. not empty, keep resolving
@@ -332,6 +277,7 @@ public class SyncPair_PR_Bot: SyncPair {
             
             //resolve to a status
             let actions = self.resolvePRStatusFromLatestIntegrations(
+                pr: pr,
                 pending: latestPendingIntegration,
                 running: runningIntegration,
                 completed: completedIntegrations)
@@ -340,14 +286,15 @@ public class SyncPair_PR_Bot: SyncPair {
             return Actions(
                 integrationsToCancel: integrationsToCancel + (actions.integrationsToCancel ?? []),
                 githubStatusToSet: actions.githubStatusToSet,
-                startNewIntegration: (startNewIntegration ?? false) || (actions.startNewIntegration ?? false)
+                startNewIntegrationBot: actions.startNewIntegrationBot ?? (startNewIntegration ? bot : nil)
             )
     }
     
     //MARK: Pure Logic
     
     private class func resolvePRStatusFromLatestIntegrations(
-        #pending: Integration?,
+        #pr: PullRequest,
+        pending: Integration?,
         running: Integration?,
         completed: Set<Integration>
         ) -> Actions {
@@ -397,8 +344,8 @@ public class SyncPair_PR_Bot: SyncPair {
         
         return Actions(
             integrationsToCancel: integrationsToCancel,
-            githubStatusToSet: statusWithComment,
-            startNewIntegration: nil
+            githubStatusToSet: (status: statusWithComment, pr: pr),
+            startNewIntegrationBot: nil
         )
     }
     

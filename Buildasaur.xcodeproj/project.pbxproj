@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A0BC03F1B0BD9C10020AB9F /* SyncPair_Branch_Bot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0BC03E1B0BD9C10020AB9F /* SyncPair_Branch_Bot.swift */; };
+		3A0BC0411B0BDA530020AB9F /* SyncPairExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0BC0401B0BDA530020AB9F /* SyncPairExtensions.swift */; };
 		3A1546461B02A0C6001EEB45 /* Script.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1546451B02A0C6001EEB45 /* Script.swift */; };
 		3A1546511B02A32C001EEB45 /* BuildaUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AAF6E741A3CE4CC00C657FB /* BuildaUtils.framework */; };
 		3A15465B1B02A37D001EEB45 /* ScriptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A15465A1B02A37D001EEB45 /* ScriptTests.swift */; };
@@ -183,6 +185,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3A0BC03E1B0BD9C10020AB9F /* SyncPair_Branch_Bot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncPair_Branch_Bot.swift; sourceTree = "<group>"; };
+		3A0BC0401B0BDA530020AB9F /* SyncPairExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncPairExtensions.swift; sourceTree = "<group>"; };
 		3A1546451B02A0C6001EEB45 /* Script.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Script.swift; sourceTree = "<group>"; };
 		3A15464B1B02A32C001EEB45 /* BuildaUtilsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BuildaUtilsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A15465A1B02A37D001EEB45 /* ScriptTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptTests.swift; sourceTree = "<group>"; };
@@ -388,9 +392,11 @@
 			isa = PBXGroup;
 			children = (
 				3A46A2C91B07E28700F0FA4B /* SyncPair.swift */,
+				3A0BC0401B0BDA530020AB9F /* SyncPairExtensions.swift */,
 				3A46A2CC1B07E38E00F0FA4B /* SyncPair_PR_NoBot.swift */,
 				3A46A2CE1B07E60200F0FA4B /* SyncPair_PR_Bot.swift */,
 				3A46A2D01B07E64F00F0FA4B /* SyncPair_NoPR_Bot.swift */,
+				3A0BC03E1B0BD9C10020AB9F /* SyncPair_Branch_Bot.swift */,
 			);
 			name = SyncPairs;
 			sourceTree = "<group>";
@@ -962,6 +968,7 @@
 				3A5B04AC1AB4AC0F00F60536 /* SetupViewController.swift in Sources */,
 				3A5B04AA1AB4ABEB00F60536 /* TriggerViewController.swift in Sources */,
 				3AF1B1241AAC7CA500917EF3 /* StatusSyncerViewController.swift in Sources */,
+				3A0BC0411B0BDA530020AB9F /* SyncPairExtensions.swift in Sources */,
 				3A5B04B21AB5C42A00F60536 /* XcodeServerSyncerUtils.swift in Sources */,
 				3A46A2CD1B07E38E00F0FA4B /* SyncPair_PR_NoBot.swift in Sources */,
 				3A5B04B01AB5144700F60536 /* ManualBotManagementViewController.swift in Sources */,
@@ -969,6 +976,7 @@
 				3A2F9D821A8FE5D700B0DB68 /* StorageManager.swift in Sources */,
 				3AAA1B781AAC508A00FA1598 /* StatusViewController.swift in Sources */,
 				3A4770A21A745F470016E170 /* StorageUtils.swift in Sources */,
+				3A0BC03F1B0BD9C10020AB9F /* SyncPair_Branch_Bot.swift in Sources */,
 				3AAA1B721AABBBB200FA1598 /* NetworkUtils.swift in Sources */,
 				3AAA1B661AAB6E9800FA1598 /* SeparatorView.swift in Sources */,
 				3A2F9D871A8FE64900B0DB68 /* Syncer.swift in Sources */,

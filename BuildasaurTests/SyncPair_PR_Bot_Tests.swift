@@ -42,8 +42,7 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
         let actions = SyncPair_PR_Bot.syncPRWithBotIntegrations(pr: pr, bot: bot, integrations: integrations)
         XCTAssertEqual(actions.integrationsToCancel?.count ?? 0, 0)
         XCTBAssertNil(actions.githubStatusToSet)
-        XCTAssertNotNil(actions.startNewIntegration)
-        XCTAssertTrue(actions.startNewIntegration!)
+        XCTAssertNotNil(actions.startNewIntegrationBot)
     }
     
     func testFirstIntegrationPending() {
@@ -55,9 +54,9 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
         
         let actions = SyncPair_PR_Bot.syncPRWithBotIntegrations(pr: pr, bot: bot, integrations: integrations)
         XCTAssertEqual(actions.integrationsToCancel?.count ?? 0, 0)
-        XCTAssertFalse(actions.startNewIntegration ?? true)
+        XCTAssertNil(actions.startNewIntegrationBot)
         XCTBAssertNotNil(actions.githubStatusToSet)
-        XCTAssertEqual(actions.githubStatusToSet!.status.state, Status.State.Pending)
+        XCTAssertEqual(actions.githubStatusToSet!.status.status.state, Status.State.Pending)
     }
     
     func testMultipleIntegrationsPending() {
@@ -76,9 +75,9 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
         XCTAssertEqual(toCancel.count, 2)
         XCTAssertTrue(toCancel.contains(integrations[0]))
         XCTAssertTrue(toCancel.contains(integrations[1]))
-        XCTAssertFalse(actions.startNewIntegration ?? true)
+        XCTAssertNil(actions.startNewIntegrationBot)
         XCTBAssertNotNil(actions.githubStatusToSet)
-        XCTAssertEqual(actions.githubStatusToSet!.status.state, Status.State.Pending)
+        XCTAssertEqual(actions.githubStatusToSet!.status.status.state, Status.State.Pending)
     }
     
     func testOneIntegrationRunning() {
@@ -91,9 +90,9 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
         let actions = SyncPair_PR_Bot.syncPRWithBotIntegrations(pr: pr, bot: bot, integrations: integrations)
         
         XCTAssertEqual(actions.integrationsToCancel!.count, 0)
-        XCTAssertFalse(actions.startNewIntegration ?? true)
+        XCTAssertNil(actions.startNewIntegrationBot)
         XCTBAssertNotNil(actions.githubStatusToSet)
-        XCTAssertEqual(actions.githubStatusToSet!.status.state, Status.State.Pending)
+        XCTAssertEqual(actions.githubStatusToSet!.status.status.state, Status.State.Pending)
     }
     
     func testOneIntegrationTestsFailed() {
@@ -106,9 +105,9 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
         let actions = SyncPair_PR_Bot.syncPRWithBotIntegrations(pr: pr, bot: bot, integrations: integrations)
         
         XCTAssertEqual(actions.integrationsToCancel!.count, 0)
-        XCTAssertFalse(actions.startNewIntegration ?? true)
+        XCTAssertNil(actions.startNewIntegrationBot)
         XCTBAssertNotNil(actions.githubStatusToSet)
-        XCTAssertEqual(actions.githubStatusToSet!.status.state, Status.State.Failure)
+        XCTAssertEqual(actions.githubStatusToSet!.status.status.state, Status.State.Failure)
     }
     
     func testOneIntegrationSuccess() {
@@ -121,9 +120,9 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
         let actions = SyncPair_PR_Bot.syncPRWithBotIntegrations(pr: pr, bot: bot, integrations: integrations)
         
         XCTAssertEqual(actions.integrationsToCancel!.count, 0)
-        XCTAssertFalse(actions.startNewIntegration ?? true)
+        XCTAssertNil(actions.startNewIntegrationBot)
         XCTBAssertNotNil(actions.githubStatusToSet)
-        XCTAssertEqual(actions.githubStatusToSet!.status.state, Status.State.Success)
+        XCTAssertEqual(actions.githubStatusToSet!.status.status.state, Status.State.Success)
     }
     
     func testTwoIntegrationOneRunningOnePending() {
@@ -137,9 +136,9 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
         let actions = SyncPair_PR_Bot.syncPRWithBotIntegrations(pr: pr, bot: bot, integrations: integrations)
         
         XCTAssertEqual(actions.integrationsToCancel!.count, 1)
-        XCTAssertFalse(actions.startNewIntegration ?? true)
+        XCTAssertNil(actions.startNewIntegrationBot)
         XCTBAssertNotNil(actions.githubStatusToSet)
-        XCTAssertEqual(actions.githubStatusToSet!.status.state, Status.State.Pending)
+        XCTAssertEqual(actions.githubStatusToSet!.status.status.state, Status.State.Pending)
     }
 
     func testTwoIntegrationsDifferentCommits() {
@@ -152,7 +151,7 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
         let actions = SyncPair_PR_Bot.syncPRWithBotIntegrations(pr: pr, bot: bot, integrations: integrations)
         
         XCTAssertEqual(actions.integrationsToCancel!.count, 1)
-        XCTAssertTrue(actions.startNewIntegration!)
+        XCTAssertNotNil(actions.startNewIntegrationBot)
         XCTBAssertNil(actions.githubStatusToSet) //no change
     }
     
