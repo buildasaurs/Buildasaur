@@ -44,7 +44,7 @@ extension HDGitHubXCBotSyncer {
         })
     }
     
-    func createBotFromPR(pr: PullRequest, completion: () -> ()) {
+    private func createBotFromName(botName: String, branch: String, repo: Repo, completion: () -> ()) {
         
         /*
         synced bots must have a manual schedule, Builda tells the bot to reintegrate in case of a new commit.
@@ -56,11 +56,10 @@ extension HDGitHubXCBotSyncer {
         logic. here I'm just explaining why "On Commit" schedule isn't generally a good idea for when managed by Builda.
         */
         let schedule = BotSchedule.manualBotSchedule()
-        let botName = BotNaming.nameForBotWithPR(pr, repoName: self.repoName()!)
         let template = self.currentBuildTemplate()
         
         //to handle forks
-        let headOriginUrl = pr.head.repo.repoUrlSSH
+        let headOriginUrl = repo.repoUrlSSH
         let localProjectOriginUrl = self.localSource.projectURL!.absoluteString
         
         let project: LocalSource
@@ -80,7 +79,6 @@ extension HDGitHubXCBotSyncer {
         }
         
         let xcodeServer = self.xcodeServer
-        let branch = pr.head.ref
         
         XcodeServerSyncerUtils.createBotFromBuildTemplate(botName, template: template, project: project, branch: branch, scheduleOverride: schedule, xcodeServer: xcodeServer) { (bot, error) -> () in
             
@@ -89,6 +87,22 @@ extension HDGitHubXCBotSyncer {
             }
             completion()
         }
+    }
+    
+    func createBotFromPR(pr: PullRequest, completion: () -> ()) {
+        
+        let branchName = pr.head.ref
+        let botName = BotNaming.nameForBotWithPR(pr, repoName: self.repoName()!)
+        
+        self.createBotFromName(botName, branch: branchName, repo: pr.head.repo, completion: completion)
+    }
+    
+    func createBotFromBranch(branch: Branch, repo: Repo, completion: () -> ()) {
+        
+        let branchName = branch.name
+        let botName = BotNaming.nameForBotWithBranch(branch, repoName: self.repoName()!)
+        
+        self.createBotFromName(botName, branch: branchName, repo: repo, completion: completion)
     }
     
     private func currentBuildTemplate() -> BuildTemplate! {

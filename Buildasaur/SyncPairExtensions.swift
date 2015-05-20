@@ -15,7 +15,7 @@ extension SyncPair {
     
     public struct Actions {
         public let integrationsToCancel: [Integration]?
-        public let githubStatusToSet: (status: HDGitHubXCBotSyncer.GitHubStatusAndComment, pr: PullRequest)?
+        public let githubStatusToSet: (status: HDGitHubXCBotSyncer.GitHubStatusAndComment, commit: String, issue: Issue?)?
         public let startNewIntegrationBot: Bot? //if non-nil, starts a new integration on this bot
     }
 
@@ -35,10 +35,11 @@ extension SyncPair {
         if let newStatus = actions.githubStatusToSet {
             
             let status = newStatus.status
-            let pr = newStatus.pr
+            let commit = newStatus.commit
+            let issue = newStatus.issue
             
             dispatch_group_enter(group)
-            self.syncer.updatePRStatusIfNecessary(status, prNumber: pr.number, completion: { (error) -> () in
+            self.syncer.updateCommitStatusIfNecessary(status, commit: commit, issue: issue, completion: { (error) -> () in
                 if let error = error {
                     lastGroupError = error
                 }
@@ -68,5 +69,39 @@ extension SyncPair {
             completion(error: lastGroupError)
         })
     }
+    
+    //MARK: Utility functions
+    
+    func getIntegrations(bot: Bot, completion: (integrations: [Integration], error: NSError?) -> ()) {
+        
+        let syncer = self.syncer
+        
+        /*
+        TODO: we should establish some reliable and reasonable plan for how many integrations to fetch.
+        currently it's always 20, but some setups might have a crazy workflow with very frequent commits
+        on active bots etc.
+        */
+        let query = [
+            "last": "20"
+        ]
+        syncer.xcodeServer.getIntegrations(bot.id, query: query, completion: { (integrations, error) -> () in
+            
+            if let error = error {
+                let e = Error.withInfo("Bot \(bot.name) failed return integrations", internalError: error)
+                completion(integrations: [], error: e)
+                return
+            }
+            
+            if let integrations = integrations {
+                
+                completion(integrations: integrations, error: nil)
+                
+            } else {
+                let e = Error.withInfo("Getting integrations", internalError: Error.withInfo("Nil integrations even after returning nil error!"))
+                completion(integrations: [], error: e)
+            }
+        })
+    }
+
 
 }

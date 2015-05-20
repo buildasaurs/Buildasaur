@@ -13,6 +13,13 @@ import BuildaUtils
 
 public class HDGitHubXCBotSyncer : Syncer {
     
+    public typealias BotActions = (
+        prsToSync: [(pr: PullRequest, bot: Bot)],
+        prBotsToCreate: [PullRequest],
+        branchesToSync: [(branch: Branch, bot: Bot)],
+        branchBotsToCreate: [Branch],
+        botsToDelete: [Bot])
+    
     let github: GitHubServer!
     let xcodeServer: XcodeServer!
     let localSource: LocalSource!
@@ -75,59 +82,97 @@ public class HDGitHubXCBotSyncer : Syncer {
         return self.localSource.githubRepoName()
     }
     
+    //TODO: migrate this shit to RAC, the callback below hell hurts my eyes (you've been warned)
+    
     public override func sync(completion: () -> ()) {
         
         if let repoName = self.repoName() {
             
-            //pull PRs from github
-            self.github.getOpenPullRequests(repoName, completion: { (prs, error) -> () in
+            self.github.getRepo(repoName, completion: { (repo, error) -> () in
                 
                 if error != nil {
                     //whoops, no more syncing for now
-                    self.notifyError(error, context: "Fetching PRs")
+                    self.notifyError(error, context: "Fetching Repo")
                     completion()
                     return
                 }
                 
-                if let prs = prs {
+                if let repo = repo {
                     
-                    self.reports["All Pull Requests"] = "\(prs.count)"
-                    
-                    //we have PRs, now fetch bots
-                    self.xcodeServer.getBots({ (bots, error) -> () in
+                    //pull PRs from github
+                    self.github.getOpenPullRequests(repoName, completion: { (prs, error) -> () in
                         
-                        if let error = error {
+                        if error != nil {
                             //whoops, no more syncing for now
-                            self.notifyError(error, context: "Fetching Bots")
+                            self.notifyError(error, context: "Fetching PRs")
                             completion()
                             return
                         }
                         
-                        if let bots = bots {
+                        if let prs = prs {
                             
-                            self.reports["All Bots"] = "\(bots.count)"
+                            self.reports["All Pull Requests"] = "\(prs.count)"
                             
-                            //we have both PRs and Bots, resolve
-                            self.syncPRsAndBots(repoName: repoName, prs: prs, bots: bots, completion: {
+                            //we have PRs, now fetch branches
+                            self.github.getBranchesOfRepo(repoName, completion: { (branches, error) -> () in
                                 
-                                //everything is done, report the damage of GitHub rate limit
-                                if let rateLimitInfo = self.github.latestRateLimitInfo {
-                                    
-                                    let report = rateLimitInfo.getReport()
-                                    self.reports["GitHub Rate Limit"] = report
-                                    Log.info("GitHub Rate Limit: \(report)")
+                                if error != nil {
+                                    //whoops, no more syncing for now
+                                    self.notifyError(error, context: "Fetching branches")
+                                    completion()
+                                    return
                                 }
                                 
-                                completion()
+                                if let branches = branches {
+                                    
+                                    
+                                    //we have branches, now fetch bots
+                                    self.xcodeServer.getBots({ (bots, error) -> () in
+                                        
+                                        if let error = error {
+                                            //whoops, no more syncing for now
+                                            self.notifyError(error, context: "Fetching Bots")
+                                            completion()
+                                            return
+                                        }
+                                        
+                                        if let bots = bots {
+                                            
+                                            self.reports["All Bots"] = "\(bots.count)"
+                                            
+                                            //we have both PRs and Bots, resolve
+                                            self.syncPRsAndBranchesAndBots(repo: repo, repoName: repoName, prs: prs, branches: branches, bots: bots, completion: {
+                                                
+                                                //everything is done, report the damage of GitHub rate limit
+                                                if let rateLimitInfo = self.github.latestRateLimitInfo {
+                                                    
+                                                    let report = rateLimitInfo.getReport()
+                                                    self.reports["GitHub Rate Limit"] = report
+                                                    Log.info("GitHub Rate Limit: \(report)")
+                                                }
+                                                
+                                                completion()
+                                            })
+                                        } else {
+                                            self.notifyErrorString("Nil bots even when error was nil", context: "Fetching Bots")
+                                            completion()
+                                        }
+                                    })
+                                    
+                                } else {
+                                    self.notifyErrorString("Branches are nil and error is nil", context: "Fetching branches")
+                                    completion()
+                                }
                             })
+                            
                         } else {
-                            self.notifyErrorString("Nil bots even when error was nil", context: "Fetching Bots")
+                            self.notifyErrorString("PRs are nil and error is nil", context: "Fetching PRs")
                             completion()
                         }
                     })
                     
                 } else {
-                    self.notifyErrorString("PRs are nil and error is nil", context: "Fetching PRs")
+                    self.notifyErrorString("Repo is nil and error is nil", context: "Fetching Repo")
                     completion()
                 }
             })
@@ -138,23 +183,29 @@ public class HDGitHubXCBotSyncer : Syncer {
         }
     }
     
-    public func syncPRsAndBots(#repoName: String, prs: [PullRequest], bots: [Bot], completion: () -> ()) {
+    public func syncPRsAndBranchesAndBots(#repo: Repo, repoName: String, prs: [PullRequest], branches: [Branch], bots: [Bot], completion: () -> ()) {
         
         let prsDescription = prs.map({ "\n\tPR \($0.number): \($0.title) [\($0.head.ref) -> \($0.base.ref))]" }) + ["\n"]
-        let botsDescription = bots.map({ "\n\t\($0.name)" }) + ["\n"]
-        Log.verbose("Resolving prs:\n\(prsDescription) \nand bots:\n\(botsDescription)")
+        let branchesDescription = branches.map({ "\n\tBranch [\($0.name):\($0.commit.sha)]" }) + ["\n"]
+        let botsDescription = bots.map({ "\n\tBot \($0.name)" }) + ["\n"]
+        Log.verbose("Resolving prs:\n\(prsDescription) \nand branches:\n\(branchesDescription)\nand bots:\n\(botsDescription)")
         
         //create the changes necessary
-        let (toSync, toCreate, toDelete) = self.resolvePRsAndBots(repoName: repoName, prs: prs, bots: bots)
+        let botActions = self.resolvePRsAndBranchesAndBots(repoName: repoName, prs: prs, branches: branches, bots: bots)
         
         //create actions from changes, so called "SyncPairs"
-        let syncPairs = self.createSyncPairsFrom(toSync: toSync, toCreate: toCreate, toDelete: toDelete)
+        let syncPairs = self.createSyncPairsFrom(repo: repo, botActions: botActions)
         
         //start these actions
         self.applyResolvedSyncPairs(syncPairs, completion: completion)
     }
     
-    public func resolvePRsAndBots(#repoName: String, prs: [PullRequest], bots: [Bot]) -> (toSync: [(pr: PullRequest, bot: Bot)], toCreate: [PullRequest], toDelete: [Bot]) {
+    public func resolvePRsAndBranchesAndBots(
+        #repoName: String,
+        prs: [PullRequest],
+        branches: [Branch],
+        bots: [Bot])
+        -> BotActions {
         
         //first filter only builda's bots, don't manipulate manually created bots
         //also filter only bots that belong to this project
@@ -164,44 +215,83 @@ public class HDGitHubXCBotSyncer : Syncer {
         var mappedBots = [String: Bot]()
         for bot in buildaBots { mappedBots[bot.name] = bot }
         
-        //PRs that also have a bot, toSync
-        var toSync: [(pr: PullRequest, bot: Bot)] = []
+        //PRs that also have a bot, prsToSync
+        var prsToSync: [(pr: PullRequest, bot: Bot)] = []
+        
+        //branches that also have a bot, branchesToSync
+        var branchesToSync: [(branch: Branch, bot: Bot)] = []
         
         //PRs that don't have a bot yet, to create
-        var toCreate: [PullRequest] = []
+        var prBotsToCreate: [PullRequest] = []
+        
+        //branches that don't have a bot yet, to create
+        var branchBotsToCreate: [Branch] = []
+        
         for pr in prs {
             
             let botName = BotNaming.nameForBotWithPR(pr, repoName: repoName)
             
             if let bot = mappedBots[botName] {
                 //we found a corresponding bot to this PR, add to toSync
-                toSync.append((pr: pr, bot: bot))
+                prsToSync.append((pr: pr, bot: bot))
                 
                 //and remove from bots mappedBots, because we handled it
                 mappedBots.removeValueForKey(botName)
             } else {
                 //no bot found for this PR, we'll have to create one
-                toCreate.append(pr)
+                prBotsToCreate.append(pr)
             }
         }
         
-        //bots that don't have a PR, to delete
-        let toDelete = mappedBots.values.array
+        for branch in branches {
+            
+            let botName = BotNaming.nameForBotWithBranch(branch, repoName: repoName)
+            
+            if let bot = mappedBots[botName] {
+                //we found a corresponding bot to this Branch, add to toSync
+                branchesToSync.append((branch: branch, bot: bot))
+                
+                //and remove from bots mappedBots, because we handled it
+                mappedBots.removeValueForKey(botName)
+            } else {
+                //no bot found for this Branch, is this branch on the list of tracked branches?
+                //ALSO: make sure the branch isn't already being PR'ed, we don't want to test the same commit twice
+                //TODO: pull from somewhere whether this branch should be tracked
+                //debug: assuming yes
+                let trackBranch = true
+                if trackBranch {
+                    branchBotsToCreate.append(branch)
+                }
+            }
+        }
         
-        return (toSync, toCreate, toDelete)
+        //bots that don't have a PR or a branch, to delete
+        let botsToDelete = mappedBots.values.array
+        
+        return (prsToSync, prBotsToCreate, branchesToSync, branchBotsToCreate, botsToDelete)
     }
     
-    public func createSyncPairsFrom(#toSync: [(pr: PullRequest, bot: Bot)], toCreate: [PullRequest], toDelete: [Bot]) -> [SyncPair] {
+    public func createSyncPairsFrom(#repo: Repo, botActions: BotActions) -> [SyncPair] {
         
         //create sync pairs for each action needed
-        let deleteBotSyncPairs = toDelete.map({ SyncPair_NoPR_Bot(bot: $0) as SyncPair })
-        let createBotSyncPairs = toCreate.map({ SyncPair_PR_NoBot(pr: $0) as SyncPair })
-        let syncPRBotSyncPairs = toSync.map({ SyncPair_PR_Bot(pr: $0.pr, bot: $0.bot) as SyncPair })
+        let syncPRBotSyncPairs = botActions.prsToSync.map({
+            SyncPair_PR_Bot(pr: $0.pr, bot: $0.bot, resolver: SyncPairPRResolver()) as SyncPair
+        })
+        let createBotFromPRSyncPairs = botActions.prBotsToCreate.map({ SyncPair_PR_NoBot(pr: $0) as SyncPair })
+        let syncBranchBotSyncPairs = botActions.branchesToSync.map({
+            SyncPair_Branch_Bot(branch: $0.branch, bot: $0.bot, resolver: SyncPairBranchResolver()) as SyncPair
+        })
+        let createBotFromBranchSyncPairs = botActions.branchBotsToCreate.map({ SyncPair_Branch_NoBot(branch: $0, repo: repo) as SyncPair })
+        let deleteBotSyncPairs = botActions.botsToDelete.map({ SyncPair_Deletable_Bot(bot: $0) as SyncPair })
         
         //here feel free to inject more things to be done during a sync
         
         //put them all into one array
-        let syncPairsRaw: [SyncPair] = deleteBotSyncPairs + createBotSyncPairs + syncPRBotSyncPairs
+        let toCreate: [SyncPair] = createBotFromPRSyncPairs + createBotFromBranchSyncPairs
+        let toSync: [SyncPair] = syncPRBotSyncPairs + syncBranchBotSyncPairs
+        let toDelete: [SyncPair] = deleteBotSyncPairs
+        
+        let syncPairsRaw: [SyncPair] = toCreate + toSync + toDelete
 
         //prepared sync pair
         let syncPairs = syncPairsRaw.map({
