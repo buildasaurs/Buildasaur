@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 func firstNonNil<T>(objects: [T?]) -> T? {
     for i in objects {
         if let i = i {
@@ -69,6 +68,19 @@ extension Array {
             }
             completion(returnedValues)
         }
+    }
+}
+
+extension Array {
+    
+    //dictionarify an array for fast lookup by a specific key
+    func toDictionary(key: (T) -> String) -> [String: T] {
+        
+        var dict = [String: T]()
+        for i in self {
+            dict[key(i)] = i
+        }
+        return dict
     }
 }
 
