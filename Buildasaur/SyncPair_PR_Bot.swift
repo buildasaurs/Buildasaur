@@ -15,7 +15,7 @@ public class SyncPair_PR_Bot: SyncPair {
     
     let pr: PullRequest
     let bot: Bot
-    let resolver: SyncPairPRResolver
+    public let resolver: SyncPairPRResolver
     
     public init(pr: PullRequest, bot: Bot, resolver: SyncPairPRResolver) {
         self.pr = pr

@@ -13,7 +13,11 @@ import BuildaUtils
 
 public class SyncPairResolver {
     
-    func resolveActionsForCommitAndIssueWithBotIntegrations(
+    public init() {
+        //
+    }
+    
+    public func resolveActionsForCommitAndIssueWithBotIntegrations(
         commit: String,
         issue: Issue?,
         bot: Bot,

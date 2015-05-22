@@ -52,6 +52,26 @@ class MockRepo: Repo {
     }
 }
 
+class MockBranch: Branch {
+    
+    class func mockDictionary(name: String = "master", sha: String = "1234f") -> NSDictionary {
+        return [
+            "name": name,
+            "commit": [
+                "sha": sha
+            ]
+        ]
+    }
+    
+    convenience init(name: String = "master", sha: String = "1234f") {
+        self.init(json: MockBranch.mockDictionary(name: name, sha: sha))
+    }
+    
+    required init(json: NSDictionary) {
+        super.init(json: json)
+    }
+}
+
 class MockPullRequestBranch: PullRequestBranch {
     
     class func mockDictionary(ref: String = "mock_ref", sha: String = "1234f") -> NSDictionary {
