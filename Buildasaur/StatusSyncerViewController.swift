@@ -178,6 +178,16 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         }
     }
     
+    @IBAction func branchWatchingTapped(sender: AnyObject) {
+        
+        assertionFailure("not yet implemented")
+//        if let syncer = self.syncer() {
+//            self.performSegueWithIdentifier("showManual", sender: self)
+//        } else {
+//            UIUtils.showAlertWithText("Syncer must be created first. Click 'Start' and try again.")
+//        }
+    }
+    
     @IBAction func manualBotManagementTapped(sender: AnyObject) {
         
         if let syncer = self.syncer() {

@@ -670,11 +670,11 @@
             <objects>
                 <viewController title="Buildasaur" id="XfG-lQ-9wD" customClass="MainViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="658" height="486"/>
+                        <rect key="frame" x="0.0" y="0.0" width="658" height="512"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <containerView translatesAutoresizingMaskIntoConstraints="NO" id="vRv-Oi-IUa" userLabel="Server View">
-                                <rect key="frame" x="338" y="166" width="300" height="300"/>
+                                <rect key="frame" x="338" y="192" width="300" height="300"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="vRv-Oi-IUa" secondAttribute="height" multiplier="1:1" id="u6g-Vy-oPM"/>
                                 </constraints>
@@ -683,7 +683,7 @@
                                 </connections>
                             </containerView>
                             <containerView translatesAutoresizingMaskIntoConstraints="NO" id="ilD-N8-ou7" userLabel="Project View">
-                                <rect key="frame" x="20" y="166" width="300" height="300"/>
+                                <rect key="frame" x="20" y="192" width="300" height="300"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="ilD-N8-ou7" secondAttribute="height" multiplier="1:1" id="VsU-hH-W2M"/>
                                 </constraints>
@@ -692,21 +692,21 @@
                                 </connections>
                             </containerView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="vYq-Em-Glf" userLabel="Separator 1" customClass="SeparatorView" customModule="Buildasaur" customModuleProvider="target">
-                                <rect key="frame" x="328" y="166" width="2" height="300"/>
+                                <rect key="frame" x="328" y="192" width="2" height="300"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="2" id="Rqh-Oq-ysa"/>
                                 </constraints>
                             </customView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="riu-7q-ces" userLabel="Separator 2" customClass="SeparatorView" customModule="Buildasaur" customModuleProvider="target">
-                                <rect key="frame" x="20" y="161" width="618" height="2"/>
+                                <rect key="frame" x="20" y="187" width="618" height="2"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="2" id="acz-J6-zP3"/>
                                 </constraints>
                             </customView>
                             <containerView translatesAutoresizingMaskIntoConstraints="NO" id="3sW-70-fuG" userLabel="Sync View">
-                                <rect key="frame" x="20" y="10" width="618" height="148"/>
+                                <rect key="frame" x="20" y="10" width="618" height="174"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="148" id="ddY-E0-8na"/>
+                                    <constraint firstAttribute="height" constant="174" id="ddY-E0-8na"/>
                                 </constraints>
                                 <connections>
                                     <segue destination="RHg-5W-Hb1" kind="embed" identifier="embedSyncView" id="kTp-B0-HSt"/>
@@ -981,7 +981,7 @@
                                             <action selector="editButtonTapped:" target="A7n-Q1-s2v" id="9Tf-RO-Oy7"/>
                                         </connections>
                                     </button>
-                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hm1-sB-msi" userLabel="Edit Button">
+                                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hm1-sB-msi" userLabel="Edit Button">
                                         <rect key="frame" x="-6" y="139" width="302" height="32"/>
                                         <buttonCell key="cell" type="push" title="Select SSH Public Key" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="59P-uj-2qD">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1019,7 +1019,7 @@
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="91h-XU-pQB" userLabel="Edit Button">
+                                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="91h-XU-pQB" userLabel="Edit Button">
                                         <rect key="frame" x="-6" y="114" width="302" height="32"/>
                                         <buttonCell key="cell" type="push" title="Select SSH Private Key" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wWL-q6-LpY">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1029,7 +1029,7 @@
                                             <action selector="selectPrivateKeyTapped:" target="A7n-Q1-s2v" id="JYo-8t-iHt"/>
                                         </connections>
                                     </button>
-                                    <secureTextField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gjV-E2-9oC">
+                                    <secureTextField verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gjV-E2-9oC">
                                         <rect key="frame" x="0.0" y="95" width="290" height="22"/>
                                         <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Your SSH key passphrase (if you have one)" drawsBackground="YES" usesSingleLineMode="YES" id="Yo3-xf-J7S">
                                             <font key="font" metaFont="system"/>
@@ -1040,7 +1040,7 @@
                                             </allowedInputSourceLocales>
                                         </secureTextFieldCell>
                                     </secureTextField>
-                                    <secureTextField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LgA-f0-McB">
+                                    <secureTextField verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LgA-f0-McB">
                                         <rect key="frame" x="0.0" y="171" width="290" height="22"/>
                                         <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Your GitHub Token" drawsBackground="YES" usesSingleLineMode="YES" id="bYg-Te-bAa">
                                             <font key="font" metaFont="system" size="10"/>
@@ -1341,7 +1341,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="56" id="7Nb-aF-8GR"/>
                                 </constraints>
-                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="0.5" horizontal="YES" id="dZ6-jK-9d0">
+                                <scroller key="horizontalScroller" verticalHuggingPriority="750" doubleValue="0.5" horizontal="YES" id="dZ6-jK-9d0">
                                     <rect key="frame" x="1" y="117.29037600755692" width="237" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -1437,7 +1437,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="113" id="akl-ae-qWk"/>
                                 </constraints>
-                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="RFK-qC-17J">
+                                <scroller key="horizontalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="RFK-qC-17J">
                                     <rect key="frame" x="1" y="117.52239549160004" width="237" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -1807,11 +1807,11 @@
             <objects>
                 <viewController id="RHg-5W-Hb1" customClass="StatusSyncerViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="zNe-bD-Pj4">
-                        <rect key="frame" x="0.0" y="0.0" width="618" height="148"/>
+                        <rect key="frame" x="0.0" y="0.0" width="618" height="174"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Fkq-gK-hvs" userLabel="Edit Button">
-                                <rect key="frame" x="14" y="77" width="97" height="32"/>
+                                <rect key="frame" x="14" y="80" width="97" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="85" id="EMb-CS-lfh"/>
                                 </constraints>
@@ -1824,7 +1824,7 @@
                                 </connections>
                             </button>
                             <progressIndicator horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="cYi-gZ-3MX">
-                                <rect key="frame" x="119" y="78" width="32" height="32"/>
+                                <rect key="frame" x="119" y="81" width="32" height="32"/>
                             </progressIndicator>
                             <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XOz-yR-q3G">
                                 <rect key="frame" x="174" y="5" width="19" height="27"/>
@@ -1853,9 +1853,9 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8VZ-bw-dT5">
-                                <rect key="frame" x="212" y="8" width="401" height="135"/>
+                                <rect key="frame" x="212" y="8" width="401" height="161"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="135" id="JhA-5r-PLq"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="161" id="JhA-5r-PLq"/>
                                 </constraints>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Multiline Label" id="4Nm-0d-uud">
                                     <font key="font" metaFont="system"/>
@@ -1864,7 +1864,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JKR-Sp-m8Y">
-                                <rect key="frame" x="20" y="124" width="169" height="19"/>
+                                <rect key="frame" x="20" y="150" width="169" height="19"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="169" id="OyQ-h8-Dln"/>
                                 </constraints>
@@ -1910,15 +1910,27 @@
                                     <action selector="helpPostStatusCommentsButtonTapped:" target="RHg-5W-Hb1" id="EYM-w9-DOh"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SY6-5q-Twj">
+                                <rect key="frame" x="21" y="124" width="169" height="19"/>
+                                <buttonCell key="cell" type="roundTextured" title="Branch Watching" bezelStyle="texturedRounded" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="C7J-2v-t41">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="smallSystem"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="branchWatchingTapped:" target="RHg-5W-Hb1" id="2Xk-LX-ywE"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="A9h-Jh-CP9" firstAttribute="top" secondItem="I34-eZ-a6k" secondAttribute="bottom" constant="6" id="3dX-AM-Tlf"/>
+                            <constraint firstItem="SY6-5q-Twj" firstAttribute="top" secondItem="JKR-Sp-m8Y" secondAttribute="bottom" constant="8" id="F5P-3r-g9T"/>
+                            <constraint firstItem="SY6-5q-Twj" firstAttribute="trailing" secondItem="JKR-Sp-m8Y" secondAttribute="trailing" constant="1" id="FGu-oL-prD"/>
                             <constraint firstItem="8VZ-bw-dT5" firstAttribute="top" secondItem="zNe-bD-Pj4" secondAttribute="top" constant="5" id="Idf-Wk-1a9"/>
                             <constraint firstItem="t3o-Ag-QHY" firstAttribute="centerX" secondItem="BkU-KL-lMX" secondAttribute="centerX" id="JBt-fO-4Qt"/>
                             <constraint firstItem="SL5-bS-Lf1" firstAttribute="trailing" secondItem="I34-eZ-a6k" secondAttribute="trailing" id="K0Z-Rf-B9m"/>
                             <constraint firstAttribute="trailing" secondItem="8VZ-bw-dT5" secondAttribute="trailing" constant="7" id="KhO-CN-dKQ"/>
                             <constraint firstItem="JKR-Sp-m8Y" firstAttribute="top" secondItem="zNe-bD-Pj4" secondAttribute="top" constant="5" id="P0S-FI-EdB"/>
-                            <constraint firstAttribute="centerY" secondItem="Fkq-gK-hvs" secondAttribute="centerY" constant="20" id="Tyj-fy-PKg"/>
+                            <constraint firstAttribute="centerY" secondItem="Fkq-gK-hvs" secondAttribute="centerY" constant="10" id="Tyj-fy-PKg"/>
                             <constraint firstAttribute="bottom" secondItem="8VZ-bw-dT5" secondAttribute="bottom" constant="8" id="VKM-vY-EPh"/>
                             <constraint firstItem="Fkq-gK-hvs" firstAttribute="centerY" secondItem="cYi-gZ-3MX" secondAttribute="centerY" constant="-0.5" id="Vmg-bM-hj9"/>
                             <constraint firstItem="SL5-bS-Lf1" firstAttribute="centerY" secondItem="BkU-KL-lMX" secondAttribute="centerY" constant="-1.5" id="arW-Yk-6ql"/>
@@ -1936,6 +1948,7 @@
                             <constraint firstItem="I34-eZ-a6k" firstAttribute="leading" secondItem="t3o-Ag-QHY" secondAttribute="trailing" constant="12" id="shw-I6-mBG"/>
                             <constraint firstItem="Fkq-gK-hvs" firstAttribute="leading" secondItem="zNe-bD-Pj4" secondAttribute="leading" constant="20" id="tAH-BV-LCf"/>
                             <constraint firstItem="cYi-gZ-3MX" firstAttribute="leading" secondItem="Fkq-gK-hvs" secondAttribute="trailing" constant="14" id="wg4-z7-3io"/>
+                            <constraint firstItem="SY6-5q-Twj" firstAttribute="leading" secondItem="JKR-Sp-m8Y" secondAttribute="leading" constant="1" id="xlq-G3-mnt"/>
                         </constraints>
                     </view>
                     <connections>
@@ -1951,7 +1964,7 @@
                 </viewController>
                 <customObject id="hcU-DC-I36" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="104" y="1284"/>
+            <point key="canvasLocation" x="104" y="1297"/>
         </scene>
         <!--Manual Bot Management View Controller-->
         <scene sceneID="1BI-BT-Scb">
@@ -2089,7 +2102,7 @@
                 </viewController>
                 <customObject id="KOh-9c-iJq" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="313" y="1599.5"/>
+            <point key="canvasLocation" x="791" y="1627.5"/>
         </scene>
     </scenes>
     <resources>
