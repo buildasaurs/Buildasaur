@@ -101,6 +101,7 @@
 		3AB489901B0929F8005C87BE /* sampleFinishedIntegration.json in Resources */ = {isa = PBXBuildFile; fileRef = 3AB4898F1B0929F8005C87BE /* sampleFinishedIntegration.json */; };
 		3AC553AF1A6313240078CCA6 /* XcodeServerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC553AE1A6313240078CCA6 /* XcodeServerConstants.swift */; };
 		3AD338B01AAE31D500ECD0F2 /* BuildTemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD338AF1AAE31D500ECD0F2 /* BuildTemplateViewController.swift */; };
+		3AF090B81B1134AA0058567F /* BranchWatchingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF090B71B1134AA0058567F /* BranchWatchingViewController.swift */; };
 		3AF1B1221AAC621800917EF3 /* UIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF1B1211AAC621800917EF3 /* UIUtils.swift */; };
 		3AF1B1241AAC7CA500917EF3 /* StatusSyncerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF1B1231AAC7CA500917EF3 /* StatusSyncerViewController.swift */; };
 		3AF2B03B1B02C5D700DCF2D6 /* SSHKeyVerification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF2B03A1B02C5D700DCF2D6 /* SSHKeyVerification.swift */; };
@@ -288,6 +289,7 @@
 		3AC553AE1A6313240078CCA6 /* XcodeServerConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeServerConstants.swift; sourceTree = "<group>"; };
 		3ACB831F1A3BB64F00E285FD /* JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
 		3AD338AF1AAE31D500ECD0F2 /* BuildTemplateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildTemplateViewController.swift; sourceTree = "<group>"; };
+		3AF090B71B1134AA0058567F /* BranchWatchingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BranchWatchingViewController.swift; sourceTree = "<group>"; };
 		3AF1B1211AAC621800917EF3 /* UIUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIUtils.swift; sourceTree = "<group>"; };
 		3AF1B1231AAC7CA500917EF3 /* StatusSyncerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusSyncerViewController.swift; sourceTree = "<group>"; };
 		3AF2B03A1B02C5D700DCF2D6 /* SSHKeyVerification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSHKeyVerification.swift; sourceTree = "<group>"; };
@@ -556,6 +558,7 @@
 				3A5B04A91AB4ABEB00F60536 /* TriggerViewController.swift */,
 				3A5B04AB1AB4AC0F00F60536 /* SetupViewController.swift */,
 				3A5B04AF1AB5144700F60536 /* ManualBotManagementViewController.swift */,
+				3AF090B71B1134AA0058567F /* BranchWatchingViewController.swift */,
 				3AB3FDCA1B05644300021197 /* MenuItemManager.swift */,
 			);
 			name = ViewController;
@@ -977,6 +980,7 @@
 				3A46A2CA1B07E28700F0FA4B /* SyncPair.swift in Sources */,
 				3A2F9D861A8FE64900B0DB68 /* LocalSource.swift in Sources */,
 				3A46A2C11B07D8D800F0FA4B /* SyncerBotNaming.swift in Sources */,
+				3AF090B81B1134AA0058567F /* BranchWatchingViewController.swift in Sources */,
 				3A0BC0491B0BFB5D0020AB9F /* SyncPair_Branch_NoBot.swift in Sources */,
 				3A46A2C31B07DCCA00F0FA4B /* SyncerBotManipulation.swift in Sources */,
 				3A5B04AC1AB4AC0F00F60536 /* SetupViewController.swift in Sources */,

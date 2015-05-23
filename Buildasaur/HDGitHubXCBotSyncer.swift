@@ -25,18 +25,19 @@ public class HDGitHubXCBotSyncer : Syncer {
     let localSource: LocalSource!
     let waitForLttm: Bool
     let postStatusComments: Bool
-    public var watchedBranchNames: [String] = []
+    public var watchedBranchNames: [String]
     
     public typealias GitHubStatusAndComment = (status: Status, comment: String?)
     
     public init(integrationServer: XcodeServer, sourceServer: GitHubServer, localSource: LocalSource,
-        syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool) {
+        syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool, watchedBranchNames: [String]) {
             
             self.github = sourceServer
             self.xcodeServer = integrationServer
             self.localSource = localSource
             self.waitForLttm = waitForLttm
             self.postStatusComments = postStatusComments
+            self.watchedBranchNames = watchedBranchNames
             super.init(syncInterval: syncInterval)
     }
     
@@ -54,6 +55,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             self.xcodeServer = XcodeServerFactory.server(serverConfig)
             self.waitForLttm = json.optionalBoolForKey("wait_for_lttm") ?? true
             self.postStatusComments = json.optionalBoolForKey("post_status_comments") ?? true
+            self.watchedBranchNames = json.optionalArrayForKey("watched_branches") as? [String] ?? []
             super.init(syncInterval: syncInterval)
             
         } else {
@@ -63,6 +65,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             self.localSource = nil
             self.waitForLttm = true
             self.postStatusComments = true
+            self.watchedBranchNames = []
             super.init(syncInterval: 0)
             return nil
         }
@@ -76,6 +79,7 @@ public class HDGitHubXCBotSyncer : Syncer {
         dict["server_host"] = self.xcodeServer.config.host
         dict["wait_for_lttm"] = self.waitForLttm
         dict["post_status_comments"] = self.postStatusComments
+        dict["watched_branches"] = self.watchedBranchNames
         return dict
     }
     

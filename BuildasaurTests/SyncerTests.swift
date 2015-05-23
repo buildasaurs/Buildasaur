@@ -35,8 +35,16 @@ class SyncerTests: XCTestCase {
         let syncInterval = 15.0
         let waitForLttm = true
         let postStatusComments = true
+        let watchedBranchNames: [String] = []
         
-        let syncer = HDGitHubXCBotSyncer(integrationServer: xcodeServer, sourceServer: githubServer, localSource: project, syncInterval: syncInterval, waitForLttm: waitForLttm, postStatusComments: postStatusComments)
+        let syncer = HDGitHubXCBotSyncer(
+            integrationServer: xcodeServer,
+            sourceServer: githubServer,
+            localSource: project,
+            syncInterval: syncInterval,
+            waitForLttm: waitForLttm,
+            postStatusComments: postStatusComments,
+            watchedBranchNames: watchedBranchNames)
         return syncer
     }
     
