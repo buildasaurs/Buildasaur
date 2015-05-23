@@ -39,6 +39,7 @@ class TriggerViewController: SetupViewController, NSComboBoxDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.bodyTextField.delegate = self
         self.typeComboBox.removeAllItems()
         self.typeComboBox.addItemsWithObjectValues(self.allKinds().map({ $0.toString() }))
         self.typeComboBox.delegate = self
@@ -220,6 +221,33 @@ class TriggerViewController: SetupViewController, NSComboBoxDelegate {
     func comboBoxWillDismiss(notification: NSNotification) {
         self.reloadUI()
     }
+}
+
+extension TriggerViewController: NSTextFieldDelegate {
     
+    //Taken from https://developer.apple.com/library/mac/qa/qa1454/_index.html
+    func control(control: NSControl, textView: NSTextView, doCommandBySelector commandSelector: Selector) -> Bool {
+        
+        let result: Bool
+        switch commandSelector {
+            
+        case Selector("insertNewline:"):
+            // new line action:
+            // always insert a line-break character and don’t cause the receiver to end editing
+            textView.insertNewlineIgnoringFieldEditor(self)
+            result = true
+            
+        case Selector("insertTab:"):
+            // tab action:
+            // always insert a tab character and don’t cause the receiver to end editing
+            textView.insertTabIgnoringFieldEditor(self)
+            result = true
+            
+        default:
+            result = false
+        }
+        
+        return result
+    }
 }
 
