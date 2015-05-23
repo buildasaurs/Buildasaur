@@ -40,5 +40,4 @@ class SyncPair_PR_NoBot: SyncPair {
             completion(error: nil)
         })
     }
-    
 }

@@ -178,6 +178,15 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         }
     }
     
+    @IBAction func branchWatchingTapped(sender: AnyObject) {
+        
+         if let syncer = self.syncer() {
+            self.performSegueWithIdentifier("showBranchWatching", sender: self)
+        } else {
+            UIUtils.showAlertWithText("Syncer must be created first. Click 'Start' and try again.")
+        }
+    }
+    
     @IBAction func manualBotManagementTapped(sender: AnyObject) {
         
         if let syncer = self.syncer() {
@@ -210,13 +219,21 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
             manual.syncer = self.syncer()!
         }
         
+        if let branchWatching = segue.destinationController as? BranchWatchingViewController {
+            
+            branchWatching.syncer = self.syncer()!
+        }
     }
     
     func startSyncing() {
         
         //create a syncer, delete the old one and kick it off
+        let oldWatchedBranchNames: [String]
         if let syncer = self.syncer() {
             self.storageManager.removeSyncer(syncer)
+            oldWatchedBranchNames = syncer.watchedBranchNames
+        } else {
+            oldWatchedBranchNames = []
         }
         
         let waitForLttm = self.lttmToggle.state == NSOnState
@@ -225,8 +242,13 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         let project = self.delegate.getProjectStatusViewController().project()!
         let serverConfig = self.delegate.getServerStatusViewController().serverConfig()!
         
-        if let syncer = self.storageManager.addSyncer(syncInterval, waitForLttm: waitForLttm, postStatusComments: postStatusComments,
-            project: project, serverConfig: serverConfig) {
+        if let syncer = self.storageManager.addSyncer(
+            syncInterval,
+            waitForLttm: waitForLttm,
+            postStatusComments: postStatusComments,
+            project: project,
+            serverConfig: serverConfig,
+            watchedBranchNames: oldWatchedBranchNames) {
             
             syncer.active = true
             

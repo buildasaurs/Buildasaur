@@ -30,7 +30,7 @@ class MainViewController: NSViewController, NSTableViewDataSource, StatusSibling
         super.viewWillAppear()
         
         if let window = self.view.window {
-            window.minSize = CGSizeMake(658, 486)
+            window.minSize = CGSizeMake(658, 512)
             let version = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as! String
             window.title = "Buildasaur \(version), at your service"
         }

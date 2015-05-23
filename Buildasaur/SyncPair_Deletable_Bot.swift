@@ -1,5 +1,5 @@
 //
-//  SyncPair_NoPR_Bot.swift
+//  SyncPair_Deletable_Bot.swift
 //  Buildasaur
 //
 //  Created by Honza Dvorsky on 16/05/2015.
@@ -10,7 +10,7 @@ import Foundation
 import BuildaCIServer
 import BuildaGitServer
 
-class SyncPair_NoPR_Bot: SyncPair {
+class SyncPair_Deletable_Bot: SyncPair {
     
     let bot: Bot
     
@@ -25,11 +25,11 @@ class SyncPair_NoPR_Bot: SyncPair {
         let syncer = self.syncer
         let bot = self.bot
         
-        SyncPair_NoPR_Bot.deleteBot(syncer: syncer, bot: bot, completion: completion)
+        SyncPair_Deletable_Bot.deleteBot(syncer: syncer, bot: bot, completion: completion)
     }
     
     override func syncPairName() -> String {
-        return "No PR + Bot (\(self.bot.name))"
+        return "Deletable Bot (\(self.bot.name))"
     }
     
     private class func deleteBot(#syncer: HDGitHubXCBotSyncer, bot: Bot, completion: Completion) {

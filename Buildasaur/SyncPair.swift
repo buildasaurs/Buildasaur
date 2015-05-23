@@ -31,7 +31,7 @@ public class SyncPair {
     final func start(completion: Completion) {
         
         let start = NSDate()
-        Log.verbose("SyncPair \(self.syncPairName()) started sync")
+//        Log.verbose("SyncPair \(self.syncPairName()) started sync")
         
         self.sync { (error) -> () in
             
