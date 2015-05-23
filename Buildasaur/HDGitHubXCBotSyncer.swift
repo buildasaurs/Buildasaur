@@ -278,9 +278,12 @@ public class HDGitHubXCBotSyncer : Syncer {
             let branchesDictionary = branches.toDictionary { $0.name }
             
             //filter just the ones we want
-            let branchesToWatch = self.watchedBranchNames.filter({ branchesDictionary[$0] != nil }).map({ branchesDictionary[$0]! })
+            let foundBranchesToWatch = self.watchedBranchNames.filter({ branchesDictionary[$0] != nil })
+            let branchesToWatch = foundBranchesToWatch.map({ branchesDictionary[$0]! })
             
-            //TODO: what do we do with deleted branches still in the list of branches to watch long term?
+            //what do we do with deleted branches still in the list of branches to watch long term?
+            //we unwatch them right here by just keeping the valid, found branches
+            self.watchedBranchNames = foundBranchesToWatch
             
             //go through the branches to track
             for branch in branchesToWatch {

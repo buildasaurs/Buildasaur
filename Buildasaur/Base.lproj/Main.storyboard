@@ -2163,7 +2163,7 @@
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
-                                                <tableColumn identifier="name" width="228" minWidth="40" maxWidth="228" id="Yfx-5F-5Pp">
+                                                <tableColumn identifier="name" width="220" minWidth="40" maxWidth="228" id="Yfx-5F-5Pp">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -2186,21 +2186,21 @@
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                         <font key="font" metaFont="system"/>
                                                         <connections>
-                                                            <action selector="testDevicesTableViewRowCheckboxTapped:" target="gBo-v0-Miz" id="d4K-54-Ud5"/>
+                                                            <action selector="branchesTableViewRowCheckboxTapped:" target="H0w-7S-xXi" id="aRq-gf-qKT"/>
                                                         </connections>
                                                     </buttonCell>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                 </tableColumn>
                                             </tableColumns>
                                             <connections>
-                                                <outlet property="dataSource" destination="gBo-v0-Miz" id="Bo7-mW-UlG"/>
-                                                <outlet property="delegate" destination="gBo-v0-Miz" id="mqn-52-Gnd"/>
+                                                <outlet property="dataSource" destination="H0w-7S-xXi" id="o53-Zz-IGO"/>
+                                                <outlet property="delegate" destination="H0w-7S-xXi" id="hIj-dU-CGj"/>
                                             </connections>
                                         </tableView>
                                     </subviews>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </clipView>
-                                <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="zLT-KA-AWK">
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="zLT-KA-AWK">
                                     <rect key="frame" x="1" y="117.52239549160004" width="237" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -2227,6 +2227,7 @@
                     </view>
                     <connections>
                         <outlet property="branchActivityIndicator" destination="SAg-Zh-mDU" id="y4C-yR-OVa"/>
+                        <outlet property="branchesTableView" destination="jDu-Ec-web" id="jGZ-XE-ZjI"/>
                     </connections>
                 </viewController>
                 <customObject id="JCM-p0-AyE" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
