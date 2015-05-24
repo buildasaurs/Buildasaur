@@ -1,7 +1,7 @@
 Buildasaur
 ==========
 
-[![Build Status](http://178.62.79.155/buildasaur-master-status)](https://github.com/czechboy0/Buildasaur/branches/all?utf8=✓&query=master)
+[![Build Status](http://178.62.79.155/buildasaur)](https://github.com/czechboy0/Buildasaur/branches/all?utf8=✓&query=master)
 [![Stars](https://img.shields.io/github/stars/czechboy0/buildasaur.svg)](https://github.com/czechboy0/Buildasaur/stargazers)
 [![Forks](https://img.shields.io/github/forks/czechboy0/buildasaur.svg)](https://github.com/czechboy0/Buildasaur/network/members)
 [![Issues](https://img.shields.io/github/issues-raw/czechboy0/buildasaur.svg)](https://github.com/czechboy0/Buildasaur/issues)
