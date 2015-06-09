@@ -19,7 +19,9 @@ class MenuItemManager : NSObject, NSMenuDelegate {
         
         let statusItem = statusBar.statusItemWithLength(32)
         statusItem.title = ""
-        statusItem.image = NSImage(named: "icon")
+        let image = NSImage(named: "icon")
+        image?.setTemplate(true)
+        statusItem.image = image
         statusItem.highlightMode = true
         
         var menu = NSMenu()
