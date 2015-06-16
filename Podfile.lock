@@ -1,0 +1,14 @@
+PODS:
+  - XcodeServerSDK (0.0.4)
+
+DEPENDENCIES:
+  - XcodeServerSDK (from `~/Documents/Buildasaur-XcodeServerSDK`)
+
+EXTERNAL SOURCES:
+  XcodeServerSDK:
+    :path: ~/Documents/Buildasaur-XcodeServerSDK
+
+SPEC CHECKSUMS:
+  XcodeServerSDK: f349ee5a7897d934a4dbf126c1d7b7a8fadb2caf
+
+COCOAPODS: 0.37.1
