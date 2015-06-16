@@ -16,3 +16,23 @@ public extension Double {
         return Double(Int(self * multiplier)) / multiplier
     }
 }
+
+public extension String {
+    
+    public func stripTrailingNewline() -> String {
+        
+        var stripped = self
+        if stripped.hasSuffix("\n") {
+            stripped.removeAtIndex(stripped.endIndex.predecessor())
+        }
+        return stripped
+    }
+    
+    public func pluralizeStringIfNecessary(number: Int) -> String {
+        if number > 1 {
+            return "\(self)s"
+        }
+        return self
+    }
+}
+

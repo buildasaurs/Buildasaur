@@ -1,0 +1,56 @@
+# https://github.com/KrauseFx/fastlane/tree/master/docs
+
+# If you want to automatically update fastlane if a new version is available:
+update_fastlane
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version "1.1.0"
+
+default_platform :mac
+
+platform :mac do
+
+  desc "Runs all the tests"
+  lane :test do
+
+    xcodebuild(
+      test: true,
+      scheme: 'Buildasaur',
+      workspace: 'Buildasaur.xcworkspace'
+    )
+
+  end
+
+  desc "Archives (and in the future will upload a new release to GitHub)"
+  lane :github do
+
+    # also add incrementing of build and version number, when it becomes available
+    # for mac - https://github.com/KrauseFx/fastlane/pull/291
+
+    xcodebuild(
+      test: true,
+      archive: true,
+      archive_path: './build/Buildasaur.xcarchive',
+      scheme: 'Buildasaur',
+      workspace: 'Buildasaur.xcworkspace'
+    )
+
+  end
+
+  # You can define as many lanes as you want
+
+  after_all do |lane|
+    # slack(
+    #   message: "Successfully deployed new App Update."
+    # )
+  end
+
+  error do |lane, exception|
+    # slack(
+    #   message: exception.message,
+    #   success: false
+    # )
+  end
+
+end

@@ -26,7 +26,8 @@ public class SourceControlBlueprint : XcodeServerEntity {
     public let commitSHA: String?
     public let privateSSHKey: String?
     public let publicSSHKey: String?
-
+    public let sshPassphrase: String?
+    
     public required init(json: NSDictionary) {
         
         self.wCCName = json.stringForKey(XcodeBlueprintNameKey)
@@ -55,12 +56,13 @@ public class SourceControlBlueprint : XcodeServerEntity {
         
         self.privateSSHKey = nil
         self.publicSSHKey = nil
+        self.sshPassphrase = nil
         
         super.init(json: json)
     }
     
     public init(branch: String, projectWCCIdentifier: String, wCCName: String, projectName: String,
-        projectURL: String, projectPath: String, publicSSHKey: String?, privateSSHKey: String?)
+        projectURL: String, projectPath: String, publicSSHKey: String?, privateSSHKey: String?, sshPassphrase: String?)
     {
         self.branch = branch
         self.projectWCCIdentifier = projectWCCIdentifier
@@ -71,8 +73,15 @@ public class SourceControlBlueprint : XcodeServerEntity {
         self.commitSHA = nil
         self.publicSSHKey = publicSSHKey
         self.privateSSHKey = privateSSHKey
+        self.sshPassphrase = sshPassphrase
         
         super.init()
+    }
+    
+    //for credentials verification only
+    public convenience init(projectWCCIdentifier: String, projectURL: String, publicSSHKey: String?, privateSSHKey: String?, sshPassphrase: String?) {
+        
+        self.init(branch: "", projectWCCIdentifier: projectWCCIdentifier, wCCName: "", projectName: "", projectURL: projectURL, projectPath: "", publicSSHKey: publicSSHKey, privateSSHKey: privateSSHKey, sshPassphrase: sshPassphrase)
     }
     
     public override func dictionarify() -> NSDictionary {
@@ -91,6 +100,7 @@ public class SourceControlBlueprint : XcodeServerEntity {
         let branch = self.branch
         let sshPublicKey = self.publicSSHKey?.base64Encoded ?? ""
         let sshPrivateKey = self.privateSSHKey?.base64Encoded ?? ""
+        let sshPassphrase = self.sshPassphrase ?? ""
         
         //locations on the branch
         dictionary[XcodeBlueprintLocationsKey] = [
@@ -140,7 +150,7 @@ public class SourceControlBlueprint : XcodeServerEntity {
             repoId: [
                 XcodeRepoAuthenticationTypeKey: XcodeRepoSSHKeysAuthenticationStrategy,
                 XcodeRepoUsernameKey: "git", //TODO: see how to add https support?
-                XcodeRepoPasswordKey: "", //TODO: is this basic auth? we could use the github token for that instead of SSH
+                XcodeRepoPasswordKey: sshPassphrase, //this is where the passphrase goes
                 XcodeRepoAuthenticationStrategiesKey: sshPrivateKey,
                 XcodeRepoPublicKeyDataKey: sshPublicKey
             ]

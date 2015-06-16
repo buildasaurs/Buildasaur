@@ -20,9 +20,21 @@ extension LocalSource {
         let projectPath = self.projectPath!
         let publicSSHKey = self.publicSSHKey
         let privateSSHKey = self.privateSSHKey
+        let sshPassphrase = self.sshPassphrase
         
-        let blueprint = SourceControlBlueprint(branch: branch, projectWCCIdentifier: projectWCCIdentifier, wCCName: wccName, projectName: projectName, projectURL: projectURL, projectPath: projectPath, publicSSHKey: publicSSHKey, privateSSHKey: privateSSHKey)
+        let blueprint = SourceControlBlueprint(branch: branch, projectWCCIdentifier: projectWCCIdentifier, wCCName: wccName, projectName: projectName, projectURL: projectURL, projectPath: projectPath, publicSSHKey: publicSSHKey, privateSSHKey: privateSSHKey, sshPassphrase: sshPassphrase)
         return blueprint
     }
     
+    public func createSourceControlBlueprintForCredentialVerification() -> SourceControlBlueprint {
+        
+        let projectWCCIdentifier = self.projectWCCIdentifier!
+        let projectURL = self.projectURL!.absoluteString!
+        let publicSSHKey = self.publicSSHKey
+        let privateSSHKey = self.privateSSHKey
+        let sshPassphrase = self.sshPassphrase
+        
+        let blueprint = SourceControlBlueprint(projectWCCIdentifier: projectWCCIdentifier, projectURL: projectURL, publicSSHKey: publicSSHKey, privateSSHKey: privateSSHKey, sshPassphrase: sshPassphrase)
+        return blueprint
+    }
 }

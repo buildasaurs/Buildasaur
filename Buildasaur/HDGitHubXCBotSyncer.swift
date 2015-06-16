@@ -13,20 +13,32 @@ import BuildaUtils
 
 public class HDGitHubXCBotSyncer : Syncer {
     
+    public typealias BotActions = (
+        prsToSync: [(pr: PullRequest, bot: Bot)],
+        prBotsToCreate: [PullRequest],
+        branchesToSync: [(branch: Branch, bot: Bot)],
+        branchBotsToCreate: [Branch],
+        botsToDelete: [Bot])
+    
     let github: GitHubServer!
     let xcodeServer: XcodeServer!
     let localSource: LocalSource!
     let waitForLttm: Bool
+    let postStatusComments: Bool
+    public var watchedBranchNames: [String]
     
-    typealias GitHubStatusAndComment = (status: Status, comment: String?)
+    public typealias GitHubStatusAndComment = (status: Status, comment: String?)
     
-    init(integrationServer: XcodeServer, sourceServer: GitHubServer, localSource: LocalSource, syncInterval: NSTimeInterval, waitForLttm: Bool) {
-        
-        self.github = sourceServer
-        self.xcodeServer = integrationServer
-        self.localSource = localSource
-        self.waitForLttm = waitForLttm
-        super.init(syncInterval: syncInterval)
+    public init(integrationServer: XcodeServer, sourceServer: GitHubServer, localSource: LocalSource,
+        syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool, watchedBranchNames: [String]) {
+            
+            self.github = sourceServer
+            self.xcodeServer = integrationServer
+            self.localSource = localSource
+            self.waitForLttm = waitForLttm
+            self.postStatusComments = postStatusComments
+            self.watchedBranchNames = watchedBranchNames
+            super.init(syncInterval: syncInterval)
     }
     
     init?(json: NSDictionary, storageManager: StorageManager) {
@@ -42,6 +54,8 @@ public class HDGitHubXCBotSyncer : Syncer {
             self.github = GitHubFactory.server(project.githubToken)
             self.xcodeServer = XcodeServerFactory.server(serverConfig)
             self.waitForLttm = json.optionalBoolForKey("wait_for_lttm") ?? true
+            self.postStatusComments = json.optionalBoolForKey("post_status_comments") ?? true
+            self.watchedBranchNames = json.optionalArrayForKey("watched_branches") as? [String] ?? []
             super.init(syncInterval: syncInterval)
             
         } else {
@@ -50,6 +64,8 @@ public class HDGitHubXCBotSyncer : Syncer {
             self.xcodeServer = nil
             self.localSource = nil
             self.waitForLttm = true
+            self.postStatusComments = true
+            self.watchedBranchNames = []
             super.init(syncInterval: 0)
             return nil
         }
@@ -62,851 +78,294 @@ public class HDGitHubXCBotSyncer : Syncer {
         dict["project_path"] = self.localSource.url.absoluteString
         dict["server_host"] = self.xcodeServer.config.host
         dict["wait_for_lttm"] = self.waitForLttm
+        dict["post_status_comments"] = self.postStatusComments
+        dict["watched_branches"] = self.watchedBranchNames
         return dict
     }
     
-    private func repoName() -> String? {
+    func repoName() -> String? {
         return self.localSource.githubRepoName()
     }
+    
+    //TODO: migrate this shit to RAC, the callback hell below hurts my eyes (you've been warned)
     
     public override func sync(completion: () -> ()) {
         
         if let repoName = self.repoName() {
             
-            //pull PRs from github
-            self.github.getOpenPullRequests(repoName, completion: { (prs, error) -> () in
-                
-                if error != nil {
-                    //whoops, no more syncing for now
-                    self.notifyError(error, context: "Fetching PRs")
-                    completion()
-                    return
-                }
-                
-                if let prs = prs {
-                    
-                    self.reports["All Pull Requests"] = "\(prs.count)"
-                    
-                    //we have PRs, now fetch bots
-                    self.xcodeServer.getBots({ (bots, error) -> () in
-                        
-                        if let error = error {
-                            //whoops, no more syncing for now
-                            self.notifyError(error, context: "Fetching Bots")
-                            completion()
-                            return
-                        }
-                        
-                        if let bots = bots {
-                            
-                            self.reports["All Bots"] = "\(bots.count)"
-                            
-                            self.resolvePRsAndBots(repoName: repoName, prs: prs, bots: bots, completion: {
-                                
-                                if let rateLimitInfo = self.github.latestRateLimitInfo {
-                                    
-                                    let report = rateLimitInfo.getReport()
-                                    self.reports["GitHub Rate Limit"] = report
-                                    Log.info("GitHub Rate Limit: \(report)")
-                                }
-                                
-                                completion()
-                            })
-                        } else {
-                            self.notifyError(Errors.errorWithInfo("Nil bots even when error was nil"), context: "Fetching Bots")
-                            completion()
-                        }
-                    })
-                    
-                } else {
-                    self.notifyError(Errors.errorWithInfo("PRs are nil and error is nil"), context: "Fetching PRs")
-                    completion()
-                }
-            })
-            
+            self.syncRepoWithName(repoName, completion: completion)
         } else {
-            self.notifyError(nil, context: "No repo name for GitHub found in URL")
+            self.notifyErrorString("Nil repo name", context: "Syncing")
             completion()
         }
     }
     
-    private func resolvePRsAndBots(#repoName: String, prs: [PullRequest], bots: [Bot], completion: () -> ()) {
+    private func syncRepoWithName(repoName: String, completion: () -> ()) {
+        
+        self.github.getRepo(repoName, completion: { (repo, error) -> () in
+            
+            if error != nil {
+                //whoops, no more syncing for now
+                self.notifyError(error, context: "Fetching Repo")
+                completion()
+                return
+            }
+            
+            if let repo = repo {
+                
+                self.syncRepoWithNameAndMetadata(repoName, repo: repo, completion: completion)
+            } else {
+                self.notifyErrorString("Repo is nil and error is nil", context: "Fetching Repo")
+                completion()
+            }
+        })
+    }
+    
+    private func syncRepoWithNameAndMetadata(repoName: String, repo: Repo, completion: () -> ()) {
+        
+        //pull PRs from github
+        self.github.getOpenPullRequests(repoName, completion: { (prs, error) -> () in
+            
+            if error != nil {
+                //whoops, no more syncing for now
+                self.notifyError(error, context: "Fetching PRs")
+                completion()
+                return
+            }
+            
+            if let prs = prs {
+                
+                self.reports["All Pull Requests"] = "\(prs.count)"
+                self.syncRepoWithPRs(repoName, repo: repo, prs: prs, completion: completion)
+                
+            } else {
+                self.notifyErrorString("PRs are nil and error is nil", context: "Fetching PRs")
+                completion()
+            }
+        })
+    }
+    
+    private func syncRepoWithPRs(repoName: String, repo: Repo, prs: [PullRequest], completion: () -> ()) {
+        
+        //only fetch branches if there are any watched ones. there might be tens or hundreds of branches
+        //so we don't want to fetch them unless user actually is watching any non-PR branches.
+        if self.watchedBranchNames.count > 0 {
+            
+            //we have PRs, now fetch branches
+            self.github.getBranchesOfRepo(repoName, completion: { (branches, error) -> () in
+                
+                if error != nil {
+                    //whoops, no more syncing for now
+                    self.notifyError(error, context: "Fetching branches")
+                    completion()
+                    return
+                }
+                
+                if let branches = branches {
+                    
+                    self.syncRepoWithPRsAndBranches(repoName, repo: repo, prs: prs, branches: branches, completion: completion)
+                } else {
+                    self.notifyErrorString("Branches are nil and error is nil", context: "Fetching branches")
+                    completion()
+                }
+            })
+        } else {
+            
+            //otherwise call the next step immediately with an empty array for branches
+            self.syncRepoWithPRsAndBranches(repoName, repo: repo, prs: prs, branches: [], completion: completion)
+        }
+    }
+    
+    private func syncRepoWithPRsAndBranches(repoName: String, repo: Repo, prs: [PullRequest], branches: [Branch], completion: () -> ()) {
+        
+        //we have branches, now fetch bots
+        self.xcodeServer.getBots({ (bots, error) -> () in
+            
+            if let error = error {
+                //whoops, no more syncing for now
+                self.notifyError(error, context: "Fetching Bots")
+                completion()
+                return
+            }
+            
+            if let bots = bots {
+                
+                self.reports["All Bots"] = "\(bots.count)"
+                
+                //we have both PRs and Bots, resolve
+                self.syncPRsAndBranchesAndBots(repo: repo, repoName: repoName, prs: prs, branches: branches, bots: bots, completion: {
+                    
+                    //everything is done, report the damage of GitHub rate limit
+                    if let rateLimitInfo = self.github.latestRateLimitInfo {
+                        
+                        let report = rateLimitInfo.getReport()
+                        self.reports["GitHub Rate Limit"] = report
+                        Log.info("GitHub Rate Limit: \(report)")
+                    }
+                    
+                    completion()
+                })
+            } else {
+                self.notifyErrorString("Nil bots even when error was nil", context: "Fetching Bots")
+                completion()
+            }
+        })
+    }
+    
+    public func syncPRsAndBranchesAndBots(#repo: Repo, repoName: String, prs: [PullRequest], branches: [Branch], bots: [Bot], completion: () -> ()) {
         
         let prsDescription = prs.map({ "\n\tPR \($0.number): \($0.title) [\($0.head.ref) -> \($0.base.ref))]" }) + ["\n"]
-        let botsDescription = bots.map({ "\n\t\($0.name)" }) + ["\n"]
+        let branchesDescription = branches.map({ "\n\tBranch [\($0.name):\($0.commit.sha)]" }) + ["\n"]
+        let botsDescription = bots.map({ "\n\tBot \($0.name)" }) + ["\n"]
+        Log.verbose("Resolving prs:\n\(prsDescription) \nand branches:\n\(branchesDescription)\nand bots:\n\(botsDescription)")
         
-        Log.verbose("Resolving prs:\n\(prsDescription) \nand bots:\n\(botsDescription)")
+        //create the changes necessary
+        let botActions = self.resolvePRsAndBranchesAndBots(repoName: repoName, prs: prs, branches: branches, bots: bots)
         
-        if let repoName = self.repoName() {
+        //create actions from changes, so called "SyncPairs"
+        let syncPairs = self.createSyncPairsFrom(repo: repo, botActions: botActions)
+        
+        //start these actions
+        self.applyResolvedSyncPairs(syncPairs, completion: completion)
+    }
+    
+    public func resolvePRsAndBranchesAndBots(
+        #repoName: String,
+        prs: [PullRequest],
+        branches: [Branch],
+        bots: [Bot])
+        -> BotActions {
             
             //first filter only builda's bots, don't manipulate manually created bots
             //also filter only bots that belong to this project
-            let buildaBots = bots.filter { self.isBuildaBotBelongingToRepoWithName($0, repoName: repoName) }
+            let buildaBots = bots.filter { BotNaming.isBuildaBotBelongingToRepoWithName($0, repoName: repoName) }
             
             //create a map of name -> bot for fast manipulation
-            var mappedBots = [String: Bot]()
-            for bot in buildaBots {
-                mappedBots[bot.name] = bot
-            }
+            var mappedBots = buildaBots.toDictionary({ $0.name })
             
-            //keep track of the ones that have a PR
-            var toSync: [(pr: PullRequest, bot: Bot)] = []
-            var toCreate: [PullRequest] = []
+            //PRs that also have a bot, prsToSync
+            var prsToSync: [(pr: PullRequest, bot: Bot)] = []
+            
+            //branches that also have a bot, branchesToSync
+            var branchesToSync: [(branch: Branch, bot: Bot)] = []
+            
+            //PRs that don't have a bot yet, to create
+            var prBotsToCreate: [PullRequest] = []
+            
+            //branches that don't have a bot yet, to create
+            var branchBotsToCreate: [Branch] = []
+            
+            //make sure every PR has a bot
             for pr in prs {
                 
-                let botName = self.nameForBotWithPR(pr, repoName: repoName)
+                let botName = BotNaming.nameForBotWithPR(pr, repoName: repoName)
                 
                 if let bot = mappedBots[botName] {
                     //we found a corresponding bot to this PR, add to toSync
-                    toSync.append((pr: pr, bot: bot))
+                    prsToSync.append((pr: pr, bot: bot))
                     
                     //and remove from bots mappedBots, because we handled it
                     mappedBots.removeValueForKey(botName)
                 } else {
                     //no bot found for this PR, we'll have to create one
-                    toCreate.append(pr)
+                    prBotsToCreate.append(pr)
                 }
             }
             
-            //bots that we haven't found a corresponding PR for we delete
-            let toDelete = mappedBots.values.array
+            //first try to find Branch objects for our watched branches
             
-            //apply changes
-            self.applyResolvedChanges(toSync: toSync, toCreate: toCreate, toDelete: toDelete, completion: completion)
-        } else {
-            self.notifyError(Errors.errorWithInfo("Nil repo name"), context: "Resolving PRs and Bots")
-            completion()
-        }
-    }
-    
-    private func applyResolvedChanges(#toSync: [(pr: PullRequest, bot: Bot)], toCreate: [PullRequest], toDelete: [Bot], completion: () -> ()) {
-        
-        let group = dispatch_group_create()
-
-        //first delete outdated bots
-        dispatch_group_enter(group)
-        self.deleteBots(toDelete, completion: { () -> () in
-            dispatch_group_leave(group)
-        })
-        
-        //create new bots with prs
-        dispatch_group_enter(group)
-        self.createBotsFromPRs(toCreate, completion: { () -> () in
-            dispatch_group_leave(group)
-        })
-        
-        //and sync PR + Bot pairs
-        dispatch_group_enter(group)
-        self.syncPRBotPairs(toSync, completion: { () -> () in
-            dispatch_group_leave(group)
-        })
-        
-        //when both, finish this method as well
-        dispatch_group_notify(group, dispatch_get_main_queue()) { () -> Void in
+            //create a map of branch names to branch objects for fast lookup
+            let branchesDictionary = branches.toDictionary { $0.name }
             
-            if toCreate.count > 0 {
-                self.reports["Created bots"] = "\(toCreate.count)"
-            }
-            if toDelete.count > 0 {
-                self.reports["Deleted bots"] = "\(toDelete.count)"
-            }
-            if toSync.count > 0 {
-                self.reports["Synced bots"] = "\(toSync.count)"
-            }
-
-            completion()
-        }
-    }
-    
-    private func syncPRBotPairs(pairs: [(pr: PullRequest, bot: Bot)], completion: () -> ()) {
-        
-        pairs.mapVoidAsync({ (pair, itemCompletion) -> () in
-            self.tryToSyncPRWithBot(pair.pr, bot: pair.bot, completion: { () -> () in
-                Log.verbose("Synced up PR #\(pair.pr.number) with bot \(pair.bot.name)")
-                itemCompletion()
-            })
-        }, completion: completion)
-    }
-    
-    private func isBotEnabled(pr: PullRequest, integrations: [Integration], completion: (isEnabled: Bool) -> ()) {
-        
-        //bot is enabled if (there are any integrations) OR (there is a recent comment with a keyword to enable the bot in the pull request's conversation)
-        //which means that there are two ways of enabling a bot. 
-        //a) manually start an integration through Xcode, API call or in Builda's GUI (TBB)
-        //b) (optional) comment an agreed keyword in the Pull Request, e.g. "lttm" - 'looks testable to me' is a frequent one
-        
-        if integrations.count > 0 || !self.waitForLttm {
-            completion(isEnabled: true)
-            return
-        }
-        
-        let keyword = ["lttm"]
-        
-        if let repoName = self.repoName() {
-
-            self.github.findMatchingCommentInIssue(keyword, issue: pr.number, repo: repoName) {
-                (foundComments, error) -> () in
+            //filter just the ones we want
+            let foundBranchesToWatch = self.watchedBranchNames.filter({ branchesDictionary[$0] != nil })
+            let branchesToWatch = foundBranchesToWatch.map({ branchesDictionary[$0]! })
+            
+            //what do we do with deleted branches still in the list of branches to watch long term?
+            //we unwatch them right here by just keeping the valid, found branches
+            self.watchedBranchNames = foundBranchesToWatch
+            
+            //go through the branches to track
+            for branch in branchesToWatch {
                 
-                if error != nil {
-                    self.notifyError(error, context: "Fetching comments")
-                    completion(isEnabled: false)
-                    return
-                }
+                let botName = BotNaming.nameForBotWithBranch(branch, repoName: repoName)
                 
-                if let foundComments = foundComments {
-                    completion(isEnabled: foundComments.count > 0)
+                if let bot = mappedBots[botName] {
+                    
+                    //we found a corresponding bot to this watched Branch, add to toSync
+                    branchesToSync.append((branch: branch, bot: bot))
+                    
+                    //and remove from bots mappedBots, because we handled it
+                    mappedBots.removeValueForKey(botName)
                 } else {
-                    completion(isEnabled: false)
+                    
+                    //no bot found for this Branch, create one
+                    branchBotsToCreate.append(branch)
                 }
             }
-
-        } else {
-            Log.error("No repo name, cannot find the GitHub repo!")
-            completion(isEnabled: false)
-        }
+            
+            //bots that don't have a PR or a branch, to delete
+            let botsToDelete = mappedBots.values.array
+            
+            return (prsToSync, prBotsToCreate, branchesToSync, branchBotsToCreate, botsToDelete)
     }
     
-    private func tryToSyncPRWithBot(pr: PullRequest, bot: Bot, completion: () -> ()) {
+    public func createSyncPairsFrom(#repo: Repo, botActions: BotActions) -> [SyncPair] {
         
-        /*
-        TODO: we should establish some reliable and reasonable plan for how many integrations to fetch.
-        currently it's always 20, but some setups might have a crazy workflow with very frequent commits
-        on active bots etc.
-        */
-        let query = [
-            "last": "20"
-        ]
-        self.xcodeServer.getIntegrations(bot.id, query: query, completion: { (integrations, error) -> () in
-            
-            if let error = error {
-                self.notifyError(error, context: "Bot \(bot.name) failed return integrations")
-                completion()
-                return
-            }
-            
-            if let integrations = integrations {
-                
-                //first check whether the bot is even enabled
-                self.isBotEnabled(pr, integrations: integrations, completion: { (isEnabled) -> () in
-                    
-                    if isEnabled {
-                        
-                        self.syncPRWithBotIntegrations(pr, bot: bot, integrations: integrations, completion: completion)
-                        
-                    } else {
-                        
-                        //not enabled, make sure the PR reflects that and the instructions are clear
-                        Log.verbose("Bot \(bot.name) is not yet enabled, ignoring...")
-                        
-                        let status = self.createStatusFromState(.Pending, description: "Waiting for \"lttm\" to start testing")
-                        let notYetEnabled = GitHubStatusAndComment(status: status, comment: nil)
-                        self.updatePRStatusIfNecessary(notYetEnabled, prNumber: pr.number, completion: completion)
-                    }
-                })
-            } else {
-                self.notifyError(Errors.errorWithInfo("Nil integrations even after returning nil error!"), context: "Getting integrations")
-            }
+        //create sync pairs for each action needed
+        let syncPRBotSyncPairs = botActions.prsToSync.map({
+            SyncPair_PR_Bot(pr: $0.pr, bot: $0.bot, resolver: SyncPairPRResolver()) as SyncPair
         })
-    }
-    
-    private func updatePRStatusIfNecessary(newStatus: GitHubStatusAndComment, prNumber: Int, completion: () -> ()) {
+        let createBotFromPRSyncPairs = botActions.prBotsToCreate.map({ SyncPair_PR_NoBot(pr: $0) as SyncPair })
+        let syncBranchBotSyncPairs = botActions.branchesToSync.map({
+            SyncPair_Branch_Bot(branch: $0.branch, bot: $0.bot, resolver: SyncPairBranchResolver()) as SyncPair
+        })
+        let createBotFromBranchSyncPairs = botActions.branchBotsToCreate.map({ SyncPair_Branch_NoBot(branch: $0, repo: repo) as SyncPair })
+        let deleteBotSyncPairs = botActions.botsToDelete.map({ SyncPair_Deletable_Bot(bot: $0) as SyncPair })
         
-        let repoName = self.repoName()!
+        //here feel free to inject more things to be done during a sync
         
-        self.github.getPullRequest(prNumber, repo: repoName) { (pr, error) -> () in
-            
-            if error != nil {
-                self.notifyError(error, context: "PR \(prNumber) failed to return data")
-                completion()
-                return
-            }
-            
-            if let pr = pr {
-
-                let latestCommit = pr.head.sha
-                
-                self.github.getStatusOfCommit(latestCommit, repo: repoName, completion: { (status, error) -> () in
-                    
-                    if error != nil {
-                        self.notifyError(error, context: "PR \(prNumber) failed to return status")
-                        completion()
-                        return
-                    }
-                    
-                    if status == nil || newStatus.status != status! {
-                        
-                        self.postStatusWithComment(newStatus, commit: latestCommit, repo: repoName, pr: pr, completion: completion)
-                        
-                    } else {
-                        completion()
-                    }
-                })
-
-            } else {
-                self.notifyError(Errors.errorWithInfo("PR is nil and error is nil"), context: "Fetching a PR")
-                completion()
-            }
+        //put them all into one array
+        let toCreate: [SyncPair] = createBotFromPRSyncPairs + createBotFromBranchSyncPairs
+        let toSync: [SyncPair] = syncPRBotSyncPairs + syncBranchBotSyncPairs
+        let toDelete: [SyncPair] = deleteBotSyncPairs
+        
+        let syncPairsRaw: [SyncPair] = toCreate + toSync + toDelete
+        
+        //prepared sync pair
+        let syncPairs = syncPairsRaw.map({
+            (syncPair: SyncPair) -> SyncPair in
+            syncPair.syncer = self
+            return syncPair
+        })
+        
+        if toCreate.count > 0 {
+            self.reports["Created bots"] = "\(toCreate.count)"
         }
+        if toDelete.count > 0 {
+            self.reports["Deleted bots"] = "\(toDelete.count)"
+        }
+        if toSync.count > 0 {
+            self.reports["Synced bots"] = "\(toSync.count)"
+        }
+        
+        return syncPairs
     }
     
-    private func syncPRWithBotIntegrations(pr: PullRequest, bot: Bot, integrations: [Integration], completion: () -> ()) {
-
+    private func applyResolvedSyncPairs(syncPairs: [SyncPair], completion: () -> ()) {
+        
+        //actually kick the sync pairs off
         let group = dispatch_group_create()
-        
-        let uniqueIntegrations = Set(integrations)
-        
-        //------------
-        // Split integrations into two groups: 1) for this SHA, 2) the rest
-        //------------
-        
-        let headCommit: String = pr.head.sha
-        
-        //1) for this SHA
-        let headCommitIntegrations = uniqueIntegrations.filterSet {
-            (integration: Integration) -> Bool in
-            
-            //if it's not pending, we need to take a look at the blueprint and inspect the SHA.
-            if let blueprint = integration.blueprint, let sha = blueprint.commitSHA {
-                return sha == headCommit
-            }
-            
-            //when an integration is Pending, Preparing or Checking out, it doesn't have a blueprint, but it is, by definition, a headCommit
-            //integration (because it will check out the latest commit on the branch when it starts running)
-            if
-                integration.currentStep == .Pending ||
-                integration.currentStep == .Preparing ||
-                integration.currentStep == .Checkout
-            {
-                return true
-            }
-            
-            //if the result doesn't have a SHA yet and isn't pending - take a look at the result
-            //if it's a checkout-error, assume that it is a malformed SSH key bot, so don't keep
-            //restarting integrations - at least until someone fixes it (by closing the PR and fixing
-            //their SSH keys in Buildasaur so that when the next bot gets created, it does so with the right
-            //SSH keys.
-            if integration.currentStep == .Completed {
-                if let result = integration.result {
-                    if result == .CheckoutError {
-                        Log.error("Integration #\(integration.number) finished with a checkout error - please check that your SSH keys setup in Buildasaur are correct! If you need to fix them, please do so and then you need to recreate the bot - e.g. by closing the Pull Request, waiting for a sync (bot will disappear) and then reopening the Pull Request - should do the job!")
-                        return true
-                    }
-                }
-            }
-
-            return false
-        }
-        
-        //2) the rest
-        let otherCommitIntegrations = uniqueIntegrations.subtract(headCommitIntegrations)
-        let noncompletedOtherCommitIntegrations: Set<Integration> = otherCommitIntegrations.filterSet {
-            return $0.currentStep != .Completed
-        }
-        
-        //2.1) Ok, now first cancel all unfinished integrations of the non-current commits
-        dispatch_group_enter(group)
-        self.cancelIntegrations(Array(noncompletedOtherCommitIntegrations), completion: { () -> () in
-            dispatch_group_leave(group)
-        })
-        
-        //------------
-        // Now we're resolving Integrations for the current commit only
-        //------------
-        /*
-        The resolving logic goes like this now. We have an array of integrations I for the latest commits.
-        A. is array empty?
-        A1. true -> there are no integrations for this commit. kick one off! we're done.
-        A2. false -> keep resolving (all references to "integrations" below mean only integrations of the current commit
-        B. take all pending integrations, keep the most recent one, if it's there, cancel all the other ones.
-        C. take the running integration, if it's there
-        D. take all completed integrations
-        
-        resolve the status of the PR as follows
-        
-        E. is there a latest pending integration?
-        E1. true -> status is ["Pending": "Waiting on the queue"]. also, if there's a running integration, cancel it.
-        E2. false ->
-            F. is there a running integration?
-            F1. true -> status is ["Pending": "Integration in progress..."]. update status and do nothing else.
-            F2. false -> 
-                G. are there any completed integrations?
-                G1. true -> based on the result of the integrations create the PR status
-                G2. false -> this shouldn't happen, print a very angry message.
-        */
-        
-        //A. is this array empty?
-        if headCommitIntegrations.count == 0 {
-            
-            //A1. - it's empty, kick off an integration for the latest commit
+        for i in syncPairs {
             dispatch_group_enter(group)
-            self.xcodeServer.postIntegration(bot.id, completion: { (integration, error) -> () in
-                
-                if let integration = integration where error == nil {
-                    Log.info("Bot \(bot.name) successfully enqueued Integration #\(integration.number)")
-                } else {
-                    self.notifyError(error, context: "Bot \(bot.name) failed to enqueue an integration")
+            i.start({ (error) -> () in
+                if let error = error {
+                    self.notifyError(error, context: "SyncPair: \(i.syncPairName())")
                 }
-                
                 dispatch_group_leave(group)
             })
-            //nothing else to do
-            
-        } else {
-            
-            //A2. not empty, keep resolving
-            
-            //B. get pending Integrations
-            let pending = headCommitIntegrations.filterSet {
-                $0.currentStep == .Pending
-            }
-            
-            var latestPendingIntegration: Integration?
-            if pending.count > 0 {
-                
-                //we should cancel all but the most recent one
-                //turn the pending set into an array and sort by integration number in ascending order
-                var pendingSortedArray: Array<Integration> = Array(pending).sorted({ (integrationA, integrationB) -> Bool in
-                    return integrationA.number < integrationB.number
-                })
-                
-                //keep the latest, which will be the last in the array
-                //let this one run, it might have been a force rebuild.
-                latestPendingIntegration = pendingSortedArray.removeLast()
-                
-                //however, cancel the rest of the pending integrations
-                dispatch_group_enter(group)
-                self.cancelIntegrations(pendingSortedArray) {
-                    dispatch_group_leave(group)
-                }
-            }
-            
-            //Get the running integration, if it's there
-            let runningIntegration = headCommitIntegrations.filterSet {
-                $0.currentStep != .Completed && $0.currentStep != .Pending
-            }.first
-            
-            //Get all completed integrations for this commit
-            let completedIntegrations = headCommitIntegrations.filterSet {
-                $0.currentStep == .Completed
-            }
-            
-            //resolve
-            dispatch_group_enter(group)
-            self.resolvePRStatusFromLatestIntegrations(pending: latestPendingIntegration, running: runningIntegration, completed: completedIntegrations, completion: { (statusWithComment) -> () in
-                
-                //we now have the status and an optional comment to add.
-                //in order to know what to do, we need to fetch the current status of this commit first.
-                let repoName = self.repoName()!
-                self.github.getStatusOfCommit(headCommit, repo: repoName, completion: { (status, error) -> () in
-                  
-                    if error != nil {
-                        self.notifyError(error, context: "Failed to fetch status of commit \(headCommit) in repo \(repoName)")
-                        dispatch_group_leave(group)
-                        return
-                    }
-                    
-                    let updateStatus: Bool
-                    if let currentStatus = status {
-                        //we have the current status!
-                        updateStatus = (statusWithComment.status != currentStatus)
-                    } else {
-                        //doesn't have a status yet, update
-                        updateStatus = true
-                    }
-                    
-                    if updateStatus {
-                        
-                        let oldStatus = status?.description ?? "[no status]"
-                        let newStatus = statusWithComment
-                        let comment = newStatus.comment ?? "[no comment]"
-                        Log.info("Updating status of commit \(headCommit) in PR #\(pr.number) from \(oldStatus) to \(newStatus), will add comment \(comment)")
-                        
-                        //we need to update status
-                        self.postStatusWithComment(statusWithComment, commit: headCommit, repo: repoName, pr: pr, completion: { () -> () in
-                            dispatch_group_leave(group)
-                        })
-                        
-                    } else {
-                        //everything is how it's supposed to be
-                        dispatch_group_leave(group)
-                    }
-                })
-            })
-            
         }
         
-        //when all actions finished, complete
         dispatch_group_notify(group, dispatch_get_main_queue(), completion)
     }
-    
-    private func postStatusWithComment(statusWithComment: GitHubStatusAndComment, commit: String, repo: String, pr: PullRequest, completion: () -> ()) {
-        
-        self.github.postStatusOfCommit(statusWithComment.status, sha: commit, repo: repo) { (status, error) -> () in
-            
-            if error != nil {
-                self.notifyError(error, context: "Failed to post a status on commit \(commit) of repo \(repo)")
-                completion()
-                return
-            }
-            
-            //optional there can be a comment to be posted as well
-            if let comment = statusWithComment.comment {
-                
-                //we have a comment, post it
-                self.github.postCommentOnIssue(comment, issueNumber: pr.number, repo: repo, completion: { (comment, error) -> () in
-                    
-                    if error != nil {
-                        self.notifyError(error, context: "Failed to post a comment \"\(comment)\" on PR \(pr.number) of repo \(repo)")
-                    }
-                    completion()
-                })
-                
-            } else {
-                completion()
-            }
-        }
-    }
-    
-    private func resolvePRStatusFromLatestIntegrations(#pending: Integration?, running: Integration?, completed: Set<Integration>, completion: (GitHubStatusAndComment) -> ()) {
-        
-        let group = dispatch_group_create()
-        let statusWithComment: GitHubStatusAndComment
-        
-        //if there's any pending integration, we're ["Pending" - Waiting in the queue]
-        if let pending = pending {
-            
-            //TODO: show how many builds are ahead in the queue and estimate when it will be
-            //started and when finished? (there is an average running time on each bot, it should be easy)
-            let status = self.createStatusFromState(.Pending, description: "Build waiting in the queue...")
-            statusWithComment = (status: status, comment: nil)
-            
-            //also, cancel the running integration, if it's there any
-            if let running = running {
-                dispatch_group_enter(group)
-                self.cancelIntegrations([running], completion: { () -> () in
-                    dispatch_group_leave(group)
-                })
-            }
-        } else {
-            
-            //there's no pending integration, it's down to running and completed
-            if let running = running {
-                
-                //there is a running integration. 
-                //TODO: estimate, based on the average running time of this bot and on the started timestamp, when it will finish. add that to the description.
-                let currentStepString = running.currentStep.rawValue
-                let status = self.createStatusFromState(.Pending, description: "Integration step: \(currentStepString)...")
-                statusWithComment = (status: status, comment: nil)
-
-            } else {
-                
-                //there no running integration, we're down to completed integration.
-                if completed.count > 0 {
-                    
-                    //we have some completed integrations
-                    statusWithComment = self.resolveStatusFromCompletedIntegrations(completed)
-
-                } else {
-                    //this shouldn't happen.
-                    Log.error("LOGIC ERROR! This shouldn't happen, there are no completed integrations!")
-                    let status = self.createStatusFromState(.Error, description: "* UNKNOWN STATE, Builda ERROR *")
-                    statusWithComment = (status: status, "Builda error, unknown state!")
-                }
-            }
-        }
-        
-        dispatch_group_notify(group, dispatch_get_main_queue()) { () -> Void in
-            completion(statusWithComment)
-        }
-    }
-    
-    private func pluralizeStringIfNecessary(string: String, number: Int) -> String {
-        if number > 1 {
-            return "\(string)s"
-        }
-        return string
-    }
-    
-    private func formattedDurationOfIntegration(integration: Integration) -> String? {
-        
-        if let seconds = integration.duration {
-            
-            let intSeconds = Int(seconds)
-            let minutes = intSeconds / 60
-            let remainderSeconds = intSeconds % 60
-            let hours = minutes / 60
-            let remainderMinutes = minutes % 60
-            
-            let formattedSeconds = self.pluralizeStringIfNecessary("second", number: remainderSeconds)
-            
-            var result = "\(remainderSeconds) \(formattedSeconds)"
-            if remainderMinutes > 0 {
-                
-                let formattedMinutes = self.pluralizeStringIfNecessary("minute", number: remainderMinutes)
-                result = "\(remainderMinutes) \(formattedMinutes) and " + result
-            }
-            if hours > 0 {
-                
-                let formattedHours = self.pluralizeStringIfNecessary("hours", number: hours)
-                result = "\(hours) \(formattedHours), " + result
-            }
-            return result
-            
-        } else {
-            Log.error("No duration provided in integration \(integration)")
-            return "[NOT PROVIDED]"
-        }
-    }
-    
-    private func baseCommentFromIntegration(integration: Integration) -> String {
-
-        var comment = "Result of integration \(integration.number)\n"
-        if let duration = self.formattedDurationOfIntegration(integration) {
-            comment += "Integration took " + duration + ".\n"
-        }
-        return comment
-    }
-
-    private func resolveStatusFromCompletedIntegrations(integrations: Set<Integration>) -> GitHubStatusAndComment {
-        
-        //get integrations sorted by number
-        let sortedDesc = Array(integrations).sorted { $0.number > $1.number }
-
-        //if there are any succeeded, it wins - iterating from the end
-        if let passingIntegration = sortedDesc.filter({
-            (integration: Integration) -> Bool in
-            switch integration.result! {
-            case Integration.Result.Succeeded, Integration.Result.Warnings, Integration.Result.AnalyzerWarnings:
-                return true
-            default:
-                return false
-            }
-        }).first {
-            
-            let baseComment = self.baseCommentFromIntegration(passingIntegration)
-            let comment: String
-            let status = self.createStatusFromState(.Success, description: "Build passed!")
-            let summary = passingIntegration.buildResultSummary!
-            if passingIntegration.result == .Succeeded {
-                comment = baseComment + "Perfect build! All \(summary.testsCount) tests passed. :+1:"
-            } else if passingIntegration.result == .Warnings {
-                comment = baseComment + "All \(summary.testsCount) tests passed, but please fix \(summary.warningCount) warnings."
-            } else {
-                comment = baseComment + "All \(summary.testsCount) tests passed, but please fix \(summary.analyzerWarningCount) analyzer warnings."
-            }
-            return (status: status, comment: comment)
-        }
-        
-        //ok, no succeeded, warnings or analyzer warnings, get down to test failures
-        if let testFailingIntegration = sortedDesc.filter({
-            $0.result! == Integration.Result.TestFailures
-        }).first {
-            
-            let baseComment = self.baseCommentFromIntegration(testFailingIntegration)
-            let status = self.createStatusFromState(.Failure, description: "Build failed tests!")
-            let summary = testFailingIntegration.buildResultSummary!
-            let comment = baseComment + "Build failed \(summary.testFailureCount) tests out of \(summary.testsCount)"
-            return (status: status, comment: comment)
-        }
-        
-        //ok, the build didn't even run then. it either got cancelled or failed
-        if let erroredIntegration = sortedDesc.filter({
-            $0.result! != Integration.Result.Canceled
-        }).first {
-            
-            let baseComment = self.baseCommentFromIntegration(erroredIntegration)
-            let errorCount: String
-            if let summary = erroredIntegration.buildResultSummary {
-                errorCount = "\(summary.errorCount)"
-            } else {
-                errorCount = "?"
-            }
-            let status = self.createStatusFromState(.Error, description: "Build error!")
-            let comment = baseComment + "\(errorCount) build errors: \(erroredIntegration.result!.rawValue)"
-            return (status: status, comment: comment)
-        }
-        
-        //cool, not even build error. it must be just canceled ones then.
-        if let canceledIntegration = sortedDesc.filter({
-            $0.result! == Integration.Result.Canceled
-        }).first {
-            
-            let baseComment = self.baseCommentFromIntegration(canceledIntegration)
-            let status = self.createStatusFromState(.Error, description: "Build canceled!")
-            let comment = baseComment + "Build was manually canceled."
-            return (status: status, comment: comment)
-        }
-        
-        //hmm no idea, if we got all the way here. just leave it with no state.
-        let status = self.createStatusFromState(.NoState, description: nil)
-        return (status: status, comment: nil)
-    }
-    
-    private func createStatusFromState(state: Status.State, description: String?) -> Status {
-        
-        //TODO: add useful targetUrl and potentially have multiple contexts to show multiple stats on the PR
-        let context = "Buildasaur"
-        let newDescription: String?
-        if let description = description {
-            newDescription = "\(context): \(description)"
-        } else {
-            newDescription = nil
-        }
-        return Status(state: state, description: newDescription, targetUrl: nil, context: context)
-    }
-    
-    //probably make these a bit more generic, something like an async reduce which calls completion when all finish
-    private func cancelIntegrations(integrations: [Integration], completion: () -> ()) {
-        
-        integrations.mapVoidAsync({ (integration, itemCompletion) -> () in
-            
-            self.xcodeServer.cancelIntegration(integration.id, completion: { (success, error) -> () in
-                if error != nil {
-                    self.notifyError(error, context: "Failed to cancel integration \(integration.number)")
-                } else {
-                    Log.info("Successfully cancelled integration \(integration.number)")
-                }
-                itemCompletion()
-            })
-            
-        }, completion: completion)
-    }
-    
-    private func deleteBots(bots: [Bot], completion: () -> ()) {
-        
-        bots.mapVoidAsync({ (bot, itemCompletion) -> () in
-            
-            self.xcodeServer.deleteBot(bot.id, revision: bot.rev, completion: { (success, error) -> () in
-                
-                if error != nil {
-                    self.notifyError(error, context: "Failed to delete bot with name \(bot.name)")
-                } else {
-                    Log.info("Successfully deleted bot \(bot.name)")
-                }
-                itemCompletion()
-            })
-            
-        }, completion: completion)
-    }
-    
-    private func createBotsFromPRs(prs: [PullRequest], completion: () -> ()) {
-        
-        prs.mapVoidAsync({ (item, itemCompletion) -> () in
-            self.createBotFromPR(item, completion: itemCompletion)
-        }, completion: completion)
-    }
-    
-    private func createBotFromPR(pr: PullRequest, completion: () -> ()) {
-        
-        /*
-        synced bots must have a manual schedule, Builda tells the bot to reintegrate in case of a new commit.
-        this has the advantage in cases when someone pushes 10 commits. if we were using Xcode Server's "On Commit"
-        schedule, it'd schedule 10 integrations, which could take ages. Builda's logic instead only schedules one
-        integration for the latest commit's SHA.
-        
-        even though this is desired behavior in this syncer, technically different syncers can have completely different
-        logic. here I'm just explaining why "On Commit" schedule isn't generally a good idea for when managed by Builda.
-        */
-        let schedule = BotSchedule.manualBotSchedule()
-        let botName = self.nameForBotWithPR(pr, repoName: self.repoName()!)
-        let template = self.currentBuildTemplate()
-        
-        //to handle forks
-        let headOriginUrl = pr.head.repo.repoUrlSSH
-        let localProjectOriginUrl = self.localSource.projectURL!.absoluteString
-        
-        let project: LocalSource
-        if headOriginUrl != localProjectOriginUrl {
-            
-            //we have a fork, duplicate the metadata with the fork's origin
-            if let source = self.localSource.duplicateForForkAtOriginURL(headOriginUrl) {
-                project = source
-            } else {
-                self.notifyError(Errors.errorWithInfo("Couldn't create a LocalSource for fork with origin at url \(headOriginUrl)"), context: "Creating a bot from a PR")
-                completion()
-                return
-            }
-        } else {
-            //a normal PR in the same repo, no need to duplicate, just use the existing localSource
-            project = self.localSource
-        }
-        
-        let xcodeServer = self.xcodeServer
-        let branch = pr.head.ref
-
-        XcodeServerSyncerUtils.createBotFromBuildTemplate(botName, template: template, project: project, branch: branch, scheduleOverride: schedule, xcodeServer: xcodeServer) { (bot, error) -> () in
-            
-            if error != nil {
-                self.notifyError(error, context: "Failed to create bot with name \(botName)")
-            }
-            completion()
-        }
-    }
-    
-    private func currentBuildTemplate() -> BuildTemplate! {
-        
-        if
-            let preferredTemplateId = self.localSource.preferredTemplateId,
-            let template = StorageManager.sharedInstance.buildTemplates.filter({ $0.uniqueId == preferredTemplateId }).first {
-                return template
-        }
-
-        assertionFailure("Couldn't get the current build template, this syncer should NOT be running!")
-        return nil
-    }
-    
-    private func isBuildaBot(bot: Bot) -> Bool {
-        return bot.name.hasPrefix(self.prefixForBuildaBot())
-    }
-    
-    private func isBuildaBotBelongingToRepoWithName(bot: Bot, repoName: String) -> Bool {
-        return bot.name.hasPrefix(self.prefixForBuildaBotInRepoWithName(repoName))
-    }
-    
-    private func nameForBotWithPR(pr: PullRequest, repoName: String) -> String {
-        return "\(self.prefixForBuildaBotInRepoWithName(repoName)) PR #\(pr.number)"
-    }
-
-    private func prefixForBuildaBotInRepoWithName(repoName: String) -> String {
-        return "\(self.prefixForBuildaBot()) [\(repoName)]"
-    }
-    
-    private func prefixForBuildaBot() -> String {
-        return "BuildaBot"
-    }
-}
-
-extension Array {
-    
-    func mapVoidAsync(transformAsync: (item: T, itemCompletion: () -> ()) -> (), completion: () -> ()) {
-        self.mapAsync(transformAsync, completion: { (_) -> () in
-            completion()
-        })
-    }
-    
-    func mapAsync<U>(transformAsync: (item: T, itemCompletion: (U) -> ()) -> (), completion: ([U]) -> ()) {
-        
-        let group = dispatch_group_create()
-        var returnedValueMap = [Int: U]()
-
-        for (index, element) in enumerate(self) {
-            dispatch_group_enter(group)
-            transformAsync(item: element, itemCompletion: {
-                (returned: U) -> () in
-                returnedValueMap[index] = returned
-                dispatch_group_leave(group)
-            })
-        }
-        
-        dispatch_group_notify(group, dispatch_get_main_queue()) {
-            
-            //we have all the returned values in a map, put it back into an array of Us
-            var returnedValues = [U]()
-            for i in 0 ..< returnedValueMap.count {
-                returnedValues.append(returnedValueMap[i]!)
-            }
-            completion(returnedValues)
-        }
-    }
-    
 }

@@ -17,6 +17,7 @@ class NetworkUtils {
         
         let token = project.githubToken
         let server = GitHubFactory.server(token)
+        let credentialValidationBlueprint = project.createSourceControlBlueprintForCredentialVerification()
         
         //check if we can get PRs, that should be representative enough
         if let repoName = project.githubRepoName() {
@@ -37,19 +38,26 @@ class NetworkUtils {
 
                     //look at the permissions in the PR metadata
                     if !readPermission {
-                        completion(success: false, error: Errors.errorWithInfo("Missing read permission for repo"))
+                        completion(success: false, error: Error.withInfo("Missing read permission for repo"))
                     } else if !writePermission {
-                        completion(success: false, error: Errors.errorWithInfo("Missing write permission for repo"))
+                        completion(success: false, error: Error.withInfo("Missing write permission for repo"))
                     } else {
-                        completion(success: true, error: nil)
+                        //now test ssh keys
+                        self.checkValidityOfSSHKeys(credentialValidationBlueprint, completion: { (success, error) -> () in
+                            
+                            Log.verbose("Finished blueprint validation with success: \(success), error: \(error)")
+                            
+                            //now complete
+                            completion(success: success, error: error)
+                        })
                     }
                 } else {
-                    completion(success: false, error: Errors.errorWithInfo("Couldn't find repo permissions in GitHub response"))
+                    completion(success: false, error: Error.withInfo("Couldn't find repo permissions in GitHub response"))
                 }
             })
             
         } else {
-            completion(success: false, error: Errors.errorWithInfo("Invalid repo name"))
+            completion(success: false, error: Error.withInfo("Invalid repo name"))
         }
     }
     
@@ -75,6 +83,19 @@ class NetworkUtils {
                 
                 completion(success: canCreateBots, error: nil)
             })
+        }
+    }
+    
+    class func checkValidityOfSSHKeys(blueprint: SourceControlBlueprint, completion: (success: Bool, error: NSError?) -> ()) {
+        
+        let blueprintDict = blueprint.dictionarify()
+        let r = SSHKeyVerification.verifyBlueprint(blueprintDict)
+        
+        //based on the return value, either succeed or fail
+        if r.terminationStatus == 0 {
+            completion(success: true, error: nil)
+        } else {
+            completion(success: false, error: Error.withInfo(r.standardError))
         }
     }
 }

@@ -81,21 +81,25 @@ public class XcodeProjectParser {
             if let parsed = self.parseCheckoutFile(checkoutUrl) {
                 return (parsed, nil)
             } else {
-                let error = Errors.errorWithInfo("Cannot parse the checkout file at path \(checkoutUrl)")
+                let error = Error.withInfo("Cannot parse the checkout file at path \(checkoutUrl)")
                 return (nil, error)
             }
         }
         //no checkout, what to do?
-        let error = Errors.errorWithInfo("Cannot find the Checkout file, please make sure to open this project in Xcode at least once (it will generate the required Checkout file). Then try again.")
+        let error = Error.withInfo("Cannot find the Checkout file, please make sure to open this project in Xcode at least once (it will generate the required Checkout file). Then try again.")
         return (nil, error)
     }
     
     public class func sharedSchemeUrlsFromProjectOrWorkspaceUrl(url: NSURL) -> [NSURL] {
         
-        let projectUrls: [NSURL]
+        var projectUrls: [NSURL]
         if self.isWorkspaceUrl(url) {
             //first parse project urls from workspace contents
             projectUrls = self.projectUrlsFromWorkspace(url) ?? [NSURL]()
+            
+            //also add the workspace's url, it might own some schemes as well
+            projectUrls.append(url)
+            
         } else {
             //this already is a project url, take just that
             projectUrls = [url]

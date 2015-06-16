@@ -12,14 +12,14 @@ public enum BuildaError: String {
     case UnknownError = "Unknown error"
 }
 
-public class Errors {
+public class Error {
     
-    public class func errorFromType(type: BuildaError) -> NSError {
+    public class func fromType(type: BuildaError) -> NSError {
         
-        return self.errorWithInfo(type.rawValue)
+        return self.withInfo(type.rawValue)
     }
     
-    public class func errorWithInfo(info: String?, internalError: NSError? = nil, userInfo: NSDictionary? = nil) -> NSError {
+    public class func withInfo(info: String?, internalError: NSError? = nil, userInfo: NSDictionary? = nil) -> NSError {
         
         var finalInfo = NSMutableDictionary()
         if let info = info {

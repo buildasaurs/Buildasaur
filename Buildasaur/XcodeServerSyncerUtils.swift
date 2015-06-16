@@ -47,7 +47,7 @@ class XcodeServerSyncerUtils {
             } else if let bot = bot {
                 Log.info("Successfully created bot \(bot.name)")
             } else {
-                outError = Errors.errorWithInfo("Failed to return bot after creation even after error was nil!")
+                outError = Error.withInfo("Failed to return bot after creation even after error was nil!")
                 Log.error(outError?.description ?? "")
             }
             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
