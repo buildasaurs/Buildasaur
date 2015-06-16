@@ -19,13 +19,12 @@ class MenuItemManager : NSObject, NSMenuDelegate {
         
         let statusItem = statusBar.statusItemWithLength(32)
         statusItem.title = ""
-        let image = NSImage(named: "icon")
-        image?.setTemplate(true)
-        statusItem.image = image
+        statusItem.image = NSImage(named: "icon")
         statusItem.highlightMode = true
         
         var menu = NSMenu()
         menu.addItemWithTitle("Open Buildasaur", action: "showMainWindow", keyEquivalent: "")
+        menu.addItemWithTitle("Quit Buildasaur", action: "terminate:", keyEquivalent: "")
         menu.addItem(NSMenuItem.separatorItem())
         self.firstIndexLastSyncedMenuItem = menu.numberOfItems
         
