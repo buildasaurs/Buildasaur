@@ -10,6 +10,7 @@ import Cocoa
 import XCTest
 import BuildaGitServer
 import BuildaUtils
+import XcodeServerSDK
 
 class GitHubSourceTests: XCTestCase {
 

@@ -6,3 +6,23 @@ target 'BuildaUtils' do
 #pod 'XcodeServerSDK', '0.0.4'
 pod 'XcodeServerSDK', :path => '~/Documents/Buildasaur-XcodeServerSDK'
 end
+
+target 'BuildaGitServer' do
+pod 'XcodeServerSDK', :path => '~/Documents/Buildasaur-XcodeServerSDK'
+end
+
+target 'Buildasaur' do
+pod 'XcodeServerSDK', :path => '~/Documents/Buildasaur-XcodeServerSDK'
+end
+
+target 'BuildaGitServerTests' do
+    pod 'XcodeServerSDK', :path => '~/Documents/Buildasaur-XcodeServerSDK'
+end
+
+target 'BuildasaurTests' do
+    pod 'XcodeServerSDK', :path => '~/Documents/Buildasaur-XcodeServerSDK'
+end
+
+target 'BuildaUtilsTests' do
+    pod 'XcodeServerSDK', :path => '~/Documents/Buildasaur-XcodeServerSDK'
+end

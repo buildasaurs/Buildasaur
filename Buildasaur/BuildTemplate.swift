@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import BuildaCIServer
 import BuildaUtils
+import XcodeServerSDK
 
 private let kKeyUniqueId = "id"
 private let kKeyName = "name"

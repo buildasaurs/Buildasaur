@@ -8,6 +8,7 @@
 
 import Foundation
 import BuildaUtils
+import XcodeServerSDK
 
 public class LocalSource : JSONSerializable {
     

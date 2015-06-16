@@ -9,6 +9,7 @@
 import Foundation
 import AppKit
 import BuildaUtils
+import XcodeServerSDK
 
 protocol StatusSiblingsViewControllerDelegate: class {
     

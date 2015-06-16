@@ -9,7 +9,7 @@
 import Foundation
 import AppKit
 import BuildaUtils
-import BuildaCIServer
+import XcodeServerSDK
 
 class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate, SetupViewControllerDelegate {
     

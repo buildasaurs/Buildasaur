@@ -8,7 +8,7 @@
 
 import Foundation
 import AppKit
-import BuildaCIServer
+import XcodeServerSDK
 import BuildaUtils
 
 class TriggerViewController: SetupViewController, NSComboBoxDelegate {
