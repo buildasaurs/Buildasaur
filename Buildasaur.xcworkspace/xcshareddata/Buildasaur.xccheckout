@@ -12,6 +12,8 @@
 	<dict>
 		<key>1C5C2A17EEADA6DBF6678501245487A71FBE28BB</key>
 		<string>github.com:czechboy0/Buildasaur.git</string>
+		<key>A36AEFA3F9FF1F738E92F0C497C14977DCE02B97</key>
+		<string>github.com:czechboy0/XcodeServerSDK.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Buildasaur.xcworkspace</string>
@@ -19,6 +21,8 @@
 	<dict>
 		<key>1C5C2A17EEADA6DBF6678501245487A71FBE28BB</key>
 		<string>..</string>
+		<key>A36AEFA3F9FF1F738E92F0C497C14977DCE02B97</key>
+		<string>..-XcodeServerSDK/</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>github.com:czechboy0/Buildasaur.git</string>
@@ -35,6 +39,14 @@
 			<string>1C5C2A17EEADA6DBF6678501245487A71FBE28BB</string>
 			<key>IDESourceControlWCCName</key>
 			<string>Buildasaur</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>A36AEFA3F9FF1F738E92F0C497C14977DCE02B97</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Buildasaur-XcodeServerSDK</string>
 		</dict>
 	</array>
 </dict>
