@@ -15,6 +15,7 @@ Also, you can find the log at ~/Library/Application Support/Buildasaur/Builda.lo
 */
 
 import BuildaUtils
+import XcodeServerSDK
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {

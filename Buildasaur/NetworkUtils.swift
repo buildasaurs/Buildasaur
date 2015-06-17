@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import BuildaCIServer
 import BuildaGitServer
 import BuildaUtils
+import XcodeServerSDK
 
 class NetworkUtils {
     

@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import BuildaCIServer
 import BuildaGitServer
+import XcodeServerSDK
 
 class SyncPair_Deletable_Bot: SyncPair {
     

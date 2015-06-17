@@ -9,8 +9,8 @@
 import Foundation
 import BuildaUtils
 import BuildaGitServer
-import BuildaCIServer
 import Buildasaur
+import XcodeServerSDK
 
 class MockXcodeServer: XcodeServer {
     init() {

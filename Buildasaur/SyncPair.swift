@@ -8,6 +8,7 @@
 
 import Foundation
 import BuildaUtils
+import XcodeServerSDK
 
 /*
 *   this class describes the basic sync element: e.g. a PR + Bot, a branch + Bot, a branch + no bot, a bot + no PR

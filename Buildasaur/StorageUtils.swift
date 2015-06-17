@@ -9,6 +9,7 @@
 import Foundation
 import Cocoa
 import BuildaUtils
+import XcodeServerSDK
 
 class StorageUtils {
     

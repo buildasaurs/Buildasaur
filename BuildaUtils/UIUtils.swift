@@ -8,13 +8,7 @@
 
 import Foundation
 import AppKit
-
-public enum AvailabilityCheckState {
-    case Unchecked
-    case Checking
-    case Failed(NSError?)
-    case Succeeded
-}
+import XcodeServerSDK
 
 public class UIUtils {
     
