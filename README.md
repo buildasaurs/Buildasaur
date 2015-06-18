@@ -20,6 +20,10 @@ Free, local and automatic testing of GitHub Pull Requests with Xcode Bots. Keep 
 :arrows_counterclockwise: **Already using Buildasaur?** Please consider [adding yourself](./PROJECTS_USING_BUILDASAUR.md) to our success stories!<br>
 :gift_heart: **Want to contribute?** Take a look at [issues with the label "up-for-grabs"](https://github.com/czechboy0/Buildasaur/labels/up-for-grabs), comment on the issue that you're working on it and let's improve Buildasaur together!
 
+Looking for Xcode Server SDK?
+----------------
+The code that makes talking to Xcode Server easy lives in a separate project: [XcodeServerSDK](https://github.com/czechboy0/XcodeServerSDK). Buildasaur is just one app that uses this SDK, but now you can build your own!
+
 :nut_and_bolt: Configurable
 ------------
 Buildasaur was designed to be easy to setup, while still giving you all the customization you need. By choosing the right defaults, most projects can get Buildasaur setup in minutes, start it and never have to worry about it again.
