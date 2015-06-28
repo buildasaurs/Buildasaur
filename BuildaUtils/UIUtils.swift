@@ -56,7 +56,7 @@ public class UIUtils {
     
     private class func createAlert(text: String, style: NSAlertStyle?) -> NSAlert {
         
-        var alert = NSAlert()
+        let alert = NSAlert()
         
         alert.alertStyle = style ?? .InformationalAlertStyle
         alert.messageText = text
@@ -66,7 +66,7 @@ public class UIUtils {
     
     private class func presentAlert(alert: NSAlert, completion: ((NSModalResponse) -> ())?) {
         
-        if let window = NSApp.windows.first as? NSWindow {
+        if let _ = NSApp.windows.first {
             let resp = alert.runModal()
             completion?(resp)
 //            alert.beginSheetModalForWindow(window, completionHandler: completion)

@@ -11,7 +11,7 @@ import XcodeServerSDK
 
 public class XcodeProjectParser {
     
-    private class func firstItemMatchingTestRecursive(url: NSURL, test: (itemUrl: NSURL) -> Bool) -> NSURL? {
+    private class func firstItemMatchingTestRecursive(url: NSURL, test: (itemUrl: NSURL) -> Bool) throws -> NSURL? {
         
         let fm = NSFileManager.defaultManager()
         
@@ -28,39 +28,34 @@ public class XcodeProjectParser {
                 return test(itemUrl: url) ? url : nil
             }
             
-            var error: NSError?
-            if let contents = fm.contentsOfDirectoryAtURL(url, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions.allZeros, error: &error) as? [NSURL] {
-                for i in contents {
-                    if let foundUrl = self.firstItemMatchingTestRecursive(i, test: test) {
-                        return foundUrl
-                    }
+            let contents = try fm.contentsOfDirectoryAtURL(url, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions())
+            for i in contents {
+                if let foundUrl = try self.firstItemMatchingTestRecursive(i, test: test) {
+                    return foundUrl
                 }
             }
+            
         }
         return nil
     }
     
-    private class func firstItemMatchingTest(url: NSURL, test: (itemUrl: NSURL) -> Bool) -> NSURL? {
+    private class func firstItemMatchingTest(url: NSURL, test: (itemUrl: NSURL) -> Bool) throws -> NSURL? {
         
-        return self.allItemsMatchingTest(url, test: test).first
+        return try self.allItemsMatchingTest(url, test: test).first
     }
 
-    private class func allItemsMatchingTest(url: NSURL, test: (itemUrl: NSURL) -> Bool) -> [NSURL] {
+    private class func allItemsMatchingTest(url: NSURL, test: (itemUrl: NSURL) -> Bool) throws -> [NSURL] {
         
         let fm = NSFileManager.defaultManager()
-        var error: NSError?
-        if let contents = fm.contentsOfDirectoryAtURL(url, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions.allZeros, error: &error) as? [NSURL] {
-            
-            let filtered = contents.filter(test)
-            return filtered
-        }
+        let contents = try fm.contentsOfDirectoryAtURL(url, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions())
         
-        return [NSURL]()
+        let filtered = contents.filter(test)
+        return filtered
     }
     
-    private class func findCheckoutUrl(workspaceUrl: NSURL) -> NSURL? {
+    private class func findCheckoutUrl(workspaceUrl: NSURL) throws -> NSURL? {
         
-        return self.firstItemMatchingTestRecursive(workspaceUrl, test: { (itemUrl: NSURL) -> Bool in
+        return try self.firstItemMatchingTestRecursive(workspaceUrl, test: { (itemUrl: NSURL) -> Bool in
             
             return itemUrl.pathExtension == "xccheckout"
         })
@@ -71,15 +66,15 @@ public class XcodeProjectParser {
         return NSDictionary(contentsOfURL: url)
     }
     
-    public class func parseRepoMetadataFromProjectOrWorkspaceURL(url: NSURL) -> (NSDictionary?, NSError?) {
+    public class func parseRepoMetadataFromProjectOrWorkspaceURL(url: NSURL) throws -> NSDictionary? {
         
         let workspaceUrl = url
         
-        if let checkoutUrl = self.findCheckoutUrl(workspaceUrl) {
+        if let checkoutUrl = try self.findCheckoutUrl(workspaceUrl) {
             //we have the checkout url
             
             if let parsed = self.parseCheckoutFile(checkoutUrl) {
-                return (parsed, nil)
+                return parsed
             } else {
                 let error = Error.withInfo("Cannot parse the checkout file at path \(checkoutUrl)")
                 return (nil, error)

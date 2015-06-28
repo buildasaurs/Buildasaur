@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import XcodeServerSDK
 
 /**
 *   A utility class for running terminal Scripts from your Mac app.
@@ -28,10 +29,10 @@ public class Script {
         let resolved = self.runResolved("/usr/bin/which", arguments: [name], environment: [:])
         
         //which returns the path + \n, so strip the newline
-        var path = resolved.standardOutput.stripTrailingNewline()
+        let path = resolved.standardOutput.stripTrailingNewline()
         
         //if resolving failed, just abort and propagate the failed run up
-        if (resolved.terminationStatus != 0) || (count(path) == 0) {
+        if (resolved.terminationStatus != 0) || (path.characters.count == 0) {
             return resolved
         }
         
@@ -58,15 +59,18 @@ public class Script {
         
         let uuid = NSUUID().UUIDString
         let tempPath = NSTemporaryDirectory().stringByAppendingPathComponent(uuid)
-        var error: NSError?
         
-        //write the script to file
-        let success = script.writeToFile(tempPath, atomically: true, encoding: NSUTF8StringEncoding, error: &error)
-        
-        block(scriptPath: tempPath, error: error)
-        
-        //delete the temp script
-        NSFileManager.defaultManager().removeItemAtPath(tempPath, error: nil)
+        do {
+            //write the script to file
+            try script.writeToFile(tempPath, atomically: true, encoding: NSUTF8StringEncoding)
+            
+            block(scriptPath: tempPath, error: nil)
+            
+            //delete the temp script
+            try NSFileManager.defaultManager().removeItemAtPath(tempPath)
+        } catch {
+            Log.error(error)
+        }
     }
     
     private class func runResolved(path: String, arguments: [String], environment: [String: String]) -> ScriptResponse {
@@ -82,7 +86,7 @@ public class Script {
         task.arguments = arguments
         
         var env = NSProcessInfo.processInfo().environment
-        for (let index, let keyValue) in enumerate(environment) {
+        for (_, keyValue) in environment.enumerate() {
             env[keyValue.0] = keyValue.1
         }
         task.environment = env
