@@ -20,7 +20,7 @@ func firstNonNil<T>(objects: [T?]) -> T? {
 extension Set {
     
     func filterSet(includeElement: (T) -> Bool) -> Set<T> {
-        return Set(filter(self, includeElement))
+        return Set(self.filter(includeElement))
     }
 }
 
@@ -28,7 +28,7 @@ extension Array {
     
     func indexOfFirstObjectPassingTest(test: (T) -> Bool) -> Array<T>.Index? {
         
-        for (idx, obj) in enumerate(self) {
+        for (idx, obj) in self.enumerate() {
             if test(obj) {
                 return idx
             }
@@ -50,7 +50,7 @@ extension Array {
         let group = dispatch_group_create()
         var returnedValueMap = [Int: U]()
         
-        for (index, element) in enumerate(self) {
+        for (index, element) in self.enumerate() {
             dispatch_group_enter(group)
             transformAsync(item: element, itemCompletion: {
                 (returned: U) -> () in

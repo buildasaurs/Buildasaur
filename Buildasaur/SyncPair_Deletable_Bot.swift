@@ -32,7 +32,7 @@ class SyncPair_Deletable_Bot: SyncPair {
         return "Deletable Bot (\(self.bot.name))"
     }
     
-    private class func deleteBot(#syncer: HDGitHubXCBotSyncer, bot: Bot, completion: Completion) {
+    private class func deleteBot(syncer syncer: HDGitHubXCBotSyncer, bot: Bot, completion: Completion) {
         
         syncer.deleteBot(bot, completion: { () -> () in
             completion(error: nil)

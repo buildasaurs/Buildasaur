@@ -39,7 +39,6 @@ class MainViewController: NSViewController, NSTableViewDataSource, StatusSibling
     override func prepareForSegue(segue: NSStoryboardSegue, sender: AnyObject?) {
         
         let destinationController = segue.destinationController as! NSViewController
-        let identifier = segue.identifier!
         
         if let statusViewController = destinationController as? StatusViewController {
             statusViewController.storageManager = self.storageManager
@@ -99,7 +98,7 @@ class MainViewController: NSViewController, NSTableViewDataSource, StatusSibling
         let image = NSImage(named: "icon")
         self.statusItem.image = image
         self.statusItem.highlightMode = true
-        var menu = NSMenu()
+        let menu = NSMenu()
         menu.addItem(self.lastPollItem)
         menu.addItem(NSMenuItem.separatorItem())
         menu.addItemWithTitle("Open the App", action: "open", keyEquivalent: "")

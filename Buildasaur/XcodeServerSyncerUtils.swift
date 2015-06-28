@@ -22,36 +22,50 @@ class XcodeServerSyncerUtils {
         let schedule = scheduleOverride ?? template.schedule!
         let cleaningPolicy = template.cleaningPolicy
         let triggers = template.triggers
-        let testingDeviceIDs = template.testingDeviceIds
-        let testingDestinationType = template.destinationType
         let analyze = template.shouldAnalyze ?? false
         let test = template.shouldTest ?? false
         let archive = template.shouldArchive ?? false
+        let deviceSpecification = template.deviceSpecification
         let blueprint = project.createSourceControlBlueprint(branch)
         
         //create bot config
-        let botConfiguration = BotConfiguration(builtFromClean: cleaningPolicy,
-            analyze: analyze, test: test, archive: archive, schemeName: schemeName, schedule: schedule,
-            triggers: triggers, testingDeviceIDs: testingDeviceIDs, testingDestinationType:testingDestinationType, sourceControlBlueprint: blueprint)
+        let botConfiguration = BotConfiguration(
+            builtFromClean: cleaningPolicy,
+            analyze: analyze,
+            test: test,
+            archive: archive,
+            schemeName: schemeName,
+            schedule: schedule,
+            triggers: triggers,
+            deviceSpecification: deviceSpecification,
+            sourceControlBlueprint: blueprint)
         
         //create the bot finally
         let newBot = Bot(name: botName, configuration: botConfiguration)
         
-        xcodeServer.createBot(newBot, completion: { (bot, error) -> () in
+        xcodeServer.createBot(newBot, completion: { (response) -> () in
             
-            var outError: NSError?
-            //print success/failure etc
-            if let error = error {
-                outError = error
-                Log.error("Failed to create bot with name \(botName) and json \(newBot.dictionarify()), error \(error)")
-            } else if let bot = bot {
+            var outBot: Bot?
+            var outError: ErrorType?
+            switch response {
+            case .Success(let bot):
+                //we good
                 Log.info("Successfully created bot \(bot.name)")
-            } else {
+                outBot = bot
+                break
+            case .Error(let error):
+                outError = error
+            default:
                 outError = Error.withInfo("Failed to return bot after creation even after error was nil!")
-                Log.error(outError?.description ?? "")
             }
+            
+            //print success/failure etc
+            if let error = outError {
+                Log.error("Failed to create bot with name \(botName) and json \(newBot.dictionarify()), error \(error)")
+            }
+            
             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-                completion(bot: bot, error: outError)
+                completion(bot: outBot, error: outError as? NSError)
             })
         })
     }

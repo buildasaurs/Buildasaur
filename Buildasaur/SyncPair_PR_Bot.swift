@@ -81,7 +81,7 @@ public class SyncPair_PR_Bot: SyncPair {
         })
     }
     
-    private func isBotEnabled(#integrations: [Integration], completion: (isEnabled: Bool, error: NSError?) -> ()) {
+    private func isBotEnabled(integrations integrations: [Integration], completion: (isEnabled: Bool, error: NSError?) -> ()) {
         
         //bot is enabled if (there are any integrations) OR (there is a recent comment with a keyword to enable the bot in the pull request's conversation)
         //which means that there are two ways of enabling a bot.

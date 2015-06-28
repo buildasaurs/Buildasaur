@@ -73,7 +73,7 @@ public class HDGitHubXCBotSyncer : Syncer {
     
     func jsonify() -> NSDictionary {
         
-        var dict = NSMutableDictionary()
+        let dict = NSMutableDictionary()
         dict["sync_interval"] = self.syncInterval
         dict["project_path"] = self.localSource.url.absoluteString
         dict["server_host"] = self.xcodeServer.config.host
@@ -212,7 +212,7 @@ public class HDGitHubXCBotSyncer : Syncer {
         })
     }
     
-    public func syncPRsAndBranchesAndBots(#repo: Repo, repoName: String, prs: [PullRequest], branches: [Branch], bots: [Bot], completion: () -> ()) {
+    public func syncPRsAndBranchesAndBots(repo repo: Repo, repoName: String, prs: [PullRequest], branches: [Branch], bots: [Bot], completion: () -> ()) {
         
         let prsDescription = prs.map({ "\n\tPR \($0.number): \($0.title) [\($0.head.ref) -> \($0.base.ref))]" }) + ["\n"]
         let branchesDescription = branches.map({ "\n\tBranch [\($0.name):\($0.commit.sha)]" }) + ["\n"]
@@ -230,7 +230,7 @@ public class HDGitHubXCBotSyncer : Syncer {
     }
     
     public func resolvePRsAndBranchesAndBots(
-        #repoName: String,
+        repoName repoName: String,
         prs: [PullRequest],
         branches: [Branch],
         bots: [Bot])
@@ -310,7 +310,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             return (prsToSync, prBotsToCreate, branchesToSync, branchBotsToCreate, botsToDelete)
     }
     
-    public func createSyncPairsFrom(#repo: Repo, botActions: BotActions) -> [SyncPair] {
+    public func createSyncPairsFrom(repo repo: Repo, botActions: BotActions) -> [SyncPair] {
         
         //create sync pairs for each action needed
         let syncPRBotSyncPairs = botActions.prsToSync.map({

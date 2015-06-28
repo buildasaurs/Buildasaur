@@ -20,11 +20,11 @@ class MenuItemManager : NSObject, NSMenuDelegate {
         let statusItem = statusBar.statusItemWithLength(32)
         statusItem.title = ""
         let image = NSImage(named: "icon")
-        image?.setTemplate(true)
+        image?.template = true
         statusItem.image = image
         statusItem.highlightMode = true
         
-        var menu = NSMenu()
+        let menu = NSMenu()
         menu.addItemWithTitle("Open Buildasaur", action: "showMainWindow", keyEquivalent: "")
         menu.addItem(NSMenuItem.separatorItem())
         self.firstIndexLastSyncedMenuItem = menu.numberOfItems
@@ -45,11 +45,11 @@ class MenuItemManager : NSObject, NSMenuDelegate {
         
         //this many items need to be created or destroyed
         if diffItems > 0 {
-            for i in 0..<diffItems {
+            for _ in 0..<diffItems {
                 menu.addItemWithTitle("", action: "", keyEquivalent: "")
             }
         } else if diffItems < 0 {
-            for i in 0..<abs(diffItems) {
+            for _ in 0..<abs(diffItems) {
                 menu.removeItemAtIndex(menu.numberOfItems-1)
             }
         }
@@ -83,7 +83,7 @@ class MenuItemManager : NSObject, NSMenuDelegate {
         })
         
         //fill into items
-        for (let i, let text) in enumerate(texts) {
+        for (i, text) in texts.enumerate() {
             let idx = self.firstIndexLastSyncedMenuItem + i
             let item = menu.itemAtIndex(idx)
             item?.title = text

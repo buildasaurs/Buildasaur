@@ -15,7 +15,7 @@ class StorageUtils {
     
     class func openWorkspaceOrProject() -> NSURL? {
         
-        var openPanel = NSOpenPanel()
+        let openPanel = NSOpenPanel()
         openPanel.canChooseDirectories = false
         openPanel.canChooseFiles = true
         openPanel.allowsMultipleSelection = false
@@ -39,7 +39,7 @@ class StorageUtils {
     
     class func openSSHKey(publicOrPrivate: String) -> NSURL? {
         
-        var openPanel = NSOpenPanel()
+        let openPanel = NSOpenPanel()
         openPanel.canChooseDirectories = false
         openPanel.canChooseFiles = true
         openPanel.allowsMultipleSelection = false

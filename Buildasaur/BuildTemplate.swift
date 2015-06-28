@@ -33,12 +33,11 @@ class BuildTemplate: JSONSerializable {
     var shouldAnalyze: Bool?
     var shouldTest: Bool?
     var shouldArchive: Bool?
-    var destinationType: BotConfiguration.TestingDestinationIdentifier
-    var testingDeviceIds: [String]
+    var deviceSpecification: DeviceSpecification
 
     func validate() -> Bool {
         
-        if count(self.uniqueId) == 0 { return false }
+        if self.uniqueId.isEmpty { return false }
         if self.name == nil { return false }
         if self.scheme == nil { return false }
         //TODO: add all the other required values! this will be called on saving from the UI to make sure we have all the required fields.
@@ -52,11 +51,10 @@ class BuildTemplate: JSONSerializable {
         self.schedule = BotSchedule.manualBotSchedule()
         self.cleaningPolicy = BotConfiguration.CleaningPolicy.Never
         self.triggers = []
-        self.destinationType = BotConfiguration.TestingDestinationIdentifier.AllCompatible
         self.shouldAnalyze = false
         self.shouldTest = false
         self.shouldArchive = false
-        self.testingDeviceIds = []
+        self.deviceSpecification = DeviceSpecification(testingDeviceIDs: [])
     }
     
     required init?(json: NSDictionary) {
@@ -81,31 +79,26 @@ class BuildTemplate: JSONSerializable {
         } else {
             self.triggers = []
         }
-        if
-            let destinationType = json.optionalIntForKey(kKeyDestinationType),
-            let destination = BotConfiguration.TestingDestinationIdentifier(rawValue: destinationType){
-            self.destinationType = destination
-        } else {
-            self.destinationType = .AllCompatible
-        }
+
         self.shouldAnalyze = json.optionalBoolForKey(kKeyShouldAnalyze)
         self.shouldTest = json.optionalBoolForKey(kKeyShouldTest)
         self.shouldArchive = json.optionalBoolForKey(kKeyShouldArchive)
-        self.testingDeviceIds = json.optionalArrayForKey(kKeyTestingDevices) as? [String] ?? []
-
+        
+        let testingDevices = json.optionalArrayForKey(kKeyTestingDevices) as? [String] ?? []
+        self.deviceSpecification = DeviceSpecification(testingDeviceIDs: testingDevices)
+        
         if !self.validate() {
             return nil
         }
     }
     
     func jsonify() -> NSDictionary {
-        var dict = NSMutableDictionary()
+        let dict = NSMutableDictionary()
         
         dict[kKeyUniqueId] = self.uniqueId
         dict[kKeyTriggers] = self.triggers.map({ $0.dictionarify() })
-        dict[kKeyTestingDevices] = self.testingDeviceIds
+        dict[kKeyTestingDevices] = self.deviceSpecification.deviceIdentifiers
         dict[kKeyCleaningPolicy] = self.cleaningPolicy.rawValue
-        dict[kKeyDestinationType] = self.destinationType.rawValue
         dict.optionallyAddValueForKey(self.name, key: kKeyName)
         dict.optionallyAddValueForKey(self.scheme, key: kKeyScheme)
         dict.optionallyAddValueForKey(self.schedule?.dictionarify(), key: kKeySchedule)

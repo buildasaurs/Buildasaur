@@ -54,7 +54,7 @@ public protocol SyncerDelegate: class {
                 let s = Selector("_sync")
                 let timer = NSTimer(timeInterval: self.syncInterval, target: self, selector: s, userInfo: nil, repeats: true)
                 self.timer = timer
-                NSRunLoop.mainRunLoop().addTimer(timer, forMode: kCFRunLoopCommonModes as! String)
+                NSRunLoop.mainRunLoop().addTimer(timer, forMode: kCFRunLoopCommonModes as String)
                 self._sync() //call for the first time, next one will be called by the timer
                 self.delegate?.syncerBecameActive(self)
             } else if !active && oldValue {

@@ -144,7 +144,7 @@ class TriggerViewController: SetupViewController, NSComboBoxDelegate {
         if super.pullDataFromUI(interactive) {
             
             let name = self.nameTextField.stringValue
-            if count(name) == 0 {
+            if name.isEmpty {
                 if interactive {
                     UIUtils.showAlertWithText("Please provide a name")
                 }
@@ -179,7 +179,7 @@ class TriggerViewController: SetupViewController, NSComboBoxDelegate {
                 //must have a body
                 
                 body = bodyString
-                if count(body) == 0 {
+                if body.isEmpty {
                     if interactive {
                         UIUtils.showAlertWithText("Please provide body of your script")
                     }
@@ -189,7 +189,7 @@ class TriggerViewController: SetupViewController, NSComboBoxDelegate {
             } else {
                 
                 body = ""
-                let trimmed = bodyString.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions.allZeros, range: nil)
+                let trimmed = bodyString.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions(), range: nil)
                 let additionalRecipients = trimmed.componentsSeparatedByString(",")
                 
                 let emailCommitters = self.emailEmailCommittersCheckbox.state == NSOnState

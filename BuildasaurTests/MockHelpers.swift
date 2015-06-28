@@ -16,7 +16,7 @@ class MockHelpers {
         if
             let url = bundle.URLForResource("sampleFinishedIntegration", withExtension: "json"),
             let data = NSData(contentsOfURL: url),
-            let obj = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as? NSMutableDictionary
+            let obj = try! NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as? NSMutableDictionary
         {
             return obj
             

@@ -32,7 +32,7 @@ public class Script {
         let path = resolved.standardOutput.stripTrailingNewline()
         
         //if resolving failed, just abort and propagate the failed run up
-        if (resolved.terminationStatus != 0) || (path.characters.count == 0) {
+        if (resolved.terminationStatus != 0) || path.isEmpty {
             return resolved
         }
         

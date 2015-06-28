@@ -24,7 +24,7 @@ public class SyncPairResolver {
         integrations: [Integration]) -> SyncPair.Actions {
             
             var integrationsToCancel: [Integration] = []
-            var startNewIntegration: Bool = false
+            let startNewIntegration: Bool = false
             
             //------------
             // Split integrations into two groups: 1) for this SHA, 2) the rest
@@ -92,7 +92,7 @@ public class SyncPairResolver {
                 
                 //we should cancel all but the most recent one
                 //turn the pending set into an array and sort by integration number in ascending order
-                var pendingSortedArray: Array<Integration> = Array(pending).sorted({ (integrationA, integrationB) -> Bool in
+                var pendingSortedArray: Array<Integration> = Array(pending).sort({ (integrationA, integrationB) -> Bool in
                     return integrationA.number < integrationB.number
                 })
                 
@@ -179,10 +179,10 @@ public class SyncPairResolver {
             return false
         }
         
-        let sortedHeadCommitIntegrations = sorted(Array(headCommitIntegrations), {
+        let sortedHeadCommitIntegrations = Array(headCommitIntegrations).sort {
             (a: Integration, b: Integration) -> Bool in
             return a.number > b.number
-        })
+        }
         return sortedHeadCommitIntegrations
     }
     
@@ -197,7 +197,7 @@ public class SyncPairResolver {
             var integrationsToCancel: [Integration] = []
             
             //if there's any pending integration, we're ["Pending" - Waiting in the queue]
-            if let pending = pending {
+            if let _ = pending {
                 
                 //TODO: show how many builds are ahead in the queue and estimate when it will be
                 //started and when finished? (there is an average running time on each bot, it should be easy)
@@ -247,7 +247,7 @@ public class SyncPairResolver {
         integrations: Set<Integration>) -> HDGitHubXCBotSyncer.GitHubStatusAndComment {
             
             //get integrations sorted by number
-            let sortedDesc = Array(integrations).sorted { $0.number > $1.number }
+            let sortedDesc = Array(integrations).sort { $0.number > $1.number }
             
             //if there are any succeeded, it wins - iterating from the end
             if let passingIntegration = sortedDesc.filter({

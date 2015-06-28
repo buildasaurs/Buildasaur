@@ -32,19 +32,14 @@ class StorageManager {
         self.stop()
     }
     
-    func addProjectAtURL(url: NSURL) -> (Bool, NSError?) {
+    func addProjectAtURL(url: NSURL) throws {
         
-        let (success, _, error) = LocalSource.attemptToParseFromUrl(url)
-        if success {
-            if let localSource = LocalSource(url: url) {
-                
-                self.projects.append(localSource)
-                return (true, nil)
-            } else {
-                assertionFailure("Attempt to parse succeeded but LocalSource still wasn't created")
-            }
+        _ = try LocalSource.attemptToParseFromUrl(url)
+        if let localSource = LocalSource(url: url) {
+            self.projects.append(localSource)
+        } else {
+            assertionFailure("Attempt to parse succeeded but LocalSource still wasn't created")
         }
-        return (false, error)
     }
     
     func addServerConfig(host host: String, user: String?, password: String?) {
@@ -78,7 +73,7 @@ class StorageManager {
         
         //in case we have a duplicate, replace
         var duplicateFound = false
-        for (idx, temp) in enumerate(self.buildTemplates) {
+        for (idx, temp) in self.buildTemplates.enumerate() {
             if temp.uniqueId == buildTemplate.uniqueId {
                 self.buildTemplates[idx] = buildTemplate
                 duplicateFound = true
@@ -97,7 +92,7 @@ class StorageManager {
     func removeBuildTemplate(buildTemplate: BuildTemplate) {
         
         //remove from the memory storage
-        for (idx, temp) in enumerate(self.buildTemplates) {
+        for (idx, temp) in self.buildTemplates.enumerate() {
             if temp.uniqueId == buildTemplate.uniqueId {
                 self.buildTemplates.removeAtIndex(idx)
                 break
@@ -108,7 +103,7 @@ class StorageManager {
         let templatesFolderUrl = Persistence.getFileInAppSupportWithName("BuildTemplates", isDirectory: true)
         let id = buildTemplate.uniqueId
         let templateUrl = templatesFolderUrl.URLByAppendingPathComponent("\(id).json")
-        NSFileManager.defaultManager().removeItemAtURL(templateUrl, error: nil)
+        do { try NSFileManager.defaultManager().removeItemAtURL(templateUrl) } catch {}
         
         //save
         self.saveBuildTemplates()
@@ -116,7 +111,7 @@ class StorageManager {
     
     func removeProject(project: LocalSource) {
         
-        for (idx, p) in enumerate(self.projects) {
+        for (idx, p) in self.projects.enumerate() {
             if project.url == p.url {
                 self.projects.removeAtIndex(idx)
                 return
@@ -126,7 +121,7 @@ class StorageManager {
     
     func removeServer(serverConfig: XcodeServerConfig) {
         
-        for (idx, p) in enumerate(self.servers) {
+        for (idx, p) in self.servers.enumerate() {
             if serverConfig.host == p.host {
                 self.servers.removeAtIndex(idx)
                 return
@@ -153,22 +148,26 @@ class StorageManager {
         self.servers.removeAll(keepCapacity: true)
         
         let serversUrl = Persistence.getFileInAppSupportWithName("ServerConfigs.json", isDirectory: false)
-        let (json, error) = Persistence.loadJSONFromUrl(serversUrl)
-        
-        if let json = json as? [NSDictionary] {
-            let allConfigs = json.map { XcodeServerConfig(json: $0) }
-            let parsedConfigs = allConfigs.filter { $0 != nil }.map { $0! }
-            if allConfigs.count != parsedConfigs.count {
-                Log.error("Some configs failed to parse, will be ignored.")
-                //maybe show a popup
+        do {
+            let json = try Persistence.loadJSONFromUrl(serversUrl)
+            
+            if let json = json as? [NSDictionary] {
+                let allConfigs = json.map { (item) -> XcodeServerConfig? in
+                    do { return try XcodeServerConfig(json: item) } catch { return nil }
+                }
+                let parsedConfigs = allConfigs.filter { $0 != nil }.map { $0! }
+                if allConfigs.count != parsedConfigs.count {
+                    Log.error("Some configs failed to parse, will be ignored.")
+                    //maybe show a popup
+                }
+                parsedConfigs.map { self.servers.append($0) }
+                return
             }
-            parsedConfigs.map { self.servers.append($0) }
-            return
-        }
-        
-        //file not found
-        if error?.code != 260 {
-            Log.error("Failed to read ServerConfigs, error \(error). Will be ignored. Please don't play with the persistence :(")
+        } catch {
+            //file not found
+            if (error as NSError).code != 260 {
+                Log.error("Failed to read ServerConfigs, error \(error). Will be ignored. Please don't play with the persistence :(")
+            }
         }
     }
     
