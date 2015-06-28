@@ -153,7 +153,7 @@ class StorageManager {
         self.servers.removeAll(keepCapacity: true)
         
         let serversUrl = Persistence.getFileInAppSupportWithName("ServerConfigs.json", isDirectory: false)
-        let (json: AnyObject?, error) = Persistence.loadJSONFromUrl(serversUrl)
+        let (json, error) = Persistence.loadJSONFromUrl(serversUrl)
         
         if let json = json as? [NSDictionary] {
             let allConfigs = json.map { XcodeServerConfig(json: $0) }
@@ -177,21 +177,24 @@ class StorageManager {
         self.projects.removeAll(keepCapacity: true)
         
         let projectsUrl = Persistence.getFileInAppSupportWithName("Projects.json", isDirectory: false)
-        let (json: AnyObject?, error) = Persistence.loadJSONFromUrl(projectsUrl)
-        
-        if let json = json as? [NSDictionary] {
-            let allProjects = json.map { LocalSource(json: $0) }
-            let parsedProjects = allProjects.filter { $0 != nil }.map { $0! }
-            if allProjects.count != parsedProjects.count {
-                Log.error("Some projects failed to parse, will be ignored.")
-                //maybe show a popup
+        do {
+            let json = try Persistence.loadJSONFromUrl(projectsUrl)
+            
+            if let json = json as? [NSDictionary] {
+                let allProjects = json.map { LocalSource(json: $0) }
+                let parsedProjects = allProjects.filter { $0 != nil }.map { $0! }
+                if allProjects.count != parsedProjects.count {
+                    Log.error("Some projects failed to parse, will be ignored.")
+                    //maybe show a popup
+                }
+                parsedProjects.map { self.projects.append($0) }
+                return
             }
-            parsedProjects.map { self.projects.append($0) }
-            return
-        }
-        //file not found
-        if error?.code != 260 {
-            Log.error("Failed to read Projects, error \(error). Will be ignored. Please don't play with the persistence :(")
+        } catch {
+            //file not found
+            if (error as NSError).code != 260 {
+                Log.error("Failed to read Projects, error \(error). Will be ignored. Please don't play with the persistence :(")
+            }
         }
     }
     
@@ -200,21 +203,24 @@ class StorageManager {
         self.syncers.removeAll(keepCapacity: true)
         
         let syncersUrl = Persistence.getFileInAppSupportWithName("Syncers.json", isDirectory: false)
-        let (json: AnyObject?, error) = Persistence.loadJSONFromUrl(syncersUrl)
-        
-        if let json = json as? [NSDictionary] {
-            let allSyncers = json.map { HDGitHubXCBotSyncer(json: $0, storageManager: self) }
-            let parsedSyncers = allSyncers.filter { $0 != nil }.map { $0! }
-            if allSyncers.count != parsedSyncers.count {
-                Log.error("Some syncers failed to parse, will be ignored.")
-                //maybe show a popup
+        do {
+            let json = try Persistence.loadJSONFromUrl(syncersUrl)
+            
+            if let json = json as? [NSDictionary] {
+                let allSyncers = json.map { HDGitHubXCBotSyncer(json: $0, storageManager: self) }
+                let parsedSyncers = allSyncers.filter { $0 != nil }.map { $0! }
+                if allSyncers.count != parsedSyncers.count {
+                    Log.error("Some syncers failed to parse, will be ignored.")
+                    //maybe show a popup
+                }
+                parsedSyncers.map { self.syncers.append($0) }
+                return
             }
-            parsedSyncers.map { self.syncers.append($0) }
-            return
-        }
-        //file not found
-        if error?.code != 260 {
-            Log.error("Failed to read Syncers, error \(error). Will be ignored. Please don't play with the persistence :(")
+        } catch {
+            //file not found
+            if (error as NSError).code != 260 {
+                Log.error("Failed to read Syncers, error \(error). Will be ignored. Please don't play with the persistence :(")
+            }
         }
     }
     
@@ -225,15 +231,18 @@ class StorageManager {
         let templatesFolderUrl = Persistence.getFileInAppSupportWithName("BuildTemplates", isDirectory: true)
         Persistence.iterateThroughFilesInFolder(templatesFolderUrl, visit: { (url) -> () in
             
-            let (json: AnyObject?, error) = Persistence.loadJSONFromUrl(url)
-            if let json = json as? NSDictionary {
-                if let template = BuildTemplate(json: json) {
-                    //we have a template
-                    self.buildTemplates.append(template)
-                    return
+            do {
+                let json = try Persistence.loadJSONFromUrl(url)
+                if let json = json as? NSDictionary {
+                    if let template = BuildTemplate(json: json) {
+                        //we have a template
+                        self.buildTemplates.append(template)
+                        return
+                    }
                 }
+            } catch {
+                Log.error("Couldn't parse Build Template at url \(url), error \(error)")
             }
-            Log.error("Couldn't parse Build Template at url \(url), error \(error)")
         })
     }
     
@@ -241,24 +250,33 @@ class StorageManager {
         
         let projectsUrl = Persistence.getFileInAppSupportWithName("Projects.json", isDirectory: false)
         let jsons = self.projects.map { $0.jsonify() }
-        let (success, error) = Persistence.saveJSONToUrl(jsons, url: projectsUrl)
-        assert(success, "Failed to save Projects, \(error)")
+        do {
+            try Persistence.saveJSONToUrl(jsons, url: projectsUrl)
+        } catch {
+            assert(false, "Failed to save Projects, \(error)")
+        }
     }
     
     func saveServers() {
         
         let serversUrl = Persistence.getFileInAppSupportWithName("ServerConfigs.json", isDirectory: false)
         let jsons = self.servers.map { $0.jsonify() }
-        let (success, error) = Persistence.saveJSONToUrl(jsons, url: serversUrl)
-        assert(success, "Failed to save ServerConfigs, \(error)")
+        do {
+            try Persistence.saveJSONToUrl(jsons, url: serversUrl)
+        } catch {
+            assert(false, "Failed to save ServerConfigs, \(error)")
+        }
     }
     
     func saveSyncers() {
 
         let syncersUrl = Persistence.getFileInAppSupportWithName("Syncers.json", isDirectory: false)
         let jsons = self.syncers.map { $0.jsonify() }
-        let (success, error) = Persistence.saveJSONToUrl(jsons, url: syncersUrl)
-        assert(success, "Failed to save Syncers, \(error)")
+        do {
+            try Persistence.saveJSONToUrl(jsons, url: syncersUrl)
+        } catch {
+            assert(false, "Failed to save Syncers, \(error)")
+        }
     }
     
     func saveBuildTemplates() {
@@ -270,8 +288,11 @@ class StorageManager {
             let json = template.jsonify()
             let id = template.uniqueId
             let templateUrl = templatesFolderUrl.URLByAppendingPathComponent("\(id).json")
-            let (success, error) = Persistence.saveJSONToUrl(json, url: templateUrl)
-            assert(success, "Failed to save a Build Template, \(error)")
+            do {
+                try Persistence.saveJSONToUrl(json, url: templateUrl)
+            } catch {
+                assert(false, "Failed to save a Build Template, \(error)")
+            }
         }
     }
     

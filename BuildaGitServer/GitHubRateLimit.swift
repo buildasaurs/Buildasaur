@@ -28,7 +28,6 @@ public struct GitHubRateLimit {
         let maxRateOfConsumptionPretty = maxRateOfConsumption.clipTo(2)
         
         //how much faster we can be consuming requests before we hit the maximum rate of 5000/hour
-        let extraRateOfConsumption = (maxRateOfConsumption - rateOfConsumption).clipTo(2)
         let usedRatePercent = (100.0 * rateOfConsumption / maxRateOfConsumption).clipTo(2)
         
         let report = "count: \(consumed)/\(self.limit), renews in \(Int(remainingTime)) seconds, rate: \(rateOfConsumptionPretty)/\(maxRateOfConsumptionPretty), using \(usedRatePercent)% of the allowed request rate."
