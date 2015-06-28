@@ -137,14 +137,11 @@ public class GitHubEndpoints {
             assert(params?["repo"] != nil, "A repo must be specified")
             let repo = self.endpointURL(.Repos, params: params)
             return "\(repo)/merges"
-            
-        default:
-            assertionFailure("Unsupported endpoint")
         }
     }
     
     
-    public func createRequest(method:HTTP.Method, endpoint:Endpoint, params: [String : String]? = nil, query: [String : String]? = nil, body:NSDictionary? = nil) -> NSMutableURLRequest? {
+    public func createRequest(method:HTTP.Method, endpoint:Endpoint, params: [String : String]? = nil, query: [String : String]? = nil, body:NSDictionary? = nil) throws -> NSMutableURLRequest {
         
         let endpointURL = self.endpointURL(endpoint, params: params)
         let queryString = HTTP.stringForQuery(query)
@@ -152,7 +149,7 @@ public class GitHubEndpoints {
         
         let url = NSURL(string: wholePath)!
         
-        var request = NSMutableURLRequest(URL: url)
+        let request = NSMutableURLRequest(URL: url)
         
         request.HTTPMethod = method.rawValue
         if let token = self.token {
@@ -161,14 +158,7 @@ public class GitHubEndpoints {
         
         if let body = body {
             
-            var error: NSError?
-            let data = NSJSONSerialization.dataWithJSONObject(body, options: .allZeros, error: &error)
-            if let error = error {
-                //parsing error
-                Log.error("Parsing error \(error.description)")
-                return nil
-            }
-            
+            let data = try NSJSONSerialization.dataWithJSONObject(body, options: NSJSONWritingOptions())
             request.HTTPBody = data
         }
         

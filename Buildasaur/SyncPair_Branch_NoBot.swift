@@ -37,7 +37,7 @@ class SyncPair_Branch_NoBot: SyncPair {
     
     //MARK: Internal
     
-    private class func createBotForBranch(#syncer: HDGitHubXCBotSyncer, branch: Branch, repo: Repo, completion: Completion) {
+    private class func createBotForBranch(syncer syncer: HDGitHubXCBotSyncer, branch: Branch, repo: Repo, completion: Completion) {
         
         syncer.createBotFromBranch(branch, repo: repo, completion: { () -> () in
             completion(error: nil)

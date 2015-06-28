@@ -180,16 +180,16 @@ extension GitHubServer {
         
         //merge the two params
         if let params = params {
-            for (let key, let value) in params {
+            for (key, value) in params {
                 allParams[key] = value
             }
         }
         
-        if let request = self.endpoints.createRequest(method, endpoint: endpoint, params: allParams, query: query, body: body) {
-            
+        do {
+            let request = try self.endpoints.createRequest(method, endpoint: endpoint, params: allParams, query: query, body: body)
             self.sendRequestWithPossiblePagination(request, accumulatedResponseBody: NSArray(), completion: completion)
-        } else {
-            completion(response: nil, body: nil, error: Error.withInfo("Couldn't create Request"))
+        } catch {
+            completion(response: nil, body: nil, error: Error.withInfo("Couldn't create Request, error \(error)"))
         }
     }
     
@@ -373,7 +373,7 @@ extension GitHubServer {
             if let body = body as? NSArray {
                 let statuses: [Status] = GitHubArray(body)
                 //sort them by creation date
-                let mostRecentStatus = statuses.sorted({ return $0.created! > $1.created! }).first
+                let mostRecentStatus = statuses.sort({ return $0.created! > $1.created! }).first
                 completion(status: mostRecentStatus, error: nil)
             } else {
                 completion(status: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -500,7 +500,7 @@ extension GitHubServer {
     *   POST merge a head branch/commit into a base branch.
     *   has a couple of different responses, a bit tricky
     */
-    public func mergeHeadIntoBase(#head: String, base: String, commitMessage: String, repo: String, completion: (result: GitHubEndpoints.MergeResult?, error: NSError?) -> ()) {
+    public func mergeHeadIntoBase(head head: String, base: String, commitMessage: String, repo: String, completion: (result: GitHubEndpoints.MergeResult?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo

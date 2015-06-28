@@ -26,9 +26,9 @@ public class SSHKeyVerification {
     
     public class func verifyBlueprint(blueprint: NSDictionary) -> Script.ScriptResponse {
         
-        //convert dictionary into string
-        var serializationError: NSError?
-        if let data = NSJSONSerialization.dataWithJSONObject(blueprint, options: NSJSONWritingOptions.allZeros, error: &serializationError) {
+        do {
+            //convert dictionary into string
+            let data = try NSJSONSerialization.dataWithJSONObject(blueprint, options: NSJSONWritingOptions())
             
             let scriptString = NSString(data: data, encoding: NSUTF8StringEncoding)!
             
@@ -45,10 +45,9 @@ public class SSHKeyVerification {
             
             //parse the response as json
             let responseString = response.standardOutput
-            var parsingError: NSError?
             if
                 let data = responseString.dataUsingEncoding(NSUTF8StringEncoding),
-                let obj = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as? NSDictionary
+                let obj = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments) as? NSDictionary
             {
                 
                 //valid output is an empty dictionary
@@ -69,12 +68,11 @@ public class SSHKeyVerification {
                     return (1, "", obj.description)
                 }
                 
-            } else {
-                return (response.terminationStatus, response.standardOutput, "\(response.standardError), error \(parsingError)")
             }
+            return response
             
-        } else {
-            return (1, "", "Failed to serialize blueprint")
+        } catch {
+            return (1, "", "\(error)")
         }
     }
 }

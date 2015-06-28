@@ -47,8 +47,8 @@ class StorageManager {
         return (false, error)
     }
     
-    func addServerConfig(#host: String, user: String?, password: String?) {
-        let config = XcodeServerConfig(host: host, user: user, password: password)
+    func addServerConfig(host host: String, user: String?, password: String?) {
+        let config = try! XcodeServerConfig(host: host, user: user, password: password)
         self.servers.append(config)
     }
     

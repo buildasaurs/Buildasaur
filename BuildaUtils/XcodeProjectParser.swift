@@ -53,36 +53,38 @@ public class XcodeProjectParser {
         return filtered
     }
     
-    private class func findCheckoutUrl(workspaceUrl: NSURL) throws -> NSURL? {
+    private class func findCheckoutUrl(workspaceUrl: NSURL) throws -> NSURL {
         
-        return try self.firstItemMatchingTestRecursive(workspaceUrl, test: { (itemUrl: NSURL) -> Bool in
+        if let found = try self.firstItemMatchingTestRecursive(workspaceUrl, test: { (itemUrl: NSURL) -> Bool in
             
             return itemUrl.pathExtension == "xccheckout"
-        })
+        }) {
+            return found
+        }
+        throw Error.withInfo("No xccheckout file found")
     }
     
-    private class func parseCheckoutFile(url: NSURL) -> NSDictionary? {
+    private class func parseCheckoutFile(url: NSURL) throws -> NSDictionary {
 
-        return NSDictionary(contentsOfURL: url)
+        if let parsed = NSDictionary(contentsOfURL: url) {
+            return parsed
+        }
+        throw Error.withInfo("Could not parse checkout file at url \(url)")
     }
     
-    public class func parseRepoMetadataFromProjectOrWorkspaceURL(url: NSURL) throws -> NSDictionary? {
+    public class func parseRepoMetadataFromProjectOrWorkspaceURL(url: NSURL) throws -> NSDictionary {
         
         let workspaceUrl = url
+        var checkoutUrl: NSURL
         
-        if let checkoutUrl = try self.findCheckoutUrl(workspaceUrl) {
-            //we have the checkout url
-            
-            if let parsed = self.parseCheckoutFile(checkoutUrl) {
-                return parsed
-            } else {
-                let error = Error.withInfo("Cannot parse the checkout file at path \(checkoutUrl)")
-                return (nil, error)
-            }
+        do {
+            checkoutUrl = try self.findCheckoutUrl(workspaceUrl)
+        } catch {
+            throw Error.withInfo("Cannot find the Checkout file, please make sure to open this project in Xcode at least once (it will generate the required Checkout file). Then try again.")
         }
-        //no checkout, what to do?
-        let error = Error.withInfo("Cannot find the Checkout file, please make sure to open this project in Xcode at least once (it will generate the required Checkout file). Then try again.")
-        return (nil, error)
+        
+        let parsed = try self.parseCheckoutFile(checkoutUrl)
+        return parsed
     }
     
     public class func sharedSchemeUrlsFromProjectOrWorkspaceUrl(url: NSURL) -> [NSURL] {
@@ -102,7 +104,7 @@ public class XcodeProjectParser {
         
         //we have the project urls, now let's parse schemes from each of them
         let schemeUrls = projectUrls.map {
-            self.sharedSchemeUrlsFromProjectUrl($0)
+            try! self.sharedSchemeUrlsFromProjectUrl($0)
         }.reduce([NSURL](), combine: { (arr, newUrls) -> [NSURL] in
             arr + newUrls
         })
@@ -110,24 +112,24 @@ public class XcodeProjectParser {
         return schemeUrls
     }
     
-    private class func sharedSchemeUrlsFromProjectUrl(url: NSURL) -> [NSURL] {
+    private class func sharedSchemeUrlsFromProjectUrl(url: NSURL) throws -> [NSURL] {
         
         //the structure is
         //in a project file, if there are any shared schemes, they will be in
         //xcshareddata/xcschemes/*
-        if let sharedDataFolder = self.firstItemMatchingTest(url,
+        if let sharedDataFolder = try self.firstItemMatchingTest(url,
             test: { (itemUrl: NSURL) -> Bool in
                 
             return itemUrl.lastPathComponent == "xcshareddata"
         }) {
             
-            if let schemesFolder = self.firstItemMatchingTest(sharedDataFolder,
+            if let schemesFolder = try self.firstItemMatchingTest(sharedDataFolder,
                 test: { (itemUrl: NSURL) -> Bool in
                     
                 return itemUrl.lastPathComponent == "xcschemes"
             }) {
                 //we have the right folder, yay! just filter all files ending with xcscheme
-                let schemes = self.allItemsMatchingTest(schemesFolder, test: { (itemUrl: NSURL) -> Bool in
+                let schemes = try self.allItemsMatchingTest(schemesFolder, test: { (itemUrl: NSURL) -> Bool in
                     let ext = itemUrl.pathExtension ?? ""
                     return ext == "xcscheme"
                 })
@@ -139,11 +141,11 @@ public class XcodeProjectParser {
     }
     
     private class func isProjectUrl(url: NSURL) -> Bool {
-        return url.absoluteString!.hasSuffix(".xcodeproj")
+        return url.absoluteString.hasSuffix(".xcodeproj")
     }
 
     private class func isWorkspaceUrl(url: NSURL) -> Bool {
-        return url.absoluteString!.hasSuffix(".xcworkspace")
+        return url.absoluteString.hasSuffix(".xcworkspace")
     }
 
     private class func projectUrlsFromWorkspace(url: NSURL) -> [NSURL]? {
@@ -152,12 +154,11 @@ public class XcodeProjectParser {
         //parse the workspace contents url and get the urls of the contained projects
         let contentsUrl = url.URLByAppendingPathComponent("contents.xcworkspacedata")
         
-        var readingError: NSError?
         if let contentsData = NSFileManager.defaultManager().contentsAtPath(contentsUrl.path!) {
             
             if let stringContents = NSString(data: contentsData, encoding: NSUTF8StringEncoding) {
                 //parse by lines
-                let components = stringContents.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet()) as! [String]
+                let components = stringContents.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
                 
                 let projectRelativePaths = components.map {
                     (line: String) -> String? in
