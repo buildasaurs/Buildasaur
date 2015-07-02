@@ -25,7 +25,18 @@ class XcodeServerSyncerUtils {
         let analyze = template.shouldAnalyze ?? false
         let test = template.shouldTest ?? false
         let archive = template.shouldArchive ?? false
-        let deviceSpecification = template.deviceSpecification
+        
+        //TODO: create a device spec from testing devices and filter type (and scheme target type?)
+        let testingDeviceIds = template.testingDeviceIds
+        let filterType = template.deviceFilter
+        let platformType = template.platformType ?? .iOS //default to iOS for no reason
+        let architectureType = DeviceFilter.ArchitectureType.architectureFromPlatformType(platformType)
+        
+        let devicePlatform = DevicePlatform(type: platformType)
+        let deviceFilter = DeviceFilter(platform: devicePlatform, filterType: filterType, architectureType: architectureType)
+        
+        let deviceSpecification = DeviceSpecification(filters: [deviceFilter], deviceIdentifiers: testingDeviceIds)
+        
         let blueprint = project.createSourceControlBlueprint(branch)
         
         //create bot config

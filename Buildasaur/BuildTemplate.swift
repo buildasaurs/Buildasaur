@@ -17,7 +17,8 @@ private let kKeySchedule = "schedule"
 private let kKeyCleaningPolicy = "cleaning_policy"
 private let kKeyTriggers = "triggers"
 private let kKeyTestingDevices = "testing_devices"
-private let kKeyDestinationType = "destination_type"
+private let kKeyDeviceFilter = "device_filter"
+private let kKeyPlatformType = "platform_type"
 private let kKeyShouldAnalyze = "should_analyze"
 private let kKeyShouldTest = "should_test"
 private let kKeyShouldArchive = "should_archive"
@@ -33,8 +34,10 @@ class BuildTemplate: JSONSerializable {
     var shouldAnalyze: Bool?
     var shouldTest: Bool?
     var shouldArchive: Bool?
-    var deviceSpecification: DeviceSpecification
-
+    var testingDeviceIds: [String]
+    var deviceFilter: DeviceFilter.FilterType
+    var platformType: DevicePlatform.PlatformType?
+    
     func validate() -> Bool {
         
         if self.uniqueId.isEmpty { return false }
@@ -54,7 +57,9 @@ class BuildTemplate: JSONSerializable {
         self.shouldAnalyze = false
         self.shouldTest = false
         self.shouldArchive = false
-        self.deviceSpecification = DeviceSpecification(testingDeviceIDs: [])
+        self.testingDeviceIds = []
+        self.deviceFilter = .AllAvailableDevicesAndSimulators
+        self.platformType = nil
     }
     
     required init?(json: NSDictionary) {
@@ -84,8 +89,24 @@ class BuildTemplate: JSONSerializable {
         self.shouldTest = json.optionalBoolForKey(kKeyShouldTest)
         self.shouldArchive = json.optionalBoolForKey(kKeyShouldArchive)
         
-        let testingDevices = json.optionalArrayForKey(kKeyTestingDevices) as? [String] ?? []
-        self.deviceSpecification = DeviceSpecification(testingDeviceIDs: testingDevices)
+        self.testingDeviceIds = json.optionalArrayForKey(kKeyTestingDevices) as? [String] ?? []
+        
+        if
+            let deviceFilterInt = json.optionalIntForKey(kKeyDeviceFilter),
+            let deviceFilter = DeviceFilter.FilterType(rawValue: deviceFilterInt)
+        {
+            self.deviceFilter = deviceFilter
+        } else {
+            self.deviceFilter = .AllAvailableDevicesAndSimulators
+        }
+        
+        if
+            let platformTypeString = json.optionalStringForKey(kKeyPlatformType),
+            let platformType = DevicePlatform.PlatformType(rawValue: platformTypeString) {
+                self.platformType = platformType
+        } else {
+            self.platformType = nil
+        }
         
         if !self.validate() {
             return nil
@@ -97,7 +118,8 @@ class BuildTemplate: JSONSerializable {
         
         dict[kKeyUniqueId] = self.uniqueId
         dict[kKeyTriggers] = self.triggers.map({ $0.dictionarify() })
-        dict[kKeyTestingDevices] = self.deviceSpecification.deviceIdentifiers
+        dict[kKeyDeviceFilter] = self.deviceFilter.rawValue
+        dict[kKeyTestingDevices] = self.testingDeviceIds ?? []
         dict[kKeyCleaningPolicy] = self.cleaningPolicy.rawValue
         dict.optionallyAddValueForKey(self.name, key: kKeyName)
         dict.optionallyAddValueForKey(self.scheme, key: kKeyScheme)
@@ -105,6 +127,7 @@ class BuildTemplate: JSONSerializable {
         dict.optionallyAddValueForKey(self.shouldAnalyze, key: kKeyShouldAnalyze)
         dict.optionallyAddValueForKey(self.shouldTest, key: kKeyShouldTest)
         dict.optionallyAddValueForKey(self.shouldArchive, key: kKeyShouldArchive)
+        dict.optionallyAddValueForKey(self.platformType?.rawValue, key: kKeyPlatformType)
         
         return dict
     }

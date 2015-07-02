@@ -11,7 +11,7 @@ import AppKit
 import BuildaUtils
 import XcodeServerSDK
 
-class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate, SetupViewControllerDelegate {
+class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate, SetupViewControllerDelegate, NSComboBoxDataSource {
     
     var storageManager: StorageManager!
     var project: LocalSource!
@@ -29,7 +29,7 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
     
     @IBOutlet weak var scheduleComboBox: NSComboBox!
     @IBOutlet weak var cleaninPolicyComboBox: NSComboBox!
-    @IBOutlet weak var testDestinationComboBox: NSComboBox!
+    @IBOutlet weak var testDeviceFilterComboBox: NSComboBox!
     @IBOutlet weak var testDevicesTableView: NSTableView!
     @IBOutlet weak var testDevicesActivityIndicator: NSProgressIndicator!
     
@@ -54,16 +54,10 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
         ]
     }
     
-    //TODO: migrate this to the new DeviceSpecification logic!
-    func allDestinations() -> [BotConfiguration.TestingDestinationIdentifier] {
-        return [
-//            BotConfiguration.TestingDestinationIdentifier.iOS_SelectedDevicesAndSimulators,
-//            BotConfiguration.TestingDestinationIdentifier.iOS_AllDevices,
-//            BotConfiguration.TestingDestinationIdentifier.iOS_AllSimulators,
-//            BotConfiguration.TestingDestinationIdentifier.iOS_AllDevicesAndSimulators,
-//            BotConfiguration.TestingDestinationIdentifier.Mac,
-//            BotConfiguration.TestingDestinationIdentifier.AllCompatible
-        ]
+    func allFilters() -> [DeviceFilter.FilterType] {
+        let currentPlatformType = self.buildTemplate.platformType ?? .Unknown
+        let allFilters = DeviceFilter.FilterType.availableFiltersForPlatform(currentPlatformType)
+        return allFilters
     }
     
     override func viewDidLoad() {
@@ -73,6 +67,10 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
             let xcodeServer = XcodeServerFactory.server(xcodeServerConfig)
             self.xcodeServer = xcodeServer
         }
+        
+        self.testDeviceFilterComboBox.delegate = self
+        self.testDeviceFilterComboBox.usesDataSource = true
+        self.testDeviceFilterComboBox.dataSource = self
         
         let schemes = self.project.schemeNames()
         self.schemesComboBox.removeAllItems()
@@ -110,16 +108,24 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
         
         self.cleaninPolicyComboBox.delegate = self
         
-        self.testDestinationComboBox.removeAllItems()
-        self.testDestinationComboBox.addItemsWithObjectValues(self.allDestinations().map({ (item) -> String in /*hack*/ return "" }))
-        //TODO: migrate here as well
-        let destination = BotConfiguration.TestingDestinationIdentifier.Mac //TODO: self.buildTemplate.deviceSpecification.filters.first!...
-        let destinationIndex = self.allDestinations().indexOfFirstObjectPassingTest({ $0 == destination })!
-        self.testDestinationComboBox.selectItemAtIndex(destinationIndex)
-        
-        self.testDestinationComboBox.delegate = self
+        self.refreshDataInDeviceFilterComboBox()
         
         self.triggersTableView.reloadData()
+        self.testDeviceFilterComboBox.reloadData()
+    }
+    
+    func refreshDataInDeviceFilterComboBox() {
+        
+        self.testDeviceFilterComboBox.reloadData()
+        
+        let filters = self.allFilters()
+        
+        let filter = self.buildTemplate.deviceFilter ?? .AllAvailableDevicesAndSimulators
+        if let destinationIndex = filters.indexOfFirstObjectPassingTest({ $0 == filter }) {
+            self.testDeviceFilterComboBox.selectItemAtIndex(destinationIndex)
+        }
+        
+        return
     }
     
     func fetchDevices(completion: () -> ()) {
@@ -153,58 +159,56 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
     
     func processReceivedDevices(devices: [Device]) -> [Device] {
         
-        //TODO: migrate this over
-        //pull filter from testing destination
-//        var filter = BotConfiguration.TestingDestinationIdentifier.AllCompatible
-//        let index = self.testDestinationComboBox.indexOfSelectedItem
-//        if index > -1 {
-//            filter = self.allDestinations()[index]
-//        }
-//        
-//        let allowedDeviceTypes = Set(filter.allowedDeviceTypes())
-//        
-//        //filter first
-//        let filtered = devices.filter { (device: Device) -> Bool in
-//            if let type = BotConfiguration.DeviceType(rawValue: device.deviceType) {
-//                return allowedDeviceTypes.contains(type)
-//            }
-//            return false
-//        }
-//        
-//        let sortDevices = {
-//            (a: Device, b: Device) -> (equal: Bool, shouldGoBefore: Bool) in
-//            
-//            if a.simulator == b.simulator {
-//                return (equal: true, shouldGoBefore: true)
-//            }
-//            return (equal: false, shouldGoBefore: !a.simulator)
-//        }
-//        
-//        let sortConnected = {
-//            (a: Device, b: Device) -> (equal: Bool, shouldGoBefore: Bool) in
-//            
-//            if a.connected == b.connected {
-//                return (equal: true, shouldGoBefore: false)
-//            }
-//            return (equal: false, shouldGoBefore: a.connected)
-//        }
-//        
-//        //then sort, devices first and if match, connected first
-//        let sortedDevices = sorted(filtered, { (a, b) -> Bool in
-//            
-//            let (equalDevices, goBeforeDevices) = sortDevices(a, b)
-//            if !equalDevices {
-//                return goBeforeDevices
-//            }
-//            
-//            let (equalConnected, goBeforeConnected) = sortConnected(a, b)
-//            if !equalConnected {
-//                return goBeforeConnected
-//            }
-//            return true
-//        })
+        //pull filter from platform type
+        guard let platform = self.buildTemplate.platformType else {
+            return []
+        }
         
-        return []
+        let allowedPlatforms: Set<DevicePlatform.PlatformType>
+        switch platform {
+        case .iOS, .iOS_Simulator:
+            allowedPlatforms = Set([.iOS, .iOS_Simulator])
+        default:
+            allowedPlatforms = Set([platform])
+        }
+        
+        //filter first
+        let filtered = devices.filter { allowedPlatforms.contains($0.platform) }
+        
+        let sortDevices = {
+            (a: Device, b: Device) -> (equal: Bool, shouldGoBefore: Bool) in
+            
+            if a.simulator == b.simulator {
+                return (equal: true, shouldGoBefore: true)
+            }
+            return (equal: false, shouldGoBefore: !a.simulator)
+        }
+        
+        let sortConnected = {
+            (a: Device, b: Device) -> (equal: Bool, shouldGoBefore: Bool) in
+            
+            if a.connected == b.connected {
+                return (equal: true, shouldGoBefore: false)
+            }
+            return (equal: false, shouldGoBefore: a.connected)
+        }
+        
+        //then sort, devices first and if match, connected first
+        let sortedDevices = filtered.sort { (a, b) -> Bool in
+            
+            let (equalDevices, goBeforeDevices) = sortDevices(a, b)
+            if !equalDevices {
+                return goBeforeDevices
+            }
+            
+            let (equalConnected, goBeforeConnected) = sortConnected(a, b)
+            if !equalConnected {
+                return goBeforeConnected
+            }
+            return true
+        }
+        
+        return sortedDevices
     }
     
     override func prepareForSegue(segue: NSStoryboardSegue, sender: AnyObject?) {
@@ -239,10 +243,12 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
         self.triggersTableView.reloadData()
         
         //enable devices table view only if selected devices is chosen
-//        let selectable = self.buildTemplate.destinationType == BotConfiguration.TestingDestinationIdentifier.iOS_SelectedDevicesAndSimulators
-//        self.testDevicesTableView.enabled = selectable
+        let filter = self.buildTemplate.deviceFilter ?? .AllAvailableDevicesAndSimulators
+        let selectable = filter == .SelectedDevicesAndSimulators
+        self.testDevicesTableView.enabled = selectable
         
-        //disable/enable based on some checkboxes
+        //also change the device filter picker based on the platform
+        self.refreshDataInDeviceFilterComboBox()
     }
     
     func pullStagesFromUI() -> Bool {
@@ -262,9 +268,9 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
             let stages = self.pullStagesFromUI()
             let schedule = self.pullScheduleFromUI(interactive)
             let cleaning = self.pullCleaningPolicyFromUI(interactive)
-            let destination = self.pullDestinationFromUI(interactive)
+            let filter = self.pullFilterFromUI(interactive)
             
-            return scheme && name && stages && schedule && cleaning && destination
+            return scheme && name && stages && schedule && cleaning && filter
         }
         return false
     }
@@ -328,7 +334,20 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
             if schemes.indexOf(selectedScheme) != nil {
                 //found it, good, use it
                 self.buildTemplate.scheme = selectedScheme
-                return true
+                
+                //also refresh devices for testing based on the scheme type
+                do {
+                    let platformType = try XcodeDeviceParser.parseDeviceTypeFromProjectUrlAndScheme(self.project.url, scheme: selectedScheme).toPlatformType()
+                    self.buildTemplate.platformType = platformType
+                    self.reloadUI()
+                    self.fetchDevices({ () -> () in
+                        //
+                    })
+                    return true
+                } catch {
+                    print("\(error)")
+                    return false
+                }
             }
         }
         
@@ -338,16 +357,16 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
         return false
     }
     
-    func pullDestinationFromUI(interactive: Bool) -> Bool {
+    func pullFilterFromUI(interactive: Bool) -> Bool {
         
-        let index = self.testDestinationComboBox.indexOfSelectedItem
+        let index = self.testDeviceFilterComboBox.indexOfSelectedItem
         if index > -1 {
-//            let destination = self.allDestinations()[index]
-//            self.buildTemplate.destinationType = destination
+            let filter = self.allFilters()[index]
+            self.buildTemplate.deviceFilter = filter
             return true
         }
-        if interactive {
-            UIUtils.showAlertWithText("Please select a destination to build with")
+        if interactive && self.testDeviceFilterComboBox.numberOfItems > 0 {
+            UIUtils.showAlertWithText("Please select a device filter to test on")
         }
         return false
     }
@@ -356,16 +375,21 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
         
         if let comboBox = notification.object as? NSComboBox {
             
-            self.pullDataFromUI(false)
-            
-            if comboBox == self.testDestinationComboBox {
+            if comboBox == self.testDeviceFilterComboBox {
                 
+                self.pullFilterFromUI(true)
                 self.reloadUI()
                 
                 //filter changed, refetch
                 self.fetchDevices({ () -> () in
                     //
                 })
+            } else if comboBox == self.schemesComboBox {
+                
+                if self.testDeviceFilterComboBox.numberOfItems > 0 {
+                    self.testDeviceFilterComboBox.selectItemAtIndex(0)
+                }
+                self.pullSchemeFromUI(true)
             }
         }
     }
@@ -389,6 +413,23 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
                 self.cancel()
             }
         })
+    }
+    
+    //MARK: filter combo box
+    func numberOfItemsInComboBox(aComboBox: NSComboBox) -> Int {
+        if (aComboBox == self.testDeviceFilterComboBox) {
+            return self.allFilters().count
+        }
+        return 0
+    }
+    
+    func comboBox(aComboBox: NSComboBox, objectValueForItemAtIndex index: Int) -> AnyObject {
+        if (aComboBox == self.testDeviceFilterComboBox) {
+            if index >= 0 {
+                return self.allFilters()[index].toString()
+            }
+        }
+        return ""
     }
     
     //MARK: triggers table view
@@ -422,11 +463,10 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
                     let string = "\(simString)\(device.name) (\(device.osVersion)) \(connString)"
                     return string
                 case "enabled":
-                    break
-//                    let devices = self.buildTemplate.testingDeviceIds ?? []
-//                    let index = devices.indexOfFirstObjectPassingTest({ $0 == device.id })
-//                    let enabled = index > -1
-//                    return enabled
+                    let devices = self.buildTemplate.testingDeviceIds ?? []
+                    let index = devices.indexOfFirstObjectPassingTest({ $0 == device.id })
+                    let enabled = index > -1
+                    return enabled
                 default:
                     return nil
                 }
@@ -482,19 +522,19 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
         //toggle selection in model and reload data
         
         //get device at index first
-//        let device = self.allAvailableTestingDevices[self.testDevicesTableView.selectedRow]
+        let device = self.allAvailableTestingDevices[self.testDevicesTableView.selectedRow]
         
         //see if we are checking or unchecking
-//        let foundIndex = self.buildTemplate.testingDeviceIds.indexOfFirstObjectPassingTest({ $0 == device.id })
-//        
-//        if let foundIndex = foundIndex {
-//            //found, remove it
-//            self.buildTemplate.testingDeviceIds.removeAtIndex(foundIndex)
-//        } else {
-//            //not found, add it
-//            self.buildTemplate.testingDeviceIds.append(device.id)
-//        }
-//        
-//        self.testDevicesTableView.reloadData()
+        let foundIndex = self.buildTemplate.testingDeviceIds.indexOfFirstObjectPassingTest({ $0 == device.id })
+        
+        if let foundIndex = foundIndex {
+            //found, remove it
+            self.buildTemplate.testingDeviceIds.removeAtIndex(foundIndex)
+        } else {
+            //not found, add it
+            self.buildTemplate.testingDeviceIds.append(device.id)
+        }
+        
+        self.testDevicesTableView.reloadData()
     }
 }

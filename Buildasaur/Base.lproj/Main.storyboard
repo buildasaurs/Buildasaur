@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8121.20" systemVersion="14E36b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8121.20" systemVersion="14E46" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8121.20"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -1373,7 +1373,7 @@
                             </textField>
                             <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eJ7-3i-rhz">
                                 <rect key="frame" x="80" y="167" width="353" height="26"/>
-                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Test destination" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="dho-Hu-TVn">
+                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Test Device Filter" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="dho-Hu-TVn">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1530,7 +1530,7 @@
                         <outlet property="scheduleComboBox" destination="oIQ-W6-NnZ" id="JPk-p4-MTh"/>
                         <outlet property="schemesComboBox" destination="AgV-fV-tZQ" id="SIt-HX-o19"/>
                         <outlet property="testButton" destination="uhv-2l-5xn" id="wU2-bu-fTN"/>
-                        <outlet property="testDestinationComboBox" destination="eJ7-3i-rhz" id="jjF-jf-wLp"/>
+                        <outlet property="testDeviceFilterComboBox" destination="eJ7-3i-rhz" id="ad3-Gd-jau"/>
                         <outlet property="testDevicesActivityIndicator" destination="VY0-39-fd9" id="omW-hD-iMO"/>
                         <outlet property="testDevicesTableView" destination="8jQ-1w-bC4" id="ioY-T3-5oI"/>
                         <outlet property="triggersTableView" destination="3LH-7K-zWF" id="mJs-5d-eR7"/>
@@ -2157,7 +2157,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" id="jDu-Ec-web">
-                                            <rect key="frame" x="0.0" y="0.0" width="342" height="19"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="349" height="19"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>

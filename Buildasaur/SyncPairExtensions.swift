@@ -84,7 +84,7 @@ extension SyncPair {
         let query = [
             "last": "20"
         ]
-        syncer.xcodeServer.getIntegrations(bot.id, query: query, completion: { (integrations, error) -> () in
+        syncer.xcodeServer.getBotIntegrations(bot.id, query: query, completion: { (integrations, error) -> () in
             
             if let error = error {
                 let e = Error.withInfo("Bot \(bot.name) failed return integrations", internalError: error)
