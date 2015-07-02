@@ -15,6 +15,17 @@ public class XcodeDeviceParser {
         case iPhoneOS = "iphoneos"
         case macOSX = "macosx"
         case watchOS = "watchos"
+        
+        public func toPlatformType() -> DevicePlatform.PlatformType {
+            switch self {
+            case .iPhoneOS:
+                return .iOS
+            case .macOSX:
+                return .OSX
+            case .watchOS:
+                return .watchOS
+            }
+        }
     }
     
     public class func parseDeviceTypeFromProjectUrlAndScheme(projectUrl: NSURL, scheme: String) throws -> DeviceType {
