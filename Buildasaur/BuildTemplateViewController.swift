@@ -338,6 +338,7 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
                     let platformType = try XcodeDeviceParser.parseDeviceTypeFromProjectUrlAndScheme(self.project.url, scheme: selectedScheme).toPlatformType()
                     self.buildTemplate.platformType = platformType
                     self.reloadUI()
+                    return true
                 } catch {
                     print("\(error)")
                     return false
@@ -359,7 +360,7 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
             self.buildTemplate.deviceFilter = filter
             return true
         }
-        if interactive {
+        if interactive && self.testDeviceFilterComboBox.numberOfItems > 0 {
             UIUtils.showAlertWithText("Please select a destination to build with")
         }
         return false
@@ -369,10 +370,9 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
         
         if let comboBox = notification.object as? NSComboBox {
             
-//            self.pullDataFromUI(false)
-            
             if comboBox == self.testDeviceFilterComboBox {
                 
+                self.pullFilterFromUI(true)
                 self.reloadUI()
                 
                 //filter changed, refetch

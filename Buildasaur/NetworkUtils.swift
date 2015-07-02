@@ -43,13 +43,14 @@ class NetworkUtils {
                         completion(success: false, error: Error.withInfo("Missing write permission for repo"))
                     } else {
                         //now test ssh keys
-                        self.checkValidityOfSSHKeys(credentialValidationBlueprint, completion: { (success, error) -> () in
-                            
-                            Log.verbose("Finished blueprint validation with success: \(success), error: \(error)")
-                            
+                        //TODO: do SSH Key validation properly in the new UI once we have Xcode Server credentials.
+//                        self.checkValidityOfSSHKeys(credentialValidationBlueprint, completion: { (success, error) -> () in
+                        
+//                            Log.verbose("Finished blueprint validation with success: \(success), error: \(error)")
+                        
                             //now complete
-                            completion(success: success, error: error)
-                        })
+                            completion(success: true, error: nil)
+//                        })
                     }
                 } else {
                     completion(success: false, error: Error.withInfo("Couldn't find repo permissions in GitHub response"))
