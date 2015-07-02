@@ -113,9 +113,9 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
         self.testDestinationComboBox.removeAllItems()
         self.testDestinationComboBox.addItemsWithObjectValues(self.allDestinations().map({ (item) -> String in /*hack*/ return "" }))
         //TODO: migrate here as well
-        let destination = BotConfiguration.TestingDestinationIdentifier.Mac //TODO: self.buildTemplate.deviceSpecification.filters.first!...
-        let destinationIndex = self.allDestinations().indexOfFirstObjectPassingTest({ $0 == destination })!
-        self.testDestinationComboBox.selectItemAtIndex(destinationIndex)
+//        let destination = BotConfiguration.TestingDestinationIdentifier.Mac //TODO: self.buildTemplate.deviceSpecification.filters.first!...
+//        let destinationIndex = self.allDestinations().indexOfFirstObjectPassingTest({ $0 == destination })!
+//        self.testDestinationComboBox.selectItemAtIndex(destinationIndex)
         
         self.testDestinationComboBox.delegate = self
         
@@ -328,7 +328,16 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
             if schemes.indexOf(selectedScheme) != nil {
                 //found it, good, use it
                 self.buildTemplate.scheme = selectedScheme
-                return true
+                
+                //also refresh devices for testing based on the scheme type
+                do {
+                    let deviceType = try XcodeDeviceParser.parseDeviceTypeFromProjectUrlAndScheme(self.project.url, scheme: selectedScheme)
+                    print("\(deviceType)")
+                    //TODO: here update the devices and only filter this type
+                } catch {
+                    print("\(error)")
+                    return false
+                }
             }
         }
         

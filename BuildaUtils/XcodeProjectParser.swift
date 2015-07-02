@@ -163,7 +163,8 @@ public class XcodeProjectParser {
                 let projectRelativePaths = components.map {
                     (line: String) -> String? in
                     
-                    let range1 = line.rangeOfString("group:")
+                    //xcode 7 and 6 styles (container vs group)
+                    let range1 = line.rangeOfString("container:") ?? line.rangeOfString("group:")
                     let range2 = line.rangeOfString("\">", options: NSStringCompareOptions.BackwardsSearch)
                     if let range1 = range1, let range2 = range2 {
                         let start = range1.endIndex
