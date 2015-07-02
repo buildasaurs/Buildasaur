@@ -10,11 +10,17 @@
 
 **Closed issues:**
 
+- Infer and automatically filter devices based on target type [\#77](https://github.com/czechboy0/Buildasaur/issues/77)
+
+- Migrate to Swift 2 [\#76](https://github.com/czechboy0/Buildasaur/issues/76)
+
 - Update UI to support multiple repositories [\#72](https://github.com/czechboy0/Buildasaur/issues/72)
 
 - Migrate to XcodeServerSDK [\#71](https://github.com/czechboy0/Buildasaur/issues/71)
 
 - Buildasaur immediately crashes after being started [\#70](https://github.com/czechboy0/Buildasaur/issues/70)
+
+- Xcode 7 support  [\#69](https://github.com/czechboy0/Buildasaur/issues/69)
 
 - Leaving for WWDC, back in mid June. [\#67](https://github.com/czechboy0/Buildasaur/issues/67)
 
@@ -31,6 +37,8 @@
 - Update branch's commit statuses based on a non-PR bot [\#18](https://github.com/czechboy0/Buildasaur/issues/18)
 
 **Merged pull requests:**
+
+- Xcode 7 compatibility [\#78](https://github.com/czechboy0/Buildasaur/pull/78) ([czechboy0](https://github.com/czechboy0))
 
 - Migrating to XcodeServerSDK [\#73](https://github.com/czechboy0/Buildasaur/pull/73) ([czechboy0](https://github.com/czechboy0))
 
