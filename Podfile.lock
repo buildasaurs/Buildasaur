@@ -11,7 +11,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   XcodeServerSDK:
-    :commit: 35f1f67b4c1e0ee34b75377c7e16504c3acf74ea
+    :commit: df387df50bcca48537833d37deb364d28be823c0
     :git: git@github.com:czechboy0/XcodeServerSDK.git
 
 SPEC CHECKSUMS:
