@@ -2,7 +2,17 @@
 
 ## [Unreleased](https://github.com/czechboy0/Buildasaur/tree/HEAD)
 
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.2.9...HEAD)
+[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3-beta1...HEAD)
+
+**Merged pull requests:**
+
+- sync master [\#86](https://github.com/czechboy0/Buildasaur/pull/86) ([czechboy0](https://github.com/czechboy0))
+
+- New App Icon and small fixes. [\#74](https://github.com/czechboy0/Buildasaur/pull/74) ([Higgcz](https://github.com/Higgcz))
+
+## [v0.3-beta1](https://github.com/czechboy0/Buildasaur/tree/v0.3-beta1) (2015-07-02)
+
+[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.2.9...v0.3-beta1)
 
 **Fixed bugs:**
 
