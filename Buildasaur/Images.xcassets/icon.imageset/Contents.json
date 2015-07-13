@@ -3,20 +3,22 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "builda_menu@0.12x.png"
+      "filename" : "Icon_mono_16.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "builda_menu@0.25x.png"
+      "filename" : "Icon_mono_16@2x.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "Icon_mono_16@3x.png"
     }
   ],
   "info" : {
     "version" : 1,
-    "author" : "xcode"
+    "author" : "xcode",
+    "template-rendering-intent" : "template"
   }
 }
