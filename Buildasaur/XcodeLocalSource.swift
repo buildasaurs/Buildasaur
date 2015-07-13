@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import BuildaCIServer
+import XcodeServerSDK
 
 extension LocalSource {
     

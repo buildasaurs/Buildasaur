@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import BuildaUtils
+import XcodeServerSDK
 
 //functions to make working with github easier - utility functions
 public extension GitHubServer {

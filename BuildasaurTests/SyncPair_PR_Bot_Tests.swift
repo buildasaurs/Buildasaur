@@ -10,7 +10,7 @@ import Foundation
 import XCTest
 import BuildaUtils
 import BuildaGitServer
-import BuildaCIServer
+import XcodeServerSDK
 import Buildasaur
 
 //for tuples, XCTAssert... doesn't work for them

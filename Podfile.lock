@@ -1,0 +1,20 @@
+PODS:
+  - XcodeServerSDK (0.0.4)
+
+DEPENDENCIES:
+  - XcodeServerSDK (from `git@github.com:czechboy0/XcodeServerSDK.git`, branch `buildasaur`)
+
+EXTERNAL SOURCES:
+  XcodeServerSDK:
+    :branch: buildasaur
+    :git: git@github.com:czechboy0/XcodeServerSDK.git
+
+CHECKOUT OPTIONS:
+  XcodeServerSDK:
+    :commit: 0278e79fe9a901e1a76e0996ef39511168417de7
+    :git: git@github.com:czechboy0/XcodeServerSDK.git
+
+SPEC CHECKSUMS:
+  XcodeServerSDK: f349ee5a7897d934a4dbf126c1d7b7a8fadb2caf
+
+COCOAPODS: 0.37.2

@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import BuildaCIServer
 import BuildaGitServer
 import BuildaUtils
+import XcodeServerSDK
 
 //TODO: dump logs to a file (Cocoa Lumberjack?) in Application Support, so that people can send it for debugging
 

@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import BuildaCIServer
 import BuildaUtils
+import XcodeServerSDK
 
 class StatusServerViewController: StatusViewController {
     

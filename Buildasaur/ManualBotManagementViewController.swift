@@ -10,6 +10,7 @@ import Foundation
 import AppKit
 import BuildaGitServer
 import BuildaUtils
+import XcodeServerSDK
 
 class ManualBotManagementViewController: NSViewController {
     

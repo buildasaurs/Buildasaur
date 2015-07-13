@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import BuildaUtils
+import XcodeServerSDK
 
 public class GitHubServer : GitServer {
     
