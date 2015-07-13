@@ -13,7 +13,7 @@ Buildasaur
 
 Free, local and automatic testing of GitHub Pull Requests with Xcode Bots. Keep your team productive and safe. Get up and running in minutes. (Follow Builda [on Twitter](http://twitter.com/buildasaur) for infrequent updates.)
 
-**Xcode 7 support is in beta. Get the latest [beta release](https://github.com/czechboy0/Buildasaur/releases) if you'd like to give it a try. [Follow the progress here](https://github.com/czechboy0/Buildasaur/milestones/Xcode%207%20Support,%20Swift%202). We still fully support Xcode 6 in versions up to [0.2.9](https://github.com/czechboy0/Buildasaur/releases/tag/v0.2.9).**
+**Xcode 7 support is in beta. Get the latest [beta release](https://github.com/czechboy0/Buildasaur/releases) if you'd like to give it a try. We still fully support Xcode 6 in versions up to [0.2.9](https://github.com/czechboy0/Buildasaur/releases/tag/v0.2.9).**
 
 Version 1.0 is being built on [a branch](https://github.com/czechboy0/Buildasaur/tree/gladiolus). The latest stable build is on master.
 
