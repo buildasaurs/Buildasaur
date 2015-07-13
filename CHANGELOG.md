@@ -6,6 +6,8 @@
 
 **Merged pull requests:**
 
+- Update master -\> gladiolus [\#88](https://github.com/czechboy0/Buildasaur/pull/88) ([czechboy0](https://github.com/czechboy0))
+
 - sync master [\#86](https://github.com/czechboy0/Buildasaur/pull/86) ([czechboy0](https://github.com/czechboy0))
 
 - New App Icon and small fixes. [\#74](https://github.com/czechboy0/Buildasaur/pull/74) ([Higgcz](https://github.com/Higgcz))
