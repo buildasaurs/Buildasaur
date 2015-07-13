@@ -2,9 +2,6 @@ Buildasaur
 ==========
 
 [![Build Status](http://178.62.79.155/buildasaur)](https://github.com/czechboy0/Buildasaur/branches/all?utf8=✓&query=master)
-[![Stars](https://img.shields.io/github/stars/czechboy0/buildasaur.svg)](https://github.com/czechboy0/Buildasaur/stargazers)
-[![Forks](https://img.shields.io/github/forks/czechboy0/buildasaur.svg)](https://github.com/czechboy0/Buildasaur/network/members)
-[![Issues](https://img.shields.io/github/issues-raw/czechboy0/buildasaur.svg)](https://github.com/czechboy0/Buildasaur/issues)
 [![Latest Buildasaur Release](https://img.shields.io/github/release/czechboy0/buildasaur.svg)](https://github.com/czechboy0/Buildasaur/releases/latest)
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://en.wikipedia.org/wiki/MIT_License)
@@ -16,7 +13,7 @@ Buildasaur
 
 Free, local and automatic testing of GitHub Pull Requests with Xcode Bots. Keep your team productive and safe. Get up and running in minutes. (Follow Builda [on Twitter](http://twitter.com/buildasaur) for infrequent updates.)
 
-**Xcode 7 support is in beta. Get the latest [beta release](https://github.com/czechboy0/Buildasaur/releases) if you'd like to give it a try. [Follow the progress here](https://github.com/czechboy0/Buildasaur/milestones/Xcode%207%20Support,%20Swift%202). We still fully support Xcode 6 in versions up to [0.2.9](https://github.com/czechboy0/Buildasaur/releases/tag/v0.2.9).**
+**Xcode 7 support is in beta. Get the latest [beta release](https://github.com/czechboy0/Buildasaur/releases) if you'd like to give it a try. We still fully support Xcode 6 in versions up to [0.2.9](https://github.com/czechboy0/Buildasaur/releases/tag/v0.2.9).**
 
 Version 1.0 is being built on [a branch](https://github.com/czechboy0/Buildasaur/tree/gladiolus). The latest stable build is on master.
 
