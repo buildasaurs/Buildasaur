@@ -67,7 +67,7 @@ class ManualBotManagementViewController: NSViewController {
     func pullBotName() -> String? {
         
         let name = self.nameTextField.stringValue
-        if count(name) == 0 {
+        if name.isEmpty {
             UIUtils.showAlertWithText("Please specify the bot's name")
             return nil
         }
@@ -76,7 +76,7 @@ class ManualBotManagementViewController: NSViewController {
     
     func pullBranchName() -> String? {
         
-        if let branch = self.branchComboBox.objectValueOfSelectedItem as? String where count(branch) > 0 {
+        if let branch = self.branchComboBox.objectValueOfSelectedItem as? String where !branch.isEmpty {
             return branch
         }
         UIUtils.showAlertWithText("Please specify a valid branch")

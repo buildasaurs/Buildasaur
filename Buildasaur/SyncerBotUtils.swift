@@ -17,7 +17,7 @@ extension HDGitHubXCBotSyncer {
         
         if let seconds = integration.duration {
             
-            var result = TimeUtils.secondsToNaturalTime(Int(seconds))
+            let result = TimeUtils.secondsToNaturalTime(Int(seconds))
             return result
             
         } else {

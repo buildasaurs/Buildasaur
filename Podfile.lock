@@ -1,20 +1,20 @@
 PODS:
-  - XcodeServerSDK (0.0.4)
+  - XcodeServerSDK (0.1-beta3)
 
 DEPENDENCIES:
-  - XcodeServerSDK (from `git@github.com:czechboy0/XcodeServerSDK.git`, branch `buildasaur`)
+  - XcodeServerSDK (from `git@github.com:czechboy0/XcodeServerSDK.git`, branch `swift-2`)
 
 EXTERNAL SOURCES:
   XcodeServerSDK:
-    :branch: buildasaur
+    :branch: swift-2
     :git: git@github.com:czechboy0/XcodeServerSDK.git
 
 CHECKOUT OPTIONS:
   XcodeServerSDK:
-    :commit: 0278e79fe9a901e1a76e0996ef39511168417de7
+    :commit: df387df50bcca48537833d37deb364d28be823c0
     :git: git@github.com:czechboy0/XcodeServerSDK.git
 
 SPEC CHECKSUMS:
-  XcodeServerSDK: f349ee5a7897d934a4dbf126c1d7b7a8fadb2caf
+  XcodeServerSDK: e409d4841fd0fde113355cc7532d0e159b13ccf1
 
-COCOAPODS: 0.37.2
+COCOAPODS: 0.38.0.beta.1

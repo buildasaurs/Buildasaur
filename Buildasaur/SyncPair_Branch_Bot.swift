@@ -38,7 +38,6 @@ public class SyncPair_Branch_Bot: SyncPair {
     
     private func syncBranchWithBot(completion: Completion) {
         
-        let syncer = self.syncer
         let bot = self.bot
         let headCommit = self.branch.commit.sha
         let issue: Issue? = nil //TODO: only pull/create if we're failing

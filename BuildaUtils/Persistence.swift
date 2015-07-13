@@ -11,28 +11,17 @@ import XcodeServerSDK
 
 public class Persistence {
     
-    public class func loadJSONFromUrl(url: NSURL) -> (AnyObject?, NSError?) {
+    public class func loadJSONFromUrl(url: NSURL) throws -> AnyObject? {
         
-        var error: NSError?
-        if let data = NSData(contentsOfURL: url, options: NSDataReadingOptions.allZeros, error: &error) {
-            
-            if let json: AnyObject = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &error) {
-                return (json, nil)
-            }
-        }
-        return (nil, error)
+        let data = try NSData(contentsOfURL: url, options: NSDataReadingOptions())
+        let json: AnyObject = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)
+        return json
     }
     
-    public class func saveJSONToUrl(json: AnyObject, url: NSURL) -> (Bool, NSError?) {
+    public class func saveJSONToUrl(json: AnyObject, url: NSURL) throws {
         
-        var error: NSError?
-        if let data = NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted, error: &error) {
-            
-            if (data.writeToURL(url, options: NSDataWritingOptions.DataWritingAtomic, error: &error)) {
-                return (true, nil)
-            }
-        }
-        return (false, error)
+        let data = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
+        try data.writeToURL(url, options: NSDataWritingOptions.DataWritingAtomic)
     }
     
     public class func getFileInAppSupportWithName(name: String, isDirectory: Bool) -> NSURL {
@@ -44,29 +33,29 @@ public class Persistence {
         }
         return url
     }
-        
+    
     public class func createFolderIfNotExists(url: NSURL) {
         
         let fm = NSFileManager.defaultManager()
-        
-        var error: NSError?
-        let success = fm.createDirectoryAtURL(url, withIntermediateDirectories: true, attributes: nil, error: &error)
-        assert(success, "Failed to create a folder in Builda's Application Support folder \(url), error \(error)")
+        do {
+            try fm.createDirectoryAtURL(url, withIntermediateDirectories: true, attributes: nil)
+        } catch {
+            fatalError("Failed to create a folder in Builda's Application Support folder \(url), error \(error)")
+        }
     }
     
     public class func buildaApplicationSupportFolderURL() -> NSURL {
         
         let fm = NSFileManager.defaultManager()
-        if let appSupport = fm.URLsForDirectory(NSSearchPathDirectory.ApplicationSupportDirectory, inDomains:NSSearchPathDomainMask.UserDomainMask).first as? NSURL {
+        if let appSupport = fm.URLsForDirectory(NSSearchPathDirectory.ApplicationSupportDirectory, inDomains:NSSearchPathDomainMask.UserDomainMask).first {
             
             let buildaAppSupport = appSupport.URLByAppendingPathComponent("Buildasaur", isDirectory: true)
             
             //ensure it exists
-            var error: NSError?
-            if fm.createDirectoryAtURL(buildaAppSupport, withIntermediateDirectories: true, attributes: nil, error: &error) {
+            do {
+                try fm.createDirectoryAtURL(buildaAppSupport, withIntermediateDirectories: true, attributes: nil)
                 return buildaAppSupport
-                
-            } else {
+            } catch {
                 Log.error("Failed to create Builda's Application Support folder, error \(error)")
             }
         }
@@ -78,10 +67,11 @@ public class Persistence {
     public class func iterateThroughFilesInFolder(folderUrl: NSURL, visit: (url: NSURL) -> ()) {
         
         let fm = NSFileManager.defaultManager()
-        var error: NSError?
-        if let contents = fm.contentsOfDirectoryAtURL(folderUrl, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions.SkipsHiddenFiles | NSDirectoryEnumerationOptions.SkipsSubdirectoryDescendants, error: &error) as? [NSURL] {
+        do {
+            let contents = try fm.contentsOfDirectoryAtURL(folderUrl, includingPropertiesForKeys: nil, options: [.SkipsHiddenFiles, .SkipsSubdirectoryDescendants])
             contents.map { visit(url: $0) }
-        } else {
+            
+        } catch {
             Log.error("Couldn't read folder \(folderUrl), error \(error)")
         }
     }

@@ -33,17 +33,13 @@ class GitHubSourceTests: XCTestCase {
         
         let expect = expectationWithDescription("Waiting for url request")
         
-        if let request = self.github.endpoints.createRequest(method, endpoint: endpoint, params: params) {
+        let request = try! self.github.endpoints.createRequest(method, endpoint: endpoint, params: params)
+        
+        self.github.http.sendRequest(request, completion: { (response, body, error) -> () in
             
-            self.github.http.sendRequest(request, completion: { (response, body, error) -> () in
-                
-                completion(body: body, error: error)
-                expect.fulfill()
-            })
-            
-        } else {
-            assertionFailure("Couldn't create request")
-        }
+            completion(body: body, error: error)
+            expect.fulfill()
+        })
         
         waitForExpectationsWithTimeout(10, handler: nil)
     }

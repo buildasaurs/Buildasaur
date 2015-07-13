@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0610"
+   LastUpgradeVersion = "0700"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -28,7 +28,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3A5687811A3B93BD0066DB2B"
+               BlueprintIdentifier = "3A46A2D51B081EF400F0FA4B"
                BuildableName = "BuildasaurTests.xctest"
                BlueprintName = "BuildasaurTests"
                ReferencedContainer = "container:Buildasaur.xcodeproj">
@@ -56,7 +56,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3AAF6E7D1A3CE4CC00C657FB"
+               BlueprintIdentifier = "3A15464A1B02A32C001EEB45"
                BuildableName = "BuildaUtilsTests.xctest"
                BlueprintName = "BuildaUtilsTests"
                ReferencedContainer = "container:Buildasaur.xcodeproj">
@@ -116,7 +116,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3A5687811A3B93BD0066DB2B"
+               BlueprintIdentifier = "3A46A2D51B081EF400F0FA4B"
                BuildableName = "BuildasaurTests.xctest"
                BlueprintName = "BuildasaurTests"
                ReferencedContainer = "container:Buildasaur.xcodeproj">
@@ -136,7 +136,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3AAF6E7D1A3CE4CC00C657FB"
+               BlueprintIdentifier = "3A15464A1B02A32C001EEB45"
                BuildableName = "BuildaUtilsTests.xctest"
                BlueprintName = "BuildaUtilsTests"
                ReferencedContainer = "container:Buildasaur.xcodeproj">
@@ -182,6 +182,8 @@
             ReferencedContainer = "container:Buildasaur.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
@@ -191,6 +193,7 @@
       buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">

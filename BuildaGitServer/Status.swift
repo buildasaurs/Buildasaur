@@ -56,7 +56,7 @@ public class Status : GitHubEntity, Equatable {
     
     public override func dictionarify() -> NSDictionary {
         
-        var dictionary = NSMutableDictionary()
+        let dictionary = NSMutableDictionary()
         
         dictionary["state"] = self.state.rawValue
         dictionary.optionallyAddValueForKey(self.description, key: "description")

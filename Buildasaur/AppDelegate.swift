@@ -51,7 +51,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.activateIgnoringOtherApps(true)
         
         //first window. i wish there was a nicer way (please some tell me there is)
-        if let window = NSApplication.sharedApplication().windows.first as? NSWindow {
+        if let window = NSApplication.sharedApplication().windows.first {
             window.makeKeyAndOrderFront(self)
         }
     }

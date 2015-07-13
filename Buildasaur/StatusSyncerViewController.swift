@@ -180,7 +180,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
     
     @IBAction func branchWatchingTapped(sender: AnyObject) {
         
-         if let syncer = self.syncer() {
+         if let _ = self.syncer() {
             self.performSegueWithIdentifier("showBranchWatching", sender: self)
         } else {
             UIUtils.showAlertWithText("Syncer must be created first. Click 'Start' and try again.")
@@ -189,7 +189,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
     
     @IBAction func manualBotManagementTapped(sender: AnyObject) {
         
-        if let syncer = self.syncer() {
+        if let _ = self.syncer() {
             self.performSegueWithIdentifier("showManual", sender: self)
         } else {
             UIUtils.showAlertWithText("Syncer must be created first. Click 'Start' and try again.")

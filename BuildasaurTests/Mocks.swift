@@ -14,7 +14,7 @@ import XcodeServerSDK
 
 class MockXcodeServer: XcodeServer {
     init() {
-        let config = XcodeServerConfig(host: "", user: "", password: "")
+        let config = try! XcodeServerConfig(host: "", user: "", password: "")
         super.init(config: config, endpoints: XcodeServerEndPoints(serverConfig: config))
     }
 }
@@ -64,7 +64,7 @@ class MockBranch: Branch {
     }
     
     convenience init(name: String = "master", sha: String = "1234f") {
-        self.init(json: MockBranch.mockDictionary(name: name, sha: sha))
+        self.init(json: MockBranch.mockDictionary(name, sha: sha))
     }
     
     required init(json: NSDictionary) {
@@ -113,7 +113,7 @@ class MockIssue: Issue {
 class MockPullRequest: PullRequest {
     
     class func mockDictionary(number: Int, title: String, head: NSDictionary, base: NSDictionary) -> NSDictionary {
-        var dict = MockIssue.mockDictionary(number: number, body: "body", title: title).mutableCopy() as! NSMutableDictionary
+        let dict = MockIssue.mockDictionary(number, body: "body", title: title).mutableCopy() as! NSMutableDictionary
         dict["head"] = head
         dict["base"] = base
         return dict.copy() as! NSDictionary
@@ -121,8 +121,8 @@ class MockPullRequest: PullRequest {
     
     class func mockDictionary(number: Int, title: String) -> NSDictionary {
         
-        let head = MockPullRequestBranch.mockDictionary(ref: "head", sha: "head_sha")
-        let base = MockPullRequestBranch.mockDictionary(ref: "base", sha: "base_sha")
+        let head = MockPullRequestBranch.mockDictionary("head", sha: "head_sha")
+        let base = MockPullRequestBranch.mockDictionary("base", sha: "base_sha")
         return self.mockDictionary(number, title: title, head: head, base: base)
     }
     
@@ -149,8 +149,16 @@ class MockSourceControlBlueprint: SourceControlBlueprint {
 class MockBotConfiguration: BotConfiguration {
     
     init() {
-        super.init(builtFromClean: BotConfiguration.CleaningPolicy.Never,
-        analyze: true, test: true, archive: true, schemeName: "scheme", schedule: BotSchedule.manualBotSchedule(), triggers: [], testingDeviceIDs: [], testingDestinationType: BotConfiguration.TestingDestinationIdentifier.AllCompatible, sourceControlBlueprint: MockSourceControlBlueprint())
+        super.init(
+            builtFromClean: BotConfiguration.CleaningPolicy.Never,
+            analyze: true,
+            test: true,
+            archive: true,
+            schemeName: "scheme",
+            schedule: BotSchedule.manualBotSchedule(),
+            triggers: [],
+            deviceSpecification: DeviceSpecification(testingDeviceIDs: []),
+            sourceControlBlueprint: MockSourceControlBlueprint())
     }
 
     required init(json: NSDictionary) {
@@ -177,9 +185,9 @@ class MockIntegration: Integration {
         dict["currentStep"] = step.rawValue
         dict["number"] = number
         dict["result"] = result.rawValue
-        var d1 = dict["revisionBlueprint"] as! NSMutableDictionary
-        var d2 = d1["DVTSourceControlWorkspaceBlueprintLocationsKey"] as! NSMutableDictionary
-        var d3 = d2["CEE8472CC4AB69CD27173B930EB93B6B4AA4BAFC"] as! NSMutableDictionary
+        let d1 = dict["revisionBlueprint"] as! NSMutableDictionary
+        let d2 = d1["DVTSourceControlWorkspaceBlueprintLocationsKey"] as! NSMutableDictionary
+        let d3 = d2["CEE8472CC4AB69CD27173B930EB93B6B4AA4BAFC"] as! NSMutableDictionary
         d3["DVTSourceControlLocationRevisionKey"] = sha
         super.init(json: dict)
     }

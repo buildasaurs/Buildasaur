@@ -21,7 +21,7 @@ public class LocalSource : JSONSerializable {
     
     var url: NSURL {
         didSet {
-            self.refreshMetadata()
+            do { try self.refreshMetadata() } catch {}
         }
     }
     
@@ -104,8 +104,10 @@ public class LocalSource : JSONSerializable {
         self.publicSSHKeyUrl = nil
         self.privateSSHKeyUrl = nil
         self.sshPassphrase = nil
-        let (parsed, error) = self.refreshMetadata()
-        if !parsed {
+        do {
+            try self.refreshMetadata()
+        } catch {
+            Log.error(error)
             return nil
         }
     }
@@ -120,8 +122,10 @@ public class LocalSource : JSONSerializable {
         self.publicSSHKeyUrl = original.publicSSHKeyUrl
         self.privateSSHKeyUrl = original.privateSSHKeyUrl
         self.sshPassphrase = original.sshPassphrase
-        let (parsed, error) = self.refreshMetadata()
-        if !parsed {
+        do {
+            try self.refreshMetadata()
+        } catch {
+            Log.error(error)
             return nil
         }
     }
@@ -131,31 +135,28 @@ public class LocalSource : JSONSerializable {
         return LocalSource(original: self, forkOriginURL: forkURL)
     }
     
-    public class func attemptToParseFromUrl(url: NSURL) -> (Bool, NSDictionary?, NSError?) {
+    public class func attemptToParseFromUrl(url: NSURL) throws -> NSDictionary {
         
-        let (meta, error) = LocalSource.loadWorkspaceMetadata(url)
-        if let error = error {
-            return (false, nil, error)
-        }
+        let meta = try LocalSource.loadWorkspaceMetadata(url)
         
         //validate allowed remote url
-        if self.parseCheckoutType(meta!) == nil {
+        if self.parseCheckoutType(meta) == nil {
             //disallowed
             let allowedString = ", ".join([AllowedCheckoutTypes.SSH].map({ $0.rawValue }))
             let error = Error.withInfo("Disallowed checkout type, the project must be checked out over one of the supported schemes: \(allowedString)")
-            return (false, nil, error)
+            throw error
         }
         
-        return (true, meta, nil)
+        return meta
     }
     
     private class func parseCheckoutType(metadata: NSDictionary) -> AllowedCheckoutTypes? {
         
         if
             let urlString = metadata.optionalStringForKey("IDESourceControlProjectURL"),
-            let url = NSURL(string: urlString),
-            let scheme = url.scheme
+            let url = NSURL(string: urlString)
         {
+            let scheme = url.scheme
             switch scheme {
             case "github.com":
                 return AllowedCheckoutTypes.SSH
@@ -177,20 +178,10 @@ public class LocalSource : JSONSerializable {
         }
     }
 
-    private func refreshMetadata() -> (Bool, NSError?) {
+    private func refreshMetadata() throws {
         
-        let (allowed, meta, error) = LocalSource.attemptToParseFromUrl(self.url)
-        if !allowed {
-            return (false, error)
-        }
-        
-        if let meta = meta {
-            
-            self.workspaceMetadata = meta
-            return (true, nil)
-        } else {
-            return (false, error)
-        }
+        let meta = try LocalSource.attemptToParseFromUrl(self.url)
+        self.workspaceMetadata = meta
     }
     
     public required init?(json: NSDictionary) {
@@ -218,8 +209,9 @@ public class LocalSource : JSONSerializable {
             }
             self.sshPassphrase = json.optionalStringForKey("ssh_passphrase")
             
-            let (success, error) = self.refreshMetadata()
-            if !success {
+            do {
+                try self.refreshMetadata()
+            } catch {
                 Log.error("Error parsing: \(error)")
                 return nil
             }
@@ -249,9 +241,9 @@ public class LocalSource : JSONSerializable {
     
     public func jsonify() -> NSDictionary {
         
-        var json = NSMutableDictionary()
+        let json = NSMutableDictionary()
         
-        json["url"] = self.url.absoluteString!
+        json["url"] = self.url.absoluteString
         json.optionallyAddValueForKey(self.preferredTemplateId, key: "preferred_template_id")
         json.optionallyAddValueForKey(self.githubToken, key: "github_token")
         json.optionallyAddValueForKey(self.publicSSHKeyUrl?.absoluteString, key: "ssh_public_key_url")
@@ -268,15 +260,15 @@ public class LocalSource : JSONSerializable {
         return names
     }
     
-    private class func loadWorkspaceMetadata(url: NSURL) -> (NSDictionary?, NSError?) {
+    private class func loadWorkspaceMetadata(url: NSURL) throws -> NSDictionary {
         
-        return XcodeProjectParser.parseRepoMetadataFromProjectOrWorkspaceURL(url)
+        return try XcodeProjectParser.parseRepoMetadataFromProjectOrWorkspaceURL(url)
     }
     
     public func githubRepoName() -> String? {
         
         if let projectUrl = self.projectURL {
-            let originalStringUrl = projectUrl.absoluteString!
+            let originalStringUrl = projectUrl.absoluteString
             let stringUrl = originalStringUrl.lowercaseString
             
             /*
@@ -286,7 +278,7 @@ public class LocalSource : JSONSerializable {
             and scan up until ".git"
             */
             
-            if let githubRange = stringUrl.rangeOfString("github.com", options: NSStringCompareOptions.allZeros, range: nil, locale: nil),
+            if let githubRange = stringUrl.rangeOfString("github.com", options: NSStringCompareOptions(), range: nil, locale: nil),
                 let dotGitRange = stringUrl.rangeOfString(".git", options: NSStringCompareOptions.BackwardsSearch, range: nil, locale: nil) {
                     
                     let start = advance(githubRange.endIndex, 1)
@@ -302,11 +294,12 @@ public class LocalSource : JSONSerializable {
     private func getContentsOfKeyAtUrl(url: NSURL?) -> String? {
         
         if let url = url {
-            var error: NSError?
-            if let key = NSString(contentsOfURL: url, encoding: NSASCIIStringEncoding, error: &error) {
+            do {
+                let key = try NSString(contentsOfURL: url, encoding: NSASCIIStringEncoding)
                 return key as String
+            } catch {
+                Log.error("Couldn't load key at url \(url) with error \(error)")
             }
-            Log.error("Couldn't load key at url \(url) with error \(error)")
             return nil
         }
         Log.error("Couldn't load key at nil url")
