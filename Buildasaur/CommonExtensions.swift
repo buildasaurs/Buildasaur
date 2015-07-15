@@ -19,14 +19,14 @@ func firstNonNil<T>(objects: [T?]) -> T? {
 
 extension Set {
     
-    func filterSet(includeElement: (T) -> Bool) -> Set<T> {
+    func filterSet(includeElement: (Element) -> Bool) -> Set<Element> {
         return Set(self.filter(includeElement))
     }
 }
 
 extension Array {
     
-    func indexOfFirstObjectPassingTest(test: (T) -> Bool) -> Array<T>.Index? {
+    func indexOfFirstObjectPassingTest(test: (Element) -> Bool) -> Array<Element>.Index? {
         
         for (idx, obj) in self.enumerate() {
             if test(obj) {
@@ -39,13 +39,13 @@ extension Array {
 
 extension Array {
     
-    func mapVoidAsync(transformAsync: (item: T, itemCompletion: () -> ()) -> (), completion: () -> ()) {
+    func mapVoidAsync(transformAsync: (item: Element, itemCompletion: () -> ()) -> (), completion: () -> ()) {
         self.mapAsync(transformAsync, completion: { (_) -> () in
             completion()
         })
     }
     
-    func mapAsync<U>(transformAsync: (item: T, itemCompletion: (U) -> ()) -> (), completion: ([U]) -> ()) {
+    func mapAsync<U>(transformAsync: (item: Element, itemCompletion: (U) -> ()) -> (), completion: ([U]) -> ()) {
         
         let group = dispatch_group_create()
         var returnedValueMap = [Int: U]()
@@ -74,9 +74,9 @@ extension Array {
 extension Array {
     
     //dictionarify an array for fast lookup by a specific key
-    func toDictionary(key: (T) -> String) -> [String: T] {
+    func toDictionary(key: (Element) -> String) -> [String: Element] {
         
-        var dict = [String: T]()
+        var dict = [String: Element]()
         for i in self {
             dict[key(i)] = i
         }
