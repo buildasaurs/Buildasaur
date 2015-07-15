@@ -26,13 +26,17 @@ extension HDGitHubXCBotSyncer {
         }
     }
     
-    class func baseCommentFromIntegration(integration: Integration) -> String {
+    class func baseCommentLinesFromIntegration(integration: Integration) -> [String] {
         
-        var comment = "Result of integration \(integration.number)\n"
+        var lines = [String]()
+        
+        lines.append("Result of Integration **\(integration.number)**")
+        lines.append("---")
+        
         if let duration = self.formattedDurationOfIntegration(integration) {
-            comment += "Integration took " + duration + ".\n"
+            lines.append("*Duration*: " + duration)
         }
-        return comment
+        return lines
     }
     
 }

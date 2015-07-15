@@ -243,12 +243,24 @@ public class SyncPairResolver {
             )
     }
     
+    private func statusAndCommentFromLines(lines: [String], status: Status) -> HDGitHubXCBotSyncer.GitHubStatusAndComment {
+        
+        let comment: String?
+        if lines.count == 0 {
+            comment = nil
+        } else {
+            comment = "\n".join(lines)
+        }
+        return (status: status, comment: comment)
+    }
+    
     func resolveStatusFromCompletedIntegrations(
         integrations: Set<Integration>) -> HDGitHubXCBotSyncer.GitHubStatusAndComment {
             
             //get integrations sorted by number
             let sortedDesc = Array(integrations).sort { $0.number > $1.number }
-            
+            let resultString = "*Result*: "
+
             //if there are any succeeded, it wins - iterating from the end
             if let passingIntegration = sortedDesc.filter({
                 (integration: Integration) -> Bool in
@@ -260,18 +272,26 @@ public class SyncPairResolver {
                 }
             }).first {
                 
-                let baseComment = HDGitHubXCBotSyncer.baseCommentFromIntegration(passingIntegration)
-                let comment: String
+                var lines = HDGitHubXCBotSyncer.baseCommentLinesFromIntegration(passingIntegration)
+                
                 let status = HDGitHubXCBotSyncer.createStatusFromState(.Success, description: "Build passed!")
+                
                 let summary = passingIntegration.buildResultSummary!
                 if passingIntegration.result == .Succeeded {
-                    comment = baseComment + "Perfect build! All \(summary.testsCount) tests passed. :+1:"
+                    lines.append(resultString + "**Perfect build!** All \(summary.testsCount) tests passed. :+1:")
                 } else if passingIntegration.result == .Warnings {
-                    comment = baseComment + "All \(summary.testsCount) tests passed, but please fix \(summary.warningCount) warnings."
+                    lines.append(resultString + "All \(summary.testsCount) tests passed, but please **fix \(summary.warningCount) warnings**.")
                 } else {
-                    comment = baseComment + "All \(summary.testsCount) tests passed, but please fix \(summary.analyzerWarningCount) analyzer warnings."
+                    lines.append(resultString + "All \(summary.testsCount) tests passed, but please **fix \(summary.analyzerWarningCount) analyzer warnings**.")
                 }
-                return (status: status, comment: comment)
+                
+                //and code coverage
+                let codeCoveragePercentage = summary.codeCoveragePercentage
+                if codeCoveragePercentage > 0 {
+                    lines.append("*Test Coverage*: \(codeCoveragePercentage)%.")
+                }
+                
+                return self.statusAndCommentFromLines(lines, status: status)
             }
             
             //ok, no succeeded, warnings or analyzer warnings, get down to test failures
@@ -279,11 +299,11 @@ public class SyncPairResolver {
                 $0.result! == Integration.Result.TestFailures
             }).first {
                 
-                let baseComment = HDGitHubXCBotSyncer.baseCommentFromIntegration(testFailingIntegration)
+                var lines = HDGitHubXCBotSyncer.baseCommentLinesFromIntegration(testFailingIntegration)
                 let status = HDGitHubXCBotSyncer.createStatusFromState(.Failure, description: "Build failed tests!")
                 let summary = testFailingIntegration.buildResultSummary!
-                let comment = baseComment + "Build failed \(summary.testFailureCount) tests out of \(summary.testsCount)"
-                return (status: status, comment: comment)
+                lines.append(resultString + "**Build failed \(summary.testFailureCount) tests** out of \(summary.testsCount)")
+                return self.statusAndCommentFromLines(lines, status: status)
             }
             
             //ok, the build didn't even run then. it either got cancelled or failed
@@ -291,7 +311,7 @@ public class SyncPairResolver {
                 $0.result! != Integration.Result.Canceled
             }).first {
                 
-                let baseComment = HDGitHubXCBotSyncer.baseCommentFromIntegration(erroredIntegration)
+                var lines = HDGitHubXCBotSyncer.baseCommentLinesFromIntegration(erroredIntegration)
                 let errorCount: String
                 if let summary = erroredIntegration.buildResultSummary {
                     errorCount = "\(summary.errorCount)"
@@ -299,8 +319,8 @@ public class SyncPairResolver {
                     errorCount = "?"
                 }
                 let status = HDGitHubXCBotSyncer.createStatusFromState(.Error, description: "Build error!")
-                let comment = baseComment + "\(errorCount) build errors: \(erroredIntegration.result!.rawValue)"
-                return (status: status, comment: comment)
+                lines.append(resultString + "**\(errorCount) errors, failing state: \(erroredIntegration.result!.rawValue)**")
+                return self.statusAndCommentFromLines(lines, status: status)
             }
             
             //cool, not even build error. it must be just canceled ones then.
@@ -308,10 +328,12 @@ public class SyncPairResolver {
                 $0.result! == Integration.Result.Canceled
             }).first {
                 
-                let baseComment = HDGitHubXCBotSyncer.baseCommentFromIntegration(canceledIntegration)
+                var lines = HDGitHubXCBotSyncer.baseCommentLinesFromIntegration(canceledIntegration)
                 let status = HDGitHubXCBotSyncer.createStatusFromState(.Error, description: "Build canceled!")
-                let comment = baseComment + "Build was manually canceled."
-                return (status: status, comment: comment)
+                
+                //TODO: find out who canceled it and add it to the comment?
+                lines.append("Build was **manually canceled**.")
+                return self.statusAndCommentFromLines(lines, status: status)
             }
             
             //hmm no idea, if we got all the way here. just leave it with no state.
