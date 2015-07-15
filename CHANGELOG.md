@@ -1,10 +1,12 @@
 # Change Log
 
-## [Unreleased](https://github.com/czechboy0/Buildasaur/tree/HEAD)
+## [v0.3-beta2](https://github.com/czechboy0/Buildasaur/tree/v0.3-beta2) (2015-07-15)
 
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3-beta1...HEAD)
+[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3-beta1...v0.3-beta2)
 
 **Merged pull requests:**
+
+- Fixed generic array parameter name changed in Xcode 7 beta 3 [\#90](https://github.com/czechboy0/Buildasaur/pull/90) ([czechboy0](https://github.com/czechboy0))
 
 - Update master -\> gladiolus [\#88](https://github.com/czechboy0/Buildasaur/pull/88) ([czechboy0](https://github.com/czechboy0))
 
