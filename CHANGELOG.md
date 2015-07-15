@@ -1,5 +1,13 @@
 # Change Log
 
+## [Unreleased](https://github.com/czechboy0/Buildasaur/tree/HEAD)
+
+[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3-beta2...HEAD)
+
+**Merged pull requests:**
+
+- Adding Code Coverage and Test Number changes to comments [\#91](https://github.com/czechboy0/Buildasaur/pull/91) ([czechboy0](https://github.com/czechboy0))
+
 ## [v0.3-beta2](https://github.com/czechboy0/Buildasaur/tree/v0.3-beta2) (2015-07-15)
 
 [Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3-beta1...v0.3-beta2)
