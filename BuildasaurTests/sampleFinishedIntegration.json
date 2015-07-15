@@ -111,7 +111,9 @@
     "warningCount": 0,
     "errorChange": 0,
     "improvedPerfTestCount": 0,
-    "analyzerWarningChange": 0
+    "analyzerWarningChange": 0,
+    "codeCoveragePercentageDelta": 0,
+    "codeCoveragePercentage": 0
   },
   "result": "succeeded",
   "testedDevices": [

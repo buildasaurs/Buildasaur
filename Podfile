@@ -2,7 +2,7 @@ platform :osx, '10.10'
 use_frameworks!
 
 xcs_name = 'XcodeServerSDK'
-xcs_tag = '0.1.2'
+xcs_tag = '0.1.3'
 
 target 'BuildaUtils' do
 pod xcs_name, xcs_tag
