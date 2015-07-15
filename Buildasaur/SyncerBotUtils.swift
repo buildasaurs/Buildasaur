@@ -30,10 +30,11 @@ extension HDGitHubXCBotSyncer {
         
         var lines = [String]()
         
-        lines.append("Result of integration \(integration.number)")
+        lines.append("Result of Integration **\(integration.number)**")
+        lines.append("---")
         
         if let duration = self.formattedDurationOfIntegration(integration) {
-            lines.append("Integration took " + duration + ".")
+            lines.append("*Duration*: " + duration)
         }
         return lines
     }

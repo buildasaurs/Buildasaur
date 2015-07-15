@@ -259,7 +259,8 @@ public class SyncPairResolver {
             
             //get integrations sorted by number
             let sortedDesc = Array(integrations).sort { $0.number > $1.number }
-            
+            let resultString = "*Result*: "
+
             //if there are any succeeded, it wins - iterating from the end
             if let passingIntegration = sortedDesc.filter({
                 (integration: Integration) -> Bool in
@@ -277,30 +278,18 @@ public class SyncPairResolver {
                 
                 let summary = passingIntegration.buildResultSummary!
                 if passingIntegration.result == .Succeeded {
-                    lines.append("Perfect build! All \(summary.testsCount) tests passed. :+1:")
+                    lines.append(resultString + "**Perfect build!** All \(summary.testsCount) tests passed. :+1:")
                 } else if passingIntegration.result == .Warnings {
-                    lines.append("All \(summary.testsCount) tests passed, but please fix \(summary.warningCount) warnings.")
+                    lines.append(resultString + "All \(summary.testsCount) tests passed, but please **fix \(summary.warningCount) warnings**.")
                 } else {
-                    lines.append("All \(summary.testsCount) tests passed, but please fix \(summary.analyzerWarningCount) analyzer warnings.")
-                }
-                
-                //also add test changes
-                let testsChange = summary.testsChange
-                if testsChange != 0 {
-                    
-                    if testsChange > 0 {
-                        lines.append("Thanks for adding \(testsChange) tests!")
-                    } else {
-                        lines.append("Are you sure you meant to remove \(-testsChange) tests?")
-                    }
+                    lines.append(resultString + "All \(summary.testsCount) tests passed, but please **fix \(summary.analyzerWarningCount) analyzer warnings**.")
                 }
                 
                 //and code coverage
-//                let codeCoverageChange = summary.
-                
-                //also add current code coverage
-//                let codeCoverage = summary.codeCoveragePercentage
-//                summary.
+                let codeCoveragePercentage = summary.codeCoveragePercentage
+                if codeCoveragePercentage > 0 {
+                    lines.append("*Test Coverage*: \(codeCoveragePercentage)%.")
+                }
                 
                 return self.statusAndCommentFromLines(lines, status: status)
             }
@@ -313,7 +302,7 @@ public class SyncPairResolver {
                 var lines = HDGitHubXCBotSyncer.baseCommentLinesFromIntegration(testFailingIntegration)
                 let status = HDGitHubXCBotSyncer.createStatusFromState(.Failure, description: "Build failed tests!")
                 let summary = testFailingIntegration.buildResultSummary!
-                lines.append("Build failed \(summary.testFailureCount) tests out of \(summary.testsCount)")
+                lines.append(resultString + "**Build failed \(summary.testFailureCount) tests** out of \(summary.testsCount)")
                 return self.statusAndCommentFromLines(lines, status: status)
             }
             
@@ -330,7 +319,7 @@ public class SyncPairResolver {
                     errorCount = "?"
                 }
                 let status = HDGitHubXCBotSyncer.createStatusFromState(.Error, description: "Build error!")
-                lines.append("\(errorCount) build errors: \(erroredIntegration.result!.rawValue)")
+                lines.append(resultString + "**\(errorCount) errors, failing state: \(erroredIntegration.result!.rawValue)**")
                 return self.statusAndCommentFromLines(lines, status: status)
             }
             
@@ -343,7 +332,7 @@ public class SyncPairResolver {
                 let status = HDGitHubXCBotSyncer.createStatusFromState(.Error, description: "Build canceled!")
                 
                 //TODO: find out who canceled it and add it to the comment?
-                lines.append("Build was manually canceled.")
+                lines.append("Build was **manually canceled**.")
                 return self.statusAndCommentFromLines(lines, status: status)
             }
             

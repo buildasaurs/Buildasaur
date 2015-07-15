@@ -1,10 +1,10 @@
 PODS:
-  - XcodeServerSDK (0.1.1)
+  - XcodeServerSDK (0.1.2)
 
 DEPENDENCIES:
-  - XcodeServerSDK (= 0.1.1)
+  - XcodeServerSDK (= 0.1.2)
 
 SPEC CHECKSUMS:
-  XcodeServerSDK: 706eb2900e8ff510da46321362c38c1aee4971bd
+  XcodeServerSDK: 97bff1ff36f379e10a51261eb5a94498b47bd95e
 
 COCOAPODS: 0.37.2
