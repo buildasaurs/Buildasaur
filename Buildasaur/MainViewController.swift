@@ -18,7 +18,7 @@ class MainViewController: NSViewController, NSTableViewDataSource, StatusSibling
     var projectStatusViewController: StatusProjectViewController!
     var serverStatusViewController: StatusServerViewController!
     
-    private var buildTemplateParams: (buildTemplate: BuildTemplate?, project: LocalSource)?
+    private var buildTemplateParams: (buildTemplate: BuildTemplate?, project: Project)?
     
     required init?(coder: NSCoder) {
         
@@ -74,7 +74,7 @@ class MainViewController: NSViewController, NSTableViewDataSource, StatusSibling
         return self.serverStatusViewController
     }
     
-    func showBuildTemplateViewControllerForTemplate(template: BuildTemplate?, project: LocalSource, sender: SetupViewControllerDelegate?) {
+    func showBuildTemplateViewControllerForTemplate(template: BuildTemplate?, project: Project, sender: SetupViewControllerDelegate?) {
 
         self.buildTemplateParams = (buildTemplate: template, project: project)
         self.performSegueWithIdentifier("showBuildTemplate", sender: sender)

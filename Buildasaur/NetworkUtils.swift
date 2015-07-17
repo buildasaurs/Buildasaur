@@ -13,11 +13,11 @@ import XcodeServerSDK
 
 class NetworkUtils {
     
-    class func checkAvailabilityOfGitHubWithCurrentSettingsOfProject(project: LocalSource, completion: (success: Bool, error: NSError?) -> ()) {
+    class func checkAvailabilityOfGitHubWithCurrentSettingsOfProject(project: Project, completion: (success: Bool, error: NSError?) -> ()) {
         
         let token = project.githubToken
         let server = GitHubFactory.server(token)
-        let credentialValidationBlueprint = project.createSourceControlBlueprintForCredentialVerification()
+//        let credentialValidationBlueprint = project.createSourceControlBlueprintForCredentialVerification()
         
         //check if we can get PRs, that should be representative enough
         if let repoName = project.githubRepoName() {

@@ -22,19 +22,19 @@ public class HDGitHubXCBotSyncer : Syncer {
     
     let github: GitHubServer!
     let xcodeServer: XcodeServer!
-    let localSource: LocalSource!
+    let project: Project!
     let waitForLttm: Bool
     let postStatusComments: Bool
     public var watchedBranchNames: [String]
     
     public typealias GitHubStatusAndComment = (status: Status, comment: String?)
     
-    public init(integrationServer: XcodeServer, sourceServer: GitHubServer, localSource: LocalSource,
+    public init(integrationServer: XcodeServer, sourceServer: GitHubServer, project: Project,
         syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool, watchedBranchNames: [String]) {
             
             self.github = sourceServer
             self.xcodeServer = integrationServer
-            self.localSource = localSource
+            self.project = project
             self.waitForLttm = waitForLttm
             self.postStatusComments = postStatusComments
             self.watchedBranchNames = watchedBranchNames
@@ -50,7 +50,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             let project = storageManager.projects.filter({ $0.url.absoluteString == projectPath }).first,
             let serverConfig = storageManager.servers.filter({ $0.host == serverHost }).first
         {
-            self.localSource = project
+            self.project = project
             self.github = GitHubFactory.server(project.githubToken)
             self.xcodeServer = XcodeServerFactory.server(serverConfig)
             self.waitForLttm = json.optionalBoolForKey("wait_for_lttm") ?? true
@@ -62,7 +62,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             
             self.github = nil
             self.xcodeServer = nil
-            self.localSource = nil
+            self.project = nil
             self.waitForLttm = true
             self.postStatusComments = true
             self.watchedBranchNames = []
@@ -75,7 +75,7 @@ public class HDGitHubXCBotSyncer : Syncer {
         
         let dict = NSMutableDictionary()
         dict["sync_interval"] = self.syncInterval
-        dict["project_path"] = self.localSource.url.absoluteString
+        dict["project_path"] = self.project.url.absoluteString
         dict["server_host"] = self.xcodeServer.config.host
         dict["wait_for_lttm"] = self.waitForLttm
         dict["post_status_comments"] = self.postStatusComments
@@ -84,7 +84,7 @@ public class HDGitHubXCBotSyncer : Syncer {
     }
     
     func repoName() -> String? {
-        return self.localSource.githubRepoName()
+        return self.project.githubRepoName()
     }
     
     //TODO: migrate this shit to RAC, the callback hell below hurts my eyes (you've been warned)

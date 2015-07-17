@@ -51,7 +51,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         self.lastAvailabilityCheckStatus = .Unchecked
     }
         
-    func project() -> LocalSource? {
+    func project() -> Project? {
         return self.storageManager.projects.first
     }
     
@@ -173,7 +173,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
                 buildTemplate = self.storageManager.buildTemplates.filter({ $0.name == templatePulled }).first
             }
             if buildTemplate == nil {
-                buildTemplate = BuildTemplate()
+                buildTemplate = BuildTemplate(projectName: self.project()!.projectName!)
             }
             
             self.delegate.showBuildTemplateViewControllerForTemplate(buildTemplate, project: self.project()!, sender: self)

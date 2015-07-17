@@ -15,7 +15,7 @@ protocol StatusSiblingsViewControllerDelegate: class {
     
     func getProjectStatusViewController() -> StatusProjectViewController
     func getServerStatusViewController() -> StatusServerViewController
-    func showBuildTemplateViewControllerForTemplate(template: BuildTemplate?, project: LocalSource, sender: SetupViewControllerDelegate?)
+    func showBuildTemplateViewControllerForTemplate(template: BuildTemplate?, project: Project, sender: SetupViewControllerDelegate?)
 }
 
 class StatusViewController: NSViewController {

@@ -1,5 +1,5 @@
 //
-//  XcodeLocalSource.swift
+//  XcodeProject.swift
 //  Buildasaur
 //
 //  Created by Honza Dvorsky on 15/02/2015.
@@ -9,7 +9,7 @@
 import Foundation
 import XcodeServerSDK
 
-extension LocalSource {
+extension Project {
     
     public func createSourceControlBlueprint(branch: String) -> SourceControlBlueprint {
         

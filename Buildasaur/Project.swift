@@ -1,5 +1,5 @@
 //
-//  LocalSource.swift
+//  Project.swift
 //  Buildasaur
 //
 //  Created by Honza Dvorsky on 14/02/2015.

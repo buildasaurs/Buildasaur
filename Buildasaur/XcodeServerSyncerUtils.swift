@@ -13,7 +13,7 @@ import BuildaUtils
 
 class XcodeServerSyncerUtils {
     
-    class func createBotFromBuildTemplate(botName: String, template: BuildTemplate, project: LocalSource, branch: String, scheduleOverride: BotSchedule?, xcodeServer: XcodeServer, completion: (bot: Bot?, error: NSError?) -> ()) {
+    class func createBotFromBuildTemplate(botName: String, template: BuildTemplate, project: Project, branch: String, scheduleOverride: BotSchedule?, xcodeServer: XcodeServer, completion: (bot: Bot?, error: NSError?) -> ()) {
         
         //pull info from template
         let schemeName = template.scheme!
