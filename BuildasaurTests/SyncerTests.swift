@@ -31,7 +31,7 @@ class SyncerTests: XCTestCase {
         
         let xcodeServer = MockXcodeServer()
         let githubServer = MockGitHubServer()
-        let project = MockLocalSource()
+        let project = MockProject()
         let syncInterval = 15.0
         let waitForLttm = true
         let postStatusComments = true
@@ -40,7 +40,7 @@ class SyncerTests: XCTestCase {
         let syncer = HDGitHubXCBotSyncer(
             integrationServer: xcodeServer,
             sourceServer: githubServer,
-            localSource: project,
+            project: project,
             syncInterval: syncInterval,
             waitForLttm: waitForLttm,
             postStatusComments: postStatusComments,

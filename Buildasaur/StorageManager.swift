@@ -19,7 +19,7 @@ class StorageManager {
     
     private(set) var syncers: [HDGitHubXCBotSyncer] = []
     private(set) var servers: [XcodeServerConfig] = []
-    private(set) var projects: [LocalSource] = []
+    private(set) var projects: [Project] = []
     private(set) var buildTemplates: [BuildTemplate] = []
     
     init() {
@@ -34,11 +34,11 @@ class StorageManager {
     
     func addProjectAtURL(url: NSURL) throws {
         
-        _ = try LocalSource.attemptToParseFromUrl(url)
-        if let localSource = LocalSource(url: url) {
-            self.projects.append(localSource)
+        _ = try Project.attemptToParseFromUrl(url)
+        if let project = Project(url: url) {
+            self.projects.append(project)
         } else {
-            assertionFailure("Attempt to parse succeeded but LocalSource still wasn't created")
+            assertionFailure("Attempt to parse succeeded but Project still wasn't created")
         }
     }
     
@@ -48,7 +48,7 @@ class StorageManager {
     }
     
     func addSyncer(syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool,
-        project: LocalSource, serverConfig: XcodeServerConfig, watchedBranchNames: [String]) -> HDGitHubXCBotSyncer? {
+        project: Project, serverConfig: XcodeServerConfig, watchedBranchNames: [String]) -> HDGitHubXCBotSyncer? {
 
         if syncInterval <= 0 {
             Log.error("Sync interval must be > 0 seconds.")
@@ -60,7 +60,7 @@ class StorageManager {
         let syncer = HDGitHubXCBotSyncer(
             integrationServer: xcodeServer,
             sourceServer: github,
-            localSource: project,
+            project: project,
             syncInterval: syncInterval,
             waitForLttm: waitForLttm,
             postStatusComments: postStatusComments,
@@ -109,7 +109,7 @@ class StorageManager {
         self.saveBuildTemplates()
     }
     
-    func removeProject(project: LocalSource) {
+    func removeProject(project: Project) {
         
         for (idx, p) in self.projects.enumerate() {
             if project.url == p.url {
@@ -180,7 +180,7 @@ class StorageManager {
             let json = try Persistence.loadJSONFromUrl(projectsUrl)
             
             if let json = json as? [NSDictionary] {
-                let allProjects = json.map { LocalSource(json: $0) }
+                let allProjects = json.map { Project(json: $0) }
                 let parsedProjects = allProjects.filter { $0 != nil }.map { $0! }
                 if allProjects.count != parsedProjects.count {
                     Log.error("Some projects failed to parse, will be ignored.")

@@ -14,7 +14,7 @@ import XcodeServerSDK
 class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate, SetupViewControllerDelegate, NSComboBoxDataSource {
     
     var storageManager: StorageManager!
-    var project: LocalSource!
+    var project: Project!
     var buildTemplate: BuildTemplate!
     var xcodeServer: XcodeServer?
     
@@ -77,7 +77,10 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
         self.schemesComboBox.addItemsWithObjectValues(schemes)
         
         let temp = self.buildTemplate
-        
+
+        let projectName = self.project.projectName
+        self.buildTemplate.projectName = projectName
+
         //name
         self.nameTextField.stringValue = temp.name ?? ""
         
@@ -124,8 +127,6 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
         if let destinationIndex = filters.indexOfFirstObjectPassingTest({ $0 == filter }) {
             self.testDeviceFilterComboBox.selectItemAtIndex(destinationIndex)
         }
-        
-        return
     }
     
     func fetchDevices(completion: () -> ()) {

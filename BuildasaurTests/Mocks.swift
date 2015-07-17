@@ -25,7 +25,7 @@ class MockGitHubServer: GitHubServer {
     }
 }
 
-class MockLocalSource: LocalSource {
+class MockProject: Project {
     override init() {
         super.init()
     }

@@ -47,7 +47,7 @@ class ManualBotManagementViewController: NSViewController {
     func fetchBranches(completion: ([Branch]?, NSError?) -> ()) {
         
         self.branchActivityIndicator.startAnimation(nil)
-        let repoName = self.syncer.localSource.githubRepoName()!
+        let repoName = self.syncer.project.githubRepoName()!
         self.syncer.github.getBranchesOfRepo(repoName, completion: { (branches, error) -> () in
             
             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
@@ -101,7 +101,7 @@ class ManualBotManagementViewController: NSViewController {
             let branch = self.pullBranchName(),
             let template = self.pullTemplate()
         {
-            let project = self.syncer.localSource
+            let project = self.syncer.project
             let xcodeServer = self.syncer.xcodeServer
             
             self.creatingActivityIndicator.startAnimation(nil)

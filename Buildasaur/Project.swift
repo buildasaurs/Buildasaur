@@ -1,5 +1,5 @@
 //
-//  LocalSource.swift
+//  Project.swift
 //  Buildasaur
 //
 //  Created by Honza Dvorsky on 14/02/2015.
@@ -10,7 +10,7 @@ import Foundation
 import BuildaUtils
 import XcodeServerSDK
 
-public class LocalSource : JSONSerializable {
+public class Project : JSONSerializable {
     
     enum AllowedCheckoutTypes: String {
         case SSH = "SSH"
@@ -83,7 +83,7 @@ public class LocalSource : JSONSerializable {
         get {
             if
                 let meta = self.workspaceMetadata,
-                let type = LocalSource.parseCheckoutType(meta) {
+                let type = Project.parseCheckoutType(meta) {
                     return type
             }
             return nil
@@ -112,7 +112,7 @@ public class LocalSource : JSONSerializable {
         }
     }
     
-    private init?(original: LocalSource, forkOriginURL: String) {
+    private init?(original: Project, forkOriginURL: String) {
         
         self.forkOriginURL = forkOriginURL
         self.url = original.url
@@ -130,14 +130,14 @@ public class LocalSource : JSONSerializable {
         }
     }
     
-    public func duplicateForForkAtOriginURL(forkURL: String) -> LocalSource? {
+    public func duplicateForForkAtOriginURL(forkURL: String) -> Project? {
         
-        return LocalSource(original: self, forkOriginURL: forkURL)
+        return Project(original: self, forkOriginURL: forkURL)
     }
     
     public class func attemptToParseFromUrl(url: NSURL) throws -> NSDictionary {
         
-        let meta = try LocalSource.loadWorkspaceMetadata(url)
+        let meta = try Project.loadWorkspaceMetadata(url)
         
         //validate allowed remote url
         if self.parseCheckoutType(meta) == nil {
@@ -180,7 +180,7 @@ public class LocalSource : JSONSerializable {
 
     private func refreshMetadata() throws {
         
-        let meta = try LocalSource.attemptToParseFromUrl(self.url)
+        let meta = try Project.attemptToParseFromUrl(self.url)
         self.workspaceMetadata = meta
     }
     

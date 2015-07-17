@@ -11,6 +11,7 @@ import BuildaUtils
 import XcodeServerSDK
 
 private let kKeyUniqueId = "id"
+private let kKeyProjectName = "project_name"
 private let kKeyName = "name"
 private let kKeyScheme = "scheme"
 private let kKeySchedule = "schedule"
@@ -25,7 +26,9 @@ private let kKeyShouldArchive = "should_archive"
 
 class BuildTemplate: JSONSerializable {
     
-    var uniqueId: String //unique id of this build template, so that we can rename them easily
+    let uniqueId: String //unique id of this build template, so that we can rename them easily
+    
+    var projectName: String?
     var name: String?
     var scheme: String?
     var schedule: BotSchedule? //will be ignored for Synced bots, only useful for Manual creation. default: Manual
@@ -47,9 +50,10 @@ class BuildTemplate: JSONSerializable {
         return true
     }
     
-    init() {
+    init(projectName: String) {
         self.uniqueId = NSUUID().UUIDString
-        self.name = "New Build Template Name"
+        self.projectName = projectName
+        self.name = "New Build Template"
         self.scheme = nil
         self.schedule = BotSchedule.manualBotSchedule()
         self.cleaningPolicy = BotConfiguration.CleaningPolicy.Never
@@ -65,6 +69,7 @@ class BuildTemplate: JSONSerializable {
     required init?(json: NSDictionary) {
         
         self.uniqueId = json.optionalStringForKey(kKeyUniqueId) ?? ""
+        self.projectName = json.optionalStringForKey(kKeyProjectName)
         self.name = json.optionalStringForKey(kKeyName)
         self.scheme = json.optionalStringForKey(kKeyScheme)
         if let scheduleDict = json.optionalDictionaryForKey(kKeySchedule) {
@@ -121,6 +126,7 @@ class BuildTemplate: JSONSerializable {
         dict[kKeyDeviceFilter] = self.deviceFilter.rawValue
         dict[kKeyTestingDevices] = self.testingDeviceIds ?? []
         dict[kKeyCleaningPolicy] = self.cleaningPolicy.rawValue
+        dict.optionallyAddValueForKey(self.projectName, key: kKeyProjectName)
         dict.optionallyAddValueForKey(self.name, key: kKeyName)
         dict.optionallyAddValueForKey(self.scheme, key: kKeyScheme)
         dict.optionallyAddValueForKey(self.schedule?.dictionarify(), key: kKeySchedule)

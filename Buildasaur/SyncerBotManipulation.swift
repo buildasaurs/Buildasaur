@@ -60,22 +60,22 @@ extension HDGitHubXCBotSyncer {
         
         //to handle forks
         let headOriginUrl = repo.repoUrlSSH
-        let localProjectOriginUrl = self.localSource.projectURL!.absoluteString
+        let localProjectOriginUrl = self.project.projectURL!.absoluteString
         
-        let project: LocalSource
+        let project: Project
         if headOriginUrl != localProjectOriginUrl {
             
             //we have a fork, duplicate the metadata with the fork's origin
-            if let source = self.localSource.duplicateForForkAtOriginURL(headOriginUrl) {
+            if let source = self.project.duplicateForForkAtOriginURL(headOriginUrl) {
                 project = source
             } else {
-                self.notifyError(Error.withInfo("Couldn't create a LocalSource for fork with origin at url \(headOriginUrl)"), context: "Creating a bot from a PR")
+                self.notifyError(Error.withInfo("Couldn't create a Project for fork with origin at url \(headOriginUrl)"), context: "Creating a bot from a PR")
                 completion()
                 return
             }
         } else {
-            //a normal PR in the same repo, no need to duplicate, just use the existing localSource
-            project = self.localSource
+            //a normal PR in the same repo, no need to duplicate, just use the existing project
+            project = self.project
         }
         
         let xcodeServer = self.xcodeServer
@@ -108,7 +108,7 @@ extension HDGitHubXCBotSyncer {
     private func currentBuildTemplate() -> BuildTemplate! {
         
         if
-            let preferredTemplateId = self.localSource.preferredTemplateId,
+            let preferredTemplateId = self.project.preferredTemplateId,
             let template = StorageManager.sharedInstance.buildTemplates.filter({ $0.uniqueId == preferredTemplateId }).first {
                 return template
         }
