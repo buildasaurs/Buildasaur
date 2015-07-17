@@ -371,6 +371,10 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
         return false
     }
 
+    private func cleanTestingDeviceIds() {
+        self.buildTemplate.testingDeviceIds = []
+    }
+    
     func comboBoxSelectionDidChange(notification: NSNotification) {
         
         if let comboBox = notification.object as? NSComboBox {
@@ -379,6 +383,7 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
                 
                 self.pullFilterFromUI(true)
                 self.reloadUI()
+                self.cleanTestingDeviceIds()
                 
                 //filter changed, refetch
                 self.fetchDevices({ () -> () in
@@ -390,6 +395,7 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
                     self.testDeviceFilterComboBox.selectItemAtIndex(0)
                 }
                 self.pullSchemeFromUI(true)
+                self.cleanTestingDeviceIds()
             }
         }
     }
