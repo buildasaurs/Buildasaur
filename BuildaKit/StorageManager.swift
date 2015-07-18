@@ -11,16 +11,14 @@ import BuildaGitServer
 import BuildaUtils
 import XcodeServerSDK
 
-//TODO: dump logs to a file (Cocoa Lumberjack?) in Application Support, so that people can send it for debugging
-
-class StorageManager {
+public class StorageManager {
     
-    static let sharedInstance = StorageManager()
+    public static let sharedInstance = StorageManager()
     
-    private(set) var syncers: [HDGitHubXCBotSyncer] = []
-    private(set) var servers: [XcodeServerConfig] = []
-    private(set) var projects: [Project] = []
-    private(set) var buildTemplates: [BuildTemplate] = []
+    private(set) public var syncers: [HDGitHubXCBotSyncer] = []
+    private(set) public var servers: [XcodeServerConfig] = []
+    private(set) public var projects: [Project] = []
+    private(set) public var buildTemplates: [BuildTemplate] = []
     
     init() {
         
@@ -32,7 +30,7 @@ class StorageManager {
         self.stop()
     }
     
-    func addProjectAtURL(url: NSURL) throws {
+    public func addProjectAtURL(url: NSURL) throws {
         
         _ = try Project.attemptToParseFromUrl(url)
         if let project = Project(url: url) {
@@ -42,12 +40,12 @@ class StorageManager {
         }
     }
     
-    func addServerConfig(host host: String, user: String?, password: String?) {
+    public func addServerConfig(host host: String, user: String?, password: String?) {
         let config = try! XcodeServerConfig(host: host, user: user, password: password)
         self.servers.append(config)
     }
     
-    func addSyncer(syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool,
+    public func addSyncer(syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool,
         project: Project, serverConfig: XcodeServerConfig, watchedBranchNames: [String]) -> HDGitHubXCBotSyncer? {
 
         if syncInterval <= 0 {
@@ -69,7 +67,7 @@ class StorageManager {
         return syncer
     }
     
-    func saveBuildTemplate(buildTemplate: BuildTemplate) {
+    public func saveBuildTemplate(buildTemplate: BuildTemplate) {
         
         //in case we have a duplicate, replace
         var duplicateFound = false
@@ -89,7 +87,7 @@ class StorageManager {
         self.saveBuildTemplates()
     }
     
-    func removeBuildTemplate(buildTemplate: BuildTemplate) {
+    public func removeBuildTemplate(buildTemplate: BuildTemplate) {
         
         //remove from the memory storage
         for (idx, temp) in self.buildTemplates.enumerate() {
@@ -109,7 +107,7 @@ class StorageManager {
         self.saveBuildTemplates()
     }
     
-    func removeProject(project: Project) {
+    public func removeProject(project: Project) {
         
         for (idx, p) in self.projects.enumerate() {
             if project.url == p.url {
@@ -119,7 +117,7 @@ class StorageManager {
         }
     }
     
-    func removeServer(serverConfig: XcodeServerConfig) {
+    public func removeServer(serverConfig: XcodeServerConfig) {
         
         for (idx, p) in self.servers.enumerate() {
             if serverConfig.host == p.host {
@@ -129,13 +127,13 @@ class StorageManager {
         }
     }
     
-    func removeSyncer(syncer: HDGitHubXCBotSyncer) {
+    public func removeSyncer(syncer: HDGitHubXCBotSyncer) {
         
         //don't know how to compare syncers yet
         self.syncers.removeAll(keepCapacity: true)
     }
     
-    func loadAllFromPersistence() {
+    public func loadAllFromPersistence() {
         
         self.loadProjects()
         self.loadServers()
@@ -245,7 +243,7 @@ class StorageManager {
         })
     }
     
-    func saveProjects() {
+    public func saveProjects() {
         
         let projectsUrl = Persistence.getFileInAppSupportWithName("Projects.json", isDirectory: false)
         let jsons = self.projects.map { $0.jsonify() }
@@ -256,7 +254,7 @@ class StorageManager {
         }
     }
     
-    func saveServers() {
+    public func saveServers() {
         
         let serversUrl = Persistence.getFileInAppSupportWithName("ServerConfigs.json", isDirectory: false)
         let jsons = self.servers.map { $0.jsonify() }
@@ -267,7 +265,7 @@ class StorageManager {
         }
     }
     
-    func saveSyncers() {
+    public func saveSyncers() {
 
         let syncersUrl = Persistence.getFileInAppSupportWithName("Syncers.json", isDirectory: false)
         let jsons = self.syncers.map { $0.jsonify() }
@@ -278,7 +276,7 @@ class StorageManager {
         }
     }
     
-    func saveBuildTemplates() {
+    public func saveBuildTemplates() {
         
         let templatesFolderUrl = Persistence.getFileInAppSupportWithName("BuildTemplates", isDirectory: true)
         self.buildTemplates.map {
@@ -295,12 +293,12 @@ class StorageManager {
         }
     }
     
-    func stop() {
+    public func stop() {
         self.saveAll()
         self.stopSyncers()
     }
     
-    func saveAll() {
+    public func saveAll() {
         //save to persistence
         
         self.saveProjects()
@@ -309,14 +307,14 @@ class StorageManager {
         self.saveSyncers()
     }
     
-    private func stopSyncers() {
+    public func stopSyncers() {
         
         for syncer in self.syncers {
             syncer.active = false
         }
     }
     
-    private func startSyncers() {
+    public func startSyncers() {
         //start all syncers in memory
         
         for syncer in self.syncers {

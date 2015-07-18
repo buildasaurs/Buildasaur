@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import BuildaKit
 
 class MenuItemManager : NSObject, NSMenuDelegate {
     

@@ -11,6 +11,7 @@ import AppKit
 import BuildaGitServer
 import BuildaUtils
 import XcodeServerSDK
+import BuildaKit
 
 class ManualBotManagementViewController: NSViewController {
     

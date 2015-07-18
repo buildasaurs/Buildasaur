@@ -11,9 +11,9 @@ import Cocoa
 import BuildaUtils
 import XcodeServerSDK
 
-class StorageUtils {
+public class StorageUtils {
     
-    class func openWorkspaceOrProject() -> NSURL? {
+    public class func openWorkspaceOrProject() -> NSURL? {
         
         let openPanel = NSOpenPanel()
         openPanel.canChooseDirectories = false
@@ -37,7 +37,7 @@ class StorageUtils {
         return nil
     }
     
-    class func openSSHKey(publicOrPrivate: String) -> NSURL? {
+    public class func openSSHKey(publicOrPrivate: String) -> NSURL? {
         
         let openPanel = NSOpenPanel()
         openPanel.canChooseDirectories = false

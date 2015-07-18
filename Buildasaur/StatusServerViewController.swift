@@ -9,6 +9,7 @@
 import Foundation
 import BuildaUtils
 import XcodeServerSDK
+import BuildaKit
 
 class StatusServerViewController: StatusViewController {
     

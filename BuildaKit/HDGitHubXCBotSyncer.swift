@@ -20,11 +20,11 @@ public class HDGitHubXCBotSyncer : Syncer {
         branchBotsToCreate: [Branch],
         botsToDelete: [Bot])
     
-    let github: GitHubServer!
-    let xcodeServer: XcodeServer!
-    let project: Project!
-    let waitForLttm: Bool
-    let postStatusComments: Bool
+    public let github: GitHubServer!
+    public let xcodeServer: XcodeServer!
+    public let project: Project!
+    public let waitForLttm: Bool
+    public let postStatusComments: Bool
     public var watchedBranchNames: [String]
     
     public typealias GitHubStatusAndComment = (status: Status, comment: String?)
