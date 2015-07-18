@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import XcodeServerSDK
 import BuildaGitServer
 
 class SyncPair_PR_NoBot: SyncPair {

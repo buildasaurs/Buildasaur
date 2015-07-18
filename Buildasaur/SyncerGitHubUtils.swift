@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import XcodeServerSDK
 import BuildaGitServer
 import BuildaUtils
 
