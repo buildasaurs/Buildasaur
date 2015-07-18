@@ -1,28 +1,34 @@
 platform :osx, '10.10'
 use_frameworks!
 
-xcs_name = 'XcodeServerSDK'
-xcs_tag = '0.1.5'
-
-b_utils = 'BuildaUtils'
-b_tag = '0.0.4'
-
-target 'BuildaGitServer' do
-pod b_utils, b_tag
+def pods_for_errbody
+	pod 'BuildaUtils', '0.0.4'
 end
 
-target 'BuildaGitServerTests' do
-pod b_utils, b_tag
+def also_xcode_pods
+	pods_for_errbody
+	pod 'XcodeServerSDK', '0.1.5'
 end
 
 target 'Buildasaur' do
-pod xcs_name, xcs_tag
-pod b_utils, b_tag
+	also_xcode_pods
 end
 
-target 'BuildasaurTests' do
-pod xcs_name, xcs_tag
-pod b_utils, b_tag
+target 'BuildaKit' do
+	also_xcode_pods
 end
+
+target 'BuildaKitTests' do
+	also_xcode_pods
+end
+
+target 'BuildaGitServer' do
+	pods_for_errbody
+end
+
+target 'BuildaGitServerTests' do
+	pods_for_errbody
+end
+
 
 
