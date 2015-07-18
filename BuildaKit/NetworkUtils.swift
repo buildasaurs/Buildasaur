@@ -11,9 +11,9 @@ import BuildaGitServer
 import BuildaUtils
 import XcodeServerSDK
 
-class NetworkUtils {
+public class NetworkUtils {
     
-    class func checkAvailabilityOfGitHubWithCurrentSettingsOfProject(project: Project, completion: (success: Bool, error: NSError?) -> ()) {
+    public class func checkAvailabilityOfGitHubWithCurrentSettingsOfProject(project: Project, completion: (success: Bool, error: NSError?) -> ()) {
         
         let token = project.githubToken
         let server = GitHubFactory.server(token)
@@ -62,7 +62,7 @@ class NetworkUtils {
         }
     }
     
-    class func checkAvailabilityOfXcodeServerWithCurrentSettings(config: XcodeServerConfig, completion: (success: Bool, error: NSError?) -> ()) {
+    public class func checkAvailabilityOfXcodeServerWithCurrentSettings(config: XcodeServerConfig, completion: (success: Bool, error: NSError?) -> ()) {
         
         let xcodeServer = XcodeServerFactory.server(config)
         

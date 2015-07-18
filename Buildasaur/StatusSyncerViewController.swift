@@ -10,6 +10,7 @@ import Foundation
 import AppKit
 import BuildaUtils
 import XcodeServerSDK
+import BuildaKit
 
 class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         

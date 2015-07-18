@@ -7,10 +7,10 @@
 //
 
 import Foundation
-
 import AppKit
 import BuildaGitServer
 import BuildaUtils
+import BuildaKit
 
 class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
     

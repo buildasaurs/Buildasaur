@@ -24,22 +24,22 @@ private let kKeyShouldAnalyze = "should_analyze"
 private let kKeyShouldTest = "should_test"
 private let kKeyShouldArchive = "should_archive"
 
-class BuildTemplate: JSONSerializable {
+public class BuildTemplate: JSONSerializable {
     
-    let uniqueId: String //unique id of this build template, so that we can rename them easily
+    public let uniqueId: String //unique id of this build template, so that we can rename them easily
     
-    var projectName: String?
-    var name: String?
-    var scheme: String?
-    var schedule: BotSchedule? //will be ignored for Synced bots, only useful for Manual creation. default: Manual
-    var cleaningPolicy: BotConfiguration.CleaningPolicy
-    var triggers: [Trigger]
-    var shouldAnalyze: Bool?
-    var shouldTest: Bool?
-    var shouldArchive: Bool?
-    var testingDeviceIds: [String]
-    var deviceFilter: DeviceFilter.FilterType
-    var platformType: DevicePlatform.PlatformType?
+    public var projectName: String?
+    public var name: String?
+    public var scheme: String?
+    public var schedule: BotSchedule? //will be ignored for Synced bots, only useful for Manual creation. default: Manual
+    public var cleaningPolicy: BotConfiguration.CleaningPolicy
+    public var triggers: [Trigger]
+    public var shouldAnalyze: Bool?
+    public var shouldTest: Bool?
+    public var shouldArchive: Bool?
+    public var testingDeviceIds: [String]
+    public var deviceFilter: DeviceFilter.FilterType
+    public var platformType: DevicePlatform.PlatformType?
     
     func validate() -> Bool {
         
@@ -50,7 +50,7 @@ class BuildTemplate: JSONSerializable {
         return true
     }
     
-    init(projectName: String) {
+    public init(projectName: String) {
         self.uniqueId = NSUUID().UUIDString
         self.projectName = projectName
         self.name = "New Build Template"
@@ -66,7 +66,7 @@ class BuildTemplate: JSONSerializable {
         self.platformType = nil
     }
     
-    required init?(json: NSDictionary) {
+    public required init?(json: NSDictionary) {
         
         self.uniqueId = json.optionalStringForKey(kKeyUniqueId) ?? ""
         self.projectName = json.optionalStringForKey(kKeyProjectName)
@@ -118,7 +118,7 @@ class BuildTemplate: JSONSerializable {
         }
     }
     
-    func jsonify() -> NSDictionary {
+    public func jsonify() -> NSDictionary {
         let dict = NSMutableDictionary()
         
         dict[kKeyUniqueId] = self.uniqueId

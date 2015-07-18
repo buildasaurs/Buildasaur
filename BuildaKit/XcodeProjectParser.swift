@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import XcodeServerSDK
+import BuildaUtils
 
 public class XcodeProjectParser {
     
@@ -34,7 +34,6 @@ public class XcodeProjectParser {
                     return foundUrl
                 }
             }
-            
         }
         return nil
     }
@@ -192,8 +191,6 @@ public class XcodeProjectParser {
     }
     
     private class func parseSharedSchemesFromProjectURL(url: NSURL) -> (schemeUrls: [NSURL]?, error: NSError?) {
-        
-        
         
         return (schemeUrls: [NSURL](), error: nil)
     }

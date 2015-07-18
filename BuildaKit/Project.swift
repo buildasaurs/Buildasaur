@@ -12,37 +12,37 @@ import XcodeServerSDK
 
 public class Project : JSONSerializable {
     
-    enum AllowedCheckoutTypes: String {
+    public enum AllowedCheckoutTypes: String {
         case SSH = "SSH"
 //        case HTTPS - not yet supported, right now only SSH is supported
 //        (for bots reasons, will be built in when I have time)
 //        case SVN - not yet supported yet
     }
     
-    var url: NSURL {
+    public var url: NSURL {
         didSet {
             do { try self.refreshMetadata() } catch {}
         }
     }
     
-    var preferredTemplateId: String?
-    var githubToken: String?
-    var privateSSHKeyUrl: NSURL?
-    var publicSSHKeyUrl: NSURL?
-    var sshPassphrase: String?
-    var privateSSHKey: String? { return self.getContentsOfKeyAtUrl(self.privateSSHKeyUrl) }
-    var publicSSHKey: String? { return self.getContentsOfKeyAtUrl(self.publicSSHKeyUrl) }
+    public var preferredTemplateId: String?
+    public var githubToken: String?
+    public var privateSSHKeyUrl: NSURL?
+    public var publicSSHKeyUrl: NSURL?
+    public var sshPassphrase: String?
+    public var privateSSHKey: String? { return self.getContentsOfKeyAtUrl(self.privateSSHKeyUrl) }
+    public var publicSSHKey: String? { return self.getContentsOfKeyAtUrl(self.publicSSHKeyUrl) }
     
-    var availabilityState: AvailabilityCheckState
+    public var availabilityState: AvailabilityCheckState
     
     private(set) var workspaceMetadata: NSDictionary?
     let forkOriginURL: String?
     
     //convenience getters
-    var projectName: String? { get { return self.pullValueForKey("IDESourceControlProjectName") }}
-    var projectPath: String? { get { return self.pullValueForKey("IDESourceControlProjectPath") }}
-    var projectWCCIdentifier: String? { get { return self.pullValueForKey("IDESourceControlProjectWCCIdentifier") }}
-    var projectWCCName: String? {
+    public var projectName: String? { get { return self.pullValueForKey("IDESourceControlProjectName") }}
+    public var projectPath: String? { get { return self.pullValueForKey("IDESourceControlProjectPath") }}
+    public var projectWCCIdentifier: String? { get { return self.pullValueForKey("IDESourceControlProjectWCCIdentifier") }}
+    public var projectWCCName: String? {
         get {
             if let wccId = self.projectWCCIdentifier {
                 if let wcConfigs = self.workspaceMetadata?["IDESourceControlProjectWCConfigurations"] as? [NSDictionary] {
@@ -60,7 +60,7 @@ public class Project : JSONSerializable {
             return nil
         }
     }
-    var projectURL: NSURL? {
+    public var projectURL: NSURL? {
         get {
             if let urlString = self.pullValueForKey("IDESourceControlProjectURL") {
                 
@@ -79,7 +79,7 @@ public class Project : JSONSerializable {
         }
     }
     
-    var checkoutType: AllowedCheckoutTypes? {
+    public var checkoutType: AllowedCheckoutTypes? {
         get {
             if
                 let meta = self.workspaceMetadata,
@@ -94,7 +94,7 @@ public class Project : JSONSerializable {
         return self.workspaceMetadata?.optionalStringForKey(key)
     }
     
-    init?(url: NSURL) {
+    public init?(url: NSURL) {
         
         self.forkOriginURL = nil
         self.url = url

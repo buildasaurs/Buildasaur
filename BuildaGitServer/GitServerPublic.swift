@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import XcodeServerSDK
+import BuildaUtils
 
 public class GitServer : HTTPServer {
     

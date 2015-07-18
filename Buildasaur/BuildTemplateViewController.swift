@@ -10,6 +10,7 @@ import Foundation
 import AppKit
 import BuildaUtils
 import XcodeServerSDK
+import BuildaKit
 
 class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate, SetupViewControllerDelegate, NSComboBoxDataSource {
     

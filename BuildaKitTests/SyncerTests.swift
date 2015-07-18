@@ -12,6 +12,7 @@ import BuildaUtils
 import BuildaGitServer
 import XcodeServerSDK
 import Buildasaur
+import BuildaKit
 
 class SyncerTests: XCTestCase {
 

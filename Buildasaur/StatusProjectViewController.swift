@@ -10,6 +10,7 @@ import Foundation
 import AppKit
 import BuildaUtils
 import XcodeServerSDK
+import BuildaKit
 
 let kBuildTemplateAddNewString = "Create New..."
 class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, SetupViewControllerDelegate {
