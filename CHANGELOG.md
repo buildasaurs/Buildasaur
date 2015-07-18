@@ -4,7 +4,31 @@
 
 [Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3-beta2...HEAD)
 
+**Fixed bugs:**
+
+- Clean testing device ids when destination is changed [\#85](https://github.com/czechboy0/Buildasaur/issues/85)
+
+- Incorrect comment info  [\#82](https://github.com/czechboy0/Buildasaur/issues/82)
+
+**Closed issues:**
+
+- Save Project Name to Build Templates and only show filtered for specific project [\#96](https://github.com/czechboy0/Buildasaur/issues/96)
+
+- Create an object for TestHierarchy [\#92](https://github.com/czechboy0/Buildasaur/issues/92)
+
+- Report code coverage in github comments [\#75](https://github.com/czechboy0/Buildasaur/issues/75)
+
 **Merged pull requests:**
+
+- Moved logging to BuildaKit [\#102](https://github.com/czechboy0/Buildasaur/pull/102) ([czechboy0](https://github.com/czechboy0))
+
+- Pulled out logic into BuildaKit, split BuildaUtils into a separate project [\#101](https://github.com/czechboy0/Buildasaur/pull/101) ([czechboy0](https://github.com/czechboy0))
+
+- Filter Build Templates by Project [\#98](https://github.com/czechboy0/Buildasaur/pull/98) ([czechboy0](https://github.com/czechboy0))
+
+- Clean testing device ids when scheme/device filter type is changed [\#97](https://github.com/czechboy0/Buildasaur/pull/97) ([czechboy0](https://github.com/czechboy0))
+
+- Update README.md [\#95](https://github.com/czechboy0/Buildasaur/pull/95) ([czechboy0](https://github.com/czechboy0))
 
 - Adding Code Coverage and Test Number changes to comments [\#91](https://github.com/czechboy0/Buildasaur/pull/91) ([czechboy0](https://github.com/czechboy0))
 
