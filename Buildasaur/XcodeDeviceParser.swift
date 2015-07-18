@@ -8,6 +8,7 @@
 
 import Foundation
 import XcodeServerSDK
+import BuildaUtils
 
 public class XcodeDeviceParser {
     
