@@ -11,6 +11,7 @@ import BuildaUtils
 import BuildaGitServer
 import Buildasaur
 import XcodeServerSDK
+import BuildaKit
 
 class MockXcodeServer: XcodeServer {
     init() {

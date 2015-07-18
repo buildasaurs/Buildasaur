@@ -12,6 +12,7 @@ import BuildaUtils
 import BuildaGitServer
 import XcodeServerSDK
 import Buildasaur
+import BuildaKit
 
 //for tuples, XCTAssert... doesn't work for them
 func XCTBAssertNil<T>(@autoclosure expression:  () -> T?, message: String = "Must be nil",
