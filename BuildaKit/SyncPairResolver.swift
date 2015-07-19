@@ -278,11 +278,14 @@ public class SyncPairResolver {
                 
                 let summary = passingIntegration.buildResultSummary!
                 if passingIntegration.result == .Succeeded {
-                    lines.append(resultString + "**Perfect build!** All \(summary.testsCount) tests passed. :+1:")
+                    let testsCount = summary.testsCount
+                    lines.append(resultString + "**Perfect build!** All \(testsCount) " + "test".pluralizeStringIfNecessary(testsCount) + " passed. :+1:")
                 } else if passingIntegration.result == .Warnings {
-                    lines.append(resultString + "All \(summary.testsCount) tests passed, but please **fix \(summary.warningCount) warnings**.")
+                    let warningCount = summary.warningCount
+                    lines.append(resultString + "All \(summary.testsCount) tests passed, but please **fix \(warningCount) " + "warning".pluralizeStringIfNecessary(warningCount) + "**.")
                 } else {
-                    lines.append(resultString + "All \(summary.testsCount) tests passed, but please **fix \(summary.analyzerWarningCount) analyzer warnings**.")
+                    let analyzerWarningCount = summary.analyzerWarningCount
+                    lines.append(resultString + "All \(summary.testsCount) tests passed, but please **fix \(analyzerWarningCount) " + "analyzer warning".pluralizeStringIfNecessary(analyzerWarningCount) + "**.")
                 }
                 
                 //and code coverage
@@ -302,7 +305,8 @@ public class SyncPairResolver {
                 var lines = HDGitHubXCBotSyncer.baseCommentLinesFromIntegration(testFailingIntegration)
                 let status = HDGitHubXCBotSyncer.createStatusFromState(.Failure, description: "Build failed tests!")
                 let summary = testFailingIntegration.buildResultSummary!
-                lines.append(resultString + "**Build failed \(summary.testFailureCount) tests** out of \(summary.testsCount)")
+                let testFailureCount = summary.testFailureCount
+                lines.append(resultString + "**Build failed \(testFailureCount) " + "test".pluralizeStringIfNecessary(testFailureCount) + "** out of \(summary.testsCount)")
                 return self.statusAndCommentFromLines(lines, status: status)
             }
             
@@ -312,14 +316,9 @@ public class SyncPairResolver {
             }).first {
                 
                 var lines = HDGitHubXCBotSyncer.baseCommentLinesFromIntegration(erroredIntegration)
-                let errorCount: String
-                if let summary = erroredIntegration.buildResultSummary {
-                    errorCount = "\(summary.errorCount)"
-                } else {
-                    errorCount = "?"
-                }
+                let errorCount: Int = erroredIntegration.buildResultSummary?.errorCount ?? -1
                 let status = HDGitHubXCBotSyncer.createStatusFromState(.Error, description: "Build error!")
-                lines.append(resultString + "**\(errorCount) errors, failing state: \(erroredIntegration.result!.rawValue)**")
+                lines.append(resultString + "**\(errorCount)" + "error".pluralizeStringIfNecessary(errorCount) + ", failing state: \(erroredIntegration.result!.rawValue)**")
                 return self.statusAndCommentFromLines(lines, status: status)
             }
             
