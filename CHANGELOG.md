@@ -20,6 +20,10 @@
 
 **Merged pull requests:**
 
+- Singular/Plural Noun Fixes [\#104](https://github.com/czechboy0/Buildasaur/pull/104) ([czechboy0](https://github.com/czechboy0))
+
+- Update README.md [\#103](https://github.com/czechboy0/Buildasaur/pull/103) ([czechboy0](https://github.com/czechboy0))
+
 - Moved logging to BuildaKit [\#102](https://github.com/czechboy0/Buildasaur/pull/102) ([czechboy0](https://github.com/czechboy0))
 
 - Pulled out logic into BuildaKit, split BuildaUtils into a separate project [\#101](https://github.com/czechboy0/Buildasaur/pull/101) ([czechboy0](https://github.com/czechboy0))
