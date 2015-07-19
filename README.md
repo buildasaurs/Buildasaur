@@ -124,6 +124,10 @@ I also write about [working on Buildasaur](http://honzadvorsky.com/?tag=buildasa
 -------
 MIT
 
+:+1: Special Thanks
+---
+- Vojta Micka ([@higgcz](https://twitter.com/higgcz)) for our great new logo!
+
 :alien: Author
 ------
 Honza Dvorsky - http://honzadvorsky.com, [@czechboy0](http://twitter.com/czechboy0)
