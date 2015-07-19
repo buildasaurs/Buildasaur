@@ -98,7 +98,7 @@ The default workflow is as follows:
 -----------------------
 - Builda can (and by default does) post a comment into the PR conversation when an integration finishes
 
-![](https://raw.githubusercontent.com/czechboy0/Buildasaur/master/Meta/comment.png)
+![](https://raw.githubusercontent.com/czechboy0/Buildasaur/gladiolus/Meta/comment.png)
 
 - this can be controlled in the UI with the toggle named "Post Status Comments"
 
