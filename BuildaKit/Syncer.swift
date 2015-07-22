@@ -20,7 +20,7 @@ public protocol SyncerDelegate: class {
     func syncerEncounteredError(syncer: Syncer, error: NSError)
 }
 
-@objc public class Syncer {
+@objc public class Syncer: NSObject {
     
     public weak var delegate: SyncerDelegate?
     

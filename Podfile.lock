@@ -1,14 +1,14 @@
 PODS:
-  - BuildaUtils (0.0.4)
-  - XcodeServerSDK (0.1.5):
-    - BuildaUtils (= 0.0.4)
+  - BuildaUtils (0.0.5)
+  - XcodeServerSDK (0.1.6):
+    - BuildaUtils (= 0.0.5)
 
 DEPENDENCIES:
-  - BuildaUtils (= 0.0.4)
-  - XcodeServerSDK (= 0.1.5)
+  - BuildaUtils (= 0.0.5)
+  - XcodeServerSDK (= 0.1.6)
 
 SPEC CHECKSUMS:
-  BuildaUtils: 88917cac8b0248c792c8d0ff269b24870d36903f
-  XcodeServerSDK: f3ac9ebc105f0df1c2faf8c8e8a3850059517874
+  BuildaUtils: d2b083bd6347783d305333e55580dafcfc62fbf6
+  XcodeServerSDK: af5819ce272c628b0c889806f6110596ad4d362d
 
 COCOAPODS: 0.38.0
