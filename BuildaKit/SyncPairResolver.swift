@@ -318,7 +318,7 @@ public class SyncPairResolver {
                 var lines = HDGitHubXCBotSyncer.baseCommentLinesFromIntegration(erroredIntegration)
                 let errorCount: Int = erroredIntegration.buildResultSummary?.errorCount ?? -1
                 let status = HDGitHubXCBotSyncer.createStatusFromState(.Error, description: "Build error!")
-                lines.append(resultString + "**\(errorCount)" + "error".pluralizeStringIfNecessary(errorCount) + ", failing state: \(erroredIntegration.result!.rawValue)**")
+                lines.append(resultString + "**\(errorCount) " + "error".pluralizeStringIfNecessary(errorCount) + ", failing state: \(erroredIntegration.result!.rawValue)**")
                 return self.statusAndCommentFromLines(lines, status: status)
             }
             
