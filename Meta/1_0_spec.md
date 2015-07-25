@@ -10,7 +10,7 @@ Overall, we hope to make Buildasaur 1.0 a very simple, but even more powerful to
 
 ## Onboarding Requirements
 
-This is a flow of creating a new synced project in Buildasaur. Each project has a 1) Xcode Server Configuration, allowing it to talk to its Xcode Server (these might be shared between multiple projects, but they don't have to be), 2) GitHub and git credentials (these might as well be shared), 3) Xcode project path and Build Template, which is unique to each project, 4) Syncer parameters, which are unique to each project.
+This is a flow of creating a new synced project in Buildasaur. Each project has a 1) Xcode Server Configuration, allowing it to talk to its Xcode Server (these might be shared between multiple projects, but they don't have to be), 2) GitHub/GitLab/other service and git credentials (these might as well be shared), 3) Xcode project path and Build Template, which is unique to each project, 4) Syncer parameters, which are unique to each project.
 
 Sections will be described in the order in which we need the user to fill them in, validating after each step that the information is valid (like a pkg installation flow on OS X, e.g.), otherwise not letting them continue. Each subsequent section depends on the previous one being valid.
 
@@ -21,14 +21,17 @@ Sections will be described in the order in which we need the user to fill them i
 - (MAYBE: create a dummy blueprint and get the server fingerprint to the user, so they can validate?)
 - validation: goes to Xcode server and validates that this user can create Bots. 
 
-### GitHub & Git Credentials
-- **GitHub Personal API token** - get one at https://github.com/settings/tokens (when signed in) - send user there with a button
+### GitHub/GitLab/other & Git Credentials
+- choose service among supported: GitHub (working on GitLab and more)
+- insert your API token (or do any sort of auth)
+-- **GitHub Personal API token** (example) - get one at https://github.com/settings/tokens (when signed in) - send user there with a button
+- we pull your projects, **you choose** the one you want
 - **SSH keys** - show sheet for user to select where their keys are - shortcut for ~/.ssh/id_rsa.pub (and no-.pub next to it). (MAYBE: let them create new SSH keys right there)
 - **SSH passphrase** - optional SSH passphrase
-- validation: 1) go to GitHub and validate token that we have read/write rights, 2) create blueprint with these git credentials and ask for branches
+- validation: 1) go to GitHub/GitLab and validate token that we have read/write rights, 2) create blueprint with these git credentials and ask for branches
 
 ### Xcode Project/Workspace Path
-- **project/workspace path OR GitHub URL** - popup a sheet letting the user choose their Xcode project/workspace, from which we pull information and which is the project tested (MAYBE: just allow them to search for their project on GitHub **only iff** we find out a way to check out the repo in a temp location instead, would be nicer)
+- **project/workspace path OR GitHub URL** - popup a sheet letting the user choose their Xcode project/workspace, from which we pull information and which is the project tested (MAYBE: just allow them to search for their project on GitHub/GitLab **only iff** we find out a way to check out the repo in a temp location instead, would be nicer)
 
 ### Build Template
 - configure how each bot should be configured. User can have existing Build Templates for this project, but can also create new ones. What needs to be filled in a Build Template follows:
