@@ -34,10 +34,33 @@ Sections will be described in the order in which we need the user to fill them i
 - **project/workspace path OR GitHub URL** - popup a sheet letting the user choose their Xcode project/workspace, from which we pull information and which is the project tested (MAYBE: just allow them to search for their project on GitHub/GitLab **only iff** we find out a way to check out the repo in a temp location instead, would be nicer)
 
 ### Build Template
-- configure how each bot should be configured. User can have existing Build Templates for this project, but can also create new ones. What needs to be filled in a Build Template follows:
+- configure how each bot should be built. User can have existing Build Templates for this project, but can also create new ones. What needs to be filled in a Build Template follows:
 
-- **scheme**
-- ...
+- **name** - a name for this Build Template, e.g. "Buildasaur PRs"
+- **scheme** - picker of available schemes (which tells is iOS/OSX/watchOS target for devices)
+- **actions** - analyze? test? (code coverage?) archive? (user-installable product?)
+- **schedule** - only used for Manual Bot Management, we need to add time-based schedules. (ignored when used for watching PRs, that schedule is always 'manual')
+- **cleaning** - how often to completely checkout the repo again
+- **triggers** - prebuild/postbuild actions (script or email)
+-- user can edit, delete and add new triggers
+-- each trigger needs *name*, *type* (Script or Email), *phase* (pre or post build), *conditions* (only for postbuild), *email configuration* (only for email)
+- **devices** - what devices to build on. 1) pick filter (iOS: all available simulators+devices, all devices, all simulators, selected devices and simulators; OSX and watchOS only have all available devices and simulators), 2) iff "selected devices and simulators" we show them filtered devices for this platform and each has a tickbox to mark it for testing.
 
-**THIS DOCUMENT IS STILL WIP**
+## Syncing
+Once onboarding is done, we have the required information and can start syncing. There are options in syncing for users as well:
+- **wait for lttm**: Bool - whether testing should start only after a comment "lttm" has appeared in the PR's conversation
+- **Post status comments**: Bool - whether to post comment in the PR conversation when a build finishes
+- **sync interval**: Int (with a stepper) - default is 15s, balance between rate limiting and speed of Buildasaur
+- **branch watching** - list of branches pulled from GitHub - with tickboxes marking them as watched. This will create a bot for this branch and update its build status on github. Feature not yet implemented is that an issue will be created if this branch starts failing (so you'd attach one to master to always be sure master is building cleanly).
+
+Then syncing can begin.
+
+Another feature is **Manual Bot Management**, which lets you create a bot from **name**, **branch** and a **Build Template**. This is **super** useful for creating one-off branches like release branches etc. The Build Template picker is the same one as the one in Project setup. Should also allow for selection and creation of a new one. In this one the **schedule** will be respected.
+
+## Ideas
+- this needs to scale for multiple syncing projects at the same time
+- give user information at a glance, just so they're sure that everything is running smoothly
+- we emit messages during syncing, show a log somewhere (probably hidden somewhere deep)
+- present information: *last successful sync*, *whether is syncing right now*, *actions taken during this sync*, *number of syncing bots*, *number of PRs and branches*
+
 
