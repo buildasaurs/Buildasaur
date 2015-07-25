@@ -112,6 +112,12 @@ In case Builda crashes, you can find crash logs at `~/Library/Logs/DiagnosticRep
 ------------
 Please create an issue with a description of a problem or a pull request with a fix. Or, if you just want to help out, take a look at [issues with the label "up-for-grabs"](https://github.com/czechboy0/Buildasaur/labels/up-for-grabs), comment on the issue that you're working on it and let's improve Buildasaur together! 
 
+:speech_balloon: Get in touch
+------------
+
+For things like general problems/ideas please report an **issue**, so anyone can see them and relate to them in the future. It's realy important for Open Source projects like this!
+If your problem requires a deep discussion or you have a great idea and you really want to share it with someone before opening an issue you can join the official [Buildasaurs](https://github.com/buildasaurs) **Slack team**! (To do so, ping @czechboy0 on Twitter and have your e-mail address ready :e-mail:)
+
 :squirrel: Xcode Server Reverse Engineering
 --------------------------------
 If you're feeling brave and would like to dig into how Xcode Server works under the hood, you might find this article I wrote useful: [Under the Hood of Xcode Server](http://honzadvorsky.com/blog/2015/5/4/under-the-hood-of-xcode-server). Recommended reading if you want to extend Buildasaur to take a greater advantage of Xcode Server (there are still a plenty of unused APIs.)
