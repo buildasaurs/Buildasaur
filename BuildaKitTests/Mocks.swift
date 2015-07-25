@@ -16,7 +16,7 @@ import BuildaKit
 class MockXcodeServer: XcodeServer {
     init() {
         let config = try! XcodeServerConfig(host: "", user: "", password: "")
-        super.init(config: config, endpoints: XcodeServerEndPoints(serverConfig: config))
+        super.init(config: config, endpoints: XcodeServerEndpoints(serverConfig: config))
     }
 }
 
