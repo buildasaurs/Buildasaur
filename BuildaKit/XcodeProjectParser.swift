@@ -103,7 +103,7 @@ public class XcodeProjectParser {
         
         //we have the project urls, now let's parse schemes from each of them
         let schemeUrls = projectUrls.map {
-            try! self.sharedSchemeUrlsFromProjectUrl($0)
+            return self.sharedSchemeUrlsFromProjectUrl($0)
         }.reduce([NSURL](), combine: { (arr, newUrls) -> [NSURL] in
             arr + newUrls
         })
@@ -111,31 +111,34 @@ public class XcodeProjectParser {
         return schemeUrls
     }
     
-    private class func sharedSchemeUrlsFromProjectUrl(url: NSURL) throws -> [NSURL] {
+    private class func sharedSchemeUrlsFromProjectUrl(url: NSURL) -> [NSURL] {
         
         //the structure is
         //in a project file, if there are any shared schemes, they will be in
         //xcshareddata/xcschemes/*
-        if let sharedDataFolder = try self.firstItemMatchingTest(url,
-            test: { (itemUrl: NSURL) -> Bool in
-                
-            return itemUrl.lastPathComponent == "xcshareddata"
-        }) {
-            
-            if let schemesFolder = try self.firstItemMatchingTest(sharedDataFolder,
+        do {
+            if let sharedDataFolder = try self.firstItemMatchingTest(url,
                 test: { (itemUrl: NSURL) -> Bool in
                     
-                return itemUrl.lastPathComponent == "xcschemes"
+                    return itemUrl.lastPathComponent == "xcshareddata"
             }) {
-                //we have the right folder, yay! just filter all files ending with xcscheme
-                let schemes = try self.allItemsMatchingTest(schemesFolder, test: { (itemUrl: NSURL) -> Bool in
-                    let ext = itemUrl.pathExtension ?? ""
-                    return ext == "xcscheme"
-                })
-                return schemes
+                
+                if let schemesFolder = try self.firstItemMatchingTest(sharedDataFolder,
+                    test: { (itemUrl: NSURL) -> Bool in
+                        
+                        return itemUrl.lastPathComponent == "xcschemes"
+                }) {
+                    //we have the right folder, yay! just filter all files ending with xcscheme
+                    let schemes = try self.allItemsMatchingTest(schemesFolder, test: { (itemUrl: NSURL) -> Bool in
+                        let ext = itemUrl.pathExtension ?? ""
+                        return ext == "xcscheme"
+                    })
+                    return schemes
+                }
             }
+        } catch {
+            Log.error(error)
         }
-        
         return [NSURL]()
     }
     
