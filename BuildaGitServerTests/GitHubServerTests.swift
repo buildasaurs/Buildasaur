@@ -10,7 +10,6 @@ import Cocoa
 import XCTest
 import BuildaGitServer
 import BuildaUtils
-import XcodeServerSDK
 
 class GitHubSourceTests: XCTestCase {
 
@@ -120,7 +119,7 @@ class GitHubSourceTests: XCTestCase {
     
     func testCommitParsing() {
         
-        let dictionary = [
+        let dictionary: NSDictionary = [
             "sha": "08182438ed2ef3b34bd97db85f39deb60e2dcd7d",
             "url": "https://api.github.com/repos/czechboy0/Buildasaur/commits/08182438ed2ef3b34bd97db85f39deb60e2dcd7d"
         ]

@@ -256,7 +256,7 @@ public class Project : JSONSerializable {
     public func schemeNames() -> [String] {
         
         let schemes = XcodeProjectParser.sharedSchemeUrlsFromProjectOrWorkspaceUrl(self.url)
-        let names = schemes.map { $0.lastPathComponent!.stringByDeletingPathExtension }
+        let names = schemes.map { ($0.lastPathComponent! as NSString).stringByDeletingPathExtension }
         return names
     }
     

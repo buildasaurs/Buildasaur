@@ -1,10 +1,7 @@
-# Customise this file, documentation can be found here:
 # https://github.com/KrauseFx/fastlane/tree/master/docs
-# All available actions: https://github.com/KrauseFx/fastlane/blob/master/docs/Actions.md
-# can also be listed using the `fastlane actions` command
 
 # If you want to automatically update fastlane if a new version is available:
-# update_fastlane
+update_fastlane
 
 # This is the minimum version number required.
 # Update this, if you use features of a newer version
@@ -39,12 +36,25 @@ platform :mac do
   desc "Archives (and in the future will upload a new release to GitHub)"
   lane :github do
 
+    # also add incrementing of build and version number, when it becomes available
+    # for mac - https://github.com/KrauseFx/fastlane/pull/291
+
+    xcodebuild(
+      test: true,
+      archive: true,
+      archive_path: './build/Buildasaur.xcarchive',
+      scheme: 'Buildasaur',
+      workspace: 'Buildasaur.xcworkspace'
+    )
+
+  end
+
+   lane :release do
+
     # prep the local state
     ensure_git_status_clean
-    ensure_git_branch(branch: "swift-2")
+    ensure_git_branch(branch: "gladiolus")
     git_pull
-
-    # TODO: up the version in the project
 
     # ask for the version
     version = prompt(text: 'New Version Tag: ')
@@ -54,7 +64,7 @@ platform :mac do
 
     # create a new release on GitHub
     repo_url = "czechboy0/Buildasaur"
-    set_github_release(
+    release = set_github_release(
       repository_name: repo_url,
       api_token: ENV["GITHUB_TOKEN"],
       name: [version, title].join(" - "),
@@ -62,25 +72,6 @@ platform :mac do
       description: description,
       is_draft: false,
       is_prerelease: false
-    )
-
-    # TODO: workaround till https://github.com/KrauseFx/fastlane/pull/446 gets into a release
-    # then let set_github_release already return the JSON so that we can use it
-    release = get_github_release(
-        url: repo_url,
-        version: version
-      )
-
-    cocoapods
-
-    # TODO: create a xcodeserver_download_asset action to dw the archive from XCS
-    # TODO: create a github_release_upload_asset action to upload a build .app to the release
-    xcodebuild(
-      test: true,
-      archive: true,
-      archive_path: './build/Buildasaur.xcarchive',
-      scheme: 'Buildasaur',
-      workspace: 'Buildasaur.xcworkspace'
     )
 
     # notify us on slack
@@ -97,4 +88,20 @@ platform :mac do
     sh "cd .. && github_changelog_generator -t $GITHUB_TOKEN"
 
   end
+
+  # You can define as many lanes as you want
+
+  after_all do |lane|
+    # slack(
+    #   message: "Successfully deployed new App Update."
+    # )
+  end
+
+  error do |lane, exception|
+    # slack(
+    #   message: exception.message,
+    #   success: false
+    # )
+  end
+
 end
