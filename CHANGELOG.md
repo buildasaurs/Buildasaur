@@ -2,7 +2,25 @@
 
 ## [Unreleased](https://github.com/czechboy0/Buildasaur/tree/HEAD)
 
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3-beta2...HEAD)
+[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3-beta3...HEAD)
+
+**Closed issues:**
+
+- 0.29: The server SSH fingerprint failed to verify. [\#107](https://github.com/czechboy0/Buildasaur/issues/107)
+
+**Merged pull requests:**
+
+- Add Slack info [\#110](https://github.com/czechboy0/Buildasaur/pull/110) ([cojoj](https://github.com/cojoj))
+
+- xcode 7 beta 4 fixes [\#108](https://github.com/czechboy0/Buildasaur/pull/108) ([czechboy0](https://github.com/czechboy0))
+
+- Singular/Plural Noun Fixes [\#104](https://github.com/czechboy0/Buildasaur/pull/104) ([czechboy0](https://github.com/czechboy0))
+
+- Update README.md [\#103](https://github.com/czechboy0/Buildasaur/pull/103) ([czechboy0](https://github.com/czechboy0))
+
+## [v0.3-beta3](https://github.com/czechboy0/Buildasaur/tree/v0.3-beta3) (2015-07-19)
+
+[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3-beta2...v0.3-beta3)
 
 **Fixed bugs:**
 
@@ -19,12 +37,6 @@
 - Report code coverage in github comments [\#75](https://github.com/czechboy0/Buildasaur/issues/75)
 
 **Merged pull requests:**
-
-- xcode 7 beta 4 fixes [\#108](https://github.com/czechboy0/Buildasaur/pull/108) ([czechboy0](https://github.com/czechboy0))
-
-- Singular/Plural Noun Fixes [\#104](https://github.com/czechboy0/Buildasaur/pull/104) ([czechboy0](https://github.com/czechboy0))
-
-- Update README.md [\#103](https://github.com/czechboy0/Buildasaur/pull/103) ([czechboy0](https://github.com/czechboy0))
 
 - Moved logging to BuildaKit [\#102](https://github.com/czechboy0/Buildasaur/pull/102) ([czechboy0](https://github.com/czechboy0))
 
