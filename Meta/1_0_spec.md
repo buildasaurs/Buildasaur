@@ -26,7 +26,7 @@ Sections will be described in the order in which we need the user to fill them i
 - insert your API token (or do any sort of auth)
 -- **GitHub Personal API token** (example) - get one at https://github.com/settings/tokens (when signed in) - send user there with a button
 - we pull your projects, **you choose** the one you want
-- **SSH keys** - show sheet for user to select where their keys are - shortcut for ~/.ssh/id_rsa.pub (and no-.pub next to it). (MAYBE: let them create new SSH keys right there)
+- **SSH keys** - show sheet for user to select where their keys are - shortcut for ~/.ssh/id_rsa.pub (and no-.pub next to it). (MAYBE: let them new SSH keys right there)
 - **SSH passphrase** - optional SSH passphrase
 - validation: 1) go to GitHub/GitLab and validate token that we have read/write rights, 2) create blueprint with these git credentials and ask for branches
 
