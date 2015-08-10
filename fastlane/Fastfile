@@ -71,7 +71,7 @@ platform :mac do
       tag_name: version,
       description: description,
       is_draft: false,
-      is_prerelease: false
+      is_prerelease: true
     )
 
     # notify us on slack
