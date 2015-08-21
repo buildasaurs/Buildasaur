@@ -15,14 +15,7 @@ extension HDGitHubXCBotSyncer {
     class func createStatusFromState(state: Status.State, description: String?) -> Status {
         
         //TODO: add useful targetUrl and potentially have multiple contexts to show multiple stats on the PR
-        let context = "Buildasaur"
-        let newDescription: String?
-        if let description = description {
-            newDescription = "\(context): \(description)"
-        } else {
-            newDescription = nil
-        }
-        return Status(state: state, description: newDescription, targetUrl: nil, context: context)
+        return Status(state: state, description: description, targetUrl: nil, context: context)
     }
     
     func updateCommitStatusIfNecessary(
