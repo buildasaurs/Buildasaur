@@ -23,6 +23,10 @@ Version 1.0 is being built on [a branch](https://github.com/czechboy0/Buildasaur
 :arrows_counterclockwise: **Already using Buildasaur?** Please consider [adding yourself](./PROJECTS_USING_BUILDASAUR.md) to our success stories!<br>
 :gift_heart: **Want to contribute?** Take a look at [issues with the label "up-for-grabs"](https://github.com/czechboy0/Buildasaur/labels/up-for-grabs), comment on the issue that you're working on it and let's improve Buildasaur together!
 
+:mortar_board: Getting Started With Xcode Server 
+---------------------------------
+To find out how to set up Xcode Server on your Mac in minutes (and more), check out my [series of tutorials](http://honzadvorsky.com/pages/xcode_server_tutorials/).
+
 Looking for Xcode Server SDK?
 ----------------
 The code that makes talking to Xcode Server easy lives in a separate project: [XcodeServerSDK](https://github.com/czechboy0/XcodeServerSDK). Buildasaur is just one app that uses this SDK, but now you can build your own!
