@@ -4,7 +4,7 @@ Buildasaur
 [![Build Status](http://178.62.79.155/buildasaur)](https://github.com/czechboy0/Buildasaur/branches/all?utf8=✓&query=master)
 [![Latest Buildasaur Release](https://img.shields.io/github/release/czechboy0/buildasaur.svg)](https://github.com/czechboy0/Buildasaur/releases/latest)
 ![Swift Version](https://img.shields.io/badge/Swift-2-green.svg)
-![Xcode Version](https://img.shields.io/badge/Xcode-7b5-green.svg)
+![Xcode Version](https://img.shields.io/badge/Xcode-7b6-green.svg)
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://en.wikipedia.org/wiki/MIT_License)
 [![Blog](https://img.shields.io/badge/blog-honzadvorsky.com-green.svg)](http://honzadvorsky.com)
