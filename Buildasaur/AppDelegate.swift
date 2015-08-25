@@ -17,6 +17,7 @@ Also, you can find the log at ~/Library/Application Support/Buildasaur/Builda.lo
 import BuildaUtils
 import XcodeServerSDK
 import BuildaKit
+import BuildaAnalytics
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -24,9 +25,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let menuItemManager = MenuItemManager()
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        
+
         Logging.setup(alsoIntoFile: true)
         self.menuItemManager.setupMenuBarItem()
+        
+        let analytics = BuildaAnalytics.sharedInstance
+        analytics.fireAnalyticsEvent(BuildaAnalyticsEvent(funnel: .Feature, event: FeatureAnalyticsEvent.OpenApp))
     }
 
     func applicationShouldHandleReopen(sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {

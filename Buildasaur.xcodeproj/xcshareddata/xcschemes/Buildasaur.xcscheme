@@ -183,6 +183,16 @@
                ReferencedContainer = "container:Buildasaur.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "4CA9DD8E1B8C0498005330D7"
+               BuildableName = "BuildaAnalyticsTests.xctest"
+               BlueprintName = "BuildaAnalyticsTests"
+               ReferencedContainer = "container:Buildasaur.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

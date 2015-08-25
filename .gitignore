@@ -26,3 +26,5 @@ DerivedData
 #
 Pods/
 Podfile.local
+Podfile.lock
+
