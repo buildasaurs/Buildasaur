@@ -1,8 +1,8 @@
 # Change Log
 
-## [Unreleased](https://github.com/czechboy0/Buildasaur/tree/HEAD)
+## [v0.3-beta5](https://github.com/czechboy0/Buildasaur/tree/v0.3-beta5) (2015-08-25)
 
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3-beta4...HEAD)
+[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3-beta4...v0.3-beta5)
 
 **Closed issues:**
 
