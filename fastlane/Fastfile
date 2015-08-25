@@ -5,7 +5,7 @@
 
 # This is the minimum version number required.
 # Update this, if you use features of a newer version
-fastlane_version "1.13.0"
+fastlane_version "1.21.0"
 
 default_platform :mac
 
@@ -25,6 +25,7 @@ platform :mac do
   desc "Runs all the tests"
   lane :test do
 
+    prebuild
     xcodebuild(
       test: true,
       scheme: 'Buildasaur',
@@ -39,6 +40,7 @@ platform :mac do
     # also add incrementing of build and version number, when it becomes available
     # for mac - https://github.com/KrauseFx/fastlane/pull/291
 
+    prebuild
     xcodebuild(
       test: true,
       archive: true,

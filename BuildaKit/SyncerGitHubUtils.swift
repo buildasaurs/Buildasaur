@@ -15,6 +15,7 @@ extension HDGitHubXCBotSyncer {
     class func createStatusFromState(state: Status.State, description: String?) -> Status {
         
         //TODO: add useful targetUrl and potentially have multiple contexts to show multiple stats on the PR
+        let context = "Buildasaur"
         return Status(state: state, description: description, targetUrl: nil, context: context)
     }
     
