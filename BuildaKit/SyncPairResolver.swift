@@ -249,7 +249,7 @@ public class SyncPairResolver {
         if lines.count == 0 {
             comment = nil
         } else {
-            comment = "\n".join(lines)
+            comment = lines.joinWithSeparator("\n")
         }
         return (status: status, comment: comment)
     }

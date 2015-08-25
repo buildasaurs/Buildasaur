@@ -114,9 +114,9 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
             itemsToReport.append(lastSyncString)
         }
         
-        strings.map { itemsToReport.append($0) }
+        strings.forEach { itemsToReport.append($0) }
         
-        self.statusTextField.stringValue = "\n".join(itemsToReport)
+        self.statusTextField.stringValue = itemsToReport.joinWithSeparator("\n")
     }
     
     override func viewDidLoad() {

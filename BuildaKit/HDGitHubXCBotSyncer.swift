@@ -305,7 +305,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             }
             
             //bots that don't have a PR or a branch, to delete
-            let botsToDelete = mappedBots.values.array
+            let botsToDelete = Array(mappedBots.values)
             
             return (prsToSync, prBotsToCreate, branchesToSync, branchBotsToCreate, botsToDelete)
     }
