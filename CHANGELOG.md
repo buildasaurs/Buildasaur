@@ -1,5 +1,19 @@
 # Change Log
 
+## [Unreleased](https://github.com/czechboy0/Buildasaur/tree/HEAD)
+
+[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3-beta4...HEAD)
+
+**Closed issues:**
+
+- Redundant integration step reporting [\#113](https://github.com/czechboy0/Buildasaur/issues/113)
+
+**Merged pull requests:**
+
+- Xcode 7 Beta 6 fixes [\#116](https://github.com/czechboy0/Buildasaur/pull/116) ([czechboy0](https://github.com/czechboy0))
+
+- Remove "Buildasaur:" from GitHub build status messages [\#115](https://github.com/czechboy0/Buildasaur/pull/115) ([accatyyc](https://github.com/accatyyc))
+
 ## [v0.3-beta4](https://github.com/czechboy0/Buildasaur/tree/v0.3-beta4) (2015-07-25)
 
 [Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3-beta3...v0.3-beta4)
