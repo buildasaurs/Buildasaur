@@ -33,7 +33,7 @@ public class UIUtils {
         
         let alert = self.createAlert(text, style: nil)
         
-        buttons.map { alert.addButtonWithTitle($0) }
+        buttons.forEach { alert.addButtonWithTitle($0) }
         
         self.presentAlert(alert, completion: { (resp) -> () in
             

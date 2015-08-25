@@ -142,7 +142,7 @@ public class Project : JSONSerializable {
         //validate allowed remote url
         if self.parseCheckoutType(meta) == nil {
             //disallowed
-            let allowedString = ", ".join([AllowedCheckoutTypes.SSH].map({ $0.rawValue }))
+            let allowedString = [AllowedCheckoutTypes.SSH].map({ $0.rawValue }).joinWithSeparator(", ")
             let error = Error.withInfo("Disallowed checkout type, the project must be checked out over one of the supported schemes: \(allowedString)")
             throw error
         }
@@ -281,7 +281,7 @@ public class Project : JSONSerializable {
             if let githubRange = stringUrl.rangeOfString("github.com", options: NSStringCompareOptions(), range: nil, locale: nil),
                 let dotGitRange = stringUrl.rangeOfString(".git", options: NSStringCompareOptions.BackwardsSearch, range: nil, locale: nil) {
                     
-                    let start = advance(githubRange.endIndex, 1)
+                    let start = githubRange.endIndex.advancedBy(1)
                     let end = dotGitRange.startIndex
                     
                     let repoName = originalStringUrl.substringWithRange(Range<String.Index>(start: start, end: end))

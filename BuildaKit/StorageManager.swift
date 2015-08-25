@@ -158,7 +158,7 @@ public class StorageManager {
                     Log.error("Some configs failed to parse, will be ignored.")
                     //maybe show a popup
                 }
-                parsedConfigs.map { self.servers.append($0) }
+                parsedConfigs.forEach { self.servers.append($0) }
                 return
             }
         } catch {
@@ -184,7 +184,7 @@ public class StorageManager {
                     Log.error("Some projects failed to parse, will be ignored.")
                     //maybe show a popup
                 }
-                parsedProjects.map { self.projects.append($0) }
+                parsedProjects.forEach { self.projects.append($0) }
                 return
             }
         } catch {
@@ -210,7 +210,7 @@ public class StorageManager {
                     Log.error("Some syncers failed to parse, will be ignored.")
                     //maybe show a popup
                 }
-                parsedSyncers.map { self.syncers.append($0) }
+                parsedSyncers.forEach { self.syncers.append($0) }
                 return
             }
         } catch {
@@ -279,7 +279,7 @@ public class StorageManager {
     public func saveBuildTemplates() {
         
         let templatesFolderUrl = Persistence.getFileInAppSupportWithName("BuildTemplates", isDirectory: true)
-        self.buildTemplates.map {
+        self.buildTemplates.forEach {
             (template: BuildTemplate) -> () in
             
             let json = template.jsonify()

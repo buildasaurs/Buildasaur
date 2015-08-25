@@ -69,7 +69,7 @@ public class Persistence {
         let fm = NSFileManager.defaultManager()
         do {
             let contents = try fm.contentsOfDirectoryAtURL(folderUrl, includingPropertiesForKeys: nil, options: [.SkipsHiddenFiles, .SkipsSubdirectoryDescendants])
-            contents.map { visit(url: $0) }
+            contents.forEach { visit(url: $0) }
             
         } catch {
             Log.error("Couldn't read folder \(folderUrl), error \(error)")
