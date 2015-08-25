@@ -16,6 +16,8 @@ class MainViewController: NSViewController, NSTableViewDataSource, StatusSibling
     
     let storageManager: StorageManager
     
+    private var _dataSource: ProjectDataSource?
+    
     var projectStatusViewController: StatusProjectViewController!
     var serverStatusViewController: StatusServerViewController!
     
@@ -32,8 +34,13 @@ class MainViewController: NSViewController, NSTableViewDataSource, StatusSibling
         
         if let window = self.view.window {
             window.minSize = CGSizeMake(658, 512)
-            let version = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as! String
-            window.title = "Buildasaur \(version), at your service"
+            if let activeProject = self.dataSource?.project where activeProject.githubRepoName() != nil {
+                window.title = activeProject.githubRepoName()!
+            }
+            else {
+                
+                window.title = "Create New Project"
+            }
         }
     }
     
@@ -51,6 +58,7 @@ class MainViewController: NSViewController, NSTableViewDataSource, StatusSibling
             
             if let projectStatusViewController = statusViewController as? StatusProjectViewController {
                 self.projectStatusViewController = projectStatusViewController
+                self.projectStatusViewController.dataSource = self.dataSource
             }
         }
         
@@ -107,6 +115,18 @@ class MainViewController: NSViewController, NSTableViewDataSource, StatusSibling
         self.statusItem.menu = menu
     }
 
+}
+
+extension MainViewController: ProjectDataSource {
+    
+    var dataSource : ProjectDataSource? {
+        get {
+            return self._dataSource
+        }
+        set {
+            self._dataSource = newValue
+        }
+    }
 }
 
 

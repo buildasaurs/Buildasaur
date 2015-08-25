@@ -15,6 +15,8 @@ import BuildaKit
 let kBuildTemplateAddNewString = "Create New..."
 class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, SetupViewControllerDelegate {
     
+    private var _dataSource : ProjectDataSource?
+    
     //no project yet
     @IBOutlet weak var addProjectButton: NSButton!
     
@@ -33,7 +35,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     
     override func availabilityChanged(state: AvailabilityCheckState) {
         
-        if let project = self.project() {
+        if let project = self.getProject() {
             project.availabilityState = state
         }
         super.availabilityChanged(state)
@@ -51,9 +53,10 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         self.tokenTextField.delegate = self
         self.lastAvailabilityCheckStatus = .Unchecked
     }
-        
-    func project() -> Project? {
-        return self.storageManager.projects.first
+    
+    //Returns the data source's project instance
+    func getProject() -> Project? {
+        return self.dataSource?.project
     }
     
     func buildTemplates() -> [BuildTemplate] {
@@ -61,7 +64,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         return self.storageManager.buildTemplates.filter { (template: BuildTemplate) -> Bool in
             if
                 let projectName = template.projectName,
-                let project = self.project()
+                let project = self.getProject()
             {
                 return projectName == project.projectName ?? ""
             } else {
@@ -74,7 +77,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     override func reloadStatus() {
         
         //if there is a local project, show status. otherwise show button to add one.
-        if let project = self.project() {
+        if let project = self.getProject() {
             
             self.statusContentView.hidden = false
             self.addProjectButton.hidden = true
@@ -129,11 +132,11 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
             statusChanged?(status: status, done: done)
         }
         
-        if let _ = self.project() {
+        if let _ = self.getProject() {
 
             statusChangedPersist(status: .Checking, done: false)
 
-            NetworkUtils.checkAvailabilityOfGitHubWithCurrentSettingsOfProject(self.project()!, completion: { (success, error) -> () in
+            NetworkUtils.checkAvailabilityOfGitHubWithCurrentSettingsOfProject(self.getProject()!, completion: { (success, error) -> () in
                 
                 let status: AvailabilityCheckState
                 if success {
@@ -165,6 +168,10 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
                 //check if we have everything, if so, enable the "start syncing" button
                 self.editing = true
                 
+                //Set the dataSource to self here because the user is creating
+                //and saving a new project.
+                self.dataSource = self
+                
             } catch {
                 //local source is malformed, something terrible must have happened, inform the user this can't be used (log should tell why exactly)
                 UIUtils.showAlertWithText("Couldn't add Xcode project at path \(url.absoluteString), error: \((error as NSError).localizedDescription).", style: NSAlertStyle.CriticalAlertStyle, completion: { (resp) -> () in
@@ -189,16 +196,16 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
                 buildTemplate = self.buildTemplates().filter({ $0.name == templatePulled }).first
             }
             if buildTemplate == nil {
-                buildTemplate = BuildTemplate(projectName: self.project()!.projectName!)
+                buildTemplate = BuildTemplate(projectName: self.getProject()!.projectName!)
             }
             
-            self.delegate.showBuildTemplateViewControllerForTemplate(buildTemplate, project: self.project()!, sender: self)
+            self.delegate.showBuildTemplateViewControllerForTemplate(buildTemplate, project: self.getProject()!, sender: self)
         }
     }
     
     func pullTemplateFromUI() -> Bool {
         
-        if let _ = self.project() {
+        if let _ = self.getProject() {
             let selectedIndex = self.buildTemplateComboBox.indexOfSelectedItem
             
             if selectedIndex == -1 {
@@ -208,7 +215,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
             }
             
             let template = self.buildTemplates()[selectedIndex]
-            if let project = self.project() {
+            if let project = self.getProject() {
                 project.preferredTemplateId = template.uniqueId
                 return true
             }
@@ -230,7 +237,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     
     func pullCredentialsFromUI() -> Bool {
         
-        if let project = self.project() {
+        if let project = self.getProject() {
             
             _ = self.pullTokenFromUI()
             let privateUrl = project.privateSSHKeyUrl
@@ -253,7 +260,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     func pullSSHPassphraseFromUI() -> Bool {
         
         let string = self.sshPassphraseTextField.stringValue
-        if let project = self.project() {
+        if let project = self.getProject() {
             if !string.isEmpty {
                 project.sshPassphrase = string
             } else {
@@ -266,7 +273,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     func pullTokenFromUI() -> Bool {
         
         let string = self.tokenTextField.stringValue
-        if let project = self.project() {
+        if let project = self.getProject() {
             if !string.isEmpty {
                 project.githubToken = string
             } else {
@@ -289,7 +296,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     
     override func removeCurrentConfig() {
         
-        if let project = self.project() {
+        if let project = self.getProject() {
             
             //also cleanup comboBoxes
             self.buildTemplateComboBox.stringValue = ""
@@ -304,7 +311,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         if let url = StorageUtils.openSSHKey(type) {
             do {
                 _ = try NSString(contentsOfURL: url, encoding: NSASCIIStringEncoding)
-                let project = self.project()!
+                let project = self.getProject()!
                 if type == "public" {
                     project.publicSSHKeyUrl = url
                 } else {
@@ -339,7 +346,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
                 }
             }
             
-            if let project = self.project() {
+            if let project = self.getProject() {
                 project.preferredTemplateId = template.uniqueId
             }
             
@@ -362,4 +369,24 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         }
     }
     
+}
+
+
+//MARK: ProjectDataSource
+extension StatusProjectViewController: ProjectDataSource {
+    
+    var project : Project? {
+        
+        return StorageManager.sharedInstance.projects.last
+    }
+    
+    var dataSource: ProjectDataSource? {
+        get {
+            return self._dataSource
+        }
+        set {
+            
+            self._dataSource = newValue
+        }
+    }
 }

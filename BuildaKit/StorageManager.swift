@@ -11,18 +11,26 @@ import BuildaGitServer
 import BuildaUtils
 import XcodeServerSDK
 
+public let ProjectsDidChangeNotification = "com.buildakit.storagemanger.projectsDidChangeNotification"
+
 public class StorageManager {
     
     public static let sharedInstance = StorageManager()
     
     private(set) public var syncers: [HDGitHubXCBotSyncer] = []
     private(set) public var servers: [XcodeServerConfig] = []
-    private(set) public var projects: [Project] = []
+    private(set) public var projects: [Project] {
+        didSet {
+            
+            NSNotificationCenter.defaultCenter().postNotificationName(ProjectsDidChangeNotification, object: self)
+        }
+    }
     private(set) public var buildTemplates: [BuildTemplate] = []
     
     init() {
         
         //initialize all stored Syncers
+        self.projects = []
         self.loadAllFromPersistence()
     }
     

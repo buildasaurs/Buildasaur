@@ -84,6 +84,9 @@
 		3AD338B01AAE31D500ECD0F2 /* BuildTemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD338AF1AAE31D500ECD0F2 /* BuildTemplateViewController.swift */; };
 		3AF090B81B1134AA0058567F /* BranchWatchingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF090B71B1134AA0058567F /* BranchWatchingViewController.swift */; };
 		3AF1B1241AAC7CA500917EF3 /* StatusSyncerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF1B1231AAC7CA500917EF3 /* StatusSyncerViewController.swift */; };
+		55A43BAC1B8CDE4300EED079 /* ProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A43BAB1B8CDE4300EED079 /* ProjectViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		6604F68F1B8F4E4900E70BA2 /* XcodeServerSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604F68E1B8F4E4900E70BA2 /* XcodeServerSDK.framework */; };
+		6604F6901B8F4E4900E70BA2 /* XcodeServerSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6604F68E1B8F4E4900E70BA2 /* XcodeServerSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		72C942865E06140723569CF1 /* Pods_Buildasaur.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFC5293812E0E442BE2182D0 /* Pods_Buildasaur.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		B967DFBE36176FD9B4960410 /* Pods_BuildaGitServer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73C0D6A9CBF4A8155E3A7376 /* Pods_BuildaGitServer.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		EC160F5DE92FC57D64786D8F /* Pods_BuildaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1086D69942F8B7830B5D00E1 /* Pods_BuildaKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -149,6 +152,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				6604F6901B8F4E4900E70BA2 /* XcodeServerSDK.framework in Embed Frameworks */,
 				3AAF6EFC1A3CE5BA00C657FB /* BuildaGitServer.framework in Embed Frameworks */,
 				3A81BB2C1B5A77E9004732CD /* BuildaKit.framework in Embed Frameworks */,
 			);
@@ -250,8 +254,11 @@
 		40BCAC9716082AB3070E2DDC /* Pods_BuildaUtilsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BuildaUtilsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B5DB9726CCDA0682B1C8D8A /* Pods-BuildaKitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaKitTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaKitTests/Pods-BuildaKitTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4C0A89C04EE4D1B92581E300 /* Pods-BuildaGitServer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaGitServer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaGitServer/Pods-BuildaGitServer.debug.xcconfig"; sourceTree = "<group>"; };
+		55A43BAB1B8CDE4300EED079 /* ProjectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectViewController.swift; sourceTree = "<group>"; };
+		55C60ECC1B8CDD69006848B4 /* XcodeServerSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XcodeServerSDK.framework; path = Build/Products/Debug/XcodeServerSDK.framework; sourceTree = "<group>"; };
 		5A1BF45FB90783C591B4D525 /* Pods-BuildaGitServer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaGitServer.release.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaGitServer/Pods-BuildaGitServer.release.xcconfig"; sourceTree = "<group>"; };
 		60565EAEB9A1817A1DEB0FF2 /* Pods-BuildaGitServerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaGitServerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaGitServerTests/Pods-BuildaGitServerTests.debug.xcconfig"; sourceTree = "<group>"; };
+		6604F68E1B8F4E4900E70BA2 /* XcodeServerSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = XcodeServerSDK.framework; path = "/Users/dcilia/Library/Developer/Xcode/DerivedData/Buildasaur-bedfsdjrepatehfsnnolyxngokev/Build/Products/Debug/XcodeServerSDK.framework"; sourceTree = "<absolute>"; };
 		681D44417C140BD1795F71E4 /* Pods-BuildaGitServer.testing.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaGitServer.testing.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaGitServer/Pods-BuildaGitServer.testing.xcconfig"; sourceTree = "<group>"; };
 		7194D95E34FC188EF9A1BAB1 /* Pods_BuildasaurTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BuildasaurTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		73C0D6A9CBF4A8155E3A7376 /* Pods_BuildaGitServer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BuildaGitServer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -279,6 +286,7 @@
 			files = (
 				3A81BB2B1B5A77E9004732CD /* BuildaKit.framework in Frameworks */,
 				3AAF6EFB1A3CE5BA00C657FB /* BuildaGitServer.framework in Frameworks */,
+				6604F68F1B8F4E4900E70BA2 /* XcodeServerSDK.framework in Frameworks */,
 				72C942865E06140723569CF1 /* Pods_Buildasaur.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -355,6 +363,7 @@
 		3A5687671A3B93BD0066DB2B = {
 			isa = PBXGroup;
 			children = (
+				6604F68E1B8F4E4900E70BA2 /* XcodeServerSDK.framework */,
 				3A5687721A3B93BD0066DB2B /* Buildasaur */,
 				3A81BB171B5A77E9004732CD /* BuildaKit */,
 				3A81BB251B5A77E9004732CD /* BuildaKitTests */,
@@ -497,6 +506,7 @@
 				3AF1B1231AAC7CA500917EF3 /* StatusSyncerViewController.swift */,
 				3AAA1B771AAC508A00FA1598 /* StatusViewController.swift */,
 				3A5B04A91AB4ABEB00F60536 /* TriggerViewController.swift */,
+				55A43BAB1B8CDE4300EED079 /* ProjectViewController.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -504,6 +514,7 @@
 		3AAA1B641AAB6E8500FA1598 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6604F6D01B8F96A800E70BA2 /* Cells */,
 				3AAA1B651AAB6E9800FA1598 /* SeparatorView.swift */,
 				3A81BB3B1B5A7994004732CD /* UIUtils.swift */,
 			);
@@ -549,6 +560,7 @@
 		50A74951EE20FE8714EAD98C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				55C60ECC1B8CDD69006848B4 /* XcodeServerSDK.framework */,
 				367971821BC7964B03631774 /* Pods_BuildaUtils.framework */,
 				73C0D6A9CBF4A8155E3A7376 /* Pods_BuildaGitServer.framework */,
 				BFC5293812E0E442BE2182D0 /* Pods_Buildasaur.framework */,
@@ -559,6 +571,13 @@
 				9763FA72546E3CAF2D2786DA /* Pods_BuildaKitTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6604F6D01B8F96A800E70BA2 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -998,6 +1017,7 @@
 				3AF090B81B1134AA0058567F /* BranchWatchingViewController.swift in Sources */,
 				3A5B04AC1AB4AC0F00F60536 /* SetupViewController.swift in Sources */,
 				3A5B04AA1AB4ABEB00F60536 /* TriggerViewController.swift in Sources */,
+				55A43BAC1B8CDE4300EED079 /* ProjectViewController.swift in Sources */,
 				3AF1B1241AAC7CA500917EF3 /* StatusSyncerViewController.swift in Sources */,
 				3A5B04B01AB5144700F60536 /* ManualBotManagementViewController.swift in Sources */,
 				3A81BB3C1B5A7994004732CD /* UIUtils.swift in Sources */,
@@ -1227,9 +1247,12 @@
 			baseConfigurationReference = AD459625FF20E15478BB71A2 /* Pods-Buildasaur.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Build/Products/Debug",
+				);
 				INFOPLIST_FILE = Buildasaur/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.honzadvorsky.$(PRODUCT_NAME:rfc1034identifier)";
@@ -1242,9 +1265,12 @@
 			baseConfigurationReference = CECD9EDC0C4F882ACEB5E1F3 /* Pods-Buildasaur.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Build/Products/Debug",
+				);
 				INFOPLIST_FILE = Buildasaur/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.honzadvorsky.$(PRODUCT_NAME:rfc1034identifier)";
@@ -1302,9 +1328,12 @@
 			baseConfigurationReference = 7C82BB415700C81EA9715FE4 /* Pods-Buildasaur.testing.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Build/Products/Debug",
+				);
 				INFOPLIST_FILE = Buildasaur/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.honzadvorsky.$(PRODUCT_NAME:rfc1034identifier)";
