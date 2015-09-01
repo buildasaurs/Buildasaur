@@ -41,17 +41,20 @@ platform :mac do
     # for mac - https://github.com/KrauseFx/fastlane/pull/291
 
     prebuild
-    xcodebuild(
-      test: true,
-      archive: true,
-      archive_path: './build/Buildasaur.xcarchive',
+    # file_name = "Buildasaur-#{version}-#{build}"
+    file_name = "Buildasaur.app"
+    gym(
       scheme: 'Buildasaur',
-      workspace: 'Buildasaur.xcworkspace'
-    )
+      output_name: file_name,
+      output_directory: './build'
+      )
+    release(assets: ["./build/Buildasaur.app"])
 
   end
 
-   lane :release do
+   lane :release do |params|
+
+    assets = params[:assets]
 
     # prep the local state
     ensure_git_status_clean
