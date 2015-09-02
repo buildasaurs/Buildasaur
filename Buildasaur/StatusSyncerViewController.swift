@@ -240,7 +240,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         let waitForLttm = self.lttmToggle.state == NSOnState
         let postStatusComments = self.postStatusCommentsToggle.state == NSOnState
         let syncInterval = self.syncIntervalTextField.doubleValue
-        let project = self.delegate.getProjectStatusViewController().project()!
+        let project = self.delegate.getProjectStatusViewController().getProject()!
         let serverConfig = self.delegate.getServerStatusViewController().serverConfig()!
         
         if let syncer = self.storageManager.addSyncer(
