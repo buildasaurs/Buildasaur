@@ -1,7 +1,7 @@
 Buildasaur
 ==========
 
-[![Build Status](http://178.62.79.155/buildasaur)](https://github.com/czechboy0/Buildasaur/branches/all?utf8=✓&query=master)
+[![satellite badge](https://stlt.herokuapp.com/v1/badge/czechboy0/buildasaur/gladiolus)](https://github.com/czechboy0/buildasaur/branches)
 [![Latest Buildasaur Release](https://img.shields.io/github/release/czechboy0/buildasaur.svg)](https://github.com/czechboy0/Buildasaur/releases/latest)
 ![Swift Version](https://img.shields.io/badge/Swift-2-green.svg)
 ![Xcode Version](https://img.shields.io/badge/Xcode-7b6-green.svg)
