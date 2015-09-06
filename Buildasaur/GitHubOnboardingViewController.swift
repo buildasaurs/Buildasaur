@@ -9,8 +9,9 @@
 import Cocoa
 import BuildaGitServer
 import hit
+import ReactiveCocoa
 
-class GitHubOnboardingViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, NSTextFieldDelegate {
+class GitHubOnboardingViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
     
     @IBOutlet weak var tokenTextField: NSSecureTextField!
     @IBOutlet weak var reloadButton: NSButton!
@@ -24,14 +25,36 @@ class GitHubOnboardingViewController: NSViewController, NSTableViewDelegate, NST
     private var filteredRepos = [Repo]()
     private var trie: Trie?
     private var repoMapFromNames: [String: Repo]?
+    private var progressObserver: Signal<Bool, NoError>.Observer?
+    private var progressSignal: Signal<Bool, NoError>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.searchBar.delegate = self
+        self.setupBindings()
+        
         self.tableView.setDataSource(self)
         self.tableView.setDelegate(self)
         
         self.progress(false)
+    }
+    
+    func setupBindings() {
+        self.createProgressSignal()
+        let prop = DynamicProperty(object: self.reloadButton, keyPath: "enabled")
+        
+        prop <~ self.progressSignal!
+        
+//        let searchFieldTextProducer = self.searchBar.rac_textSignal().toSignalProducer()
+//            .map { text in text as! String }
+//        searchFieldTextProducer.
+        
+        
+    }
+    
+    func createProgressSignal() {
+        let (signal, observer) = Signal<Bool, NoError>.pipe()
+        self.progressSignal = signal
+        self.progressObserver = observer
     }
     
     func progress(on: Bool) {
@@ -52,18 +75,19 @@ class GitHubOnboardingViewController: NSViewController, NSTableViewDelegate, NST
         
         self.progress(true)
         
-        server.getUserRepos { (repos, error) -> () in
-            
-            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-
-                self.progress(false)
-                if let error = error {
+        server.getUserRepos()
+            .observeOn(UIScheduler())
+            .start(
+                error: { error in
                     UIUtils.showAlertWithError(error)
-                    return
-                }
-                self.reposUpdated(repos)
+                    self.reposUpdated([])
+                },
+                completed: {
+                    self.progress(false)
+                },
+                next: { value in
+                    self.reposUpdated(value)
             })
-        }
     }
     
     @IBAction func nextButtonTapped(sender: AnyObject) {
@@ -78,8 +102,7 @@ class GitHubOnboardingViewController: NSViewController, NSTableViewDelegate, NST
         self.tableView.reloadData()
     }
     
-    //MARK: search field delegate
-    override func controlTextDidChange(obj: NSNotification) {
+    func searchStringUpdated() {
         
         //filter repos -> filteredRepos
         guard let trie = self.trie else {

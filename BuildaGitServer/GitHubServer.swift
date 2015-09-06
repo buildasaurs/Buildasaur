@@ -620,8 +620,7 @@ extension GitHubServer {
                 completion(repos: nil, error: Error.withInfo("Wrong body \(body)"))
             }
         }
-    }
-    
+    }    
 }
 
 

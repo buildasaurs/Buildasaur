@@ -6,6 +6,10 @@ def pods_for_errbody
 	pod 'hit', '0.3'
 end
 
+def ui
+	pod 'RxSwift', '2.0-alpha.1'
+end
+
 def also_xcode_pods
 	pods_for_errbody
 	pod 'XcodeServerSDK', '0.2.1'
@@ -13,6 +17,7 @@ end
 
 target 'Buildasaur' do
 	also_xcode_pods
+	ui
 end
 
 target 'BuildaKit' do
