@@ -600,6 +600,28 @@ extension GitHubServer {
         }
     }
     
+    /**
+    *   GET all user's repos
+    */
+    public func getUserRepos(completion: (repos: [Repo]?, error: NSError?) -> ()) {
+        
+        self.sendRequestWithMethod(.GET, endpoint: .Repos, params: nil, query: nil, body: nil) {
+            (response, body, error) -> () in
+            
+            if error != nil {
+                completion(repos: nil, error: error)
+                return
+            }
+            
+            if let body = body as? NSArray {
+                let repositories: [Repo] = GitHubArray(body)
+                completion(repos: repositories, error: nil)
+            } else {
+                completion(repos: nil, error: Error.withInfo("Wrong body \(body)"))
+            }
+        }
+    }
+    
 }
 
 

@@ -20,6 +20,7 @@
 		3A5B04AA1AB4ABEB00F60536 /* TriggerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5B04A91AB4ABEB00F60536 /* TriggerViewController.swift */; };
 		3A5B04AC1AB4AC0F00F60536 /* SetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5B04AB1AB4AC0F00F60536 /* SetupViewController.swift */; };
 		3A5B04B01AB5144700F60536 /* ManualBotManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5B04AF1AB5144700F60536 /* ManualBotManagementViewController.swift */; };
+		3A69FC7E1B9BB4DA004955B6 /* GitHubOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A69FC7D1B9BB4DA004955B6 /* GitHubOnboardingViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		3A81BB191B5A77E9004732CD /* BuildaKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A81BB181B5A77E9004732CD /* BuildaKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A81BB201B5A77E9004732CD /* BuildaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A81BB161B5A77E9004732CD /* BuildaKit.framework */; };
 		3A81BB2B1B5A77E9004732CD /* BuildaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A81BB161B5A77E9004732CD /* BuildaKit.framework */; };
@@ -190,6 +191,7 @@
 		3A6355DF1A3BC77F00545BF9 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = BuildaGitServer/User.swift; sourceTree = SOURCE_ROOT; };
 		3A6355E11A3BCD2800545BF9 /* Repo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Repo.swift; path = BuildaGitServer/Repo.swift; sourceTree = SOURCE_ROOT; };
 		3A6355E31A3BD57D00545BF9 /* PullRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PullRequest.swift; path = BuildaGitServer/PullRequest.swift; sourceTree = SOURCE_ROOT; };
+		3A69FC7D1B9BB4DA004955B6 /* GitHubOnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubOnboardingViewController.swift; sourceTree = "<group>"; };
 		3A81BB161B5A77E9004732CD /* BuildaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BuildaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A81BB181B5A77E9004732CD /* BuildaKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BuildaKit.h; sourceTree = "<group>"; };
 		3A81BB1A1B5A77E9004732CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -497,6 +499,7 @@
 				3AF1B1231AAC7CA500917EF3 /* StatusSyncerViewController.swift */,
 				3AAA1B771AAC508A00FA1598 /* StatusViewController.swift */,
 				3A5B04A91AB4ABEB00F60536 /* TriggerViewController.swift */,
+				3A69FC7D1B9BB4DA004955B6 /* GitHubOnboardingViewController.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -1004,6 +1007,7 @@
 				3A5687761A3B93BD0066DB2B /* AppDelegate.swift in Sources */,
 				3AAA1B781AAC508A00FA1598 /* StatusViewController.swift in Sources */,
 				3AAA1B661AAB6E9800FA1598 /* SeparatorView.swift in Sources */,
+				3A69FC7E1B9BB4DA004955B6 /* GitHubOnboardingViewController.swift in Sources */,
 				3AD338B01AAE31D500ECD0F2 /* BuildTemplateViewController.swift in Sources */,
 				3AAA1B681AAB722600FA1598 /* StatusProjectViewController.swift in Sources */,
 				3AB3FDCB1B05644300021197 /* MenuItemManager.swift in Sources */,

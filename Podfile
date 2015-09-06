@@ -3,11 +3,12 @@ use_frameworks!
 
 def pods_for_errbody
 	pod 'BuildaUtils', '0.0.11'
+	pod 'hit', '0.3'
 end
 
 def also_xcode_pods
 	pods_for_errbody
-	pod 'XcodeServerSDK', '0.1.10'
+	pod 'XcodeServerSDK', '0.2.1'
 end
 
 target 'Buildasaur' do

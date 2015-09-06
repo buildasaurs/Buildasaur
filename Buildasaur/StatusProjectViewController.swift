@@ -17,6 +17,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     
     //no project yet
     @IBOutlet weak var addProjectButton: NSButton!
+    @IBOutlet weak var addProjectFromGitHubButton: NSButton!
     
     //we have a project
     @IBOutlet weak var statusContentView: NSView!
@@ -78,6 +79,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
             
             self.statusContentView.hidden = false
             self.addProjectButton.hidden = true
+            self.addProjectFromGitHubButton.hidden = true
             
             self.buildTemplateComboBox.enabled = self.editing
             self.deleteButton.hidden = !self.editing
@@ -116,6 +118,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         } else {
             self.statusContentView.hidden = true
             self.addProjectButton.hidden = false
+            self.addProjectFromGitHubButton.hidden = false
             self.tokenTextField.stringValue = ""
             self.buildTemplateComboBox.removeAllItems()
         }
@@ -176,6 +179,11 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         } else {
             //user cancelled
         }
+    }
+    
+    @IBAction func addProjectFromGitHubButtonTapped(sender: AnyObject) {
+        
+        self.performSegueWithIdentifier("showGitHub", sender: self)
     }
     
     //Combo Box Delegate
