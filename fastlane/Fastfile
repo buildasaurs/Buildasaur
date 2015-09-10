@@ -69,6 +69,7 @@ private_lane :github do |params|
   repo_url = "czechboy0/Buildasaur"
   release = set_github_release(
     repository_name: repo_url,
+    upload_assets: assets,
     api_token: ENV["GITHUB_TOKEN"],
     name: [version_tag, title].join(" - "),
     tag_name: version_tag,
