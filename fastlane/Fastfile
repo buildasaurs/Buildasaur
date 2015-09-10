@@ -15,7 +15,10 @@ lane :prebuild do
 end
 
 lane :test do
+  run_tests
+end
 
+private_lane :run_tests do
   prebuild
   xcodebuild(
     test: true,
@@ -26,7 +29,7 @@ end
 
 lane :release do
 
-  test
+  run_tests
   version = get_info_plist_value(
       key: "CFBundleShortVersionString",
       path: "Buildasaur/Info.plist"
