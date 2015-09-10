@@ -84,7 +84,15 @@
 		3AD338B01AAE31D500ECD0F2 /* BuildTemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD338AF1AAE31D500ECD0F2 /* BuildTemplateViewController.swift */; };
 		3AF090B81B1134AA0058567F /* BranchWatchingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF090B71B1134AA0058567F /* BranchWatchingViewController.swift */; };
 		3AF1B1241AAC7CA500917EF3 /* StatusSyncerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF1B1231AAC7CA500917EF3 /* StatusSyncerViewController.swift */; };
-		72C942865E06140723569CF1 /* Pods_Buildasaur.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFC5293812E0E442BE2182D0 /* Pods_Buildasaur.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		4CA544161B8C054A002321B8 /* Pods_BuildaAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA544151B8C054A002321B8 /* Pods_BuildaAnalytics.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		4CA544181B8C057A002321B8 /* BuildaAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA544171B8C057A002321B8 /* BuildaAnalytics.swift */; };
+		4CA5441A1B8C0C10002321B8 /* BuildaAnalyticsEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA544191B8C0C10002321B8 /* BuildaAnalyticsEvents.swift */; };
+		4CA9DD891B8C0498005330D7 /* BuildaAnalytics.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA9DD881B8C0498005330D7 /* BuildaAnalytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA9DD901B8C0498005330D7 /* BuildaAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA9DD861B8C0498005330D7 /* BuildaAnalytics.framework */; };
+		4CA9DD971B8C0498005330D7 /* BuildaAnalyticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA9DD961B8C0498005330D7 /* BuildaAnalyticsTests.swift */; };
+		4CA9DD9B1B8C0498005330D7 /* BuildaAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA9DD861B8C0498005330D7 /* BuildaAnalytics.framework */; };
+		4CA9DD9C1B8C0498005330D7 /* BuildaAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA9DD861B8C0498005330D7 /* BuildaAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		72C942865E06140723569CF1 /* Pods_Buildasaur.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFC5293812E0E442BE2182D0 /* Pods_Buildasaur.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		B967DFBE36176FD9B4960410 /* Pods_BuildaGitServer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73C0D6A9CBF4A8155E3A7376 /* Pods_BuildaGitServer.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		EC160F5DE92FC57D64786D8F /* Pods_BuildaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1086D69942F8B7830B5D00E1 /* Pods_BuildaKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		F27BD0C6EA74D366E34EB3BA /* Pods_BuildaGitServerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9ECC1671A5C1E3811C3C3FFB /* Pods_BuildaGitServerTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -140,6 +148,27 @@
 			remoteGlobalIDString = 3AAF6EE31A3CE5BA00C657FB;
 			remoteInfo = BuildaGitServer;
 		};
+		4CA9DD911B8C0498005330D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3A5687681A3B93BD0066DB2B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4CA9DD851B8C0498005330D7;
+			remoteInfo = BuildaAnalytics;
+		};
+		4CA9DD931B8C0498005330D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3A5687681A3B93BD0066DB2B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3A56876F1A3B93BD0066DB2B;
+			remoteInfo = Buildasaur;
+		};
+		4CA9DD991B8C0498005330D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3A5687681A3B93BD0066DB2B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4CA9DD851B8C0498005330D7;
+			remoteInfo = BuildaAnalytics;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -149,6 +178,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				4CA9DD9C1B8C0498005330D7 /* BuildaAnalytics.framework in Embed Frameworks */,
 				3AAF6EFC1A3CE5BA00C657FB /* BuildaGitServer.framework in Embed Frameworks */,
 				3A81BB2C1B5A77E9004732CD /* BuildaKit.framework in Embed Frameworks */,
 			);
@@ -167,6 +197,7 @@
 		2BA66B4A6DFD76C4122D696A /* Pods-BuildaUtils.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaUtils.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaUtils/Pods-BuildaUtils.debug.xcconfig"; sourceTree = "<group>"; };
 		2F8799E7CA29F40E308CB090 /* Pods-BuildaKit.testing.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaKit.testing.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaKit/Pods-BuildaKit.testing.xcconfig"; sourceTree = "<group>"; };
 		367971821BC7964B03631774 /* Pods_BuildaUtils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BuildaUtils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		39E648C4DC2199469616B58E /* Pods-BuildaAnalytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaAnalytics.release.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaAnalytics/Pods-BuildaAnalytics.release.xcconfig"; sourceTree = "<group>"; };
 		3A3231B01B5AEF7900B53E3F /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		3A32CD131A3D00F800861A34 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		3A32CD171A3D01E300861A34 /* Issue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Issue.swift; sourceTree = "<group>"; };
@@ -250,6 +281,15 @@
 		40BCAC9716082AB3070E2DDC /* Pods_BuildaUtilsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BuildaUtilsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B5DB9726CCDA0682B1C8D8A /* Pods-BuildaKitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaKitTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaKitTests/Pods-BuildaKitTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4C0A89C04EE4D1B92581E300 /* Pods-BuildaGitServer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaGitServer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaGitServer/Pods-BuildaGitServer.debug.xcconfig"; sourceTree = "<group>"; };
+		4CA544151B8C054A002321B8 /* Pods_BuildaAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_BuildaAnalytics.framework; path = Pods/../build/Debug/Pods_BuildaAnalytics.framework; sourceTree = "<group>"; };
+		4CA544171B8C057A002321B8 /* BuildaAnalytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildaAnalytics.swift; sourceTree = "<group>"; };
+		4CA544191B8C0C10002321B8 /* BuildaAnalyticsEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildaAnalyticsEvents.swift; sourceTree = "<group>"; };
+		4CA9DD861B8C0498005330D7 /* BuildaAnalytics.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BuildaAnalytics.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CA9DD881B8C0498005330D7 /* BuildaAnalytics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BuildaAnalytics.h; sourceTree = "<group>"; };
+		4CA9DD8A1B8C0498005330D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4CA9DD8F1B8C0498005330D7 /* BuildaAnalyticsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BuildaAnalyticsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CA9DD961B8C0498005330D7 /* BuildaAnalyticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildaAnalyticsTests.swift; sourceTree = "<group>"; };
+		4CA9DD981B8C0498005330D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5A1BF45FB90783C591B4D525 /* Pods-BuildaGitServer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaGitServer.release.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaGitServer/Pods-BuildaGitServer.release.xcconfig"; sourceTree = "<group>"; };
 		60565EAEB9A1817A1DEB0FF2 /* Pods-BuildaGitServerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaGitServerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaGitServerTests/Pods-BuildaGitServerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		681D44417C140BD1795F71E4 /* Pods-BuildaGitServer.testing.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaGitServer.testing.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaGitServer/Pods-BuildaGitServer.testing.xcconfig"; sourceTree = "<group>"; };
@@ -258,7 +298,9 @@
 		7C82BB415700C81EA9715FE4 /* Pods-Buildasaur.testing.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Buildasaur.testing.xcconfig"; path = "Pods/Target Support Files/Pods-Buildasaur/Pods-Buildasaur.testing.xcconfig"; sourceTree = "<group>"; };
 		7E934E50EA252648E6AFE307 /* Pods-BuildaKitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaKitTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaKitTests/Pods-BuildaKitTests.release.xcconfig"; sourceTree = "<group>"; };
 		812198AFEF9A93437DF9E7BF /* Pods-BuildaKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaKit/Pods-BuildaKit.release.xcconfig"; sourceTree = "<group>"; };
+		8FB01D270AB454D59D1B25CA /* Pods-BuildaAnalytics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaAnalytics.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaAnalytics/Pods-BuildaAnalytics.debug.xcconfig"; sourceTree = "<group>"; };
 		9763FA72546E3CAF2D2786DA /* Pods_BuildaKitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BuildaKitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AA4D5159F2652A25A9CC33B /* Pods-BuildaAnalytics.testing.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaAnalytics.testing.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaAnalytics/Pods-BuildaAnalytics.testing.xcconfig"; sourceTree = "<group>"; };
 		9ECC1671A5C1E3811C3C3FFB /* Pods_BuildaGitServerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BuildaGitServerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FD7CC3A9C814B53A3E59FEA /* Pods-BuildaGitServerTests.testing.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaGitServerTests.testing.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaGitServerTests/Pods-BuildaGitServerTests.testing.xcconfig"; sourceTree = "<group>"; };
 		AD459625FF20E15478BB71A2 /* Pods-Buildasaur.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Buildasaur.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Buildasaur/Pods-Buildasaur.debug.xcconfig"; sourceTree = "<group>"; };
@@ -268,6 +310,7 @@
 		C932019AC696395A2BF69F2F /* Pods-BuildaKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaKit/Pods-BuildaKit.debug.xcconfig"; sourceTree = "<group>"; };
 		CECD9EDC0C4F882ACEB5E1F3 /* Pods-Buildasaur.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Buildasaur.release.xcconfig"; path = "Pods/Target Support Files/Pods-Buildasaur/Pods-Buildasaur.release.xcconfig"; sourceTree = "<group>"; };
 		DC54BBBDFD511913AA588726 /* Pods-BuildaUtilsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaUtilsTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaUtilsTests/Pods-BuildaUtilsTests.release.xcconfig"; sourceTree = "<group>"; };
+		ED2034509984340D073FD9A1 /* Pods_BuildaAnalytics.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BuildaAnalytics.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F159C5240A79DE46DB418D8C /* Pods-BuildaGitServerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaGitServerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaGitServerTests/Pods-BuildaGitServerTests.release.xcconfig"; sourceTree = "<group>"; };
 		F55F8A6BBDE1F9BD198D441A /* Pods-BuildaUtilsTests.testing.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaUtilsTests.testing.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaUtilsTests/Pods-BuildaUtilsTests.testing.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -279,6 +322,7 @@
 			files = (
 				3A81BB2B1B5A77E9004732CD /* BuildaKit.framework in Frameworks */,
 				3AAF6EFB1A3CE5BA00C657FB /* BuildaGitServer.framework in Frameworks */,
+				4CA9DD9B1B8C0498005330D7 /* BuildaAnalytics.framework in Frameworks */,
 				72C942865E06140723569CF1 /* Pods_Buildasaur.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -318,6 +362,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4CA9DD821B8C0498005330D7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CA544161B8C054A002321B8 /* Pods_BuildaAnalytics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CA9DD8C1B8C0498005330D7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CA9DD901B8C0498005330D7 /* BuildaAnalytics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -348,6 +408,9 @@
 				4B5DB9726CCDA0682B1C8D8A /* Pods-BuildaKitTests.debug.xcconfig */,
 				C6866CD696AF52F4772D2C38 /* Pods-BuildaKitTests.testing.xcconfig */,
 				7E934E50EA252648E6AFE307 /* Pods-BuildaKitTests.release.xcconfig */,
+				8FB01D270AB454D59D1B25CA /* Pods-BuildaAnalytics.debug.xcconfig */,
+				9AA4D5159F2652A25A9CC33B /* Pods-BuildaAnalytics.testing.xcconfig */,
+				39E648C4DC2199469616B58E /* Pods-BuildaAnalytics.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -360,6 +423,8 @@
 				3A81BB251B5A77E9004732CD /* BuildaKitTests */,
 				3AAF6EE51A3CE5BA00C657FB /* BuildaGitServer */,
 				3AAF6EF41A3CE5BA00C657FB /* BuildaGitServerTests */,
+				4CA9DD871B8C0498005330D7 /* BuildaAnalytics */,
+				4CA9DD951B8C0498005330D7 /* BuildaAnalyticsTests */,
 				3A5687711A3B93BD0066DB2B /* Products */,
 				00BB8425DD68675612C875AD /* Pods */,
 				50A74951EE20FE8714EAD98C /* Frameworks */,
@@ -374,6 +439,8 @@
 				3AAF6EEE1A3CE5BA00C657FB /* BuildaGitServerTests.xctest */,
 				3A81BB161B5A77E9004732CD /* BuildaKit.framework */,
 				3A81BB1F1B5A77E9004732CD /* BuildaKitTests.xctest */,
+				4CA9DD861B8C0498005330D7 /* BuildaAnalytics.framework */,
+				4CA9DD8F1B8C0498005330D7 /* BuildaAnalyticsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -546,9 +613,30 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		4CA9DD871B8C0498005330D7 /* BuildaAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				4CA9DD881B8C0498005330D7 /* BuildaAnalytics.h */,
+				4CA9DD8A1B8C0498005330D7 /* Info.plist */,
+				4CA544171B8C057A002321B8 /* BuildaAnalytics.swift */,
+				4CA544191B8C0C10002321B8 /* BuildaAnalyticsEvents.swift */,
+			);
+			path = BuildaAnalytics;
+			sourceTree = "<group>";
+		};
+		4CA9DD951B8C0498005330D7 /* BuildaAnalyticsTests */ = {
+			isa = PBXGroup;
+			children = (
+				4CA9DD961B8C0498005330D7 /* BuildaAnalyticsTests.swift */,
+				4CA9DD981B8C0498005330D7 /* Info.plist */,
+			);
+			path = BuildaAnalyticsTests;
+			sourceTree = "<group>";
+		};
 		50A74951EE20FE8714EAD98C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CA544151B8C054A002321B8 /* Pods_BuildaAnalytics.framework */,
 				367971821BC7964B03631774 /* Pods_BuildaUtils.framework */,
 				73C0D6A9CBF4A8155E3A7376 /* Pods_BuildaGitServer.framework */,
 				BFC5293812E0E442BE2182D0 /* Pods_Buildasaur.framework */,
@@ -557,6 +645,7 @@
 				40BCAC9716082AB3070E2DDC /* Pods_BuildaUtilsTests.framework */,
 				1086D69942F8B7830B5D00E1 /* Pods_BuildaKit.framework */,
 				9763FA72546E3CAF2D2786DA /* Pods_BuildaKitTests.framework */,
+				ED2034509984340D073FD9A1 /* Pods_BuildaAnalytics.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -580,6 +669,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4CA9DD831B8C0498005330D7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CA9DD891B8C0498005330D7 /* BuildaAnalytics.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -600,6 +697,7 @@
 			dependencies = (
 				3AAF6EFA1A3CE5BA00C657FB /* PBXTargetDependency */,
 				3A81BB2A1B5A77E9004732CD /* PBXTargetDependency */,
+				4CA9DD9A1B8C0498005330D7 /* PBXTargetDependency */,
 			);
 			name = Buildasaur;
 			productName = Buildasaur;
@@ -691,6 +789,45 @@
 			productReference = 3AAF6EEE1A3CE5BA00C657FB /* BuildaGitServerTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		4CA9DD851B8C0498005330D7 /* BuildaAnalytics */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CA9DD9D1B8C0498005330D7 /* Build configuration list for PBXNativeTarget "BuildaAnalytics" */;
+			buildPhases = (
+				AFA4EEF263BEE8B4772D0D60 /* Check Pods Manifest.lock */,
+				4CA9DD811B8C0498005330D7 /* Sources */,
+				4CA9DD821B8C0498005330D7 /* Frameworks */,
+				4CA9DD831B8C0498005330D7 /* Headers */,
+				4CA9DD841B8C0498005330D7 /* Resources */,
+				C77C0A0AEBC7628AC90CBC2F /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BuildaAnalytics;
+			productName = BuildaAnalytics;
+			productReference = 4CA9DD861B8C0498005330D7 /* BuildaAnalytics.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		4CA9DD8E1B8C0498005330D7 /* BuildaAnalyticsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CA9DDA11B8C0498005330D7 /* Build configuration list for PBXNativeTarget "BuildaAnalyticsTests" */;
+			buildPhases = (
+				4CA9DD8B1B8C0498005330D7 /* Sources */,
+				4CA9DD8C1B8C0498005330D7 /* Frameworks */,
+				4CA9DD8D1B8C0498005330D7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4CA9DD921B8C0498005330D7 /* PBXTargetDependency */,
+				4CA9DD941B8C0498005330D7 /* PBXTargetDependency */,
+			);
+			name = BuildaAnalyticsTests;
+			productName = BuildaAnalyticsTests;
+			productReference = 4CA9DD8F1B8C0498005330D7 /* BuildaAnalyticsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -725,6 +862,14 @@
 						CreatedOnToolsVersion = 6.1.1;
 						TestTargetID = 3A56876F1A3B93BD0066DB2B;
 					};
+					4CA9DD851B8C0498005330D7 = {
+						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = 7BJ2984YDK;
+					};
+					4CA9DD8E1B8C0498005330D7 = {
+						CreatedOnToolsVersion = 7.0;
+						TestTargetID = 3A56876F1A3B93BD0066DB2B;
+					};
 				};
 			};
 			buildConfigurationList = 3A56876B1A3B93BD0066DB2B /* Build configuration list for PBXProject "Buildasaur" */;
@@ -745,6 +890,8 @@
 				3A81BB1E1B5A77E9004732CD /* BuildaKitTests */,
 				3AAF6EE31A3CE5BA00C657FB /* BuildaGitServer */,
 				3AAF6EED1A3CE5BA00C657FB /* BuildaGitServerTests */,
+				4CA9DD851B8C0498005330D7 /* BuildaAnalytics */,
+				4CA9DD8E1B8C0498005330D7 /* BuildaAnalyticsTests */,
 			);
 		};
 /* End PBXProject section */
@@ -782,6 +929,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		3AAF6EEC1A3CE5BA00C657FB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CA9DD841B8C0498005330D7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CA9DD8D1B8C0498005330D7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -924,6 +1085,36 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BuildaGitServerTests/Pods-BuildaGitServerTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AFA4EEF263BEE8B4772D0D60 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		C77C0A0AEBC7628AC90CBC2F /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BuildaAnalytics/Pods-BuildaAnalytics-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D6B2FF7E0F016F08197E2719 /* Embed Pods Frameworks */ = {
@@ -1088,6 +1279,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4CA9DD811B8C0498005330D7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CA5441A1B8C0C10002321B8 /* BuildaAnalyticsEvents.swift in Sources */,
+				4CA544181B8C057A002321B8 /* BuildaAnalytics.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CA9DD8B1B8C0498005330D7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CA9DD971B8C0498005330D7 /* BuildaAnalyticsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1125,6 +1333,21 @@
 			isa = PBXTargetDependency;
 			target = 3AAF6EE31A3CE5BA00C657FB /* BuildaGitServer */;
 			targetProxy = 3AAF6EF91A3CE5BA00C657FB /* PBXContainerItemProxy */;
+		};
+		4CA9DD921B8C0498005330D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4CA9DD851B8C0498005330D7 /* BuildaAnalytics */;
+			targetProxy = 4CA9DD911B8C0498005330D7 /* PBXContainerItemProxy */;
+		};
+		4CA9DD941B8C0498005330D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3A56876F1A3B93BD0066DB2B /* Buildasaur */;
+			targetProxy = 4CA9DD931B8C0498005330D7 /* PBXContainerItemProxy */;
+		};
+		4CA9DD9A1B8C0498005330D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4CA9DD851B8C0498005330D7 /* BuildaAnalytics */;
+			targetProxy = 4CA9DD991B8C0498005330D7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1578,6 +1801,141 @@
 			};
 			name = Release;
 		};
+		4CA9DD9E1B8C0498005330D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8FB01D270AB454D59D1B25CA /* Pods-BuildaAnalytics.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug",
+				);
+				FRAMEWORK_VERSION = A;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = BuildaAnalytics/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.honzadvorsky.BuildaAnalytics;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		4CA9DD9F1B8C0498005330D7 /* Testing */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9AA4D5159F2652A25A9CC33B /* Pods-BuildaAnalytics.testing.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug",
+				);
+				FRAMEWORK_VERSION = A;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = BuildaAnalytics/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.honzadvorsky.BuildaAnalytics;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Testing;
+		};
+		4CA9DDA01B8C0498005330D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 39E648C4DC2199469616B58E /* Pods-BuildaAnalytics.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug",
+				);
+				FRAMEWORK_VERSION = A;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = BuildaAnalytics/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.honzadvorsky.BuildaAnalytics;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		4CA9DDA21B8C0498005330D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = BuildaAnalyticsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.honzadvorsky.BuildaAnalyticsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Buildasaur.app/Contents/MacOS/Buildasaur";
+			};
+			name = Debug;
+		};
+		4CA9DDA31B8C0498005330D7 /* Testing */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = BuildaAnalyticsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.honzadvorsky.BuildaAnalyticsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Buildasaur.app/Contents/MacOS/Buildasaur";
+			};
+			name = Testing;
+		};
+		4CA9DDA41B8C0498005330D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = BuildaAnalyticsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.honzadvorsky.BuildaAnalyticsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Buildasaur.app/Contents/MacOS/Buildasaur";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1637,6 +1995,26 @@
 				3AAF6F011A3CE5BA00C657FB /* Debug */,
 				3A7A079D1AAB1524008C3425 /* Testing */,
 				3AAF6F021A3CE5BA00C657FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4CA9DD9D1B8C0498005330D7 /* Build configuration list for PBXNativeTarget "BuildaAnalytics" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CA9DD9E1B8C0498005330D7 /* Debug */,
+				4CA9DD9F1B8C0498005330D7 /* Testing */,
+				4CA9DDA01B8C0498005330D7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4CA9DDA11B8C0498005330D7 /* Build configuration list for PBXNativeTarget "BuildaAnalyticsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CA9DDA21B8C0498005330D7 /* Debug */,
+				4CA9DDA31B8C0498005330D7 /* Testing */,
+				4CA9DDA41B8C0498005330D7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
