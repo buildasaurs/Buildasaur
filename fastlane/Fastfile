@@ -34,14 +34,14 @@ lane :release do
       key: "CFBundleShortVersionString",
       path: "Buildasaur/Info.plist"
     )
-  file_name = "Buildasaur-#{version}"
+  file_name = "Buildasaur"
   gym(
     scheme: 'Buildasaur',
     output_name: file_name,
     output_directory: './build'
     )
   github(
-    assets: ["./build/#{file_name}"],
+    assets: ["./build/#{file_name}.app"],
     version: version
     )
 end
