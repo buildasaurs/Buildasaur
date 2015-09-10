@@ -5,108 +5,87 @@
 
 # This is the minimum version number required.
 # Update this, if you use features of a newer version
-fastlane_version "1.21.0"
+fastlane_version "1.25.1"
 
-default_platform :mac
+before_all do |lane|
+end
 
-platform :mac do
+lane :prebuild do
+  cocoapods
+end
 
-  before_all do |lane|
-  end
+lane :test do
 
-  lane :prebuild do
-    cocoapods
-  end
-
-  lane :postbuild do
-    # nada
-  end
-
-  desc "Runs all the tests"
-  lane :test do
-
-    prebuild
-    xcodebuild(
-      test: true,
-      scheme: 'Buildasaur',
-      workspace: 'Buildasaur.xcworkspace'
+  prebuild
+  xcodebuild(
+    test: true,
+    scheme: 'Buildasaur',
+    workspace: 'Buildasaur.xcworkspace'
     )
+end
 
-  end
+lane :release do
 
-  desc "Archives (and in the future will upload a new release to GitHub)"
-  lane :github do
-
-    # also add incrementing of build and version number, when it becomes available
-    # for mac - https://github.com/KrauseFx/fastlane/pull/291
-
-    prebuild
-    # file_name = "Buildasaur-#{version}-#{build}"
-    file_name = "Buildasaur.app"
-    gym(
-      scheme: 'Buildasaur',
-      output_name: file_name,
-      output_directory: './build'
-      )
-    release(assets: ["./build/Buildasaur.app"])
-
-  end
-
-   lane :release do |params|
-
-    assets = params[:assets]
-
-    # prep the local state
-    ensure_git_status_clean
-    ensure_git_branch(branch: "master")
-    git_pull
-
-    # ask for the version
-    version = prompt(text: 'New Version Tag: ')
-    title = prompt(text: 'Release Title: ')
-    description = prompt(text: "Release changelog: ",
-                         multi_line_end_keyword: "END")
-
-    # create a new release on GitHub
-    repo_url = "czechboy0/Buildasaur"
-    release = set_github_release(
-      repository_name: repo_url,
-      api_token: ENV["GITHUB_TOKEN"],
-      name: [version, title].join(" - "),
-      tag_name: version,
-      description: description,
-      is_draft: false,
-      is_prerelease: true
+  prebuild
+  version = get_info_plist_value(
+      key: "CFBundleShortVersionString",
+      path: "Buildasaur/Info.plist"
     )
-
-    # notify us on slack
-    slack(
-      slack_url: ENV['SLACK_RELEASES_URL'],
-      message: "Successfully released [Buildasaur #{version}](#{release['html_url']}) :rocket:",
-      payload: {
-        "New" => release['body']
-      }
+  file_name = "Buildasaur-#{version}"
+  gym(
+    scheme: 'Buildasaur',
+    output_name: file_name,
+    output_directory: './build'
     )
+  github(
+    assets: ["./build/#{file_name}"],
+    version: version
+    )
+end
 
-    # regenerate changelog to get it committed
-    # TODO: is there a "commit" fastlane action?
-    sh "cd .. && github_changelog_generator -t $GITHUB_TOKEN"
+private_lane :github do |params|
 
-  end
+  assets = params[:assets]
+  version = params[:version]
+  version_tag = "v#{version}"
 
-  # You can define as many lanes as you want
+  # prep the local state
+  ensure_git_status_clean
+  ensure_git_branch(branch: "master")
+  git_pull
 
-  after_all do |lane|
-    # slack(
-    #   message: "Successfully deployed new App Update."
-    # )
-  end
+  # regen the changelog and open it
+  sh "cd .. && github_changelog_generator -t $GITHUB_TOKEN && subl CHANGELOG.md"
 
-  error do |lane, exception|
-    # slack(
-    #   message: exception.message,
-    #   success: false
-    # )
-  end
+  # ask for the version
+  title = prompt(text: 'Release Title: ')
+  description = prompt(text: "Release changelog: ",
+   multi_line_end_keyword: "END")
+
+  # create a new release on GitHub
+  repo_url = "czechboy0/Buildasaur"
+  release = set_github_release(
+    repository_name: repo_url,
+    api_token: ENV["GITHUB_TOKEN"],
+    name: [version_tag, title].join(" - "),
+    tag_name: version_tag,
+    description: description,
+    is_draft: false,
+    is_prerelease: true
+  )
+
+  # notify us on slack
+  slack(
+    slack_url: ENV['SLACK_RELEASES_URL'],
+    message: "Successfully released [Buildasaur #{version_tag}](#{release['html_url']}) :rocket:",
+    payload: {
+      "New" => release['body']
+    }
+  )
+
+  # regenerate changelog to get it committed
+  sh "cd .. && github_changelog_generator -t $GITHUB_TOKEN"
+  sh "cd .. && git commit -am \"changelog\" && git push"
 
 end
+
