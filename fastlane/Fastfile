@@ -58,7 +58,7 @@ platform :mac do
 
     # prep the local state
     ensure_git_status_clean
-    ensure_git_branch(branch: "gladiolus")
+    ensure_git_branch(branch: "master")
     git_pull
 
     # ask for the version
