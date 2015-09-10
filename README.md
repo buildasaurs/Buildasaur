@@ -45,11 +45,11 @@ Buildasaur runs as a background Mac app, its configuration window goes away when
 You have multiple options of getting started with Buildasaur, from source code to downloading the App.
 - get the .app of the [latest release](https://github.com/czechboy0/Buildasaur/releases/latest)
 - starting with version 0.2.8, release .app is always signed with my [Developer ID](https://developer.apple.com/developer-id/) (Jan Dvorsky), so that you can be sure you're really launching an official release. Feel free to run Buildasaur yourself from code, just be aware that you will get a warning from OS X if you have [Gatekeeper](http://en.wikipedia.org/wiki/Gatekeeper_(OS_X)) enabled.
-- check out code and build and run in Xcode (requires Xcode 6.3 with Swift 1.2, thus OS X 10.10.3)
+- check out code and build and run in Xcode (requires Xcode 7 with Swift 2, thus OS X 10.10.5)
 
 :white_check_mark: Installation Steps
 ------------------
-- Install Xcode 6+, Xcode Server 4+ and have your GitHub repo credentials ready
+- Install Xcode 7, Xcode Server 5 and have your GitHub repo credentials ready
 
 **Xcode Server Setup**
 - Open Server.app, go to Services -> Xcode and add select your Xcode
