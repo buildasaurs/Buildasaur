@@ -1,23 +1,20 @@
 Buildasaur
 ==========
 
-[![satellite badge](https://stlt.herokuapp.com/v1/badge/czechboy0/buildasaur/gladiolus)](https://github.com/czechboy0/buildasaur/branches)
+[![satellite badge](https://stlt.herokuapp.com/v1/badge/czechboy0/buildasaur/master)](https://github.com/czechboy0/buildasaur/branches)
 [![Latest Buildasaur Release](https://img.shields.io/github/release/czechboy0/buildasaur.svg)](https://github.com/czechboy0/Buildasaur/releases/latest)
 ![Swift Version](https://img.shields.io/badge/Swift-2-green.svg)
-![Xcode Version](https://img.shields.io/badge/Xcode-7b6-green.svg)
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://en.wikipedia.org/wiki/MIT_License)
 [![Blog](https://img.shields.io/badge/blog-honzadvorsky.com-green.svg)](http://honzadvorsky.com)
 [![Twitter Buildasaur](https://img.shields.io/badge/twitter-Buildasaur-green.svg)](http://twitter.com/buildasaur)
 [![Twitter Czechboy0](https://img.shields.io/badge/twitter-czechboy0-green.svg)](http://twitter.com/czechboy0)
 
-![](https://raw.githubusercontent.com/czechboy0/Buildasaur/gladiolus/Buildasaur/Images.xcassets/AppIcon.appiconset/Icon_128@2x.png)
+![](https://raw.githubusercontent.com/czechboy0/Buildasaur/master/Buildasaur/Images.xcassets/AppIcon.appiconset/Icon_128@2x.png)
 
 Free, local and automatic testing of GitHub Pull Requests with Xcode Bots. Keep your team productive and safe. Get up and running in minutes. (Follow Builda [on Twitter](http://twitter.com/buildasaur) for infrequent updates.)
 
-**Xcode 7 support is in beta. Get the latest [beta release](https://github.com/czechboy0/Buildasaur/releases) if you'd like to give it a try. We still fully support Xcode 6 in versions up to [0.2.9](https://github.com/czechboy0/Buildasaur/releases/tag/v0.2.9).**
-
-Version 1.0 is being built on [a branch](https://github.com/czechboy0/Buildasaur/tree/gladiolus). The latest stable build is on master.
+**Get the latest [Xcode 7 release](https://github.com/czechboy0/Buildasaur/releases) (not backwards compatible). If you'd like Xcode 6 support, download version [0.2.9](https://github.com/czechboy0/Buildasaur/releases/tag/v0.2.9).**
 
 :thought_balloon: **Thinking of trying Buildasaur?** Check out the list of [teams and projects](./PROJECTS_USING_BUILDASAUR.md) already using it.<br>
 :arrows_counterclockwise: **Already using Buildasaur?** Please consider [adding yourself](./PROJECTS_USING_BUILDASAUR.md) to our success stories!<br>
@@ -103,7 +100,7 @@ The default workflow is as follows:
 -----------------------
 - Builda can (and by default does) post a comment into the PR conversation when an integration finishes
 
-![](https://raw.githubusercontent.com/czechboy0/Buildasaur/gladiolus/Meta/comment.png)
+![](https://raw.githubusercontent.com/czechboy0/Buildasaur/master/Meta/comment.png)
 
 - this can be controlled in the UI with the toggle named "Post Status Comments"
 
