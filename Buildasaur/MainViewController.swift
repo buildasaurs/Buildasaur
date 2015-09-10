@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import BuildaKit
 
 //server trust - must be logged in in the browser first or have a server trust certificate.
 //otherwise fails.
@@ -18,7 +19,7 @@ class MainViewController: NSViewController, NSTableViewDataSource, StatusSibling
     var projectStatusViewController: StatusProjectViewController!
     var serverStatusViewController: StatusServerViewController!
     
-    private var buildTemplateParams: (buildTemplate: BuildTemplate?, project: LocalSource)?
+    private var buildTemplateParams: (buildTemplate: BuildTemplate?, project: Project)?
     
     required init?(coder: NSCoder) {
         
@@ -39,7 +40,6 @@ class MainViewController: NSViewController, NSTableViewDataSource, StatusSibling
     override func prepareForSegue(segue: NSStoryboardSegue, sender: AnyObject?) {
         
         let destinationController = segue.destinationController as! NSViewController
-        let identifier = segue.identifier!
         
         if let statusViewController = destinationController as? StatusViewController {
             statusViewController.storageManager = self.storageManager
@@ -75,7 +75,7 @@ class MainViewController: NSViewController, NSTableViewDataSource, StatusSibling
         return self.serverStatusViewController
     }
     
-    func showBuildTemplateViewControllerForTemplate(template: BuildTemplate?, project: LocalSource, sender: SetupViewControllerDelegate?) {
+    func showBuildTemplateViewControllerForTemplate(template: BuildTemplate?, project: Project, sender: SetupViewControllerDelegate?) {
 
         self.buildTemplateParams = (buildTemplate: template, project: project)
         self.performSegueWithIdentifier("showBuildTemplate", sender: sender)
@@ -99,7 +99,7 @@ class MainViewController: NSViewController, NSTableViewDataSource, StatusSibling
         let image = NSImage(named: "icon")
         self.statusItem.image = image
         self.statusItem.highlightMode = true
-        var menu = NSMenu()
+        let menu = NSMenu()
         menu.addItem(self.lastPollItem)
         menu.addItem(NSMenuItem.separatorItem())
         menu.addItemWithTitle("Open the App", action: "open", keyEquivalent: "")

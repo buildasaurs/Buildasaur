@@ -10,6 +10,7 @@ import Foundation
 import AppKit
 import XcodeServerSDK
 import BuildaUtils
+import BuildaKit
 
 class TriggerViewController: SetupViewController, NSComboBoxDelegate {
     
@@ -62,7 +63,7 @@ class TriggerViewController: SetupViewController, NSComboBoxDelegate {
             if trigger.kind == Trigger.Kind.RunScript {
                 self.bodyTextField.stringValue = trigger.scriptBody
             } else {
-                self.bodyTextField.stringValue = ",".join(trigger.emailConfiguration!.additionalRecipients)
+                self.bodyTextField.stringValue = trigger.emailConfiguration!.additionalRecipients.joinWithSeparator(",")
             }
             
             if let conditions = trigger.conditions {
@@ -126,14 +127,14 @@ class TriggerViewController: SetupViewController, NSComboBoxDelegate {
             self.bodyDescriptionLabel.stringValue = desc
             
             let isEmail = triggerKind == Trigger.Kind.EmailNotification
-            self.emailCheckboxes().map { $0.enabled = isEmail }
+            self.emailCheckboxes().forEach { $0.enabled = isEmail }
         }
         
         let phaseIndex = self.phaseComboBox.indexOfSelectedItem
         if phaseIndex > -1 {
             let triggerPhase = self.allPhases()[phaseIndex]
             let isPostbuild = triggerPhase == Trigger.Phase.Postbuild
-            self.conditionsCheckboxes().map { $0.enabled = isPostbuild }
+            self.conditionsCheckboxes().forEach { $0.enabled = isPostbuild }
         }
         
         super.reloadUI()
@@ -144,7 +145,7 @@ class TriggerViewController: SetupViewController, NSComboBoxDelegate {
         if super.pullDataFromUI(interactive) {
             
             let name = self.nameTextField.stringValue
-            if count(name) == 0 {
+            if name.isEmpty {
                 if interactive {
                     UIUtils.showAlertWithText("Please provide a name")
                 }
@@ -179,7 +180,7 @@ class TriggerViewController: SetupViewController, NSComboBoxDelegate {
                 //must have a body
                 
                 body = bodyString
-                if count(body) == 0 {
+                if body.isEmpty {
                     if interactive {
                         UIUtils.showAlertWithText("Please provide body of your script")
                     }
@@ -189,7 +190,7 @@ class TriggerViewController: SetupViewController, NSComboBoxDelegate {
             } else {
                 
                 body = ""
-                let trimmed = bodyString.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions.allZeros, range: nil)
+                let trimmed = bodyString.stringByReplacingOccurrencesOfString(" ", withString: "", options: NSStringCompareOptions(), range: nil)
                 let additionalRecipients = trimmed.componentsSeparatedByString(",")
                 
                 let emailCommitters = self.emailEmailCommittersCheckbox.state == NSOnState

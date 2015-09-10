@@ -11,6 +11,7 @@ import AppKit
 import BuildaGitServer
 import BuildaUtils
 import XcodeServerSDK
+import BuildaKit
 
 class ManualBotManagementViewController: NSViewController {
     
@@ -47,7 +48,7 @@ class ManualBotManagementViewController: NSViewController {
     func fetchBranches(completion: ([Branch]?, NSError?) -> ()) {
         
         self.branchActivityIndicator.startAnimation(nil)
-        let repoName = self.syncer.localSource.githubRepoName()!
+        let repoName = self.syncer.project.githubRepoName()!
         self.syncer.github.getBranchesOfRepo(repoName, completion: { (branches, error) -> () in
             
             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
@@ -67,7 +68,7 @@ class ManualBotManagementViewController: NSViewController {
     func pullBotName() -> String? {
         
         let name = self.nameTextField.stringValue
-        if count(name) == 0 {
+        if name.isEmpty {
             UIUtils.showAlertWithText("Please specify the bot's name")
             return nil
         }
@@ -76,7 +77,7 @@ class ManualBotManagementViewController: NSViewController {
     
     func pullBranchName() -> String? {
         
-        if let branch = self.branchComboBox.objectValueOfSelectedItem as? String where count(branch) > 0 {
+        if let branch = self.branchComboBox.objectValueOfSelectedItem as? String where !branch.isEmpty {
             return branch
         }
         UIUtils.showAlertWithText("Please specify a valid branch")
@@ -101,7 +102,7 @@ class ManualBotManagementViewController: NSViewController {
             let branch = self.pullBranchName(),
             let template = self.pullTemplate()
         {
-            let project = self.syncer.localSource
+            let project = self.syncer.project
             let xcodeServer = self.syncer.xcodeServer
             
             self.creatingActivityIndicator.startAnimation(nil)

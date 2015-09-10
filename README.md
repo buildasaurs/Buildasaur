@@ -1,25 +1,28 @@
 Buildasaur
 ==========
 
-[![Build Status](http://178.62.79.155/buildasaur)](https://github.com/czechboy0/Buildasaur/branches/all?utf8=✓&query=master)
+[![satellite badge](https://stlt.herokuapp.com/v1/badge/czechboy0/buildasaur/master)](https://github.com/czechboy0/buildasaur/branches)
 [![Latest Buildasaur Release](https://img.shields.io/github/release/czechboy0/buildasaur.svg)](https://github.com/czechboy0/Buildasaur/releases/latest)
+![Swift Version](https://img.shields.io/badge/Swift-2-green.svg)
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://en.wikipedia.org/wiki/MIT_License)
 [![Blog](https://img.shields.io/badge/blog-honzadvorsky.com-green.svg)](http://honzadvorsky.com)
 [![Twitter Buildasaur](https://img.shields.io/badge/twitter-Buildasaur-green.svg)](http://twitter.com/buildasaur)
 [![Twitter Czechboy0](https://img.shields.io/badge/twitter-czechboy0-green.svg)](http://twitter.com/czechboy0)
 
-![](https://raw.githubusercontent.com/czechboy0/Buildasaur/gladiolus/Buildasaur/Images.xcassets/AppIcon.appiconset/Icon_128@2x.png)
+![](https://raw.githubusercontent.com/czechboy0/Buildasaur/master/Buildasaur/Images.xcassets/AppIcon.appiconset/Icon_128@2x.png)
 
 Free, local and automatic testing of GitHub Pull Requests with Xcode Bots. Keep your team productive and safe. Get up and running in minutes. (Follow Builda [on Twitter](http://twitter.com/buildasaur) for infrequent updates.)
 
-**Xcode 7 support is in beta. Get the latest [beta release](https://github.com/czechboy0/Buildasaur/releases) if you'd like to give it a try. We still fully support Xcode 6 in versions up to [0.2.9](https://github.com/czechboy0/Buildasaur/releases/tag/v0.2.9).**
-
-Version 1.0 is being built on [a branch](https://github.com/czechboy0/Buildasaur/tree/gladiolus). The latest stable build is on master.
+**Get the latest [Xcode 7 release](https://github.com/czechboy0/Buildasaur/releases) (not backwards compatible). If you'd like Xcode 6 support, download version [0.2.9](https://github.com/czechboy0/Buildasaur/releases/tag/v0.2.9).**
 
 :thought_balloon: **Thinking of trying Buildasaur?** Check out the list of [teams and projects](./PROJECTS_USING_BUILDASAUR.md) already using it.<br>
 :arrows_counterclockwise: **Already using Buildasaur?** Please consider [adding yourself](./PROJECTS_USING_BUILDASAUR.md) to our success stories!<br>
 :gift_heart: **Want to contribute?** Take a look at [issues with the label "up-for-grabs"](https://github.com/czechboy0/Buildasaur/labels/up-for-grabs), comment on the issue that you're working on it and let's improve Buildasaur together!
+
+:mortar_board: Getting Started With Xcode Server 
+---------------------------------
+To find out how to set up Xcode Server on your Mac in minutes (and more), check out my [series of tutorials](http://honzadvorsky.com/pages/xcode_server_tutorials/).
 
 Looking for Xcode Server SDK?
 ----------------
@@ -42,11 +45,11 @@ Buildasaur runs as a background Mac app, its configuration window goes away when
 You have multiple options of getting started with Buildasaur, from source code to downloading the App.
 - get the .app of the [latest release](https://github.com/czechboy0/Buildasaur/releases/latest)
 - starting with version 0.2.8, release .app is always signed with my [Developer ID](https://developer.apple.com/developer-id/) (Jan Dvorsky), so that you can be sure you're really launching an official release. Feel free to run Buildasaur yourself from code, just be aware that you will get a warning from OS X if you have [Gatekeeper](http://en.wikipedia.org/wiki/Gatekeeper_(OS_X)) enabled.
-- check out code and build and run in Xcode (requires Xcode 6.3 with Swift 1.2, thus OS X 10.10.3)
+- check out code and build and run in Xcode (requires Xcode 7 with Swift 2, thus OS X 10.10.5)
 
 :white_check_mark: Installation Steps
 ------------------
-- Install Xcode 6+, Xcode Server 4+ and have your GitHub repo credentials ready
+- Install Xcode 7, Xcode Server 5 and have your GitHub repo credentials ready
 
 **Xcode Server Setup**
 - Open Server.app, go to Services -> Xcode and add select your Xcode
@@ -87,6 +90,7 @@ The default workflow is as follows:
 
 :unlock: The "lttm" barrier
 ------------------
+- "Looks Testable To Me"
 - an optional extra step in the workflow (**enabled** by default)
 - instead of integrating immediately after a PR is created, the reviewer first has a chance to look at the code and request any fixes of the code from the author
 - when the reviewer is happy with the code visually, she comments "lttm" in the PR and the bot is activated and performs an integration of the code

@@ -16,6 +16,7 @@ Also, you can find the log at ~/Library/Application Support/Buildasaur/Builda.lo
 
 import BuildaUtils
 import XcodeServerSDK
+import BuildaKit
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -24,7 +25,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         
-        self.setupLogging()
+        Logging.setup(alsoIntoFile: true)
         self.menuItemManager.setupMenuBarItem()
     }
 
@@ -51,33 +52,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.activateIgnoringOtherApps(true)
         
         //first window. i wish there was a nicer way (please some tell me there is)
-        if let window = NSApplication.sharedApplication().windows.first as? NSWindow {
+        if let window = NSApplication.sharedApplication().windows.first {
             window.makeKeyAndOrderFront(self)
         }
-    }
-    
-    //MARK: Logging
-    
-    func setupLogging() {
-        
-        let path = Persistence.buildaApplicationSupportFolderURL().URLByAppendingPathComponent("Builda.log", isDirectory: false)
-        let fileLogger = FileLogger(filePath: path)
-        let consoleLogger = ConsoleLogger()
-        let loggers: [Logger] = [
-            consoleLogger,
-            fileLogger
-        ]
-        Log.addLoggers(loggers)
-        let version = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as! String
-        let ascii =
-        " ____        _ _     _\n" +
-        "|  _ \\      (_) |   | |\n" +
-        "| |_) |_   _ _| | __| | __ _ ___  __ _ _   _ _ __\n" +
-        "|  _ <| | | | | |/ _` |/ _` / __|/ _` | | | | '__|\n" +
-        "| |_) | |_| | | | (_| | (_| \\__ \\ (_| | |_| | |\n" +
-        "|____/ \\__,_|_|_|\\__,_|\\__,_|___/\\__,_|\\__,_|_|\n"
-        
-        Log.untouched("*\n*\n*\n\(ascii)\nBuildasaur \(version) launched at \(NSDate()).\n*\n*\n*\n")
     }
 }
 

@@ -10,6 +10,7 @@ import Foundation
 import AppKit
 import BuildaUtils
 import XcodeServerSDK
+import BuildaKit
 
 let kBuildTemplateAddNewString = "Create New..."
 class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, SetupViewControllerDelegate {
@@ -51,8 +52,23 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         self.lastAvailabilityCheckStatus = .Unchecked
     }
         
-    func project() -> LocalSource? {
+    func project() -> Project? {
         return self.storageManager.projects.first
+    }
+    
+    func buildTemplates() -> [BuildTemplate] {
+        
+        return self.storageManager.buildTemplates.filter { (template: BuildTemplate) -> Bool in
+            if
+                let projectName = template.projectName,
+                let project = self.project()
+            {
+                return projectName == project.projectName ?? ""
+            } else {
+                //if it doesn't yet have a project name associated, assume we have to show it
+                return true
+            }
+        }
     }
     
     override func reloadStatus() {
@@ -86,13 +102,13 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
             
             let selectedBefore = self.buildTemplateComboBox.objectValueOfSelectedItem as? String
             self.buildTemplateComboBox.removeAllItems()
-            let buildTemplateNames = self.storageManager.buildTemplates.map { $0.name! }
+            let buildTemplateNames = self.buildTemplates().map { $0.name! }
             self.buildTemplateComboBox.addItemsWithObjectValues(buildTemplateNames + [kBuildTemplateAddNewString])
             self.buildTemplateComboBox.selectItemWithObjectValue(selectedBefore)
             
             if
                 let preferredTemplateId = project.preferredTemplateId,
-                let template = self.storageManager.buildTemplates.filter({ $0.uniqueId == preferredTemplateId }).first
+                let template = self.buildTemplates().filter({ $0.uniqueId == preferredTemplateId }).first
             {
                 self.buildTemplateComboBox.selectItemWithObjectValue(template.name!)
             }
@@ -113,7 +129,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
             statusChanged?(status: status, done: done)
         }
         
-        if let project = self.project() {
+        if let _ = self.project() {
 
             statusChangedPersist(status: .Checking, done: false)
 
@@ -142,16 +158,16 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         
         if let url = StorageUtils.openWorkspaceOrProject() {
             
-            let (success, error) = self.storageManager.addProjectAtURL(url)
-            if success {
+            do {
                 
+                try self.storageManager.addProjectAtURL(url)
                 //we have just added a local source, good stuff!
                 //check if we have everything, if so, enable the "start syncing" button
-                
                 self.editing = true
-            } else {
+                
+            } catch {
                 //local source is malformed, something terrible must have happened, inform the user this can't be used (log should tell why exactly)
-                UIUtils.showAlertWithText("Couldn't add Xcode project at path \(url.absoluteString!), error: \(error!.localizedDescription).", style: NSAlertStyle.CriticalAlertStyle, completion: { (resp) -> () in
+                UIUtils.showAlertWithText("Couldn't add Xcode project at path \(url.absoluteString), error: \((error as NSError).localizedDescription).", style: NSAlertStyle.CriticalAlertStyle, completion: { (resp) -> () in
                     //
                 })
             }
@@ -170,10 +186,10 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
             //it's string
             var buildTemplate: BuildTemplate?
             if templatePulled != kBuildTemplateAddNewString {
-                buildTemplate = self.storageManager.buildTemplates.filter({ $0.name == templatePulled }).first
+                buildTemplate = self.buildTemplates().filter({ $0.name == templatePulled }).first
             }
             if buildTemplate == nil {
-                buildTemplate = BuildTemplate()
+                buildTemplate = BuildTemplate(projectName: self.project()!.projectName!)
             }
             
             self.delegate.showBuildTemplateViewControllerForTemplate(buildTemplate, project: self.project()!, sender: self)
@@ -182,7 +198,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     
     func pullTemplateFromUI() -> Bool {
         
-        if let project = self.project() {
+        if let _ = self.project() {
             let selectedIndex = self.buildTemplateComboBox.indexOfSelectedItem
             
             if selectedIndex == -1 {
@@ -191,7 +207,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
                 return false
             }
             
-            let template = self.storageManager.buildTemplates[selectedIndex]
+            let template = self.buildTemplates()[selectedIndex]
             if let project = self.project() {
                 project.preferredTemplateId = template.uniqueId
                 return true
@@ -216,10 +232,10 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         
         if let project = self.project() {
             
-            let successToken = self.pullTokenFromUI()
+            _ = self.pullTokenFromUI()
             let privateUrl = project.privateSSHKeyUrl
             let publicUrl = project.publicSSHKeyUrl
-            let sshPassphrase = self.pullSSHPassphraseFromUI() //can't fail
+            _ = self.pullSSHPassphraseFromUI() //can't fail
             let githubToken = project.githubToken
             
             let tokenPresent = githubToken != nil
@@ -238,7 +254,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         
         let string = self.sshPassphraseTextField.stringValue
         if let project = self.project() {
-            if count(string) > 0 {
+            if !string.isEmpty {
                 project.sshPassphrase = string
             } else {
                 project.sshPassphrase = nil
@@ -251,7 +267,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         
         let string = self.tokenTextField.stringValue
         if let project = self.project() {
-            if count(string) > 0 {
+            if !string.isEmpty {
                 project.githubToken = string
             } else {
                 project.githubToken = nil
@@ -274,6 +290,10 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     override func removeCurrentConfig() {
         
         if let project = self.project() {
+            
+            //also cleanup comboBoxes
+            self.buildTemplateComboBox.stringValue = ""
+            
             self.storageManager.removeProject(project)
             self.storageManager.saveProjects()
             self.reloadStatus()
@@ -282,16 +302,16 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     
     func selectKey(type: String) {
         if let url = StorageUtils.openSSHKey(type) {
-            var error: NSError?
-            if let string = NSString(contentsOfURL: url, encoding: NSASCIIStringEncoding, error: &error) {
+            do {
+                _ = try NSString(contentsOfURL: url, encoding: NSASCIIStringEncoding)
                 let project = self.project()!
                 if type == "public" {
                     project.publicSSHKeyUrl = url
                 } else {
                     project.privateSSHKeyUrl = url
                 }
-            } else {
-                UIUtils.showAlertWithError(error!)
+            } catch {
+                UIUtils.showAlertWithError(error as NSError)
             }
         }
         self.reloadStatus()
@@ -312,7 +332,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
             //select the passed in template
             var foundIdx: Int? = nil
             let template = templateViewController.buildTemplate
-            for (idx, obj) in enumerate(self.storageManager.buildTemplates) {
+            for (idx, obj) in self.buildTemplates().enumerate() {
                 if obj.uniqueId == template.uniqueId {
                     foundIdx = idx
                     break
@@ -335,7 +355,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     
     func setupViewControllerDidCancel(viewController: SetupViewController) {
         
-        if let templateViewController = viewController as? BuildTemplateViewController {
+        if let _ = viewController as? BuildTemplateViewController {
             //nothing to do really, reset the selection of the combo box to nothing
             self.buildTemplateComboBox.deselectItemAtIndex(self.buildTemplateComboBox.indexOfSelectedItem)
             self.reloadStatus()

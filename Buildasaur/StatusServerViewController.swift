@@ -9,6 +9,7 @@
 import Foundation
 import BuildaUtils
 import XcodeServerSDK
+import BuildaKit
 
 class StatusServerViewController: StatusViewController {
     
@@ -81,16 +82,16 @@ class StatusServerViewController: StatusViewController {
         if super.pullDataFromUI() {
             
             var host: String? = self.serverHostTextField.stringValue
-            if count(host ?? "") == 0 {
+            if host?.isEmpty ?? true {
                 host = nil
             }
 
             var user: String? = self.serverUserTextField.stringValue
-            if count(user ?? "") == 0 {
+            if user?.isEmpty ?? true {
                 user = nil
             }
             var password: String? = self.serverPasswordTextField.stringValue
-            if count(password ?? "") == 0 {
+            if password?.isEmpty ?? true {
                 password = nil
             }
             

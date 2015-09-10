@@ -1,20 +1,14 @@
 PODS:
-  - XcodeServerSDK (0.0.4)
+  - BuildaUtils (0.0.11)
+  - XcodeServerSDK (0.1.10):
+    - BuildaUtils (= 0.0.11)
 
 DEPENDENCIES:
-  - XcodeServerSDK (from `git@github.com:czechboy0/XcodeServerSDK.git`, branch `buildasaur`)
-
-EXTERNAL SOURCES:
-  XcodeServerSDK:
-    :branch: buildasaur
-    :git: git@github.com:czechboy0/XcodeServerSDK.git
-
-CHECKOUT OPTIONS:
-  XcodeServerSDK:
-    :commit: 0278e79fe9a901e1a76e0996ef39511168417de7
-    :git: git@github.com:czechboy0/XcodeServerSDK.git
+  - BuildaUtils (= 0.0.11)
+  - XcodeServerSDK (= 0.1.10)
 
 SPEC CHECKSUMS:
-  XcodeServerSDK: f349ee5a7897d934a4dbf126c1d7b7a8fadb2caf
+  BuildaUtils: be29c9977230329a330a02c6f97454a7422ae534
+  XcodeServerSDK: 8e0e4552b3f330b928cb4d38f2ded7d5a25cf751
 
-COCOAPODS: 0.37.2
+COCOAPODS: 0.38.2

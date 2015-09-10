@@ -10,6 +10,7 @@ import Foundation
 import AppKit
 import BuildaUtils
 import XcodeServerSDK
+import BuildaKit
 
 class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         
@@ -113,9 +114,9 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
             itemsToReport.append(lastSyncString)
         }
         
-        strings.map { itemsToReport.append($0) }
+        strings.forEach { itemsToReport.append($0) }
         
-        self.statusTextField.stringValue = "\n".join(itemsToReport)
+        self.statusTextField.stringValue = itemsToReport.joinWithSeparator("\n")
     }
     
     override func viewDidLoad() {
@@ -180,7 +181,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
     
     @IBAction func branchWatchingTapped(sender: AnyObject) {
         
-         if let syncer = self.syncer() {
+         if let _ = self.syncer() {
             self.performSegueWithIdentifier("showBranchWatching", sender: self)
         } else {
             UIUtils.showAlertWithText("Syncer must be created first. Click 'Start' and try again.")
@@ -189,7 +190,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
     
     @IBAction func manualBotManagementTapped(sender: AnyObject) {
         
-        if let syncer = self.syncer() {
+        if let _ = self.syncer() {
             self.performSegueWithIdentifier("showManual", sender: self)
         } else {
             UIUtils.showAlertWithText("Syncer must be created first. Click 'Start' and try again.")

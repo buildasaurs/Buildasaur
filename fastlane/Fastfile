@@ -1,19 +1,31 @@
 # https://github.com/KrauseFx/fastlane/tree/master/docs
 
 # If you want to automatically update fastlane if a new version is available:
-update_fastlane
+# update_fastlane
 
 # This is the minimum version number required.
 # Update this, if you use features of a newer version
-fastlane_version "1.1.0"
+fastlane_version "1.21.0"
 
 default_platform :mac
 
 platform :mac do
 
+  before_all do |lane|
+  end
+
+  lane :prebuild do
+    cocoapods
+  end
+
+  lane :postbuild do
+    # nada
+  end
+
   desc "Runs all the tests"
   lane :test do
 
+    prebuild
     xcodebuild(
       test: true,
       scheme: 'Buildasaur',
@@ -28,13 +40,57 @@ platform :mac do
     # also add incrementing of build and version number, when it becomes available
     # for mac - https://github.com/KrauseFx/fastlane/pull/291
 
-    xcodebuild(
-      test: true,
-      archive: true,
-      archive_path: './build/Buildasaur.xcarchive',
+    prebuild
+    # file_name = "Buildasaur-#{version}-#{build}"
+    file_name = "Buildasaur.app"
+    gym(
       scheme: 'Buildasaur',
-      workspace: 'Buildasaur.xcworkspace'
+      output_name: file_name,
+      output_directory: './build'
+      )
+    release(assets: ["./build/Buildasaur.app"])
+
+  end
+
+   lane :release do |params|
+
+    assets = params[:assets]
+
+    # prep the local state
+    ensure_git_status_clean
+    ensure_git_branch(branch: "gladiolus")
+    git_pull
+
+    # ask for the version
+    version = prompt(text: 'New Version Tag: ')
+    title = prompt(text: 'Release Title: ')
+    description = prompt(text: "Release changelog: ",
+                         multi_line_end_keyword: "END")
+
+    # create a new release on GitHub
+    repo_url = "czechboy0/Buildasaur"
+    release = set_github_release(
+      repository_name: repo_url,
+      api_token: ENV["GITHUB_TOKEN"],
+      name: [version, title].join(" - "),
+      tag_name: version,
+      description: description,
+      is_draft: false,
+      is_prerelease: true
     )
+
+    # notify us on slack
+    slack(
+      slack_url: ENV['SLACK_RELEASES_URL'],
+      message: "Successfully released [Buildasaur #{version}](#{release['html_url']}) :rocket:",
+      payload: {
+        "New" => release['body']
+      }
+    )
+
+    # regenerate changelog to get it committed
+    # TODO: is there a "commit" fastlane action?
+    sh "cd .. && github_changelog_generator -t $GITHUB_TOKEN"
 
   end
 
