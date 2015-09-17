@@ -10,6 +10,7 @@ import Foundation
 import BuildaGitServer
 import BuildaUtils
 import XcodeServerSDK
+import BuildaHeartbeatKit
 
 public class StorageManager {
     
@@ -19,11 +20,22 @@ public class StorageManager {
     private(set) public var servers: [XcodeServerConfig] = []
     private(set) public var projects: [Project] = []
     private(set) public var buildTemplates: [BuildTemplate] = []
+    private(set) public var config: [String: AnyObject] = [:]
+    
+    private var heartbeatManager: HeartbeatManager!
     
     init() {
         
         //initialize all stored Syncers
         self.loadAllFromPersistence()
+        if let heartbeatOptOut = self.config["heartbeat_opt_out"] as? Bool where heartbeatOptOut {
+            Log.info("User opted out of anonymous heartbeat")
+        } else {
+            Log.info("Will send anonymous heartbeat. To opt out add `\"heartbeat_opt_out\" = true` to ~/Library/Application Support/Buildasaur/Config.json")
+            self.heartbeatManager = HeartbeatManager(server: "https://builda-ekg.herokuapp.com")
+            self.heartbeatManager.delegate = self
+            self.heartbeatManager.start()
+        }
     }
     
     deinit {
@@ -135,10 +147,28 @@ public class StorageManager {
     
     public func loadAllFromPersistence() {
         
+        self.loadConfig()
         self.loadProjects()
         self.loadServers()
         self.loadSyncers()
         self.loadBuildTemplates()
+    }
+    
+    func loadConfig() {
+        let configUrl = Persistence.getFileInAppSupportWithName("Config.json", isDirectory: false)
+        do {
+            let json = try Persistence.loadJSONFromUrl(configUrl)
+            
+            if let json = json as? [String: AnyObject] {
+                self.config = json
+                return
+            }
+        } catch {
+            //file not found
+            if (error as NSError).code != 260 {
+                Log.error("Failed to read Config, error \(error). Will be ignored. Please don't play with the persistence :(")
+            }
+        }
     }
     
     func loadServers() {
@@ -243,6 +273,16 @@ public class StorageManager {
         })
     }
     
+    public func saveConfig() {
+        let configUrl = Persistence.getFileInAppSupportWithName("Config.json", isDirectory: false)
+        let json = self.config
+        do {
+            try Persistence.saveJSONToUrl(json, url: configUrl)
+        } catch {
+            assert(false, "Failed to save Config, \(error)")
+        }
+    }
+    
     public func saveProjects() {
         
         let projectsUrl = Persistence.getFileInAppSupportWithName("Projects.json", isDirectory: false)
@@ -301,6 +341,7 @@ public class StorageManager {
     public func saveAll() {
         //save to persistence
         
+        self.saveConfig()
         self.saveProjects()
         self.saveServers()
         self.saveBuildTemplates()
@@ -321,5 +362,10 @@ public class StorageManager {
             syncer.active = true
         }
     }
-    
+}
+
+extension StorageManager: HeartbeatManagerDelegate {
+    public func numberOfRunningSyncers() -> Int {
+        return self.syncers.filter { $0.active }.count
+    }
 }

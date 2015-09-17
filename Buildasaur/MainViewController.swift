@@ -23,6 +23,7 @@ class MainViewController: NSViewController, NSTableViewDataSource, StatusSibling
     
     required init?(coder: NSCoder) {
         
+        Logging.setup(alsoIntoFile: true)
         self.storageManager = StorageManager.sharedInstance
         super.init(coder: coder)
     }

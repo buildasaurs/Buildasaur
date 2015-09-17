@@ -25,7 +25,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         
-        Logging.setup(alsoIntoFile: true)
         self.menuItemManager.setupMenuBarItem()
     }
 

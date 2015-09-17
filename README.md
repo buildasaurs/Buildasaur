@@ -108,6 +108,14 @@ The default workflow is as follows:
 ---------------------
 In addition to automatic bot management with syncers, you can create bots from an existing Build Template and a branch by clicking *Manual Bot Management* when your syncer is setup. This is useful for creating one-off bots based on e.g. release branches with a different Build Template than you use for PRs.
 
+:heartpulse: Heartbeat
+---------------
+In order to understand how many Buildasaur instances are actively being used, which helps me to decide how much free time I should dedicate to this project, one anonymous heartbeat event is sent from Buildasaur every 24 hours (and one when Buildasaur is launched). There is **absolutely no information** about your projects being synced with Buildasaur (I don't care about that, that's *your* business), the event just sends a randomly generated identifier (to discern between different Buildasaur instances), the uptime of Buildasaur (to potentially detect crashes) and the number of running syncers (for when we have multi-repo support).
+
+I wrote the server storing this data myself - and [it's open source](https://github.com/czechboy0/ekg), so feel free to take a peek yourself at how that's done. And take a look [here](https://github.com/czechboy0/ekgclient/blob/master/ekgclient/Event.swift#L39) to see exactly what data is being sent.
+
+If, despite absolutely no identifiable data being sent, you still aren't comfortable allowing Buildasaur to send its heartbeat, add `{ "heartbeat_opt_out" = true }` to `~/Library/Application Support/Buildasaur/Config.json`. But please keep in mind that if you do that, it will make me think fewer people are in fact using Buildasaur, which might just lead to me spending less time on improving it.
+
 :warning: Troubleshooting
 ---------------
 In case Builda crashes, you can find crash logs at `~/Library/Logs/DiagnosticReports/Buildasaur-*`. Please let me know if that happens and I'll take a look. Also, Builda logs (pretty verbosely) to `~/Library/Application Support/Buildasaur/Builda.log`, so this is another place to watch in case of any problems.
@@ -124,9 +132,7 @@ If your problem requires a deep discussion or you have a great idea and you real
 
 :squirrel: Xcode Server Reverse Engineering
 --------------------------------
-If you're feeling brave and would like to dig into how Xcode Server works under the hood, you might find this article I wrote useful: [Under the Hood of Xcode Server](http://honzadvorsky.com/blog/2015/5/4/under-the-hood-of-xcode-server). Recommended reading if you want to extend Buildasaur to take a greater advantage of Xcode Server (there are still a plenty of unused APIs.)
-
-I also write about [working on Buildasaur](http://honzadvorsky.com/?tag=buildasaur), its challenges, interesting problems and failures on [my blog](http://honzadvorsky.com/). 
+If you're feeling brave and would like to dig into how Xcode Server works under the hood, you might find this article series I wrote useful: [Xcode Server Tutorials](http://honzadvorsky.com/pages/xcode_server_tutorials/). Recommended reading if you want to extend Buildasaur to take a greater advantage of Xcode Server (there are still a plenty of unused APIs.)
 
 :v: License
 -------
