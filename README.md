@@ -110,11 +110,11 @@ In addition to automatic bot management with syncers, you can create bots from a
 
 :heartpulse: Heartbeat
 ---------------
-In order to understand how many Buildasaurs are running out there, which helps me to decide how much free time I should dedicate to this project, one anonymous heartbeat event is sent from Buildasaur every 24 hours (and one when Buildasaur is launched). There is **absolutely no information** about the projects being synced with Buildasaur (I don't care about that), the event just sends a randomly generated identifier (to discern different Buildasaur instances), the uptime of Buildasaur (to potentially detect crashes) and the number of running syncers (for when we have multi-repo support).
+In order to understand how many Buildasaur instances are actively being used, which helps me to decide how much free time I should dedicate to this project, one anonymous heartbeat event is sent from Buildasaur every 24 hours (and one when Buildasaur is launched). There is **absolutely no information** about your projects being synced with Buildasaur (I don't care about that, that's *your* business), the event just sends a randomly generated identifier (to discern between different Buildasaur instances), the uptime of Buildasaur (to potentially detect crashes) and the number of running syncers (for when we have multi-repo support).
 
 I wrote the server storing this data myself - and [it's open source](https://github.com/czechboy0/ekg), so feel free to take a peek yourself at how that's done. And take a look [here](https://github.com/czechboy0/ekgclient/blob/master/ekgclient/Event.swift#L39) to see exactly what data is being sent.
 
-If, despite absolutely no identifiable data is being sent, you still aren't comfortable allowing Buildasaur send its heartbeat, add `{ "heartbeat_opt_out" = true }` to `~/Library/Application Support/Buildasaur/Config.json`. But please don't, because that will make me think fewer people are in fact using Buildasaur, which might just lead to me spending less time on it. Thanks! :)
+If, despite absolutely no identifiable data being sent, you still aren't comfortable allowing Buildasaur to send its heartbeat, add `{ "heartbeat_opt_out" = true }` to `~/Library/Application Support/Buildasaur/Config.json`. But please keep in mind that if you do that, it will make me think fewer people are in fact using Buildasaur, which might just lead to me spending less time on improving it.
 
 :warning: Troubleshooting
 ---------------
