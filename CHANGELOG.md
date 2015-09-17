@@ -3,7 +3,6 @@
 ## [v0.4.0](https://github.com/czechboy0/Buildasaur/tree/v0.4.0) (2015-09-17)
 [Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3.1...v0.4.0)
 
-
 **Closed issues:**
 
 - Add basic, anonymous stat reporting [\#93](https://github.com/czechboy0/Buildasaur/issues/93)
