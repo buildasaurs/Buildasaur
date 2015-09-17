@@ -1,5 +1,16 @@
 # Change Log
 
+## [v0.3.1](https://github.com/czechboy0/Buildasaur/tree/v0.3.1) (2015-09-17)
+[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3...v0.3.1)
+
+**Fixed bugs:**
+
+- Build Template UI - Testing Devices Not Shown Bug [\#124](https://github.com/czechboy0/Buildasaur/pull/124) ([czechboy0](https://github.com/czechboy0))
+
+**Closed issues:**
+
+- Testing devices don't show up when editing a build template [\#123](https://github.com/czechboy0/Buildasaur/issues/123)
+
 ## [v0.3](https://github.com/czechboy0/Buildasaur/tree/v0.3) (2015-09-10)
 [Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3-beta5...v0.3)
 
