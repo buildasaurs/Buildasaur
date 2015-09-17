@@ -14,6 +14,7 @@ public protocol HeartbeatManagerDelegate {
     func numberOfRunningSyncers() -> Int
 }
 
+//READ: https://github.com/czechboy0/Buildasaur/tree/master#heartpulse-heartbeat
 @objc public class HeartbeatManager: NSObject {
     
     public var delegate: HeartbeatManagerDelegate?
