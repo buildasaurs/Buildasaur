@@ -1,5 +1,16 @@
 # Change Log
 
+## [v0.4.0](https://github.com/czechboy0/Buildasaur/tree/v0.4.0) (2015-09-17)
+[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3.1...v0.4.0)
+
+**Closed issues:**
+
+- Add basic, anonymous stat reporting [\#93](https://github.com/czechboy0/Buildasaur/issues/93)
+
+**Merged pull requests:**
+
+- Anonymous Heartbeat Sending [\#125](https://github.com/czechboy0/Buildasaur/pull/125) ([czechboy0](https://github.com/czechboy0))
+
 ## [v0.3.1](https://github.com/czechboy0/Buildasaur/tree/v0.3.1) (2015-09-17)
 [Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3...v0.3.1)
 
