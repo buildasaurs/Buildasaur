@@ -8,6 +8,7 @@ end
 def also_xcode_pods
 	pods_for_errbody
 	pod 'XcodeServerSDK', '0.2.1'
+	pod 'ekgclient', '0.3.0'
 end
 
 target 'Buildasaur' do
@@ -32,7 +33,6 @@ end
 
 target 'BuildaHeartbeatKit' do
 	also_xcode_pods
-	pod 'ekgclient', '0.3.0'
 end
 
 
