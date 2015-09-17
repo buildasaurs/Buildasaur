@@ -36,6 +36,7 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
     
     private var triggerToEdit: Trigger?
     private var allAvailableTestingDevices: [Device] = []
+    private var viewDidLoadCalled: Bool = false //huge hack to prevent cleaning of data source on initial loading calls (will get removed with the transition to RAC)
     
     func allSchedules() -> [BotSchedule.Schedule] {
         //scheduled not yet supported, just manual vs commit
@@ -116,6 +117,8 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
         
         self.triggersTableView.reloadData()
         self.testDeviceFilterComboBox.reloadData()
+        
+        self.viewDidLoadCalled = true
     }
     
     func refreshDataInDeviceFilterComboBox() {
@@ -253,13 +256,23 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
         self.refreshDataInDeviceFilterComboBox()
     }
     
-    func pullStagesFromUI() -> Bool {
+    func pullStagesFromUI(interactive: Bool) -> Bool {
         
-        self.buildTemplate.shouldAnalyze = (self.analyzeButton.state == NSOnState)
-        self.buildTemplate.shouldTest = (self.testButton.state == NSOnState)
-        self.buildTemplate.shouldArchive = (self.archiveButton.state == NSOnState)
+        let analyze = (self.analyzeButton.state == NSOnState)
+        self.buildTemplate.shouldAnalyze = analyze
+        let test = (self.testButton.state == NSOnState)
+        self.buildTemplate.shouldTest = test
+        let archive = (self.archiveButton.state == NSOnState)
+        self.buildTemplate.shouldArchive = archive
         
-        return true
+        let passed = analyze || test || archive
+        
+        if !passed && interactive {
+            UIUtils.showAlertWithText("Please select at least one action (analyze/test/archive)")
+        }
+
+        //at least one action has to be enabled
+        return passed
     }
     
     override func pullDataFromUI(interactive: Bool) -> Bool {
@@ -267,7 +280,7 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
         if super.pullDataFromUI(interactive) {
             let scheme = self.pullSchemeFromUI(interactive)
             let name = self.pullNameFromUI()
-            let stages = self.pullStagesFromUI()
+            let stages = self.pullStagesFromUI(interactive)
             let schedule = self.pullScheduleFromUI(interactive)
             let cleaning = self.pullCleaningPolicyFromUI(interactive)
             let filter = self.pullFilterFromUI(interactive)
@@ -374,7 +387,10 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
     }
 
     private func cleanTestingDeviceIds() {
-        self.buildTemplate.testingDeviceIds = []
+        //don't call this during initial loading calls (this is a hack, don't try this at home kids)
+        if self.viewDidLoadCalled {
+            self.buildTemplate.testingDeviceIds = []
+        }
     }
     
     func comboBoxSelectionDidChange(notification: NSNotification) {
