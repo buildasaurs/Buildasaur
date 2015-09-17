@@ -78,6 +78,8 @@ private_lane :github do |params|
     is_prerelease: false
   )
 
+  sh "cd .. && rm -rf build" #delete built ipa/app
+
   # notify us on slack
   slack(
     slack_url: ENV['SLACK_RELEASES_URL'],
