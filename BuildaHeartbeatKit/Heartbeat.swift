@@ -53,7 +53,19 @@ public protocol HeartbeatManagerDelegate {
     }
     
     private func sendEvent(event: Event) {
+        
+        var sendReal = true
+        #if DEBUG
+            sendReal = false
+        #endif
+        
+        guard sendReal else {
+            Log.info("Not sending events in debug environment")
+            return
+        }
+
         Log.info("Sending heartbeat event \(event.jsonify())")
+
         self.client.sendEvent(event) {
             if let error = $0 {
                 Log.error("Failed to send a heartbeat event. Error \(error)")
