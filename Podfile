@@ -30,5 +30,10 @@ target 'BuildaGitServerTests' do
 	pods_for_errbody
 end
 
+target 'BuildaHeartbeatKit' do
+	also_xcode_pods
+	pod 'ekgclient', '0.3.0'
+end
+
 
 

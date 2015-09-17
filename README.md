@@ -108,6 +108,14 @@ The default workflow is as follows:
 ---------------------
 In addition to automatic bot management with syncers, you can create bots from an existing Build Template and a branch by clicking *Manual Bot Management* when your syncer is setup. This is useful for creating one-off bots based on e.g. release branches with a different Build Template than you use for PRs.
 
+:heartpulse: Heartbeat
+---------------
+In order to understand how many Buildasaurs are running out there, which helps me to decide how much free time I should dedicate to this project, one anonymous heartbeat event is sent from Buildasaur every 24 hours (and one when Buildasaur is launched). There is **absolutely no information** about the projects being synced with Buildasaur (I don't care about that), the event just sends a randomly generated identifier (to discern different Buildasaur instances), the uptime of Buildasaur (to potentially detect crashes) and the number of running syncers (for when we have multi-repo support).
+
+I wrote the server storing this data myself - and [it's open source](https://github.com/czechboy0/ekg), so feel free to take a peek yourself at how that's done. And take a look [here](https://github.com/czechboy0/ekgclient/blob/master/ekgclient/Event.swift#L39) to see exactly what data is being sent.
+
+If, despite absolutely no identifiable data is being sent, you still aren't comfortable allowing Buildasaur send its heartbeat, add `{ "heartbeat_opt_out" = true }` to `~/Library/Application Support/Buildasaur/Config.json`. But please don't, because that will make me think fewer people are in fact using Buildasaur, which might just lead to me spending less time on it. Thanks! :)
+
 :warning: Troubleshooting
 ---------------
 In case Builda crashes, you can find crash logs at `~/Library/Logs/DiagnosticReports/Buildasaur-*`. Please let me know if that happens and I'll take a look. Also, Builda logs (pretty verbosely) to `~/Library/Application Support/Buildasaur/Builda.log`, so this is another place to watch in case of any problems.
