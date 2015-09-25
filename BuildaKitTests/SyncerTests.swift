@@ -34,7 +34,7 @@ class SyncerTests: XCTestCase {
         let githubServer = MockGitHubServer()
         let project = MockProject()
         let syncInterval = 15.0
-        let waitForLttm = true
+        let waitForLttm = false
         let postStatusComments = true
         let watchedBranchNames: [String] = []
         
