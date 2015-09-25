@@ -1365,7 +1365,6 @@
 			baseConfigurationReference = C71B8BFC1219E902D71A617E /* Pods-BuildaHeartbeatKit.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -1391,7 +1390,6 @@
 			baseConfigurationReference = 5546DD8FB6FD18CB1D4EAF35 /* Pods-BuildaHeartbeatKit.testing.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1419,7 +1417,6 @@
 			baseConfigurationReference = B71CEA364F849EF1A9E9483C /* Pods-BuildaHeartbeatKit.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1606,7 +1603,6 @@
 			baseConfigurationReference = 1F8594F1047EB3CC3762E83A /* Pods-BuildaKit.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
