@@ -53,7 +53,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             self.project = project
             self.github = GitHubFactory.server(project.githubToken)
             self.xcodeServer = XcodeServerFactory.server(serverConfig)
-            self.waitForLttm = json.optionalBoolForKey("wait_for_lttm") ?? true
+            self.waitForLttm = json.optionalBoolForKey("wait_for_lttm") ?? false
             self.postStatusComments = json.optionalBoolForKey("post_status_comments") ?? true
             self.watchedBranchNames = json.optionalArrayForKey("watched_branches") as? [String] ?? []
             super.init(syncInterval: syncInterval)
@@ -63,7 +63,7 @@ public class HDGitHubXCBotSyncer : Syncer {
             self.github = nil
             self.xcodeServer = nil
             self.project = nil
-            self.waitForLttm = true
+            self.waitForLttm = false
             self.postStatusComments = true
             self.watchedBranchNames = []
             super.init(syncInterval: 0)

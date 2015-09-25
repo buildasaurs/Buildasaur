@@ -153,7 +153,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
             self.postStatusCommentsToggle.state = syncer.postStatusComments ? NSOnState : NSOffState
         } else {
             self.updateIntervalFromUIToValue(15) //default
-            self.lttmToggle.state = NSOnState //default is true
+            self.lttmToggle.state = NSOffState //default is false
             self.postStatusCommentsToggle.state = NSOnState //default is true
         }
     }
@@ -199,7 +199,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
     
     @IBAction func helpLttmButtonTapped(sender: AnyObject) {
         
-        let urlString = "https://github.com/czechboy0/Buildasaur/blob/master/README.md#the-lttm-barrier"
+        let urlString = "https://github.com/czechboy0/Buildasaur/blob/master/README.md#unlock-the-lttm-barrier"
         if let url = NSURL(string: urlString) {
             NSWorkspace.sharedWorkspace().openURL(url)
         }
@@ -207,7 +207,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
     
     @IBAction func helpPostStatusCommentsButtonTapped(sender: AnyObject) {
         
-        let urlString = "https://github.com/czechboy0/Buildasaur/blob/master/README.md#posting-status-comments"
+        let urlString = "https://github.com/czechboy0/Buildasaur/blob/master/README.md#envelope-posting-status-comments"
         if let url = NSURL(string: urlString) {
             NSWorkspace.sharedWorkspace().openURL(url)
         }
