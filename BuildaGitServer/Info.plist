@@ -24,10 +24,5 @@
 	<string>Copyright © 2014 Honza Dvorsky. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
 	<string></string>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
 </dict>
 </plist>
