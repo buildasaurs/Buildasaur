@@ -1,7 +1,7 @@
 Buildasaur
 ==========
 
-[![satellite badge](https://stlt.herokuapp.com/v1/badge/czechboy0/buildasaur/master)](https://github.com/czechboy0/buildasaur/branches)
+[![satellite badge](https://stlt.herokuapp.com/v1/badge/czechboy0/buildasaur/master/)](https://github.com/czechboy0/buildasaur/branches)
 [![Latest Buildasaur Release](https://img.shields.io/github/release/czechboy0/buildasaur.svg)](https://github.com/czechboy0/Buildasaur/releases/latest)
 ![Swift Version](https://img.shields.io/badge/Swift-2-green.svg)
 
