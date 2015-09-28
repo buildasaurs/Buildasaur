@@ -2,7 +2,7 @@ platform :osx, '10.10'
 use_frameworks!
 
 def pods_for_errbody
-	pod 'BuildaUtils', '0.1.0'
+	pod 'BuildaUtils', '~> 0.1.1'
 end
 
 def rac
@@ -11,8 +11,8 @@ end
 
 def also_xcode_pods
 	pods_for_errbody
-	pod 'XcodeServerSDK', '0.3.0'
-	pod 'ekgclient', '0.3.0'
+	pod 'XcodeServerSDK', '~> 0.3.1'
+	pod 'ekgclient', '~> 0.3.0'
 end
 
 target 'Buildasaur' do

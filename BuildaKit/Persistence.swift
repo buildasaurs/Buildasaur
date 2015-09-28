@@ -11,6 +11,52 @@ import BuildaUtils
 
 public class Persistence {
     
+    class func loadDictionaryFromFile<T>(name: String) -> T? {
+        return self.loadDataFromFile(name, process: { (json) -> T? in
+            
+            guard let contents = json as? T else { return nil }
+            return contents
+        })
+    }
+    
+    class func loadArrayFromFile<T>(name: String, convert: (json: NSDictionary) throws -> T?) -> [T]? {
+        
+        return self.loadDataFromFile(name, process: { (json) -> [T]? in
+            
+            guard let json = json as? [NSDictionary] else { return nil }
+            
+            let allItems = json.map { (item) -> T? in
+                do { return try convert(json: item) } catch { return nil }
+            }
+            let parsedItems = allItems.filter { $0 != nil }.map { $0! }
+            if parsedItems.count != allItems.count {
+                Log.error("Some \(name) failed to parse, will be ignored.")
+                //maybe show a popup?
+            }
+            return parsedItems
+        })
+    }
+    
+    class func loadArrayFromFile<T: JSONSerializable>(name: String) -> [T]? {
+        
+        return self.loadArrayFromFile(name) { try T(json: $0) }
+    }
+    
+    class func loadDataFromFile<T>(name: String, process: (json: AnyObject?) -> T?) -> T? {
+        let configUrl = Persistence.getFileInAppSupportWithName(name, isDirectory: false)
+        do {
+            let json = try Persistence.loadJSONFromUrl(configUrl)
+            guard let contents = process(json: json) else { return nil }
+            return contents
+        } catch {
+            //file not found
+            if (error as NSError).code != 260 {
+                Log.error("Failed to read \(name), error \(error). Will be ignored. Please don't play with the persistence :(")
+            }
+            return nil
+        }
+    }
+    
     public class func loadJSONFromUrl(url: NSURL) throws -> AnyObject? {
         
         let data = try NSData(contentsOfURL: url, options: NSDataReadingOptions())
