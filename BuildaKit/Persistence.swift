@@ -49,7 +49,9 @@ public class Persistence {
         let fm = NSFileManager.defaultManager()
         if let appSupport = fm.URLsForDirectory(NSSearchPathDirectory.ApplicationSupportDirectory, inDomains:NSSearchPathDomainMask.UserDomainMask).first {
             
-            let buildaAppSupport = appSupport.URLByAppendingPathComponent("Buildasaur", isDirectory: true)
+//            let folderName = "Buildasaur"
+            let folderName = "Buildasaur-Debug"
+            let buildaAppSupport = appSupport.URLByAppendingPathComponent(folderName, isDirectory: true)
             
             //ensure it exists
             do {

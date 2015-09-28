@@ -5,6 +5,10 @@ def pods_for_errbody
 	pod 'BuildaUtils', '0.1.0'
 end
 
+def rac
+	pod 'ReactiveCocoa', '4.0.2-alpha-1'
+end
+
 def also_xcode_pods
 	pods_for_errbody
 	pod 'XcodeServerSDK', '0.3.0'
@@ -13,10 +17,12 @@ end
 
 target 'Buildasaur' do
 	also_xcode_pods
+	rac
 end
 
 target 'BuildaKit' do
 	also_xcode_pods
+	rac
 end
 
 target 'BuildaKitTests' do
