@@ -11,6 +11,43 @@ import BuildaUtils
 
 public class Persistence {
     
+    class func saveData(name: String, item: AnyObject) {
+        
+        let itemUrl = Persistence.getFileInAppSupportWithName(name, isDirectory: false)
+        let json = item
+        do {
+            try Persistence.saveJSONToUrl(json, url: itemUrl)
+        } catch {
+            assert(false, "Failed to save \(name), \(error)")
+        }
+    }
+    
+    class func saveDictionary(name: String, item: NSDictionary) {
+        self.saveData(name, item: item)
+    }
+    
+    class func saveArray(name: String, items: [JSONWritable]) {
+        
+        let jsons = items.map { $0.jsonify() }
+        self.saveData(name, item: jsons)
+    }
+    
+    class func saveArrayIntoFolder<T: JSONWritable>(folderName: String, items: [T], itemFileName: (item: T) -> String) {
+        
+        let folderUrl = Persistence.getFileInAppSupportWithName(folderName, isDirectory: true)
+        items.forEach { (item: T) -> () in
+            
+            let json = item.jsonify()
+            let name = itemFileName(item: item)
+            let url = folderUrl.URLByAppendingPathComponent("\(name).json")
+            do {
+                try Persistence.saveJSONToUrl(json, url: url)
+            } catch {
+                assert(false, "Failed to save a \(folderName), \(error)")
+            }
+        }
+    }
+    
     class func loadDictionaryFromFile<T>(name: String) -> T? {
         return self.loadDataFromFile(name, process: { (json) -> T? in
             
@@ -37,15 +74,32 @@ public class Persistence {
         })
     }
     
-    class func loadArrayFromFile<T: JSONSerializable>(name: String) -> [T]? {
+    class func loadArrayFromFile<T: JSONReadable>(name: String) -> [T]? {
         
         return self.loadArrayFromFile(name) { try T(json: $0) }
     }
     
+    class func loadArrayFromFolder<T: JSONReadable>(folderName: String) -> [T]? {
+        
+        let folderUrl = Persistence.getFileInAppSupportWithName(folderName, isDirectory: true)
+        return self.filesInFolder(folderUrl)?.map { (url: NSURL) -> T? in
+            
+            do {
+                let json = try self.loadJSONFromUrl(url)
+                if let json = json as? NSDictionary, let template = try T(json: json) {
+                    return template
+                }
+            } catch {
+                Log.error("Couldn't parse \(folderName) at url \(url), error \(error)")
+            }
+            return nil
+        }.filter { $0 != nil }.map { $0! }
+    }
+    
     class func loadDataFromFile<T>(name: String, process: (json: AnyObject?) -> T?) -> T? {
-        let configUrl = Persistence.getFileInAppSupportWithName(name, isDirectory: false)
+        let url = Persistence.getFileInAppSupportWithName(name, isDirectory: false)
         do {
-            let json = try Persistence.loadJSONFromUrl(configUrl)
+            let json = try Persistence.loadJSONFromUrl(url)
             guard let contents = process(json: json) else { return nil }
             return contents
         } catch {
@@ -112,15 +166,14 @@ public class Persistence {
         return NSURL()
     }
     
-    public class func iterateThroughFilesInFolder(folderUrl: NSURL, visit: (url: NSURL) -> ()) {
-        
-        let fm = NSFileManager.defaultManager()
+    public class func filesInFolder(folderUrl: NSURL) -> [NSURL]? {
+
         do {
-            let contents = try fm.contentsOfDirectoryAtURL(folderUrl, includingPropertiesForKeys: nil, options: [.SkipsHiddenFiles, .SkipsSubdirectoryDescendants])
-            contents.forEach { visit(url: $0) }
-            
+            let contents = try NSFileManager.defaultManager().contentsOfDirectoryAtURL(folderUrl, includingPropertiesForKeys: nil, options: [.SkipsHiddenFiles, .SkipsSubdirectoryDescendants])
+            return contents
         } catch {
             Log.error("Couldn't read folder \(folderUrl), error \(error)")
+            return nil
         }
     }
     

@@ -44,9 +44,13 @@ class StatusServerViewController: StatusViewController {
         }
         super.availabilityChanged(state)
     }
+    
+    private var servers: [XcodeServerConfig] {
+        return self.storageManager.servers.value
+    }
 
     func serverConfig() -> XcodeServerConfig? {
-        return self.storageManager.servers.first
+        return self.servers.first
     }
     
     override func reloadStatus() {

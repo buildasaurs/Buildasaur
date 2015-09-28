@@ -47,8 +47,8 @@ public class HDGitHubXCBotSyncer : Syncer {
             let syncInterval = json.optionalDoubleForKey("sync_interval"),
             let projectPath = json.optionalStringForKey("project_path"),
             let serverHost = json.optionalStringForKey("server_host"),
-            let project = storageManager.projects.filter({ $0.url.absoluteString == projectPath }).first,
-            let serverConfig = storageManager.servers.filter({ $0.host == serverHost }).first
+            let project = storageManager.projects.value.filter({ $0.url.absoluteString == projectPath }).first,
+            let serverConfig = storageManager.servers.value.filter({ $0.host == serverHost }).first
         {
             self.project = project
             self.github = GitHubFactory.server(project.githubToken)
@@ -69,18 +69,6 @@ public class HDGitHubXCBotSyncer : Syncer {
             super.init(syncInterval: 0)
             return nil
         }
-    }
-    
-    func jsonify() -> NSDictionary {
-        
-        let dict = NSMutableDictionary()
-        dict["sync_interval"] = self.syncInterval
-        dict["project_path"] = self.project.url.absoluteString
-        dict["server_host"] = self.xcodeServer.config.host
-        dict["wait_for_lttm"] = self.waitForLttm
-        dict["post_status_comments"] = self.postStatusComments
-        dict["watched_branches"] = self.watchedBranchNames
-        return dict
     }
     
     func repoName() -> String? {
@@ -367,5 +355,20 @@ public class HDGitHubXCBotSyncer : Syncer {
         }
         
         dispatch_group_notify(group, dispatch_get_main_queue(), completion)
+    }
+}
+
+extension HDGitHubXCBotSyncer: JSONWritable {
+    
+    public func jsonify() -> NSDictionary {
+        
+        let dict = NSMutableDictionary()
+        dict["sync_interval"] = self.syncInterval
+        dict["project_path"] = self.project.url.absoluteString
+        dict["server_host"] = self.xcodeServer.config.host
+        dict["wait_for_lttm"] = self.waitForLttm
+        dict["post_status_comments"] = self.postStatusComments
+        dict["watched_branches"] = self.watchedBranchNames
+        return dict
     }
 }

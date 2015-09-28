@@ -38,8 +38,12 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         }
     }
     
+    private var syncers: [HDGitHubXCBotSyncer] {
+        return self.storageManager.syncers.value
+    }
+    
     func syncer() -> HDGitHubXCBotSyncer? {
-        if let syncer = self.storageManager.syncers.first {
+        if let syncer = self.syncers.first {
             if syncer.delegate == nil {
                 syncer.delegate = self
                 if syncer.active {

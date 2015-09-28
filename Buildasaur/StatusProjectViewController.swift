@@ -51,14 +51,14 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         self.tokenTextField.delegate = self
         self.lastAvailabilityCheckStatus = .Unchecked
     }
-        
+    
     func project() -> Project? {
-        return self.storageManager.projects.first
+        return self.storageManager.projects.value.first
     }
     
     func buildTemplates() -> [BuildTemplate] {
         
-        return self.storageManager.buildTemplates.filter { (template: BuildTemplate) -> Bool in
+        return self.storageManager.buildTemplates.value.filter { (template: BuildTemplate) -> Bool in
             if
                 let projectName = template.projectName,
                 let project = self.project()

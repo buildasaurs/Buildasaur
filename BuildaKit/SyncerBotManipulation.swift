@@ -109,7 +109,7 @@ extension HDGitHubXCBotSyncer {
         
         if
             let preferredTemplateId = self.project.preferredTemplateId,
-            let template = StorageManager.sharedInstance.buildTemplates.filter({ $0.uniqueId == preferredTemplateId }).first {
+            let template = StorageManager.sharedInstance.buildTemplates.value.filter({ $0.uniqueId == preferredTemplateId }).first {
                 return template
         }
         

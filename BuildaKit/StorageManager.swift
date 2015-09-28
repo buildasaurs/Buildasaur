@@ -25,14 +25,17 @@ public class StorageManager {
     
     private var heartbeatManager: HeartbeatManager!
     
-    init() {
-        
-        //initialize all stored Syncers
+    private init() {
         self.loadAllFromPersistence()
-        
-        
-        
-        if let heartbeatOptOut = self.config["heartbeat_opt_out"] as? Bool where heartbeatOptOut {
+        self.setupHeartbeatManager()
+    }
+    
+    deinit {
+        self.stop()
+    }
+    
+    private func setupHeartbeatManager() {
+        if let heartbeatOptOut = self.config.value["heartbeat_opt_out"] as? Bool where heartbeatOptOut {
             Log.info("User opted out of anonymous heartbeat")
         } else {
             Log.info("Will send anonymous heartbeat. To opt out add `\"heartbeat_opt_out\" = true` to ~/Library/Application Support/Buildasaur/Config.json")
@@ -42,15 +45,11 @@ public class StorageManager {
         }
     }
     
-    deinit {
-        self.stop()
-    }
-    
     public func addProjectAtURL(url: NSURL) throws {
         
         _ = try Project.attemptToParseFromUrl(url)
         if let project = Project(url: url) {
-            self.projects.append(project)
+            self.projects.value.append(project)
         } else {
             assertionFailure("Attempt to parse succeeded but Project still wasn't created")
         }
@@ -58,7 +57,7 @@ public class StorageManager {
     
     public func addServerConfig(host host: String, user: String?, password: String?) {
         let config = try! XcodeServerConfig(host: host, user: user, password: password)
-        self.servers.append(config)
+        self.servers.value.append(config)
     }
     
     public func addSyncer(syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool,
@@ -79,7 +78,7 @@ public class StorageManager {
             waitForLttm: waitForLttm,
             postStatusComments: postStatusComments,
             watchedBranchNames: watchedBranchNames)
-        self.syncers.append(syncer)
+        self.syncers.value.append(syncer)
         return syncer
     }
     
@@ -87,16 +86,16 @@ public class StorageManager {
         
         //in case we have a duplicate, replace
         var duplicateFound = false
-        for (idx, temp) in self.buildTemplates.enumerate() {
+        for (idx, temp) in self.buildTemplates.value.enumerate() {
             if temp.uniqueId == buildTemplate.uniqueId {
-                self.buildTemplates[idx] = buildTemplate
+                self.buildTemplates.value[idx] = buildTemplate
                 duplicateFound = true
                 break
             }
         }
         
         if !duplicateFound {
-            self.buildTemplates.append(buildTemplate)
+            self.buildTemplates.value.append(buildTemplate)
         }
         
         //now save all
@@ -106,9 +105,9 @@ public class StorageManager {
     public func removeBuildTemplate(buildTemplate: BuildTemplate) {
         
         //remove from the memory storage
-        for (idx, temp) in self.buildTemplates.enumerate() {
+        for (idx, temp) in self.buildTemplates.value.enumerate() {
             if temp.uniqueId == buildTemplate.uniqueId {
-                self.buildTemplates.removeAtIndex(idx)
+                self.buildTemplates.value.removeAtIndex(idx)
                 break
             }
         }
@@ -125,9 +124,9 @@ public class StorageManager {
     
     public func removeProject(project: Project) {
         
-        for (idx, p) in self.projects.enumerate() {
+        for (idx, p) in self.projects.value.enumerate() {
             if project.url == p.url {
-                self.projects.removeAtIndex(idx)
+                self.projects.value.removeAtIndex(idx)
                 return
             }
         }
@@ -135,9 +134,9 @@ public class StorageManager {
     
     public func removeServer(serverConfig: XcodeServerConfig) {
         
-        for (idx, p) in self.servers.enumerate() {
+        for (idx, p) in self.servers.value.enumerate() {
             if serverConfig.host == p.host {
-                self.servers.removeAtIndex(idx)
+                self.servers.value.removeAtIndex(idx)
                 return
             }
         }
@@ -154,71 +153,30 @@ public class StorageManager {
         self.config.value = Persistence.loadDictionaryFromFile("Config.json") ?? [:]
         self.projects.value = Persistence.loadArrayFromFile("Projects.json") ?? []
         self.servers.value = Persistence.loadArrayFromFile("ServerConfigs.json") ?? []
-        self.buildTemplates.value = Persistence.loadArrayFromFile("BuildTemplates") ?? []
+        self.buildTemplates.value = Persistence.loadArrayFromFolder("BuildTemplates") ?? []
         self.syncers.value = Persistence.loadArrayFromFile("Syncers.json") {
             HDGitHubXCBotSyncer(json: $0, storageManager: self)
             } ?? []
     }
     
-    
     public func saveConfig() {
-        let configUrl = Persistence.getFileInAppSupportWithName("Config.json", isDirectory: false)
-        let json = self.config
-        do {
-            try Persistence.saveJSONToUrl(json, url: configUrl)
-        } catch {
-            assert(false, "Failed to save Config, \(error)")
-        }
+        Persistence.saveDictionary("Config.json", item: self.config.value)
     }
     
     public func saveProjects() {
-        
-        let projectsUrl = Persistence.getFileInAppSupportWithName("Projects.json", isDirectory: false)
-        let jsons = self.projects.map { $0.jsonify() }
-        do {
-            try Persistence.saveJSONToUrl(jsons, url: projectsUrl)
-        } catch {
-            assert(false, "Failed to save Projects, \(error)")
-        }
+        Persistence.saveArray("Projects.json", items: self.projects.value)
     }
     
     public func saveServers() {
-        
-        let serversUrl = Persistence.getFileInAppSupportWithName("ServerConfigs.json", isDirectory: false)
-        let jsons = self.servers.map { $0.jsonify() }
-        do {
-            try Persistence.saveJSONToUrl(jsons, url: serversUrl)
-        } catch {
-            assert(false, "Failed to save ServerConfigs, \(error)")
-        }
+        Persistence.saveArray("ServerConfigs.json", items: self.servers.value)
     }
     
     public func saveSyncers() {
-
-        let syncersUrl = Persistence.getFileInAppSupportWithName("Syncers.json", isDirectory: false)
-        let jsons = self.syncers.map { $0.jsonify() }
-        do {
-            try Persistence.saveJSONToUrl(jsons, url: syncersUrl)
-        } catch {
-            assert(false, "Failed to save Syncers, \(error)")
-        }
+        Persistence.saveArray("Syncers.json", items: self.syncers.value)
     }
     
-    public func saveBuildTemplates() {
-        
-        let templatesFolderUrl = Persistence.getFileInAppSupportWithName("BuildTemplates", isDirectory: true)
-        self.buildTemplates.forEach {
-            (template: BuildTemplate) -> () in
-            
-            let json = template.jsonify()
-            let id = template.uniqueId
-            let templateUrl = templatesFolderUrl.URLByAppendingPathComponent("\(id).json")
-            do {
-                try Persistence.saveJSONToUrl(json, url: templateUrl)
-            } catch {
-                assert(false, "Failed to save a Build Template, \(error)")
-            }
-        }
+    func saveBuildTemplates() {
+        Persistence.saveArrayIntoFolder("BuildTemplates", items: self.buildTemplates.value) { $0.uniqueId }
     }
     
     public func stop() {
@@ -237,23 +195,16 @@ public class StorageManager {
     }
     
     public func stopSyncers() {
-        
-        for syncer in self.syncers {
-            syncer.active = false
-        }
+        self.syncers.value.forEach { $0.active = false }
     }
     
     public func startSyncers() {
-        //start all syncers in memory
-        
-        for syncer in self.syncers {
-            syncer.active = true
-        }
+        self.syncers.value.forEach { $0.active = true }
     }
 }
 
 extension StorageManager: HeartbeatManagerDelegate {
     public func numberOfRunningSyncers() -> Int {
-        return self.syncers.filter { $0.active }.count
+        return self.syncers.value.filter { $0.active }.count
     }
 }

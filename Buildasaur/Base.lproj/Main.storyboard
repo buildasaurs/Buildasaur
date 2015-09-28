@@ -680,7 +680,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" headerView="wIH-7K-Ol7" id="D3C-wr-ynD">
-                                            <rect key="frame" x="0.0" y="0.0" width="638" height="217"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="638" height="19"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -870,7 +870,7 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="768"/>
+            <point key="canvasLocation" x="19" y="807"/>
         </scene>
         <!--Status Server View Controller-->
         <scene sceneID="tJp-HU-7xF">

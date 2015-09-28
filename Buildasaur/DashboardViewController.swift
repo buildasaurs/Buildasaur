@@ -7,14 +7,22 @@
 //
 
 import Cocoa
+import BuildaKit
+import ReactiveCocoa
 
 class DashboardViewController: NSViewController {
 
     @IBOutlet weak var syncersTableView: NSTableView!
     
+    //TODO: figure out a way to inject this instead
+    let storageManager: StorageManager = StorageManager.sharedInstance
+    
+    private var syncers: [HDGitHubXCBotSyncer] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.configDataSource()
         self.configTableView()
     }
     
@@ -26,6 +34,14 @@ class DashboardViewController: NSViewController {
         tableView.columnAutoresizingStyle = .UniformColumnAutoresizingStyle
     }
     
+    func configDataSource() {
+        
+        self.storageManager.syncers.producer.startWithNext { newSyncers in
+            self.syncers = newSyncers
+            self.syncersTableView.reloadData()
+        }
+    }
+    
     
     
 }
@@ -33,7 +49,7 @@ class DashboardViewController: NSViewController {
 extension DashboardViewController: NSTableViewDataSource {
     
     func numberOfRowsInTableView(tableView: NSTableView) -> Int {
-        return 1
+        return self.syncers.count
     }
     
     func tableView(tableView: NSTableView, objectValueForTableColumn tableColumn: NSTableColumn?, row: Int) -> AnyObject? {

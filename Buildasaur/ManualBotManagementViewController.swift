@@ -25,12 +25,16 @@ class ManualBotManagementViewController: NSViewController {
     
     @IBOutlet weak var creatingActivityIndicator: NSProgressIndicator!
     
+    private var buildTemplates: [BuildTemplate] {
+        return self.storageManager.buildTemplates.value
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         assert(self.syncer != nil, "We need a syncer here")
         
-        let names = self.storageManager.buildTemplates.map({ $0.name! })
+        let names = self.buildTemplates.map({ $0.name! })
         self.templateComboBox.addItemsWithObjectValues(names)
     }
     
@@ -88,7 +92,7 @@ class ManualBotManagementViewController: NSViewController {
         
         let index = self.templateComboBox.indexOfSelectedItem
         if index > -1 {
-            let template = self.storageManager.buildTemplates[index]
+            let template = self.buildTemplates[index]
             return template
         }
         UIUtils.showAlertWithText("Please specify a valid build template")

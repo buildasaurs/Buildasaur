@@ -22,6 +22,7 @@ import BuildaKit
 class AppDelegate: NSObject, NSApplicationDelegate {
     
     let menuItemManager = MenuItemManager()
+    let storageManager = StorageManager.sharedInstance
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         
@@ -41,7 +42,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationWillTerminate(aNotification: NSNotification) {
         
-        StorageManager.sharedInstance.stop()
+        self.storageManager.stop()
     }
     
     //MARK: Showing Window on Reactivation
