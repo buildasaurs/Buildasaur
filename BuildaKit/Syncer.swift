@@ -10,6 +10,7 @@ import Foundation
 import BuildaGitServer
 import BuildaUtils
 import XcodeServerSDK
+import ReactiveCocoa
 
 public protocol SyncerDelegate: class {
     
@@ -62,8 +63,11 @@ public protocol SyncerDelegate: class {
                 self.timer = nil
                 self.delegate?.syncerStopped(self)
             }
+            self.activeSignalProducer.value = active
         }
     }
+    
+    public let activeSignalProducer = MutableProperty<Bool>(false)
 
     //private
     var timer: NSTimer?

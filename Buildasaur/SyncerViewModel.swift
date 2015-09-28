@@ -8,44 +8,47 @@
 
 import Foundation
 import BuildaKit
+import ReactiveCocoa
 
 struct SyncerViewModel {
     
-    enum Column: String {
-        case Status = "status"
-        case XCSHost = "xcs_host"
-        case ProjectName = "project_name"
-        case BuildTemplate = "build_template"
-        case Control = "control"
-        case Edit = "edit"
-    }
-
     let syncer: HDGitHubXCBotSyncer
     
-    func objectForColumnIdentifier(columnIdentifier: String) -> AnyObject? {
+    let status: SignalProducer<String, NoError>
+    let host: SignalProducer<String, NoError>
+    let projectName: SignalProducer<String, NoError>
+    let buildTemplateName: SignalProducer<String, NoError>
+    
+    init(syncer: HDGitHubXCBotSyncer) {
+        self.syncer = syncer
         
-        guard let column = Column(rawValue: columnIdentifier) else { return nil }
-        return self.objectForColumn(column)
+        self.status = syncer.activeSignalProducer
+            .producer
+            .map { SyncerViewModel.stringForState($0) }
+        
+        self.host = SignalProducer(value: syncer.xcodeServer.config.host)
+            .map { NSURL(string: $0)!.host! }
+        
+        self.projectName = SignalProducer(value: syncer.project.projectName!)
+        self.buildTemplateName = SignalProducer(value: syncer.currentBuildTemplate().name!)
     }
     
-    private func objectForColumn(column: Column) -> AnyObject? {
+    func editButtonClicked() {
         
-        switch column {
-        case .Status:
-            return "who knows?"
-        case .XCSHost:
-            let fullHost = self.syncer.xcodeServer.config.host
-            let url = NSURL(string: fullHost)
-            return url?.host
-        case .ProjectName:
-            return self.syncer.project.projectName
-        case .BuildTemplate:
-            return self.syncer.currentBuildTemplate().name
-        case .Control:
-            return "start/stop"
-        case .Edit:
-            return "Edit"
+    }
+    
+    func controlButtonClicked() {
+        //TODO: run through validation first?
+        self.syncer.active = !self.syncer.active
+    }
+    
+    private static func stringForState(active: Bool) -> String {
+        if active {
+            return "✔️ syncing..."
+        } else {
+            return "✖️ stopped."
         }
     }
+    
 }
 
