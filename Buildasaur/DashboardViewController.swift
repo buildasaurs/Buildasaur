@@ -17,7 +17,7 @@ class DashboardViewController: NSViewController {
     //TODO: figure out a way to inject this instead
     let storageManager: StorageManager = StorageManager.sharedInstance
     
-    private var syncers: [HDGitHubXCBotSyncer] = []
+    private var syncerViewModels: [SyncerViewModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +37,7 @@ class DashboardViewController: NSViewController {
     func configDataSource() {
         
         self.storageManager.syncers.producer.startWithNext { newSyncers in
-            self.syncers = newSyncers
+            self.syncerViewModels = newSyncers.map { SyncerViewModel(syncer: $0) }
             self.syncersTableView.reloadData()
         }
     }
@@ -49,12 +49,15 @@ class DashboardViewController: NSViewController {
 extension DashboardViewController: NSTableViewDataSource {
     
     func numberOfRowsInTableView(tableView: NSTableView) -> Int {
-        return self.syncers.count
+        return self.syncerViewModels.count
     }
     
     func tableView(tableView: NSTableView, objectValueForTableColumn tableColumn: NSTableColumn?, row: Int) -> AnyObject? {
         
-        return "hello"
+        let syncerViewModel = self.syncerViewModels[row]
+        guard let columnIdentifier = tableColumn?.identifier else { return nil }
+        let object = syncerViewModel.objectForColumnIdentifier(columnIdentifier)
+        return object
     }
 }
 

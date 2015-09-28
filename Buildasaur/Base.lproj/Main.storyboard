@@ -686,7 +686,7 @@
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
-                                                <tableColumn identifier="" width="100" minWidth="80" maxWidth="100" id="hqA-Xo-4uD" userLabel="Status">
+                                                <tableColumn identifier="status" width="100" minWidth="80" maxWidth="100" id="hqA-Xo-4uD" userLabel="Status">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Status">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -699,7 +699,7 @@
                                                     </textFieldCell>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                 </tableColumn>
-                                                <tableColumn width="120" minWidth="80" maxWidth="200" id="Cs9-8U-vn7" userLabel="XCS Host">
+                                                <tableColumn identifier="xcs_host" width="120" minWidth="80" maxWidth="200" id="Cs9-8U-vn7" userLabel="XCS Host">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Xcode Server Host">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -712,7 +712,7 @@
                                                     </textFieldCell>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                 </tableColumn>
-                                                <tableColumn width="120" minWidth="80" maxWidth="200" id="fh2-Je-Hc8" userLabel="Project Name">
+                                                <tableColumn identifier="project_name" width="120" minWidth="80" maxWidth="200" id="fh2-Je-Hc8" userLabel="Project Name">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Project Name">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -725,7 +725,7 @@
                                                     </textFieldCell>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                 </tableColumn>
-                                                <tableColumn width="120" minWidth="80" maxWidth="200" id="uwu-Xd-cED" userLabel="Build Template">
+                                                <tableColumn identifier="build_template" width="120" minWidth="80" maxWidth="200" id="uwu-Xd-cED" userLabel="Build Template">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Build Template">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -738,7 +738,7 @@
                                                     </textFieldCell>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                 </tableColumn>
-                                                <tableColumn width="80" minWidth="70" maxWidth="90" id="1D7-U9-E9S" userLabel="Start/Stop">
+                                                <tableColumn identifier="control" width="80" minWidth="70" maxWidth="90" id="1D7-U9-E9S" userLabel="Start/Stop">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -750,7 +750,7 @@
                                                     </buttonCell>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                 </tableColumn>
-                                                <tableColumn width="80" minWidth="80" maxWidth="90" id="UOC-HI-BPH" userLabel="Edit">
+                                                <tableColumn identifier="edit" width="80" minWidth="80" maxWidth="90" id="UOC-HI-BPH" userLabel="Edit">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -768,7 +768,7 @@
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </clipView>
                                 <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="l2f-Ea-7MX">
-                                    <rect key="frame" x="1" y="218" width="618" height="16"/>
+                                    <rect key="frame" x="1" y="218" width="638" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="gNW-Db-gtO">

@@ -13,6 +13,18 @@ import BuildaUtils
 
 extension HDGitHubXCBotSyncer {
     
+    public func currentBuildTemplate() -> BuildTemplate! {
+        
+        if
+            let preferredTemplateId = self.project.preferredTemplateId,
+            let template = StorageManager.sharedInstance.buildTemplates.value.filter({ $0.uniqueId == preferredTemplateId }).first {
+                return template
+        }
+        
+        assertionFailure("Couldn't get the current build template, this syncer should NOT be running!")
+        return nil
+    }
+    
     //MARK: Bot manipulation utils
     
     func cancelIntegrations(integrations: [Integration], completion: () -> ()) {
@@ -103,17 +115,5 @@ extension HDGitHubXCBotSyncer {
         let botName = BotNaming.nameForBotWithBranch(branch, repoName: self.repoName()!)
         
         self.createBotFromName(botName, branch: branchName, repo: repo, completion: completion)
-    }
-    
-    private func currentBuildTemplate() -> BuildTemplate! {
-        
-        if
-            let preferredTemplateId = self.project.preferredTemplateId,
-            let template = StorageManager.sharedInstance.buildTemplates.value.filter({ $0.uniqueId == preferredTemplateId }).first {
-                return template
-        }
-        
-        assertionFailure("Couldn't get the current build template, this syncer should NOT be running!")
-        return nil
     }
 }

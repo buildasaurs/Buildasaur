@@ -71,7 +71,7 @@ public class HDGitHubXCBotSyncer : Syncer {
         }
     }
     
-    func repoName() -> String? {
+    public func repoName() -> String? {
         return self.project.githubRepoName()
     }
     
