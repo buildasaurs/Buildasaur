@@ -91,7 +91,7 @@ public class XcodeProjectParser {
             let parsed = try self.parseCheckoutOrBlueprintFile(checkoutUrl)
             return parsed
         } catch {
-            throw Error.withInfo("Cannot find the Checkout/Blueprint file, please make sure to open this project in Xcode at least once (it will generate the required Checkout/Blueprint file) and create at least one Bot from Xcode. Then please try again. Create an issue on GitHub is this issue persists.")
+            throw Error.withInfo("Cannot find the Checkout/Blueprint file, please make sure to open this project in Xcode at least once (it will generate the required Checkout/Blueprint file) and create at least one Bot from Xcode. Then please try again. Create an issue on GitHub is this issue persists. (Error \((error as NSError).localizedDescription))")
         }
     }
     

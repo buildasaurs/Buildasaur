@@ -46,14 +46,9 @@ class CheckoutFileParser: SourceControlFileParser {
             }
             return nil
             }()
-        let projectURL = { () -> NSURL? in
-            if let urlString = dictionary.optionalStringForKey("IDESourceControlProjectURL") {
-                return NSURL(string: urlString)
-            }
-            return nil
-            }()
+        let projectURLString = { dictionary.optionalStringForKey("IDESourceControlProjectURL") }()
         
-        return try WorkspaceMetadata(projectName: projectName, projectPath: projectPath, projectWCCIdentifier: projectWCCIdentifier, projectWCCName: projectWCCName, projectURL: projectURL)
+        return try WorkspaceMetadata(projectName: projectName, projectPath: projectPath, projectWCCIdentifier: projectWCCIdentifier, projectWCCName: projectWCCName, projectURLString: projectURLString)
     }
 }
 

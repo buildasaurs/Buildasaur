@@ -25,19 +25,27 @@ public struct WorkspaceMetadata {
     public let projectURL: NSURL
     public let checkoutType: CheckoutType
     
-    init(projectName: String?, projectPath: String?, projectWCCIdentifier: String?, projectWCCName: String?, projectURL: NSURL?) throws {
+    init(projectName: String?, projectPath: String?, projectWCCIdentifier: String?, projectWCCName: String?, projectURLString: String?) throws {
         
         let errorForMissingKey: (String) -> ErrorType = { Error.withInfo("Can't find/parse \"\($0)\" in workspace metadata!") }
         guard let projectName = projectName else { throw errorForMissingKey("Project Name") }
         guard let projectPath = projectPath else { throw errorForMissingKey("Project Path") }
         guard let projectWCCIdentifier = projectWCCIdentifier else { throw errorForMissingKey("Project WCC Identifier") }
         guard let projectWCCName = projectWCCName else { throw errorForMissingKey("Project WCC Name") }
-        guard let projectURL = projectURL else { throw errorForMissingKey("Project URL") }
-        guard let checkoutType = WorkspaceMetadata.parseCheckoutType(projectURL) else {
+        guard let projectURLString = projectURLString else { throw errorForMissingKey("Project URL") }
+        guard let checkoutType = WorkspaceMetadata.parseCheckoutType(projectURLString) else {
             let allowedString = [CheckoutType.SSH].map({ $0.rawValue }).joinWithSeparator(", ")
             let error = Error.withInfo("Disallowed checkout type, the project must be checked out over one of the supported schemes: \(allowedString)")
             throw error
         }
+        
+        //we have to prefix SSH urls with "git@" (for a reason I don't remember)
+        var correctedProjectUrlString = projectURLString
+        if case .SSH = checkoutType where !projectURLString.hasPrefix("git@") {
+            correctedProjectUrlString = "git@" + projectURLString
+        }
+        
+        guard let projectURL = NSURL(string: correctedProjectUrlString) else { throw Error.withInfo("Can't parse url \"\(projectURLString)\"") }
         
         self.projectName = projectName
         self.projectPath = projectPath
@@ -48,17 +56,16 @@ public struct WorkspaceMetadata {
     }
     
     func duplicateWithForkURL(forkUrlString: String?) throws -> WorkspaceMetadata {
-        let forkUrl = NSURL(string: forkUrlString ?? "")
-        return try WorkspaceMetadata(projectName: self.projectName, projectPath: self.projectPath, projectWCCIdentifier: self.projectWCCIdentifier, projectWCCName: self.projectWCCName, projectURL: forkUrl)
+        return try WorkspaceMetadata(projectName: self.projectName, projectPath: self.projectPath, projectWCCIdentifier: self.projectWCCIdentifier, projectWCCName: self.projectWCCName, projectURLString: forkUrlString)
     }
 }
 
 extension WorkspaceMetadata {
     
-    internal static func parseCheckoutType(projectURL: NSURL) -> CheckoutType? {
+    internal static func parseCheckoutType(projectURLString: String) -> CheckoutType? {
         
-        let urlString = projectURL.absoluteString
-        let scheme = projectURL.scheme
+        let urlString = projectURLString
+        let scheme = NSURL(string: projectURLString)!.scheme
         switch scheme {
         case "github.com":
             return CheckoutType.SSH
