@@ -680,7 +680,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="wIH-7K-Ol7" viewBased="YES" id="D3C-wr-ynD">
-                                            <rect key="frame" x="0.0" y="0.0" width="638" height="19"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="638" height="0.0"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -823,18 +823,18 @@
                                                     <buttonCell key="dataCell" type="push" title="Start" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="PKC-eA-Efn">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="system"/>
-                                                        <connections>
-                                                            <action selector="controlButtonClicked:" target="fGl-D9-6Tw" id="PEh-D1-sSf"/>
-                                                        </connections>
                                                     </buttonCell>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
-                                                        <button identifier="buttonView" verticalHuggingPriority="750" id="uVE-l3-mpn">
+                                                        <button identifier="buttonView" verticalHuggingPriority="750" id="uVE-l3-mpn" customClass="BuildaNSButton" customModule="Buildasaur" customModuleProvider="target">
                                                             <rect key="frame" x="473" y="1" width="80" height="32"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3hr-hy-pJR">
                                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                 <font key="font" metaFont="system"/>
+                                                                <connections>
+                                                                    <action selector="controlButtonClicked:" target="fGl-D9-6Tw" id="vE1-AN-GYU"/>
+                                                                </connections>
                                                             </buttonCell>
                                                         </button>
                                                     </prototypeCellViews>
@@ -848,18 +848,18 @@
                                                     <buttonCell key="dataCell" type="push" title="Edit" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="lw9-4Z-Jgs">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="system"/>
-                                                        <connections>
-                                                            <action selector="editButtonClicked:" target="fGl-D9-6Tw" id="F8f-tp-yaJ"/>
-                                                        </connections>
                                                     </buttonCell>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
-                                                        <button identifier="buttonView" verticalHuggingPriority="750" id="vsh-hH-b23">
+                                                        <button identifier="buttonView" verticalHuggingPriority="750" id="vsh-hH-b23" customClass="BuildaNSButton" customModule="Buildasaur" customModuleProvider="target">
                                                             <rect key="frame" x="556" y="1" width="80" height="32"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fti-Hu-uEW">
                                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                 <font key="font" metaFont="system"/>
+                                                                <connections>
+                                                                    <action selector="editButtonClicked:" target="fGl-D9-6Tw" id="hiA-90-BMV"/>
+                                                                </connections>
                                                             </buttonCell>
                                                         </button>
                                                     </prototypeCellViews>
@@ -882,6 +882,26 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f7Q-ra-uiy">
+                                <rect key="frame" x="537" y="248" width="89" height="32"/>
+                                <buttonCell key="cell" type="push" title="Stop All" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fin-Vj-0Os">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="stopAllButtonClicked:" target="fGl-D9-6Tw" id="pHR-m2-BVt"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oQI-eo-8zz">
+                                <rect key="frame" x="448" y="248" width="89" height="32"/>
+                                <buttonCell key="cell" type="push" title="Start All" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="d5f-ow-2G6">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="startAllButtonClicked:" target="fGl-D9-6Tw" id="75u-gC-5hy"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="wph-xW-ouc" secondAttribute="trailing" id="5q7-eJ-LKk"/>
@@ -891,6 +911,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="startAllButton" destination="oQI-eo-8zz" id="hn5-aV-N88"/>
+                        <outlet property="stopAllButton" destination="f7Q-ra-uiy" id="O6F-H8-VoB"/>
                         <outlet property="syncersTableView" destination="D3C-wr-ynD" id="kMa-jK-0v8"/>
                     </connections>
                 </viewController>

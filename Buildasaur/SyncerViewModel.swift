@@ -18,23 +18,38 @@ struct SyncerViewModel {
     let host: SignalProducer<String, NoError>
     let projectName: SignalProducer<String, NoError>
     let buildTemplateName: SignalProducer<String, NoError>
+    let editButtonTitle: SignalProducer<String, NoError>
+    let editButtonEnabled: SignalProducer<Bool, NoError>
+    let controlButtonTitle: SignalProducer<String, NoError>
     
     init(syncer: HDGitHubXCBotSyncer) {
         self.syncer = syncer
         
-        self.status = syncer.activeSignalProducer
-            .producer
-            .map { SyncerViewModel.stringForState($0) }
+        let active = syncer.activeSignalProducer.producer
+        
+        self.status = active.map { SyncerViewModel.stringForState($0) }
         
         self.host = SignalProducer(value: syncer.xcodeServer.config.host)
             .map { NSURL(string: $0)!.host! }
         
-        self.projectName = SignalProducer(value: syncer.project.projectName!)
+        self.projectName = SignalProducer(value: syncer.project.workspaceMetadata!.projectName)
         self.buildTemplateName = SignalProducer(value: syncer.currentBuildTemplate().name!)
+        self.editButtonTitle = SignalProducer(value: "Edit")
+        self.editButtonEnabled = active.map { !$0 }
+        self.controlButtonTitle = active.map { $0 ? "Stop" : "Start" }
     }
     
     func editButtonClicked() {
         
+    }
+    
+    func startButtonClicked() {
+        //TODO: run through validation first?
+        self.syncer.active = true
+    }
+    
+    func stopButtonClicked() {
+        self.syncer.active = false
     }
     
     func controlButtonClicked() {
