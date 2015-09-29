@@ -11,6 +11,11 @@ import BuildaUtils
 
 public class XcodeProjectParser {
     
+    static private var sourceControlFileParsers: [SourceControlFileParser] = [
+        CheckoutFileParser(),
+        BlueprintFileParser()
+    ]
+    
     private class func firstItemMatchingTestRecursive(url: NSURL, test: (itemUrl: NSURL) -> Bool) throws -> NSURL? {
         
         let fm = NSFileManager.defaultManager()
@@ -52,38 +57,42 @@ public class XcodeProjectParser {
         return filtered
     }
     
-    private class func findCheckoutUrl(workspaceUrl: NSURL) throws -> NSURL {
+    private class func findCheckoutOrBlueprintUrl(workspaceUrl: NSURL) throws -> NSURL {
         
         if let found = try self.firstItemMatchingTestRecursive(workspaceUrl, test: { (itemUrl: NSURL) -> Bool in
             
-            return itemUrl.pathExtension == "xccheckout"
+            let pathExtension = itemUrl.pathExtension
+            return pathExtension == "xccheckout" || pathExtension == "xcscmblueprint"
         }) {
             return found
         }
-        throw Error.withInfo("No xccheckout file found")
+        throw Error.withInfo("No xccheckout or xcscmblueprint file found")
     }
     
-    private class func parseCheckoutFile(url: NSURL) throws -> NSDictionary {
-
-        if let parsed = NSDictionary(contentsOfURL: url) {
-            return parsed
-        }
-        throw Error.withInfo("Could not parse checkout file at url \(url)")
-    }
-    
-    public class func parseRepoMetadataFromProjectOrWorkspaceURL(url: NSURL) throws -> NSDictionary {
+    private class func parseCheckoutOrBlueprintFile(url: NSURL) throws -> WorkspaceMetadata {
         
-        let workspaceUrl = url
-        var checkoutUrl: NSURL
+        let pathExtension = url.pathExtension!
+        
+        let maybeParser = self.sourceControlFileParsers.filter {
+            Set($0.supportedFileExtensions()).contains(pathExtension)
+        }.first
+        guard let parser = maybeParser else {
+            throw Error.withInfo("Could not find a parser for path extension \(pathExtension)")
+        }
+        
+        let parsedWorkspace = try parser.parseFileAtUrl(url)
+        return parsedWorkspace
+    }
+    
+    public class func parseRepoMetadataFromProjectOrWorkspaceURL(url: NSURL) throws -> WorkspaceMetadata {
         
         do {
-            checkoutUrl = try self.findCheckoutUrl(workspaceUrl)
+            let checkoutUrl = try self.findCheckoutOrBlueprintUrl(url)
+            let parsed = try self.parseCheckoutOrBlueprintFile(checkoutUrl)
+            return parsed
         } catch {
-            throw Error.withInfo("Cannot find the Checkout file, please make sure to open this project in Xcode at least once (it will generate the required Checkout file). Then try again.")
+            throw Error.withInfo("Cannot find the Checkout/Blueprint file, please make sure to open this project in Xcode at least once (it will generate the required Checkout/Blueprint file) and create at least one Bot from Xcode. Then please try again. Create an issue on GitHub is this issue persists. (Error \((error as NSError).localizedDescription))")
         }
-        
-        let parsed = try self.parseCheckoutFile(checkoutUrl)
-        return parsed
     }
     
     public class func sharedSchemeUrlsFromProjectOrWorkspaceUrl(url: NSURL) -> [NSURL] {

@@ -15,6 +15,8 @@
 		3A32CD181A3D01E300861A34 /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A32CD171A3D01E300861A34 /* Issue.swift */; };
 		3A32CD1E1A3D2ADD00861A34 /* GitHubServerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A32CD1D1A3D2ADD00861A34 /* GitHubServerExtensions.swift */; };
 		3A3BDC1F1AF6D34900D2CD99 /* GitHubRateLimit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3BDC1E1AF6D34900D2CD99 /* GitHubRateLimit.swift */; };
+		3A4C159F1BBB2DD0007FA970 /* SourceControlFileParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4C159D1BBB2DD0007FA970 /* SourceControlFileParser.swift */; settings = {ASSET_TAGS = (); }; };
+		3A4C15A01BBB2DD0007FA970 /* WorkspaceMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4C159E1BBB2DD0007FA970 /* WorkspaceMetadata.swift */; settings = {ASSET_TAGS = (); }; };
 		3A5687761A3B93BD0066DB2B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5687751A3B93BD0066DB2B /* AppDelegate.swift */; };
 		3A5687781A3B93BD0066DB2B /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5687771A3B93BD0066DB2B /* MainViewController.swift */; };
 		3A56877A1A3B93BD0066DB2B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A5687791A3B93BD0066DB2B /* Images.xcassets */; };
@@ -186,6 +188,8 @@
 		3A38CF951A3CE94C00F41AFA /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Status.swift; path = BuildaGitServer/Status.swift; sourceTree = SOURCE_ROOT; };
 		3A3BDC1E1AF6D34900D2CD99 /* GitHubRateLimit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubRateLimit.swift; sourceTree = "<group>"; };
 		3A4770A51A746BC00016E170 /* Buildasaur.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Buildasaur.entitlements; sourceTree = "<group>"; };
+		3A4C159D1BBB2DD0007FA970 /* SourceControlFileParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SourceControlFileParser.swift; sourceTree = "<group>"; };
+		3A4C159E1BBB2DD0007FA970 /* WorkspaceMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceMetadata.swift; sourceTree = "<group>"; };
 		3A5687701A3B93BD0066DB2B /* Buildasaur.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Buildasaur.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A5687741A3B93BD0066DB2B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A5687751A3B93BD0066DB2B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -626,6 +630,8 @@
 		3AC1562B1BB964C80068A1A3 /* Xcode Project Management */ = {
 			isa = PBXGroup;
 			children = (
+				3A4C159D1BBB2DD0007FA970 /* SourceControlFileParser.swift */,
+				3A4C159E1BBB2DD0007FA970 /* WorkspaceMetadata.swift */,
 				3ACBADF81B5ADE2A00204457 /* XcodeDeviceParser.swift */,
 				3ACBADF91B5ADE2A00204457 /* XcodeProject.swift */,
 				3ACBADFA1B5ADE2A00204457 /* XcodeProjectParser.swift */,
@@ -1203,6 +1209,7 @@
 				3ACBAE081B5ADE2A00204457 /* SyncerBotUtils.swift in Sources */,
 				3ACBADFD1B5ADE2A00204457 /* CommonExtensions.swift in Sources */,
 				3ACBAE131B5ADE2A00204457 /* SyncPairResolver.swift in Sources */,
+				3A4C15A01BBB2DD0007FA970 /* WorkspaceMetadata.swift in Sources */,
 				3ACBAE0A1B5ADE2A00204457 /* SyncPair_Branch_Bot.swift in Sources */,
 				3ACBADFE1B5ADE2A00204457 /* HDGitHubXCBotSyncer.swift in Sources */,
 				3ACBAE071B5ADE2A00204457 /* SyncerBotNaming.swift in Sources */,
@@ -1220,6 +1227,7 @@
 				3ACBAE121B5ADE2A00204457 /* SyncPairPRResolver.swift in Sources */,
 				3ACBAE151B5ADE2A00204457 /* XcodeProject.swift in Sources */,
 				3ACBAE161B5ADE2A00204457 /* XcodeProjectParser.swift in Sources */,
+				3A4C159F1BBB2DD0007FA970 /* SourceControlFileParser.swift in Sources */,
 				3ACBAE091B5ADE2A00204457 /* SyncerGitHubUtils.swift in Sources */,
 				3ACBAE001B5ADE2A00204457 /* Persistence.swift in Sources */,
 				3ACBAE0B1B5ADE2A00204457 /* SyncPair_Branch_NoBot.swift in Sources */,
