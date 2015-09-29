@@ -38,7 +38,6 @@ lane :release do
   gym(
     scheme: 'Buildasaur',
     output_name: file_name,
-    export_method: 'developer-id',
     output_directory: './build'
     )
   github(
