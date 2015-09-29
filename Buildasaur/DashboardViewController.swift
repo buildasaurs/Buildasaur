@@ -39,11 +39,41 @@ class DashboardViewController: NSViewController {
     }
     
     func configHeaderView() {
+        
         let syncerViewModelsProducer = self.syncerViewModels.producer
-        let startAllEnabled = syncerViewModelsProducer.map { models in
+        
+        let activeProducers = syncerViewModelsProducer.map { syncerViewModels in
+            return syncerViewModels.map { $0.syncer.activeSignalProducer.producer }
+            }
+        let flatProducers = activeProducers.map { (producers: [SignalProducer<Bool, NoError>]) in
+            return SignalProducer<SignalProducer<Bool, NoError>, NoError> {
+                sink, _ in
+                producers.forEach { sendNext(sink, $0) }
+                sendCompleted(sink)
+            }
+        }.flatten(.Merge)
+        let flatterProducers = flatProducers.flatten(.Merge).map { _ in () }
+        let initial = SignalProducer<Void, NoError>(value: ())
+        
+        let merged = SignalProducer<SignalProducer<Void, NoError>, NoError> {
+            sink, _ in
+            sendNext(sink, flatterProducers)
+            sendNext(sink, initial)
+            sendCompleted(sink)
+        }.flatten(.Merge).on(next: {
+                print("")
+        })
+        
+        
+        //NOT CLEAR why we don't get the initial call so that the state would be correct from the beginnign
+        let syncerViewModelsOnAnyActiveChange = syncerViewModelsProducer.sampleOn(merged).on(next: { _ in
+            print("")
+        })
+        
+        let startAllEnabled = syncerViewModelsOnAnyActiveChange.map { models in
             return models.filter { !$0.syncer.active }.count > 0
         }.map(fix)
-        let stopAllEnabled = syncerViewModelsProducer.map { models in
+        let stopAllEnabled = syncerViewModelsOnAnyActiveChange.map { models in
             return models.filter { $0.syncer.active }.count > 0
         }.map(fix)
         
@@ -83,6 +113,10 @@ class DashboardViewController: NSViewController {
         self.syncerViewModels.value.forEach { $0.stopButtonClicked() }
     }
     
+    @IBAction func newSyncerButtonClicked(sender: AnyObject) {
+        //TODO: configure an editing window with a brand new syncer
+    }
+    
     @IBAction func editButtonClicked(sender: BuildaNSButton) {
         self.syncerViewModelFromSender(sender).editButtonClicked()
     }
@@ -97,14 +131,6 @@ extension DashboardViewController: NSTableViewDataSource {
     func numberOfRowsInTableView(tableView: NSTableView) -> Int {
         return self.syncerViewModels.value.count
     }
-    
-//    func tableView(tableView: NSTableView, objectValueForTableColumn tableColumn: NSTableColumn?, row: Int) -> AnyObject? {
-//        
-//        let syncerViewModel = self.syncerViewModels[row]
-//        guard let columnIdentifier = tableColumn?.identifier else { return nil }
-//        let object = syncerViewModel.objectForColumnIdentifier(columnIdentifier)
-//        return object
-//    }
     
     enum Column: String {
         case Status = "status"
@@ -145,6 +171,23 @@ extension DashboardViewController: NSTableViewDataSource {
         }
     }
     
+    func getButtonView(tableView: NSTableView, column: Column) -> BuildaNSButton {
+        
+        let identifier: String
+        switch column {
+        case .Control:
+            identifier = "controlButtonView"
+        case .Edit:
+            identifier = "editButtonView"
+        default: fatalError("Unrecognized column")
+        }
+        
+        guard let view = tableView.makeViewWithIdentifier(identifier, owner: self) as? BuildaNSButton else {
+            fatalError("Couldn't get a button")
+        }
+        return view
+    }
+    
     func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
         
         guard let columnIdentifier = tableColumn?.identifier else { return nil }
@@ -162,8 +205,7 @@ extension DashboardViewController: NSTableViewDataSource {
             
         case .Control, .Edit:
             //push button
-            let identifier = "buttonView"
-            guard let view = tableView.makeViewWithIdentifier(identifier, owner: self) as? BuildaNSButton else { return nil }
+            let view = self.getButtonView(tableView, column: column)
             self.bindButtonView(view, column: column, viewModel: syncerViewModel)
             view.row = row
             return view
