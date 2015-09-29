@@ -4,12 +4,10 @@
 
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "A36AEFA3F9FF1F738E92F0C497C14977DCE02B97" : 0,
     "1C5C2A17EEADA6DBF6678501245487A71FBE28BB" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "69B0DA2F-5930-4961-9871-EF4103C70CA9",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "A36AEFA3F9FF1F738E92F0C497C14977DCE02B97" : "Buildasaur-XcodeServerSDK",
     "1C5C2A17EEADA6DBF6678501245487A71FBE28BB" : "Buildasaur"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "Buildasaur",
@@ -20,11 +18,6 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:czechboy0\/Buildasaur.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "1C5C2A17EEADA6DBF6678501245487A71FBE28BB"
-    },
-    {
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:czechboy0\/XcodeServerSDK.git",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "A36AEFA3F9FF1F738E92F0C497C14977DCE02B97"
     }
   ]
 }

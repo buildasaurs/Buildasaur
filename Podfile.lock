@@ -17,4 +17,4 @@ SPEC CHECKSUMS:
   ekgclient: 40f5d347e2ede450b3e50ac7c6bd84d96e7b84ad
   XcodeServerSDK: 177cebc86a5b78e7309bcb1a9b3fae045a4eda6a
 
-COCOAPODS: 0.38.2
+COCOAPODS: 0.39.0.beta.3
