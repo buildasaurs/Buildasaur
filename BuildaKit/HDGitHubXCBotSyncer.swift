@@ -214,9 +214,9 @@ public class HDGitHubXCBotSyncer : Syncer {
     
     public func syncPRsAndBranchesAndBots(repo repo: Repo, repoName: String, prs: [PullRequest], branches: [Branch], bots: [Bot], completion: () -> ()) {
         
-        let prsDescription = prs.map({ "\n\tPR \($0.number): \($0.title) [\($0.head.ref) -> \($0.base.ref)]" }) + ["\n"]
-        let branchesDescription = branches.map({ "\n\tBranch [\($0.name):\($0.commit.sha)]" }) + ["\n"]
-        let botsDescription = bots.map({ "\n\tBot \($0.name)" }) + ["\n"]
+        let prsDescription = prs.map({ "    PR \($0.number): \($0.title) [\($0.head.ref) -> \($0.base.ref)]" }).joinWithSeparator("\n")
+        let branchesDescription = branches.map({ "    Branch [\($0.name):\($0.commit.sha)]" }).joinWithSeparator("\n")
+        let botsDescription = bots.map({ "    Bot \($0.name)" }).joinWithSeparator("\n")
         Log.verbose("Resolving prs:\n\(prsDescription) \nand branches:\n\(branchesDescription)\nand bots:\n\(botsDescription)")
         
         //create the changes necessary
