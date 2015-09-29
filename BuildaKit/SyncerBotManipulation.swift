@@ -60,16 +60,17 @@ extension HDGitHubXCBotSyncer {
         
         //to handle forks
         let headOriginUrl = repo.repoUrlSSH
-        let localProjectOriginUrl = self.project.projectURL!.absoluteString
+        let localProjectOriginUrl = self.project.workspaceMetadata!.projectURL.absoluteString
         
         let project: Project
         if headOriginUrl != localProjectOriginUrl {
             
             //we have a fork, duplicate the metadata with the fork's origin
-            if let source = self.project.duplicateForForkAtOriginURL(headOriginUrl) {
+            do {
+                let source = try self.project.duplicateForForkAtOriginURL(headOriginUrl)
                 project = source
-            } else {
-                self.notifyError(Error.withInfo("Couldn't create a Project for fork with origin at url \(headOriginUrl)"), context: "Creating a bot from a PR")
+            } catch {
+                self.notifyError(Error.withInfo("Couldn't create a Project for fork with origin at url \(headOriginUrl), error \(error)"), context: "Creating a bot from a PR")
                 completion()
                 return
             }

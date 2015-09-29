@@ -63,7 +63,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
                 let projectName = template.projectName,
                 let project = self.project()
             {
-                return projectName == project.projectName ?? ""
+                return projectName == project.workspaceMetadata?.projectName ?? ""
             } else {
                 //if it doesn't yet have a project name associated, assume we have to show it
                 return true
@@ -91,8 +91,8 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
             self.sshPassphraseTextField.stringValue = project.sshPassphrase ?? ""
             
             //fill data in
-            self.projectNameLabel.stringValue = project.projectName ?? "<NO NAME>"
-            self.projectURLLabel.stringValue = project.projectURL?.absoluteString ?? "<NO URL>"
+            self.projectNameLabel.stringValue = project.workspaceMetadata?.projectName ?? "<NO NAME>"
+            self.projectURLLabel.stringValue = project.workspaceMetadata?.projectURL.absoluteString ?? "<NO URL>"
             self.projectPathLabel.stringValue = project.url.path ?? "<NO PATH>"
             
             if let githubToken = project.githubToken {
@@ -189,7 +189,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
                 buildTemplate = self.buildTemplates().filter({ $0.name == templatePulled }).first
             }
             if buildTemplate == nil {
-                buildTemplate = BuildTemplate(projectName: self.project()!.projectName!)
+                buildTemplate = BuildTemplate(projectName: self.project()!.workspaceMetadata!.projectName)
             }
             
             self.delegate.showBuildTemplateViewControllerForTemplate(buildTemplate, project: self.project()!, sender: self)

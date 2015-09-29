@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A2024AB1BBAF60A0093807F /* SourceControlFileParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2024AA1BBAF60A0093807F /* SourceControlFileParser.swift */; settings = {ASSET_TAGS = (); }; };
+		3A2024AD1BBAF64B0093807F /* WorkspaceMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2024AC1BBAF64B0093807F /* WorkspaceMetadata.swift */; settings = {ASSET_TAGS = (); }; };
 		3A3231B11B5AEF7900B53E3F /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3231B01B5AEF7900B53E3F /* Logging.swift */; };
 		3A32CD141A3D00F800861A34 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A32CD131A3D00F800861A34 /* Comment.swift */; };
 		3A32CD181A3D01E300861A34 /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A32CD171A3D01E300861A34 /* Issue.swift */; };
@@ -177,6 +179,8 @@
 		1F8594F1047EB3CC3762E83A /* Pods-BuildaKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaKit/Pods-BuildaKit.release.xcconfig"; sourceTree = "<group>"; };
 		2705613A9D9BA7B4398ED478 /* Pods_Buildasaur.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Buildasaur.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		30857BA7B7416223483A4226 /* Pods-BuildaKitTests.testing.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaKitTests.testing.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaKitTests/Pods-BuildaKitTests.testing.xcconfig"; sourceTree = "<group>"; };
+		3A2024AA1BBAF60A0093807F /* SourceControlFileParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SourceControlFileParser.swift; sourceTree = "<group>"; };
+		3A2024AC1BBAF64B0093807F /* WorkspaceMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceMetadata.swift; sourceTree = "<group>"; };
 		3A3231B01B5AEF7900B53E3F /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		3A32CD131A3D00F800861A34 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		3A32CD171A3D01E300861A34 /* Issue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Issue.swift; sourceTree = "<group>"; };
@@ -467,6 +471,8 @@
 				3ACBADF91B5ADE2A00204457 /* XcodeProject.swift */,
 				3ACBADFA1B5ADE2A00204457 /* XcodeProjectParser.swift */,
 				3ACBADFB1B5ADE2A00204457 /* XcodeServerSyncerUtils.swift */,
+				3A2024AA1BBAF60A0093807F /* SourceControlFileParser.swift */,
+				3A2024AC1BBAF64B0093807F /* WorkspaceMetadata.swift */,
 			);
 			path = BuildaKit;
 			sourceTree = "<group>";
@@ -1123,6 +1129,7 @@
 				3ACBAE081B5ADE2A00204457 /* SyncerBotUtils.swift in Sources */,
 				3ACBADFD1B5ADE2A00204457 /* CommonExtensions.swift in Sources */,
 				3ACBAE131B5ADE2A00204457 /* SyncPairResolver.swift in Sources */,
+				3A2024AD1BBAF64B0093807F /* WorkspaceMetadata.swift in Sources */,
 				3ACBAE0A1B5ADE2A00204457 /* SyncPair_Branch_Bot.swift in Sources */,
 				3ACBADFE1B5ADE2A00204457 /* HDGitHubXCBotSyncer.swift in Sources */,
 				3ACBAE071B5ADE2A00204457 /* SyncerBotNaming.swift in Sources */,
@@ -1140,6 +1147,7 @@
 				3ACBAE121B5ADE2A00204457 /* SyncPairPRResolver.swift in Sources */,
 				3ACBAE151B5ADE2A00204457 /* XcodeProject.swift in Sources */,
 				3ACBAE161B5ADE2A00204457 /* XcodeProjectParser.swift in Sources */,
+				3A2024AB1BBAF60A0093807F /* SourceControlFileParser.swift in Sources */,
 				3ACBAE091B5ADE2A00204457 /* SyncerGitHubUtils.swift in Sources */,
 				3ACBAE001B5ADE2A00204457 /* Persistence.swift in Sources */,
 				3ACBAE0B1B5ADE2A00204457 /* SyncPair_Branch_NoBot.swift in Sources */,

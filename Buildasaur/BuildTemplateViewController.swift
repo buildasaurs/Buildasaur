@@ -80,7 +80,7 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
         
         let temp = self.buildTemplate
 
-        let projectName = self.project.projectName
+        let projectName = self.project.workspaceMetadata!.projectName
         self.buildTemplate.projectName = projectName
 
         //name
