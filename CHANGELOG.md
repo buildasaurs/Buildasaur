@@ -1,12 +1,29 @@
 # Change Log
 
-## [Unreleased](https://github.com/czechboy0/Buildasaur/tree/HEAD)
+## [v0.5.0](https://github.com/czechboy0/Buildasaur/tree/v0.5.0) (2015-09-29)
+[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.4.0...v0.5.0)
 
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.4.0...HEAD)
+**Fixed bugs:**
+
+- Bots Initial Integrations Are Not Triggered [\#129](https://github.com/czechboy0/Buildasaur/issues/129)
+- Can't setup using a project that was checked out via SSH [\#127](https://github.com/czechboy0/Buildasaur/issues/127)
 
 **Closed issues:**
 
+- Change the lttm barrier default from enabled to disabled [\#130](https://github.com/czechboy0/Buildasaur/issues/130)
+- Analyzer Warnings are Not considered Errors [\#128](https://github.com/czechboy0/Buildasaur/issues/128)
 - Alamofire issue when creating a .app \(crashes on startup\) [\#126](https://github.com/czechboy0/Buildasaur/issues/126)
+- Improve logs [\#121](https://github.com/czechboy0/Buildasaur/issues/121)
+- Investigate simplifying networking code with Alamofire [\#120](https://github.com/czechboy0/Buildasaur/issues/120)
+- Give more detailed test result comments [\#87](https://github.com/czechboy0/Buildasaur/issues/87)
+- Handle timing-out Simulator/Devices [\#84](https://github.com/czechboy0/Buildasaur/issues/84)
+- Hook into the websocket published by xcs to update GitHub status better [\#7](https://github.com/czechboy0/Buildasaur/issues/7)
+
+**Merged pull requests:**
+
+- Refactored loading of checkout file, added support for xcscmblueprint file [\#141](https://github.com/czechboy0/Buildasaur/pull/141) ([czechboy0](https://github.com/czechboy0))
+- Disable App Transport Security to connect to self-signed XCS [\#134](https://github.com/czechboy0/Buildasaur/pull/134) ([Brett-Best](https://github.com/Brett-Best))
+- lttm barrier default changed to disabled [\#131](https://github.com/czechboy0/Buildasaur/pull/131) ([czechboy0](https://github.com/czechboy0))
 
 ## [v0.4.0](https://github.com/czechboy0/Buildasaur/tree/v0.4.0) (2015-09-17)
 [Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3.1...v0.4.0)
