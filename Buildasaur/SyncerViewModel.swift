@@ -22,8 +22,16 @@ struct SyncerViewModel {
     let editButtonEnabled: SignalProducer<Bool, NoError>
     let controlButtonTitle: SignalProducer<String, NoError>
     
-    init(syncer: HDGitHubXCBotSyncer) {
+    //for creating presentable VCs, not sure it should live here though.
+    typealias PresentViewControllerType = (viewController: PresentableViewController) -> ()
+    let presentViewController: PresentViewControllerType
+    typealias CreateViewControllerType = (storyboardIdentifier: String, uniqueIdentifier: String) -> MainViewController
+    let createViewController: CreateViewControllerType
+    
+    init(syncer: HDGitHubXCBotSyncer, presentViewController: PresentViewControllerType, createViewController: CreateViewControllerType) {
         self.syncer = syncer
+        self.presentViewController = presentViewController
+        self.createViewController = createViewController
         
         let active = syncer.activeSignalProducer.producer
         
@@ -40,6 +48,14 @@ struct SyncerViewModel {
     }
     
     func editButtonClicked() {
+        
+        //present the edit window
+        let syncerEditViewController: MainViewController = self.createViewController(storyboardIdentifier: "mainViewController", uniqueIdentifier: "Syncer_\(syncer.hash)")
+        //        syncerEditViewController.syncer = self.syncer
+        self.presentViewController(viewController: syncerEditViewController)
+    }
+    
+    func showDetailButtonClicked(startEditing: Bool) {
         
     }
     

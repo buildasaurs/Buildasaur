@@ -12,7 +12,7 @@ import BuildaKit
 //server trust - must be logged in in the browser first or have a server trust certificate.
 //otherwise fails.
 
-class MainViewController: NSViewController, NSTableViewDataSource, StatusSiblingsViewControllerDelegate {
+class MainViewController: PresentableViewController, NSTableViewDataSource, StatusSiblingsViewControllerDelegate {
     
     let storageManager: StorageManager
     

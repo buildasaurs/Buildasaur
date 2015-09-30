@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8191"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -645,30 +645,12 @@
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Buildasaur" customModuleProvider="target"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-485" y="-26"/>
-        </scene>
-        <!--Window Controller-->
-        <scene sceneID="R2V-B0-nI4">
-            <objects>
-                <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
-                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="196" y="240" width="480" height="270"/>
-                        <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
-                    </window>
-                    <connections>
-                        <segue destination="fGl-D9-6Tw" kind="relationship" relationship="window.shadowedContentViewController" id="YTY-l2-IRg"/>
-                    </connections>
-                </windowController>
-                <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-743" y="224"/>
+            <point key="canvasLocation" x="-409" y="394"/>
         </scene>
         <!--Dashboard View Controller-->
         <scene sceneID="kgb-eM-qYt">
             <objects>
-                <viewController id="fGl-D9-6Tw" customClass="DashboardViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="dashboardViewController" id="fGl-D9-6Tw" customClass="DashboardViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="B7s-MS-Jnq">
                         <rect key="frame" x="0.0" y="0.0" width="640" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -882,18 +864,11 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f7Q-ra-uiy">
-                                <rect key="frame" x="537" y="248" width="89" height="32"/>
-                                <buttonCell key="cell" type="push" title="Stop All" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fin-Vj-0Os">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="stopAllButtonClicked:" target="fGl-D9-6Tw" id="pHR-m2-BVt"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oQI-eo-8zz">
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oQI-eo-8zz">
                                 <rect key="frame" x="448" y="248" width="89" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="77" id="6A5-PT-zZb"/>
+                                </constraints>
                                 <buttonCell key="cell" type="push" title="Start All" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="d5f-ow-2G6">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -902,8 +877,11 @@
                                     <action selector="startAllButtonClicked:" target="fGl-D9-6Tw" id="75u-gC-5hy"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="E55-J5-dz5">
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="E55-J5-dz5">
                                 <rect key="frame" x="333" y="248" width="115" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="103" id="8g1-rS-Nen"/>
+                                </constraints>
                                 <buttonCell key="cell" type="push" title="New Syncer" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UUf-rc-14o">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -912,11 +890,33 @@
                                     <action selector="newSyncerButtonClicked:" target="fGl-D9-6Tw" id="WWZ-pK-4dT"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="f7Q-ra-uiy">
+                                <rect key="frame" x="537" y="248" width="89" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="77" id="bQU-rX-9Zu"/>
+                                    <constraint firstAttribute="height" constant="21" id="zvj-lh-RjQ"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="Stop All" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fin-Vj-0Os">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="stopAllButtonClicked:" target="fGl-D9-6Tw" id="pHR-m2-BVt"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="E55-J5-dz5" firstAttribute="bottom" secondItem="oQI-eo-8zz" secondAttribute="bottom" id="3b6-1L-xt6"/>
                             <constraint firstAttribute="trailing" secondItem="wph-xW-ouc" secondAttribute="trailing" id="5q7-eJ-LKk"/>
+                            <constraint firstItem="E55-J5-dz5" firstAttribute="top" secondItem="oQI-eo-8zz" secondAttribute="top" id="ELN-y8-M7T"/>
+                            <constraint firstItem="f7Q-ra-uiy" firstAttribute="top" secondItem="B7s-MS-Jnq" secondAttribute="top" constant="24" id="Gn4-f5-Yxc"/>
                             <constraint firstItem="wph-xW-ouc" firstAttribute="top" secondItem="B7s-MS-Jnq" secondAttribute="top" constant="65" id="XLd-Jf-psf"/>
                             <constraint firstItem="wph-xW-ouc" firstAttribute="leading" secondItem="B7s-MS-Jnq" secondAttribute="leading" id="dB3-9p-ifh"/>
+                            <constraint firstItem="f7Q-ra-uiy" firstAttribute="bottom" secondItem="oQI-eo-8zz" secondAttribute="bottom" id="fCB-yZ-1HS"/>
+                            <constraint firstAttribute="trailing" secondItem="f7Q-ra-uiy" secondAttribute="trailing" constant="20" id="fmP-i6-BF7"/>
+                            <constraint firstItem="f7Q-ra-uiy" firstAttribute="top" secondItem="oQI-eo-8zz" secondAttribute="top" id="n0V-pm-eup"/>
+                            <constraint firstItem="f7Q-ra-uiy" firstAttribute="leading" secondItem="oQI-eo-8zz" secondAttribute="trailing" constant="12" id="r9L-je-9ey"/>
+                            <constraint firstItem="oQI-eo-8zz" firstAttribute="leading" secondItem="E55-J5-dz5" secondAttribute="trailing" constant="12" id="x7B-l6-0Io"/>
                             <constraint firstAttribute="bottom" secondItem="wph-xW-ouc" secondAttribute="bottom" id="xe6-q0-TJh"/>
                         </constraints>
                     </view>
@@ -928,30 +928,12 @@
                 </viewController>
                 <customObject id="aow-GT-AuN" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-752.5" y="675"/>
-        </scene>
-        <!--Window Controller-->
-        <scene sceneID="0cm-d9-LnT">
-            <objects>
-                <windowController storyboardIdentifier="editSyncerWindow" id="S2p-ec-aoQ" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="xAZ-on-J4F">
-                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="163" y="208" width="480" height="270"/>
-                        <rect key="screenRect" x="0.0" y="0.0" width="1280" height="800"/>
-                    </window>
-                    <connections>
-                        <segue destination="XfG-lQ-9wD" kind="relationship" relationship="window.shadowedContentViewController" id="bi5-QQ-2a9"/>
-                    </connections>
-                </windowController>
-                <customObject id="paQ-2Y-jPC" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="19" y="232"/>
+            <point key="canvasLocation" x="-760" y="683"/>
         </scene>
         <!--Buildasaur-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController title="Buildasaur" id="XfG-lQ-9wD" customClass="MainViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Buildasaur" storyboardIdentifier="mainViewController" id="XfG-lQ-9wD" customClass="MainViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
                         <rect key="frame" x="0.0" y="0.0" width="658" height="512"/>
                         <autoresizingMask key="autoresizingMask"/>

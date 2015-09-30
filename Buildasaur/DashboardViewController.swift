@@ -15,14 +15,14 @@ func fix<T>(item: T) -> AnyObject? {
     return item as? AnyObject
 }
 
-class DashboardViewController: NSViewController {
+class DashboardViewController: PresentableViewController {
 
     @IBOutlet weak var syncersTableView: NSTableView!
     @IBOutlet weak var startAllButton: NSButton!
     @IBOutlet weak var stopAllButton: NSButton!
     
-    //TODO: figure out a way to inject this instead
-    let storageManager: StorageManager = StorageManager.sharedInstance
+    //injected before viewDidLoad
+    var storageManager: StorageManager!
     
     private var syncerViewModels: MutableProperty<[SyncerViewModel]> = MutableProperty([])
     
@@ -61,9 +61,8 @@ class DashboardViewController: NSViewController {
             sendNext(sink, initial)
             sendCompleted(sink)
         }.flatten(.Merge).on(next: {
-                print("")
+            print("")
         })
-        
         
         //NOT CLEAR why we don't get the initial call so that the state would be correct from the beginnign
         let syncerViewModelsOnAnyActiveChange = syncerViewModelsProducer.sampleOn(merged).on(next: { _ in
@@ -91,8 +90,16 @@ class DashboardViewController: NSViewController {
     
     func configDataSource() {
         
+        let present: SyncerViewModel.PresentViewControllerType = {
+            self.presentingDelegate?.presentViewControllerInUniqueWindow($0)
+        }
+        let create: SyncerViewModel.CreateViewControllerType = {
+            self.storyboardLoader.viewControllerWithStoryboardIdentifier($0, uniqueIdentifier: $1)
+        }
         self.storageManager.syncers.producer.startWithNext { newSyncers in
-            self.syncerViewModels.value = newSyncers.map { SyncerViewModel(syncer: $0) }
+            self.syncerViewModels.value = newSyncers.map {
+                SyncerViewModel(syncer: $0, presentViewController: present, createViewController: create)
+            }
             self.syncersTableView.reloadData()
         }
     }
