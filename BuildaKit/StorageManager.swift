@@ -55,10 +55,10 @@ public class StorageManager {
         }
     }
     
-    public func addServerConfig(host host: String, user: String?, password: String?) {
+    public func addServerConfig(host host: String, user: String?, password: String?) -> XcodeServerConfig {
         let config = try! XcodeServerConfig(host: host, user: user, password: password)
-        //unique by host!
         self.servers.value[host] = config
+        return config
     }
     
     public func addSyncer(syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool,
