@@ -24,7 +24,8 @@ class StoryboardLoader {
         self.storyboard = storyboard
     }
     
-    func viewControllerWithStoryboardIdentifier<T: PresentableViewController>(storyboardIdentifier: String, uniqueIdentifier: String) -> T {
+    //for presentable view controllers
+    func presentableViewControllerWithStoryboardIdentifier<T: PresentableViewController>(storyboardIdentifier: String, uniqueIdentifier: String) -> T {
         
         //look at our existing view controllers
         if let found = self.delegate?.storyboardLoaderExistingViewControllerWithIdentifier(uniqueIdentifier) {
@@ -41,6 +42,14 @@ class StoryboardLoader {
         viewController.uniqueIdentifier = uniqueIdentifier
         viewController.storyboardLoader = self
         return viewController as! T
+    }
+    
+    //for all other view controllers
+    func viewControllerWithStoryboardIdentifier(storyboardIdentifier: String) -> NSViewController {
+        guard let viewController = self.storyboard.instantiateControllerWithIdentifier(storyboardIdentifier) as? NSViewController else {
+            fatalError("Failed to instantiate View Controller with identifier \(storyboardIdentifier)")
+        }
+        return viewController
     }
     
 }

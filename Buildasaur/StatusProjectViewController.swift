@@ -16,10 +16,7 @@ let kBuildTemplateAddNewString = "Create New..."
 class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, SetupViewControllerDelegate {
     
     var project: Project!
-    
-    //no project yet
-    @IBOutlet weak var addProjectButton: NSButton!
-    
+
     //we have a project
     @IBOutlet weak var statusContentView: NSView!
     @IBOutlet weak var projectNameLabel: NSTextField!
@@ -75,7 +72,6 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         if let project = self.project {
             
             self.statusContentView.hidden = false
-            self.addProjectButton.hidden = true
             
             self.buildTemplateComboBox.enabled = self.editing
             self.deleteButton.hidden = !self.editing
@@ -113,7 +109,6 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
             
         } else {
             self.statusContentView.hidden = true
-            self.addProjectButton.hidden = false
             self.tokenTextField.stringValue = ""
             self.buildTemplateComboBox.removeAllItems()
         }
@@ -149,30 +144,6 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
 
         } else {
             statusChangedPersist(status: .Unchecked, done: true)
-        }
-    }
-        
-    @IBAction func addProjectButtonTapped(sender: AnyObject) {
-        
-        if let url = StorageUtils.openWorkspaceOrProject() {
-            
-            do {
-                
-                try self.storageManager.addProjectAtURL(url)
-                //we have just added a local source, good stuff!
-                //check if we have everything, if so, enable the "start syncing" button
-                self.editing = true
-                
-            } catch {
-                //local source is malformed, something terrible must have happened, inform the user this can't be used (log should tell why exactly)
-                UIUtils.showAlertWithText("Couldn't add Xcode project at path \(url.absoluteString), error: \((error as NSError).localizedDescription).", style: NSAlertStyle.CriticalAlertStyle, completion: { (resp) -> () in
-                    //
-                })
-            }
-            
-            self.reloadStatus()
-        } else {
-            //user cancelled
         }
     }
     

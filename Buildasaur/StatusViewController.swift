@@ -19,9 +19,12 @@ protocol StatusSiblingsViewControllerDelegate: class {
     func showBuildTemplateViewControllerForTemplate(template: BuildTemplate?, project: Project, sender: SetupViewControllerDelegate?)
 }
 
-class StatusViewController: NSViewController {
-    
+class StorableViewController: NSViewController {
     var storageManager: StorageManager!
+}
+
+class StatusViewController: StorableViewController {
+    
     weak var delegate: StatusSiblingsViewControllerDelegate!
 
     @IBOutlet weak var editButton: NSButton!

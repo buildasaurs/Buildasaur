@@ -47,7 +47,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func createInitialViewController() -> DashboardViewController {
         
         let dashboard: DashboardViewController = self.storyboardLoader
-            .viewControllerWithStoryboardIdentifier("dashboardViewController", uniqueIdentifier: "dashboard")
+            .presentableViewControllerWithStoryboardIdentifier("dashboardViewController", uniqueIdentifier: "dashboard")
         dashboard.storageManager = storageManager
         return dashboard
     }

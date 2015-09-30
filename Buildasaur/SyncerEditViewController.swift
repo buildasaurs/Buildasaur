@@ -9,16 +9,27 @@
 import Cocoa
 import BuildaKit
 
-class SyncerEditViewController: PresentableViewController, NSTableViewDataSource, StatusSiblingsViewControllerDelegate {
+class SyncerEditViewController: PresentableViewController {
     
     var syncer: HDGitHubXCBotSyncer!
     var storageManager: StorageManager! //TODO: this should be removed for a less capable, read-only version
     
-    var projectStatusViewController: StatusProjectViewController!
-    var serverStatusViewController: StatusServerViewController!
-    var syncerStatusViewController: StatusSyncerViewController!
+    weak var projectStatusViewController: StatusProjectViewController?
+    weak var projectStatusEmptyViewController: StatusProjectEmptyViewController?
+    
+    var serverStatusViewController: StatusServerViewController?
+    var syncerStatusViewController: StatusSyncerViewController?
     
     private var buildTemplateParams: (buildTemplate: BuildTemplate?, project: Project)?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        //TODO: move to a better place
+        if self.syncer != nil && self.syncer.project != nil {
+            self.swapInFullProjectViewController(self.syncer.project)
+        }
+    }
     
     override func viewWillAppear() {
         super.viewWillAppear()
@@ -34,23 +45,31 @@ class SyncerEditViewController: PresentableViewController, NSTableViewDataSource
         
         let destinationController = segue.destinationController as! NSViewController
         
-        if let statusViewController = destinationController as? StatusViewController {
-            statusViewController.storageManager = self.storageManager
-            statusViewController.delegate = self
-            
-            if let serverStatusViewController = statusViewController as? StatusServerViewController {
-                self.serverStatusViewController = serverStatusViewController
-                serverStatusViewController.serverConfig = self.syncer.xcodeServer.config
+        if let storableViewController = destinationController as? StorableViewController {
+            storableViewController.storageManager = self.storageManager
+
+            if let projectStatusEmptyViewController = storableViewController as? StatusProjectEmptyViewController {
+                self.projectStatusEmptyViewController = projectStatusEmptyViewController
+                projectStatusEmptyViewController.emptyProjectDelegate = self
             }
             
-            if let projectStatusViewController = statusViewController as? StatusProjectViewController {
-                self.projectStatusViewController = projectStatusViewController
-                projectStatusViewController.project = self.syncer.project
-            }
-            
-            if let syncerStatusViewController = statusViewController as? StatusSyncerViewController {
-                self.syncerStatusViewController = syncerStatusViewController
-                syncerStatusViewController.syncer = self.syncer
+            if let statusViewController = storableViewController as? StatusViewController {
+                statusViewController.delegate = self
+                
+                if let serverStatusViewController = statusViewController as? StatusServerViewController {
+                    self.serverStatusViewController = serverStatusViewController
+                    serverStatusViewController.serverConfig = self.syncer.xcodeServer.config
+                }
+                
+                if let projectStatusViewController = statusViewController as? StatusProjectViewController {
+                    self.projectStatusViewController = projectStatusViewController
+                    projectStatusViewController.project = self.syncer.project
+                }
+                
+                if let syncerStatusViewController = statusViewController as? StatusSyncerViewController {
+                    self.syncerStatusViewController = syncerStatusViewController
+                    syncerStatusViewController.syncer = self.syncer
+                }
             }
         }
         
@@ -65,22 +84,6 @@ class SyncerEditViewController: PresentableViewController, NSTableViewDataSource
         }
         
         super.prepareForSegue(segue, sender: sender)
-    }
-    
-    func getProjectStatusViewController() -> StatusProjectViewController {
-        return self.projectStatusViewController
-    }
-    
-    func getServerStatusViewController() -> StatusServerViewController {
-        return self.serverStatusViewController
-    }
-    
-    func showBuildTemplateViewControllerForTemplate(template: BuildTemplate?, project: Project, sender: SetupViewControllerDelegate?) {
-
-        self.buildTemplateParams = (buildTemplate: template, project: project)
-        self.performSegueWithIdentifier("showBuildTemplate", sender: sender)
-        
-        //TODO: read about unwind: http://stackoverflow.com/questions/9732499/how-to-dismiss-a-modal-that-was-presented-in-a-uistoryboard-with-a-modal-segue
     }
     
     func open() {
@@ -106,8 +109,51 @@ class SyncerEditViewController: PresentableViewController, NSTableViewDataSource
         menu.addItemWithTitle("Quit Buildasaur", action: "terminate:", keyEquivalent: "")
         self.statusItem.menu = menu
     }
-
 }
 
+extension SyncerEditViewController: StatusProjectEmptyViewControllerDelegate {
+    
+    func addedProject(project: Project) {
+        //cool, let's take the project and create a proper project status vc and replace the empty with it
+        self.swapInFullProjectViewController(project)
+    }
+    
+    private func swapInFullProjectViewController(project: Project) {
+        //TODO: call after checking whether we have a project in the first place
+        
+        //create full view controller
+        let projectViewController = self.storyboardLoader
+            .viewControllerWithStoryboardIdentifier("projectViewController") as! StatusProjectViewController
+        
+        projectViewController.storageManager = self.storageManager
+        projectViewController.delegate = self
+        projectViewController.project = self.syncer.project
+        self.projectStatusViewController = projectViewController
+        
+        self.addChildViewController(projectViewController)
+        let from = self.projectStatusEmptyViewController!
+        let to = projectViewController
+        self.transitionFromViewController(from, toViewController: to, options: NSViewControllerTransitionOptions.None, completionHandler: nil)
+    }
+}
+
+extension SyncerEditViewController: StatusSiblingsViewControllerDelegate {
+    
+    func getProjectStatusViewController() -> StatusProjectViewController {
+        return self.projectStatusViewController!
+    }
+    
+    func getServerStatusViewController() -> StatusServerViewController {
+        return self.serverStatusViewController!
+    }
+    
+    func showBuildTemplateViewControllerForTemplate(template: BuildTemplate?, project: Project, sender: SetupViewControllerDelegate?) {
+        
+        self.buildTemplateParams = (buildTemplate: template, project: project)
+        self.performSegueWithIdentifier("showBuildTemplate", sender: sender)
+        
+        //TODO: read about unwind: http://stackoverflow.com/questions/9732499/how-to-dismiss-a-modal-that-was-presented-in-a-uistoryboard-with-a-modal-segue
+    }
+}
 
 

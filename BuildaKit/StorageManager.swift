@@ -45,14 +45,14 @@ public class StorageManager {
         }
     }
     
-    public func addProjectAtURL(url: NSURL) throws {
+    public func addProjectAtURL(url: NSURL) throws -> Project {
         
         _ = try Project.attemptToParseFromUrl(url)
         if let project = Project(url: url) {
             self.projects.value[project.urlString] = project
-        } else {
-            assertionFailure("Attempt to parse succeeded but Project still wasn't created")
+            return project
         }
+        throw Error.withInfo("Attempt to parse succeeded but Project still wasn't created")
     }
     
     public func addServerConfig(host host: String, user: String?, password: String?) -> XcodeServerConfig {

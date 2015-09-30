@@ -953,7 +953,7 @@
                                     <constraint firstAttribute="width" secondItem="ilD-N8-ou7" secondAttribute="height" multiplier="1:1" id="VsU-hH-W2M"/>
                                 </constraints>
                                 <connections>
-                                    <segue destination="A7n-Q1-s2v" kind="embed" identifier="embedProjectView" id="FAH-hU-XZ3"/>
+                                    <segue destination="iwK-na-O2D" kind="embed" identifier="embedEmptyProjectViewController" id="L8m-v4-tJV"/>
                                 </connections>
                             </containerView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="vYq-Em-Glf" userLabel="Separator 1" customClass="SeparatorView" customModule="Buildasaur" customModuleProvider="target">
@@ -1176,28 +1176,52 @@
             </objects>
             <point key="canvasLocation" x="673" y="1206"/>
         </scene>
-        <!--Project-->
-        <scene sceneID="cgs-Vi-ZZ6">
+        <!--Status Project Empty View Controller-->
+        <scene sceneID="WS5-8H-q26">
             <objects>
-                <viewController title="Project" id="A7n-Q1-s2v" customClass="StatusProjectViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="SSU-3D-Rud">
+                <viewController id="iwK-na-O2D" customClass="StatusProjectEmptyViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="Cbj-uE-OaZ">
                         <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AWk-g1-zet">
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AWk-g1-zet">
                                 <rect key="frame" x="55" y="98" width="191" height="104"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="101" id="LoC-vr-ee4"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="101" id="Tl0-ms-9Vd"/>
                                     <constraint firstAttribute="width" constant="191" id="f7c-OB-Y9U"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="191" id="gNV-st-fFt"/>
                                 </constraints>
                                 <buttonCell key="cell" type="squareTextured" title="Add your Xcode Project" bezelStyle="texturedSquare" imagePosition="overlaps" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="lxI-mw-y17">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="addProjectButtonTapped:" target="A7n-Q1-s2v" id="H4n-k1-6co"/>
+                                    <action selector="addProjectButtonTapped:" target="iwK-na-O2D" id="Xde-2F-dmW"/>
                                 </connections>
                             </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="AWk-g1-zet" firstAttribute="centerX" secondItem="Cbj-uE-OaZ" secondAttribute="centerX" id="IBx-QB-VPj"/>
+                            <constraint firstItem="AWk-g1-zet" firstAttribute="centerY" secondItem="Cbj-uE-OaZ" secondAttribute="centerY" id="nRp-qO-Tad"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="addProjectButton" destination="AWk-g1-zet" id="NP6-Z7-nx4"/>
+                    </connections>
+                </viewController>
+                <customObject id="CQW-5R-nlV" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-867" y="1274"/>
+        </scene>
+        <!--Project-->
+        <scene sceneID="cgs-Vi-ZZ6">
+            <objects>
+                <viewController title="Project" storyboardIdentifier="projectViewController" id="A7n-Q1-s2v" customClass="StatusProjectViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="SSU-3D-Rud">
+                        <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="7qa-tf-Tab">
                                 <rect key="frame" x="5" y="5" width="290" height="290"/>
                                 <subviews>
@@ -1356,15 +1380,12 @@
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="7qa-tf-Tab" secondAttribute="bottom" constant="5" id="7n9-QX-RHW"/>
-                            <constraint firstAttribute="centerX" secondItem="AWk-g1-zet" secondAttribute="centerX" id="7zV-vN-Qm2"/>
                             <constraint firstItem="7qa-tf-Tab" firstAttribute="leading" secondItem="SSU-3D-Rud" secondAttribute="leading" constant="5" id="80w-0W-7sN"/>
                             <constraint firstItem="7qa-tf-Tab" firstAttribute="top" secondItem="SSU-3D-Rud" secondAttribute="top" constant="5" id="Y9u-0h-YEU"/>
-                            <constraint firstAttribute="centerY" secondItem="AWk-g1-zet" secondAttribute="centerY" id="buM-0n-CBa"/>
                             <constraint firstAttribute="trailing" secondItem="7qa-tf-Tab" secondAttribute="trailing" constant="5" id="oxq-Ii-tbj"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="addProjectButton" destination="AWk-g1-zet" id="GSS-fP-6Vc"/>
                         <outlet property="buildTemplateComboBox" destination="bS2-PQ-LqY" id="9yE-Te-tir"/>
                         <outlet property="deleteButton" destination="YvH-rP-LsF" id="rzs-14-qaW"/>
                         <outlet property="editButton" destination="pLy-98-uKD" id="n4f-zo-eH2"/>
@@ -1382,7 +1403,7 @@
                 </viewController>
                 <customObject id="1Bt-t6-soj" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-425" y="1210"/>
+            <point key="canvasLocation" x="-481" y="1274"/>
         </scene>
         <!--Build Template View Controller-->
         <scene sceneID="tL6-3S-gnF">

@@ -104,7 +104,7 @@ class DashboardViewController: PresentableViewController {
             self.presentingDelegate?.presentViewControllerInUniqueWindow($0)
         }
         let create: SyncerViewModel.CreateViewControllerType = {
-            self.storyboardLoader.viewControllerWithStoryboardIdentifier($0, uniqueIdentifier: $1)
+            self.storyboardLoader.presentableViewControllerWithStoryboardIdentifier($0, uniqueIdentifier: $1)
         }
         self.storageManager.syncers.producer.startWithNext { newSyncers in
             self.syncerViewModels.value = newSyncers.map {
