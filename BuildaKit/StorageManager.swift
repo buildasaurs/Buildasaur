@@ -18,7 +18,7 @@ public class StorageManager {
     public static let sharedInstance = StorageManager()
     
     public let syncers = MutableProperty<[HDGitHubXCBotSyncer]>([])
-    public let servers = MutableProperty<[XcodeServerConfig]>([])
+    public let servers = MutableProperty<[String: XcodeServerConfig]>([:])
     public let projects = MutableProperty<[Project]>([])
     public let buildTemplates = MutableProperty<[BuildTemplate]>([])
     public let config = MutableProperty<[String: AnyObject]>([:])
@@ -57,7 +57,8 @@ public class StorageManager {
     
     public func addServerConfig(host host: String, user: String?, password: String?) {
         let config = try! XcodeServerConfig(host: host, user: user, password: password)
-        self.servers.value.append(config)
+        //unique by host!
+        self.servers.value[host] = config
     }
     
     public func addSyncer(syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool,
@@ -133,13 +134,7 @@ public class StorageManager {
     }
     
     public func removeServer(serverConfig: XcodeServerConfig) {
-        
-        for (idx, p) in self.servers.value.enumerate() {
-            if serverConfig.host == p.host {
-                self.servers.value.removeAtIndex(idx)
-                return
-            }
-        }
+        self.servers.value.removeValueForKey(serverConfig.host)
     }
     
     public func removeSyncer(syncer: HDGitHubXCBotSyncer) {
@@ -153,7 +148,7 @@ public class StorageManager {
     }
     
     private func serverForHost(host: String) -> XcodeServer? {
-        guard let config = self.servers.value.filter({ $0.host == host }).first else { return nil }
+        guard let config = self.servers.value[host] else { return nil }
         let server = XcodeServerFactory.server(config)
         return server
     }
@@ -162,9 +157,16 @@ public class StorageManager {
         
         self.config.value = Persistence.loadDictionaryFromFile("Config.json") ?? [:]
         self.projects.value = Persistence.loadArrayFromFile("Projects.json") ?? []
-        self.servers.value = Persistence.loadArrayFromFile("ServerConfigs.json") ?? []
+        let allServerConfigs: [XcodeServerConfig] = Persistence.loadArrayFromFile("ServerConfigs.json") ?? []
+        self.servers.value = self.dictionarifyWithKey(allServerConfigs) { $0.host }
         self.buildTemplates.value = Persistence.loadArrayFromFolder("BuildTemplates") ?? []
         self.syncers.value = Persistence.loadArrayFromFile("Syncers.json") { self.createSyncerFromJSON($0) } ?? []
+    }
+    
+    private func dictionarifyWithKey<T>(array: [T], key: (item: T) -> String) -> [String: T] {
+        var dict = [String: T]()
+        array.forEach { dict[key(item: $0)] = $0 }
+        return dict
     }
     
     public func saveConfig() {
@@ -176,7 +178,7 @@ public class StorageManager {
     }
     
     public func saveServers() {
-        Persistence.saveArray("ServerConfigs.json", items: self.servers.value)
+        Persistence.saveArray("ServerConfigs.json", items: Array(self.servers.value.values))
     }
     
     public func saveSyncers() {
@@ -196,8 +198,8 @@ public class StorageManager {
         //save to persistence
         
         self.saveConfig()
-        self.saveProjects()
         self.saveServers()
+        self.saveProjects()
         self.saveBuildTemplates()
         self.saveSyncers()
     }

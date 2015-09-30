@@ -245,7 +245,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         let postStatusComments = self.postStatusCommentsToggle.state == NSOnState
         let syncInterval = self.syncIntervalTextField.doubleValue
         let project = self.delegate.getProjectStatusViewController().project()!
-        let serverConfig = self.delegate.getServerStatusViewController().serverConfig()!
+        let serverConfig = self.delegate.getServerStatusViewController().serverConfig
         
         if let syncer = self.storageManager.addSyncer(
             syncInterval,

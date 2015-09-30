@@ -13,6 +13,8 @@ import BuildaKit
 
 class StatusServerViewController: StatusViewController {
     
+    var serverConfig: XcodeServerConfig!
+    
     //no project yet
     @IBOutlet weak var addServerButton: NSButton!
     
@@ -25,32 +27,19 @@ class StatusServerViewController: StatusViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if self.serverConfig() == nil {
+        if self.serverConfig == nil {
             self.editing = false
         }
         
         self.lastConnectionView.stringValue = "-"
     }
     
-    override func viewWillAppear() {
-        super.viewWillAppear()
-        
-    }
-    
     override func availabilityChanged(state: AvailabilityCheckState) {
         
-        if let config = self.serverConfig() {
+        if let config = self.serverConfig {
             config.availabilityState = state
         }
         super.availabilityChanged(state)
-    }
-    
-    private var servers: [XcodeServerConfig] {
-        return self.storageManager.servers.value
-    }
-
-    func serverConfig() -> XcodeServerConfig? {
-        return self.servers.first
     }
     
     override func reloadStatus() {
@@ -61,7 +50,7 @@ class StatusServerViewController: StatusViewController {
         self.serverUserTextField.enabled = self.editing
         self.serverPasswordTextField.enabled = self.editing
         
-        let server = self.serverConfig()
+        let server = self.serverConfig
         
         if self.editing || server != nil {
 
@@ -100,24 +89,18 @@ class StatusServerViewController: StatusViewController {
             }
             
             if let host = host {
-                
-                if let config = self.serverConfig() {
-                    self.storageManager.removeServer(config)
-                }
                 self.storageManager.addServerConfig(host: host, user: user, password: password)
+                return true
             } else {
-                UIUtils.showAlertWithText("Please add a host name or IP address of your Xcode Server")
-                return false
+                UIUtils.showAlertWithText("Please add a host name and IP address of your Xcode Server")
             }
-            
-            return true
         }
         return false
     }
     
     override func removeCurrentConfig() {
         
-        if let config = self.serverConfig() {
+        if let config = self.serverConfig {
             self.storageManager.removeServer(config)
             self.storageManager.saveServers()
             self.editing = false
@@ -136,7 +119,7 @@ class StatusServerViewController: StatusViewController {
             statusChanged?(status: status, done: done)
         }
 
-        if let config = self.serverConfig() {
+        if let config = self.serverConfig {
             statusChangedPersist(status: .Checking, done: false)
             NetworkUtils.checkAvailabilityOfXcodeServerWithCurrentSettings(config, completion: { (success, error) -> () in
                 NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
@@ -153,7 +136,6 @@ class StatusServerViewController: StatusViewController {
     }
     
     @IBAction func addServerButtonTapped(sender: AnyObject) {
-        
         self.editing = true
     }
 }

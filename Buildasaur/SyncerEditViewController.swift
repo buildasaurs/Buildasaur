@@ -37,6 +37,7 @@ class SyncerEditViewController: PresentableViewController, NSTableViewDataSource
             
             if let serverStatusViewController = statusViewController as? StatusServerViewController {
                 self.serverStatusViewController = serverStatusViewController
+                serverStatusViewController.serverConfig = self.syncer.xcodeServer.config
             }
             
             if let projectStatusViewController = statusViewController as? StatusProjectViewController {
