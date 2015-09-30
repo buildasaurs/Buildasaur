@@ -18,7 +18,7 @@
 		3A4C159F1BBB2DD0007FA970 /* SourceControlFileParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4C159D1BBB2DD0007FA970 /* SourceControlFileParser.swift */; settings = {ASSET_TAGS = (); }; };
 		3A4C15A01BBB2DD0007FA970 /* WorkspaceMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4C159E1BBB2DD0007FA970 /* WorkspaceMetadata.swift */; settings = {ASSET_TAGS = (); }; };
 		3A5687761A3B93BD0066DB2B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5687751A3B93BD0066DB2B /* AppDelegate.swift */; };
-		3A5687781A3B93BD0066DB2B /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5687771A3B93BD0066DB2B /* MainViewController.swift */; };
+		3A5687781A3B93BD0066DB2B /* SyncerEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5687771A3B93BD0066DB2B /* SyncerEditViewController.swift */; };
 		3A56877A1A3B93BD0066DB2B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A5687791A3B93BD0066DB2B /* Images.xcassets */; };
 		3A56877D1A3B93BD0066DB2B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A56877B1A3B93BD0066DB2B /* Main.storyboard */; };
 		3A5B04AA1AB4ABEB00F60536 /* TriggerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5B04A91AB4ABEB00F60536 /* TriggerViewController.swift */; };
@@ -60,6 +60,7 @@
 		3AC156241BB95C0C0068A1A3 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC156231BB95C0C0068A1A3 /* DashboardViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		3AC7D5DF1BBC22A900786198 /* PresentableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC7D5DE1BBC22A900786198 /* PresentableViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		3AC7D5E11BBC231400786198 /* StoryboardLoadingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC7D5E01BBC231400786198 /* StoryboardLoadingUtils.swift */; settings = {ASSET_TAGS = (); }; };
+		3AC7D5E31BBC3B9000786198 /* SyncerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC7D5E21BBC3B9000786198 /* SyncerConfig.swift */; settings = {ASSET_TAGS = (); }; };
 		3ACBADD71B5ADE0E00204457 /* MockHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADD61B5ADE0E00204457 /* MockHelpers.swift */; };
 		3ACBADDC1B5ADE1400204457 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADD81B5ADE1400204457 /* Mocks.swift */; };
 		3ACBADDD1B5ADE1400204457 /* sampleFinishedIntegration.json in Resources */ = {isa = PBXBuildFile; fileRef = 3ACBADD91B5ADE1400204457 /* sampleFinishedIntegration.json */; };
@@ -195,7 +196,7 @@
 		3A5687701A3B93BD0066DB2B /* Buildasaur.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Buildasaur.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A5687741A3B93BD0066DB2B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A5687751A3B93BD0066DB2B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3A5687771A3B93BD0066DB2B /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		3A5687771A3B93BD0066DB2B /* SyncerEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncerEditViewController.swift; sourceTree = "<group>"; };
 		3A5687791A3B93BD0066DB2B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3A56877C1A3B93BD0066DB2B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3A58B1521A3B967C003E0266 /* GitHubServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GitHubServer.swift; path = BuildaGitServer/GitHubServer.swift; sourceTree = SOURCE_ROOT; };
@@ -236,6 +237,7 @@
 		3AC156231BB95C0C0068A1A3 /* DashboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		3AC7D5DE1BBC22A900786198 /* PresentableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentableViewController.swift; sourceTree = "<group>"; };
 		3AC7D5E01BBC231400786198 /* StoryboardLoadingUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryboardLoadingUtils.swift; sourceTree = "<group>"; };
+		3AC7D5E21BBC3B9000786198 /* SyncerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerConfig.swift; sourceTree = "<group>"; };
 		3ACBADD61B5ADE0E00204457 /* MockHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockHelpers.swift; sourceTree = "<group>"; };
 		3ACBADD81B5ADE1400204457 /* Mocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
 		3ACBADD91B5ADE1400204457 /* sampleFinishedIntegration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sampleFinishedIntegration.json; sourceTree = "<group>"; };
@@ -567,7 +569,7 @@
 			children = (
 				3AF090B71B1134AA0058567F /* BranchWatchingViewController.swift */,
 				3AD338AF1AAE31D500ECD0F2 /* BuildTemplateViewController.swift */,
-				3A5687771A3B93BD0066DB2B /* MainViewController.swift */,
+				3A5687771A3B93BD0066DB2B /* SyncerEditViewController.swift */,
 				3A5B04AF1AB5144700F60536 /* ManualBotManagementViewController.swift */,
 				3A5B04AB1AB4AC0F00F60536 /* SetupViewController.swift */,
 				3AAA1B671AAB722600FA1598 /* StatusProjectViewController.swift */,
@@ -615,6 +617,7 @@
 			children = (
 				3ACBADE21B5ADE2A00204457 /* HDGitHubXCBotSyncer.swift */,
 				3ACBADE91B5ADE2A00204457 /* Syncer.swift */,
+				3AC7D5E21BBC3B9000786198 /* SyncerConfig.swift */,
 				3ACBADEA1B5ADE2A00204457 /* SyncerBotManipulation.swift */,
 				3ACBADEB1B5ADE2A00204457 /* SyncerBotNaming.swift */,
 				3ACBADEC1B5ADE2A00204457 /* SyncerBotUtils.swift */,
@@ -1180,7 +1183,7 @@
 			files = (
 				3AE0AB2B1BB991AB00A52D20 /* SyncerViewModel.swift in Sources */,
 				3AAA1B761AAC504700FA1598 /* StatusServerViewController.swift in Sources */,
-				3A5687781A3B93BD0066DB2B /* MainViewController.swift in Sources */,
+				3A5687781A3B93BD0066DB2B /* SyncerEditViewController.swift in Sources */,
 				3AF090B81B1134AA0058567F /* BranchWatchingViewController.swift in Sources */,
 				3A5B04AC1AB4AC0F00F60536 /* SetupViewController.swift in Sources */,
 				3A5B04AA1AB4ABEB00F60536 /* TriggerViewController.swift in Sources */,
@@ -1234,6 +1237,7 @@
 				3ACBADFC1B5ADE2A00204457 /* BuildTemplate.swift in Sources */,
 				3ACBAE121B5ADE2A00204457 /* SyncPairPRResolver.swift in Sources */,
 				3ACBAE151B5ADE2A00204457 /* XcodeProject.swift in Sources */,
+				3AC7D5E31BBC3B9000786198 /* SyncerConfig.swift in Sources */,
 				3ACBAE161B5ADE2A00204457 /* XcodeProjectParser.swift in Sources */,
 				3A4C159F1BBB2DD0007FA970 /* SourceControlFileParser.swift in Sources */,
 				3ACBAE091B5ADE2A00204457 /* SyncerGitHubUtils.swift in Sources */,

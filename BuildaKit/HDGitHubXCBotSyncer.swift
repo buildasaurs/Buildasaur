@@ -13,19 +13,22 @@ import XcodeServerSDK
 
 public class HDGitHubXCBotSyncer : Syncer {
     
+    public let github: GitHubServer!
+    public let xcodeServer: XcodeServer!
+    public let project: Project!
+    
+    public let waitForLttm: Bool
+    public let postStatusComments: Bool
+    public var watchedBranchNames: [String]
+    
+    //--------
+    
     public typealias BotActions = (
         prsToSync: [(pr: PullRequest, bot: Bot)],
         prBotsToCreate: [PullRequest],
         branchesToSync: [(branch: Branch, bot: Bot)],
         branchBotsToCreate: [Branch],
         botsToDelete: [Bot])
-    
-    public let github: GitHubServer!
-    public let xcodeServer: XcodeServer!
-    public let project: Project!
-    public let waitForLttm: Bool
-    public let postStatusComments: Bool
-    public var watchedBranchNames: [String]
     
     public typealias GitHubStatusAndComment = (status: Status, comment: String?)
     
@@ -39,36 +42,6 @@ public class HDGitHubXCBotSyncer : Syncer {
             self.postStatusComments = postStatusComments
             self.watchedBranchNames = watchedBranchNames
             super.init(syncInterval: syncInterval)
-    }
-    
-    init?(json: NSDictionary, storageManager: StorageManager) {
-        
-        if
-            let syncInterval = json.optionalDoubleForKey("sync_interval"),
-            let projectPath = json.optionalStringForKey("project_path"),
-            let serverHost = json.optionalStringForKey("server_host"),
-            let project = storageManager.projects.value.filter({ $0.url.absoluteString == projectPath }).first,
-            let serverConfig = storageManager.servers.value.filter({ $0.host == serverHost }).first
-        {
-            self.project = project
-            self.github = GitHubFactory.server(project.githubToken)
-            self.xcodeServer = XcodeServerFactory.server(serverConfig)
-            self.waitForLttm = json.optionalBoolForKey("wait_for_lttm") ?? false
-            self.postStatusComments = json.optionalBoolForKey("post_status_comments") ?? true
-            self.watchedBranchNames = json.optionalArrayForKey("watched_branches") as? [String] ?? []
-            super.init(syncInterval: syncInterval)
-            
-        } else {
-            
-            self.github = nil
-            self.xcodeServer = nil
-            self.project = nil
-            self.waitForLttm = false
-            self.postStatusComments = true
-            self.watchedBranchNames = []
-            super.init(syncInterval: 0)
-            return nil
-        }
     }
     
     public func repoName() -> String? {

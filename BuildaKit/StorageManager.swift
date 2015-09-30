@@ -148,15 +148,23 @@ public class StorageManager {
         self.syncers.value.removeAll(keepCapacity: true)
     }
     
+    private func projectForPath(path: String) -> Project? {
+        return self.projects.value.filter({ $0.url.absoluteString == path }).first
+    }
+    
+    private func serverForHost(host: String) -> XcodeServer? {
+        guard let config = self.servers.value.filter({ $0.host == host }).first else { return nil }
+        let server = XcodeServerFactory.server(config)
+        return server
+    }
+    
     public func loadAllFromPersistence() {
         
         self.config.value = Persistence.loadDictionaryFromFile("Config.json") ?? [:]
         self.projects.value = Persistence.loadArrayFromFile("Projects.json") ?? []
         self.servers.value = Persistence.loadArrayFromFile("ServerConfigs.json") ?? []
         self.buildTemplates.value = Persistence.loadArrayFromFolder("BuildTemplates") ?? []
-        self.syncers.value = Persistence.loadArrayFromFile("Syncers.json") {
-            HDGitHubXCBotSyncer(json: $0, storageManager: self)
-            } ?? []
+        self.syncers.value = Persistence.loadArrayFromFile("Syncers.json") { self.createSyncerFromJSON($0) } ?? []
     }
     
     public func saveConfig() {
@@ -200,6 +208,29 @@ public class StorageManager {
     
     public func startSyncers() {
         self.syncers.value.forEach { $0.active = true }
+    }
+}
+
+//Syncer Parsing
+extension StorageManager {
+    
+    private func createSyncerFromJSON(json: NSDictionary) -> HDGitHubXCBotSyncer? {
+        
+        guard
+            let xcodeServerHost = json.optionalStringForKey("server_host"),
+            let xcodeServer = self.serverForHost(xcodeServerHost),
+            let projectPath = json.optionalStringForKey("project_path"),
+            let project = self.projectForPath(projectPath)
+            else { return nil }
+        
+        let syncInterval = json.optionalDoubleForKey("sync_interval") ?? 15
+        let githubServer = GitHubFactory.server(project.githubToken)
+        let waitForLttm = json.optionalBoolForKey("wait_for_lttm") ?? false
+        let postStatusComments = json.optionalBoolForKey("post_status_comments") ?? true
+        let watchedBranchNames = json.optionalArrayForKey("watched_branches") as? [String] ?? []
+        
+        let syncer = HDGitHubXCBotSyncer(integrationServer: xcodeServer, sourceServer: githubServer, project: project, syncInterval: syncInterval, waitForLttm: waitForLttm, postStatusComments: postStatusComments, watchedBranchNames: watchedBranchNames)
+        return syncer
     }
 }
 

@@ -31,6 +31,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         
+        Logging.setup(alsoIntoFile: true)
+
         self.storyboardLoader = StoryboardLoader(storyboard: NSStoryboard.mainStoryboard)
         self.storyboardLoader.delegate = self
         
@@ -79,7 +81,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 extension AppDelegate: PresentableViewControllerDelegate {
     
+    func configureViewController(viewController: PresentableViewController) {
+        
+        if let syncerEdit = viewController as? SyncerEditViewController {
+            //TODO: remove
+            syncerEdit.storageManager = self.storageManager
+        }
+    }
+    
     func presentViewControllerInUniqueWindow(viewController: PresentableViewController) {
+        
+        //last chance to config
+        self.configureViewController(viewController)
         
         //make sure we're the delegate
         viewController.presentingDelegate = self

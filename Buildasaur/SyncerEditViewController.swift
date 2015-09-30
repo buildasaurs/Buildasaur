@@ -9,32 +9,21 @@
 import Cocoa
 import BuildaKit
 
-//server trust - must be logged in in the browser first or have a server trust certificate.
-//otherwise fails.
-
-class MainViewController: PresentableViewController, NSTableViewDataSource, StatusSiblingsViewControllerDelegate {
+class SyncerEditViewController: PresentableViewController, NSTableViewDataSource, StatusSiblingsViewControllerDelegate {
     
-    let storageManager: StorageManager
+    var syncer: HDGitHubXCBotSyncer!
+    var storageManager: StorageManager! //TODO: this should be removed for a less capable, read-only version
     
     var projectStatusViewController: StatusProjectViewController!
     var serverStatusViewController: StatusServerViewController!
     
     private var buildTemplateParams: (buildTemplate: BuildTemplate?, project: Project)?
     
-    required init?(coder: NSCoder) {
-        
-        Logging.setup(alsoIntoFile: true)
-        self.storageManager = StorageManager.sharedInstance
-        super.init(coder: coder)
-    }
-    
     override func viewWillAppear() {
         super.viewWillAppear()
         
         if let window = self.view.window {
             window.minSize = CGSizeMake(658, 512)
-            let version = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as! String
-            window.title = "Buildasaur \(version), at your service"
         }
     }
     

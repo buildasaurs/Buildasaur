@@ -25,7 +25,7 @@ struct SyncerViewModel {
     //for creating presentable VCs, not sure it should live here though.
     typealias PresentViewControllerType = (viewController: PresentableViewController) -> ()
     let presentViewController: PresentViewControllerType
-    typealias CreateViewControllerType = (storyboardIdentifier: String, uniqueIdentifier: String) -> MainViewController
+    typealias CreateViewControllerType = (storyboardIdentifier: String, uniqueIdentifier: String) -> SyncerEditViewController
     let createViewController: CreateViewControllerType
     
     init(syncer: HDGitHubXCBotSyncer, presentViewController: PresentViewControllerType, createViewController: CreateViewControllerType) {
@@ -50,8 +50,8 @@ struct SyncerViewModel {
     func editButtonClicked() {
         
         //present the edit window
-        let syncerEditViewController: MainViewController = self.createViewController(storyboardIdentifier: "mainViewController", uniqueIdentifier: "Syncer_\(syncer.hash)")
-        //        syncerEditViewController.syncer = self.syncer
+        let syncerEditViewController: SyncerEditViewController = self.createViewController(storyboardIdentifier: "syncerEditViewController", uniqueIdentifier: "Syncer_\(syncer.hash)")
+        syncerEditViewController.syncer = self.syncer
         self.presentViewController(viewController: syncerEditViewController)
     }
     
