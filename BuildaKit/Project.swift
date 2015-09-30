@@ -18,6 +18,8 @@ public class Project : JSONSerializable {
         }
     }
     
+    public var urlString: String { return self.url.absoluteString }
+    
     public var preferredTemplateId: String?
     public var githubToken: String?
     public var privateSSHKeyUrl: NSURL?

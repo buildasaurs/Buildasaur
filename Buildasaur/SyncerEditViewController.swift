@@ -16,11 +16,14 @@ class SyncerEditViewController: PresentableViewController, NSTableViewDataSource
     
     var projectStatusViewController: StatusProjectViewController!
     var serverStatusViewController: StatusServerViewController!
+    var syncerStatusViewController: StatusSyncerViewController!
     
     private var buildTemplateParams: (buildTemplate: BuildTemplate?, project: Project)?
     
     override func viewWillAppear() {
         super.viewWillAppear()
+        
+        self.title = self.syncer.project.workspaceMetadata?.projectName
         
         if let window = self.view.window {
             window.minSize = CGSizeMake(658, 512)
@@ -42,6 +45,12 @@ class SyncerEditViewController: PresentableViewController, NSTableViewDataSource
             
             if let projectStatusViewController = statusViewController as? StatusProjectViewController {
                 self.projectStatusViewController = projectStatusViewController
+                projectStatusViewController.project = self.syncer.project
+            }
+            
+            if let syncerStatusViewController = statusViewController as? StatusSyncerViewController {
+                self.syncerStatusViewController = syncerStatusViewController
+                syncerStatusViewController.syncer = self.syncer
             }
         }
         

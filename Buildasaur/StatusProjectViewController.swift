@@ -15,6 +15,8 @@ import BuildaKit
 let kBuildTemplateAddNewString = "Create New..."
 class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, SetupViewControllerDelegate {
     
+    var project: Project!
+    
     //no project yet
     @IBOutlet weak var addProjectButton: NSButton!
     
@@ -33,7 +35,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     
     override func availabilityChanged(state: AvailabilityCheckState) {
         
-        if let project = self.project() {
+        if let project = self.project {
             project.availabilityState = state
         }
         super.availabilityChanged(state)
@@ -52,16 +54,12 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         self.lastAvailabilityCheckStatus = .Unchecked
     }
     
-    func project() -> Project? {
-        return self.storageManager.projects.value.first
-    }
-    
     func buildTemplates() -> [BuildTemplate] {
         
         return self.storageManager.buildTemplates.value.filter { (template: BuildTemplate) -> Bool in
             if
                 let projectName = template.projectName,
-                let project = self.project()
+                let project = self.project
             {
                 return projectName == project.workspaceMetadata?.projectName ?? ""
             } else {
@@ -74,7 +72,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     override func reloadStatus() {
         
         //if there is a local project, show status. otherwise show button to add one.
-        if let project = self.project() {
+        if let project = self.project {
             
             self.statusContentView.hidden = false
             self.addProjectButton.hidden = true
@@ -129,11 +127,11 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
             statusChanged?(status: status, done: done)
         }
         
-        if let _ = self.project() {
+        if let project = self.project {
 
             statusChangedPersist(status: .Checking, done: false)
 
-            NetworkUtils.checkAvailabilityOfGitHubWithCurrentSettingsOfProject(self.project()!, completion: { (success, error) -> () in
+            NetworkUtils.checkAvailabilityOfGitHubWithCurrentSettingsOfProject(project, completion: { (success, error) -> () in
                 
                 let status: AvailabilityCheckState
                 if success {
@@ -189,16 +187,16 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
                 buildTemplate = self.buildTemplates().filter({ $0.name == templatePulled }).first
             }
             if buildTemplate == nil {
-                buildTemplate = BuildTemplate(projectName: self.project()!.workspaceMetadata!.projectName)
+                buildTemplate = BuildTemplate(projectName: self.project.workspaceMetadata!.projectName)
             }
             
-            self.delegate.showBuildTemplateViewControllerForTemplate(buildTemplate, project: self.project()!, sender: self)
+            self.delegate.showBuildTemplateViewControllerForTemplate(buildTemplate, project: self.project, sender: self)
         }
     }
     
     func pullTemplateFromUI() -> Bool {
         
-        if let _ = self.project() {
+        if let _ = self.project {
             let selectedIndex = self.buildTemplateComboBox.indexOfSelectedItem
             
             if selectedIndex == -1 {
@@ -208,7 +206,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
             }
             
             let template = self.buildTemplates()[selectedIndex]
-            if let project = self.project() {
+            if let project = self.project {
                 project.preferredTemplateId = template.uniqueId
                 return true
             }
@@ -230,7 +228,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     
     func pullCredentialsFromUI() -> Bool {
         
-        if let project = self.project() {
+        if let project = self.project {
             
             _ = self.pullTokenFromUI()
             let privateUrl = project.privateSSHKeyUrl
@@ -253,7 +251,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     func pullSSHPassphraseFromUI() -> Bool {
         
         let string = self.sshPassphraseTextField.stringValue
-        if let project = self.project() {
+        if let project = self.project {
             if !string.isEmpty {
                 project.sshPassphrase = string
             } else {
@@ -266,7 +264,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     func pullTokenFromUI() -> Bool {
         
         let string = self.tokenTextField.stringValue
-        if let project = self.project() {
+        if let project = self.project {
             if !string.isEmpty {
                 project.githubToken = string
             } else {
@@ -289,7 +287,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     
     override func removeCurrentConfig() {
         
-        if let project = self.project() {
+        if let project = self.project {
             
             //also cleanup comboBoxes
             self.buildTemplateComboBox.stringValue = ""
@@ -304,7 +302,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         if let url = StorageUtils.openSSHKey(type) {
             do {
                 _ = try NSString(contentsOfURL: url, encoding: NSASCIIStringEncoding)
-                let project = self.project()!
+                let project = self.project
                 if type == "public" {
                     project.publicSSHKeyUrl = url
                 } else {
@@ -339,7 +337,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
                 }
             }
             
-            if let project = self.project() {
+            if let project = self.project {
                 project.preferredTemplateId = template.uniqueId
             }
             

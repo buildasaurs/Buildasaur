@@ -13,37 +13,9 @@ import XcodeServerSDK
 import BuildaKit
 
 class StatusSyncerViewController: StatusViewController, SyncerDelegate {
-        
-    @IBOutlet weak var statusTextField: NSTextField!
-    @IBOutlet weak var startStopButton: NSButton!
-    @IBOutlet weak var statusActivityIndicator: NSProgressIndicator!
-    @IBOutlet weak var syncIntervalStepper: NSStepper!
-    @IBOutlet weak var syncIntervalTextField: NSTextField!
-    @IBOutlet weak var lttmToggle: NSButton!
-    @IBOutlet weak var postStatusCommentsToggle: NSButton!
     
-    var isSyncing: Bool {
-        set {
-            if let syncer = self.syncer() {
-                syncer.active = newValue
-            }
-            self.delegate.getProjectStatusViewController().editingAllowed = !newValue
-            self.delegate.getServerStatusViewController().editingAllowed = !newValue
-        }
-        get {
-            if let syncer = self.syncer() {
-                return syncer.active
-            }
-            return false
-        }
-    }
-    
-    private var syncers: [HDGitHubXCBotSyncer] {
-        return self.storageManager.syncers.value
-    }
-    
-    func syncer() -> HDGitHubXCBotSyncer? {
-        if let syncer = self.syncers.first {
+    var syncer: HDGitHubXCBotSyncer! {
+        didSet {
             if syncer.delegate == nil {
                 syncer.delegate = self
                 if syncer.active {
@@ -52,9 +24,37 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
                     self.syncerStopped(syncer)
                 }
             }
-            return syncer
         }
-        return nil
+    }
+    
+    @IBOutlet weak var statusTextField: NSTextField!
+    @IBOutlet weak var startStopButton: NSButton!
+    @IBOutlet weak var statusActivityIndicator: NSProgressIndicator!
+    @IBOutlet weak var syncIntervalStepper: NSStepper!
+    @IBOutlet weak var syncIntervalTextField: NSTextField!
+    @IBOutlet weak var lttmToggle: NSButton!
+    @IBOutlet weak var postStatusCommentsToggle: NSButton!
+    
+    private var viewHasLoaded: Bool = false
+    
+    var isSyncing: Bool {
+        set {
+            if let syncer = self.syncer {
+                syncer.active = newValue
+            }
+            self.delegate.getProjectStatusViewController().editingAllowed = !newValue
+            self.delegate.getServerStatusViewController().editingAllowed = !newValue
+        }
+        get {
+            if let syncer = self.syncer {
+                return syncer.active
+            }
+            return false
+        }
+    }
+    
+    private var syncers: [HDGitHubXCBotSyncer] {
+        return self.storageManager.syncers.value
     }
     
     func syncerBecameActive(syncer: Syncer) {
@@ -71,7 +71,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
             "Syncing in progress..."
         ]
 
-        if let lastStartedSync = self.syncer()?.lastSyncStartDate {
+        if let lastStartedSync = self.syncer?.lastSyncStartDate {
             let lastSyncString = "Started sync at \(lastStartedSync)"
             messages.append(lastSyncString)
         }
@@ -113,14 +113,17 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         
         var itemsToReport = [String]()
         
-        if let lastFinishedSync = self.syncer()?.lastSuccessfulSyncFinishedDate {
+        if let lastFinishedSync = self.syncer?.lastSuccessfulSyncFinishedDate {
             let lastSyncString = "Last successful sync at \(lastFinishedSync)"
             itemsToReport.append(lastSyncString)
         }
         
         strings.forEach { itemsToReport.append($0) }
         
-        self.statusTextField.stringValue = itemsToReport.joinWithSeparator("\n")
+        //because it can be called before viewdidload (from syncer -> didSet) TODO: fix obviously
+        if self.statusTextField != nil {
+            self.statusTextField.stringValue = itemsToReport.joinWithSeparator("\n")
+        }
     }
     
     override func viewDidLoad() {
@@ -132,7 +135,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
     override func viewDidAppear() {
         super.viewDidAppear()
         
-        if let syncer = self.syncer() {
+        if let syncer = self.syncer {
             Log.info("We have a syncer \(syncer)")
         }
     }
@@ -150,7 +153,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
             self.statusActivityIndicator.stopAnimation(nil)
         }
         
-        if let syncer = self.syncer() {
+        if let syncer = self.syncer {
             
             self.updateIntervalFromUIToValue(syncer.syncInterval)
             self.lttmToggle.state = syncer.waitForLttm ? NSOnState : NSOffState
@@ -185,7 +188,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
     
     @IBAction func branchWatchingTapped(sender: AnyObject) {
         
-         if let _ = self.syncer() {
+         if let _ = self.syncer {
             self.performSegueWithIdentifier("showBranchWatching", sender: self)
         } else {
             UIUtils.showAlertWithText("Syncer must be created first. Click 'Start' and try again.")
@@ -194,7 +197,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
     
     @IBAction func manualBotManagementTapped(sender: AnyObject) {
         
-        if let _ = self.syncer() {
+        if let _ = self.syncer {
             self.performSegueWithIdentifier("showManual", sender: self)
         } else {
             UIUtils.showAlertWithText("Syncer must be created first. Click 'Start' and try again.")
@@ -221,12 +224,12 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         
         if let manual = segue.destinationController as? ManualBotManagementViewController {
             
-            manual.syncer = self.syncer()!
+            manual.syncer = self.syncer
         }
         
         if let branchWatching = segue.destinationController as? BranchWatchingViewController {
             
-            branchWatching.syncer = self.syncer()!
+            branchWatching.syncer = self.syncer
         }
     }
     
@@ -234,7 +237,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         
         //create a syncer, delete the old one and kick it off
         let oldWatchedBranchNames: [String]
-        if let syncer = self.syncer() {
+        if let syncer = self.syncer {
             self.storageManager.removeSyncer(syncer)
             oldWatchedBranchNames = syncer.watchedBranchNames
         } else {
@@ -244,7 +247,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         let waitForLttm = self.lttmToggle.state == NSOnState
         let postStatusComments = self.postStatusCommentsToggle.state == NSOnState
         let syncInterval = self.syncIntervalTextField.doubleValue
-        let project = self.delegate.getProjectStatusViewController().project()!
+        let project = self.delegate.getProjectStatusViewController().project
         let serverConfig = self.delegate.getServerStatusViewController().serverConfig
         
         if let syncer = self.storageManager.addSyncer(

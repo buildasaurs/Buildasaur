@@ -2221,7 +2221,7 @@
                         <outlet property="postStatusCommentsToggle" destination="I34-eZ-a6k" id="DbA-bD-uId"/>
                         <outlet property="startStopButton" destination="Fkq-gK-hvs" id="5Ba-3L-5FZ"/>
                         <outlet property="statusActivityIndicator" destination="cYi-gZ-3MX" id="5l5-14-v81"/>
-                        <outlet property="statusTextField" destination="8VZ-bw-dT5" id="Uav-J8-RH3"/>
+                        <outlet property="statusTextField" destination="8VZ-bw-dT5" id="2pJ-qt-Dy8"/>
                         <outlet property="syncIntervalStepper" destination="XOz-yR-q3G" id="ZgF-2G-Jyb"/>
                         <outlet property="syncIntervalTextField" destination="A9h-Jh-CP9" id="GAf-Ie-yg8"/>
                         <segue destination="4et-cp-hnb" kind="modal" identifier="showManual" id="2HZ-dc-2CX"/>

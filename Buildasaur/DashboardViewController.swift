@@ -29,14 +29,23 @@ class DashboardViewController: PresentableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.configWindow()
+        self.configTitle()
         self.configDataSource()
         self.configTableView()
         self.configHeaderView()
     }
     
+    override func viewWillAppear() {
+        super.viewWillAppear()
+    }
+    
     override func viewDidAppear() {
         super.viewDidAppear()
+    }
+    
+    func configTitle() {
+        let version = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as! String
+        self.title = "Buildasaur \(version), at your service"
     }
     
     func configHeaderView() {
@@ -79,14 +88,6 @@ class DashboardViewController: PresentableViewController {
         
         DynamicProperty(object: self.startAllButton, keyPath: "enabled") <~ startAllEnabled
         DynamicProperty(object: self.stopAllButton, keyPath: "enabled") <~ stopAllEnabled
-    }
-    
-    func configWindow() {
-        
-        if let window = self.view.window {
-            let version = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as! String
-            window.title = "Buildasaur \(version), at your service"
-        }
     }
     
     func configTableView() {

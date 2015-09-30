@@ -19,7 +19,7 @@ public class StorageManager {
     
     public let syncers = MutableProperty<[HDGitHubXCBotSyncer]>([])
     public let servers = MutableProperty<[String: XcodeServerConfig]>([:])
-    public let projects = MutableProperty<[Project]>([])
+    public let projects = MutableProperty<[String: Project]>([:])
     public let buildTemplates = MutableProperty<[BuildTemplate]>([])
     public let config = MutableProperty<[String: AnyObject]>([:])
     
@@ -49,7 +49,7 @@ public class StorageManager {
         
         _ = try Project.attemptToParseFromUrl(url)
         if let project = Project(url: url) {
-            self.projects.value.append(project)
+            self.projects.value[project.urlString] = project
         } else {
             assertionFailure("Attempt to parse succeeded but Project still wasn't created")
         }
@@ -124,13 +124,7 @@ public class StorageManager {
     }
     
     public func removeProject(project: Project) {
-        
-        for (idx, p) in self.projects.value.enumerate() {
-            if project.url == p.url {
-                self.projects.value.removeAtIndex(idx)
-                return
-            }
-        }
+        self.projects.value.removeValueForKey(project.urlString)
     }
     
     public func removeServer(serverConfig: XcodeServerConfig) {
@@ -144,7 +138,7 @@ public class StorageManager {
     }
     
     private func projectForPath(path: String) -> Project? {
-        return self.projects.value.filter({ $0.url.absoluteString == path }).first
+        return self.projects.value[path]
     }
     
     private func serverForHost(host: String) -> XcodeServer? {
@@ -156,7 +150,8 @@ public class StorageManager {
     public func loadAllFromPersistence() {
         
         self.config.value = Persistence.loadDictionaryFromFile("Config.json") ?? [:]
-        self.projects.value = Persistence.loadArrayFromFile("Projects.json") ?? []
+        let allProjects: [Project] = Persistence.loadArrayFromFile("Projects.json") ?? []
+        self.projects.value = self.dictionarifyWithKey(allProjects) { $0.urlString }
         let allServerConfigs: [XcodeServerConfig] = Persistence.loadArrayFromFile("ServerConfigs.json") ?? []
         self.servers.value = self.dictionarifyWithKey(allServerConfigs) { $0.host }
         self.buildTemplates.value = Persistence.loadArrayFromFolder("BuildTemplates") ?? []
@@ -174,7 +169,7 @@ public class StorageManager {
     }
     
     public func saveProjects() {
-        Persistence.saveArray("Projects.json", items: self.projects.value)
+        Persistence.saveArray("Projects.json", items: Array(self.projects.value.values))
     }
     
     public func saveServers() {

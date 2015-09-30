@@ -17,7 +17,7 @@ public class NetworkUtils {
         
         let token = project.githubToken
         let server = GitHubFactory.server(token)
-//        let credentialValidationBlueprint = project.createSourceControlBlueprintForCredentialVerification()
+        let credentialValidationBlueprint = project.createSourceControlBlueprintForCredentialVerification()
         
         //check if we can get PRs, that should be representative enough
         if let repoName = project.githubRepoName() {
@@ -44,13 +44,17 @@ public class NetworkUtils {
                     } else {
                         //now test ssh keys
                         //TODO: do SSH Key validation properly in the new UI once we have Xcode Server credentials.
-//                        self.checkValidityOfSSHKeys(credentialValidationBlueprint, completion: { (success, error) -> () in
-                        
-//                            Log.verbose("Finished blueprint validation with success: \(success), error: \(error)")
+                        self.checkValidityOfSSHKeys(credentialValidationBlueprint, completion: { (success, error) -> () in
+                            
+                            if success {
+                                Log.verbose("Finished blueprint validation with success!")
+                            } else {
+                                Log.verbose("Finished blueprint validation with error: \(error)")
+                            }
                         
                             //now complete
                             completion(success: true, error: nil)
-//                        })
+                        })
                     }
                 } else {
                     completion(success: false, error: Error.withInfo("Couldn't find repo permissions in GitHub response"))
