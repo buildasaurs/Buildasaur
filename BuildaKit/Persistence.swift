@@ -26,9 +26,10 @@ public class Persistence {
         self.saveData(name, item: item)
     }
     
-    class func saveArray(name: String, items: [JSONWritable]) {
+    //crashes when I use [JSONWritable] instead of NSArray :(
+    class func saveArray(name: String, items: NSArray) {
         
-        let jsons = items.map { $0.jsonify() }
+        let jsons = items.map { $0 as! JSONWritable }.map { $0.jsonify() }
         self.saveData(name, item: jsons)
     }
     
