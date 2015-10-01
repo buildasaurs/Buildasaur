@@ -123,6 +123,17 @@ public class StorageManager {
         self.saveBuildTemplates()
     }
     
+    public func buildTemplatesForProjectName(projectName: String) -> [BuildTemplate] {
+        return self.buildTemplates.value.filter { (template: BuildTemplate) -> Bool in
+            if let templateProjectName = template.projectName {
+                return projectName == templateProjectName
+            } else {
+                //if it doesn't yet have a project name associated, assume we have to show it
+                return true
+            }
+        }
+    }
+    
     public func removeProject(project: Project) {
         self.projects.value.removeValueForKey(project.urlString)
     }
