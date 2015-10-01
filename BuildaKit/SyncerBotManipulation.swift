@@ -16,7 +16,7 @@ extension HDGitHubXCBotSyncer {
     public func currentBuildTemplate() -> BuildTemplate! {
         
         if
-            let preferredTemplateId = self.project.preferredTemplateId,
+            let preferredTemplateId = self._project.preferredTemplateId,
             let template = StorageManager.sharedInstance.buildTemplates.value.filter({ $0.uniqueId == preferredTemplateId }).first {
                 return template
         }
@@ -31,7 +31,7 @@ extension HDGitHubXCBotSyncer {
         
         integrations.mapVoidAsync({ (integration, itemCompletion) -> () in
             
-            self.xcodeServer.cancelIntegration(integration.id, completion: { (success, error) -> () in
+            self._xcodeServer.cancelIntegration(integration.id, completion: { (success, error) -> () in
                 if error != nil {
                     self.notifyError(error, context: "Failed to cancel integration \(integration.number)")
                 } else {
@@ -45,7 +45,7 @@ extension HDGitHubXCBotSyncer {
     
     func deleteBot(bot: Bot, completion: () -> ()) {
         
-        self.xcodeServer.deleteBot(bot.id, revision: bot.rev, completion: { (success, error) -> () in
+        self._xcodeServer.deleteBot(bot.id, revision: bot.rev, completion: { (success, error) -> () in
             
             if error != nil {
                 self.notifyError(error, context: "Failed to delete bot with name \(bot.name)")
@@ -72,14 +72,14 @@ extension HDGitHubXCBotSyncer {
         
         //to handle forks
         let headOriginUrl = repo.repoUrlSSH
-        let localProjectOriginUrl = self.project.workspaceMetadata!.projectURL.absoluteString
+        let localProjectOriginUrl = self._project.workspaceMetadata!.projectURL.absoluteString
         
         let project: Project
         if headOriginUrl != localProjectOriginUrl {
             
             //we have a fork, duplicate the metadata with the fork's origin
             do {
-                let source = try self.project.duplicateForForkAtOriginURL(headOriginUrl)
+                let source = try self._project.duplicateForForkAtOriginURL(headOriginUrl)
                 project = source
             } catch {
                 self.notifyError(Error.withInfo("Couldn't create a Project for fork with origin at url \(headOriginUrl), error \(error)"), context: "Creating a bot from a PR")
@@ -88,10 +88,10 @@ extension HDGitHubXCBotSyncer {
             }
         } else {
             //a normal PR in the same repo, no need to duplicate, just use the existing project
-            project = self.project
+            project = self._project
         }
         
-        let xcodeServer = self.xcodeServer
+        let xcodeServer = self._xcodeServer
         
         XcodeServerSyncerUtils.createBotFromBuildTemplate(botName, template: template, project: project, branch: branch, scheduleOverride: schedule, xcodeServer: xcodeServer) { (bot, error) -> () in
             

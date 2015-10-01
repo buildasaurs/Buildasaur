@@ -26,7 +26,7 @@ extension HDGitHubXCBotSyncer {
         completion: SyncPair.Completion) {
         
         let repoName = self.repoName()!
-        self.github.getStatusOfCommit(commit, repo: repoName, completion: { (status, error) -> () in
+        self._github.getStatusOfCommit(commit, repo: repoName, completion: { (status, error) -> () in
             
             if error != nil {
                 let e = Error.withInfo("Commit \(commit) failed to return status", internalError: error)
@@ -49,7 +49,7 @@ extension HDGitHubXCBotSyncer {
 
     func postStatusWithComment(statusWithComment: GitHubStatusAndComment, commit: String, repo: String, issue: Issue?, completion: SyncPair.Completion) {
         
-        self.github.postStatusOfCommit(statusWithComment.status, sha: commit, repo: repo) { (status, error) -> () in
+        self._github.postStatusOfCommit(statusWithComment.status, sha: commit, repo: repo) { (status, error) -> () in
             
             if error != nil {
                 let e = Error.withInfo("Failed to post a status on commit \(commit) of repo \(repo)", internalError: error)
@@ -58,7 +58,7 @@ extension HDGitHubXCBotSyncer {
             }
             
             //have a chance to NOT post a status comment...
-            let postStatusComments = self.postStatusComments
+            let postStatusComments = self._postStatusComments
             
             //optional there can be a comment to be posted and there's an issue to be posted on
             if
@@ -66,7 +66,7 @@ extension HDGitHubXCBotSyncer {
                 let comment = statusWithComment.comment where postStatusComments {
                 
                 //we have a comment, post it
-                self.github.postCommentOnIssue(comment, issueNumber: issue.number, repo: repo, completion: { (comment, error) -> () in
+                self._github.postCommentOnIssue(comment, issueNumber: issue.number, repo: repo, completion: { (comment, error) -> () in
                     
                     if error != nil {
                         let e = Error.withInfo("Failed to post a comment \"\(comment)\" on Issue \(issue.number) of repo \(repo)", internalError: error)

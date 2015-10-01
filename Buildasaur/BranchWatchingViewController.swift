@@ -27,7 +27,7 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
         super.viewDidLoad()
         
         assert(self.syncer != nil, "Syncer has not been set")
-        self.watchedBranchNames = Set(self.syncer.watchedBranchNames)
+        self.watchedBranchNames = Set(self.syncer.watchedBranchNames.value)
     }
     
     override func viewWillAppear() {
@@ -46,8 +46,8 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
     func fetchBranches(completion: ([Branch]?, NSError?) -> ()) {
         
         self.branchActivityIndicator.startAnimation(nil)
-        let repoName = self.syncer.project.githubRepoName()!
-        self.syncer.github.getBranchesOfRepo(repoName, completion: { (branches, error) -> () in
+        let repoName = self.syncer.project.value!.githubRepoName()!
+        self.syncer.github.value!.getBranchesOfRepo(repoName, completion: { (branches, error) -> () in
             
             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
                 
@@ -67,7 +67,7 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
     
     @IBAction func doneTapped(sender: AnyObject) {
         //save the now-selected watched branches to the syncer
-        self.syncer.watchedBranchNames = Array(self.watchedBranchNames)
+        self.syncer.watchedBranchNames.value = Array(self.watchedBranchNames)
         StorageManager.sharedInstance.saveSyncers() //think of a better way to force saving
         self.dismissController(nil)
     }

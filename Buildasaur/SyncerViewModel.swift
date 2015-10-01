@@ -37,10 +37,13 @@ struct SyncerViewModel {
         
         self.status = active.map { SyncerViewModel.stringForState($0) }
         
-        self.host = SignalProducer(value: syncer.xcodeServer.config.host)
-            .map { NSURL(string: $0)!.host! }
+        self.host = syncer.xcodeServer
+            .producer
+            .map { $0?.config.host ?? "[No Xcode Server]" }
         
-        self.projectName = SignalProducer(value: syncer.project.workspaceMetadata!.projectName)
+        self.projectName = syncer.project.producer
+            .map { $0?.workspaceMetadata?.projectName ?? "[No Project]" }
+        
         self.buildTemplateName = SignalProducer(value: syncer.currentBuildTemplate().name!)
         self.editButtonTitle = SignalProducer(value: "Edit")
         self.editButtonEnabled = active.map { !$0 }

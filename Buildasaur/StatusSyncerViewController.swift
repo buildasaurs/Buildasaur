@@ -156,8 +156,8 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         if let syncer = self.syncer {
             
             self.updateIntervalFromUIToValue(syncer.syncInterval)
-            self.lttmToggle.state = syncer.waitForLttm ? NSOnState : NSOffState
-            self.postStatusCommentsToggle.state = syncer.postStatusComments ? NSOnState : NSOffState
+            self.lttmToggle.state = syncer.waitForLttm.value ? NSOnState : NSOffState
+            self.postStatusCommentsToggle.state = syncer.postStatusComments.value ? NSOnState : NSOffState
         } else {
             self.updateIntervalFromUIToValue(15) //default
             self.lttmToggle.state = NSOffState //default is false
@@ -239,7 +239,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         let oldWatchedBranchNames: [String]
         if let syncer = self.syncer {
             self.storageManager.removeSyncer(syncer)
-            oldWatchedBranchNames = syncer.watchedBranchNames
+            oldWatchedBranchNames = syncer.watchedBranchNames.value
         } else {
             oldWatchedBranchNames = []
         }

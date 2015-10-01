@@ -12,7 +12,7 @@ import BuildaKit
 class SyncerEditViewController: PresentableViewController {
     
     var syncer: HDGitHubXCBotSyncer!
-    var storageManager: StorageManager! //TODO: this should be removed for a less capable, read-only version
+    var storageManager: StorageManager! //TODO: this should be removed for a less capable, read-only version?
     
     weak var projectStatusViewController: StatusProjectViewController?
     weak var projectStatusEmptyViewController: StatusProjectEmptyViewController?
@@ -26,28 +26,28 @@ class SyncerEditViewController: PresentableViewController {
         super.viewDidLoad()
         
         //TODO: move to a better place
-        if self.syncer != nil && self.syncer.project != nil {
-            self.swapInFullProjectViewController(self.syncer.project)
+        if self.syncer != nil {
+            if let project = self.syncer.project.value {
+                self.swapInFullProjectViewController(project)
+            }
         }
     }
     
     override func viewWillAppear() {
         super.viewWillAppear()
         
-        self.title = self.syncer.project.workspaceMetadata?.projectName
+        self.title = self.syncer.project.value?.workspaceMetadata?.projectName
         
         if let window = self.view.window {
             window.minSize = CGSizeMake(658, 512)
         }
     }
     
-    override func prepareForSegue(segue: NSStoryboardSegue, sender: AnyObject?) {
+    func configureViewController(viewController: NSViewController, sender: AnyObject?) {
         
-        let destinationController = segue.destinationController as! NSViewController
-        
-        if let storableViewController = destinationController as? StorableViewController {
+        if let storableViewController = viewController as? StorableViewController {
             storableViewController.storageManager = self.storageManager
-
+            
             if let projectStatusEmptyViewController = storableViewController as? StatusProjectEmptyViewController {
                 self.projectStatusEmptyViewController = projectStatusEmptyViewController
                 projectStatusEmptyViewController.emptyProjectDelegate = self
@@ -58,12 +58,12 @@ class SyncerEditViewController: PresentableViewController {
                 
                 if let serverStatusViewController = statusViewController as? StatusServerViewController {
                     self.serverStatusViewController = serverStatusViewController
-                    serverStatusViewController.serverConfig = self.syncer.xcodeServer.config
+                    serverStatusViewController.serverConfig = self.syncer.xcodeServer.value!.config
                 }
                 
                 if let projectStatusViewController = statusViewController as? StatusProjectViewController {
                     self.projectStatusViewController = projectStatusViewController
-                    projectStatusViewController.project = self.syncer.project
+                    projectStatusViewController.project = self.syncer.project.value!
                 }
                 
                 if let syncerStatusViewController = statusViewController as? StatusSyncerViewController {
@@ -73,7 +73,7 @@ class SyncerEditViewController: PresentableViewController {
             }
         }
         
-        if let buildTemplateViewController = destinationController as? BuildTemplateViewController {
+        if let buildTemplateViewController = viewController as? BuildTemplateViewController {
             buildTemplateViewController.storageManager = self.storageManager
             buildTemplateViewController.buildTemplate = self.buildTemplateParams!.buildTemplate
             buildTemplateViewController.project = self.buildTemplateParams!.project
@@ -82,7 +82,12 @@ class SyncerEditViewController: PresentableViewController {
             }
             self.buildTemplateParams = nil
         }
+    }
+    
+    override func prepareForSegue(segue: NSStoryboardSegue, sender: AnyObject?) {
         
+        let destinationController = segue.destinationController as! NSViewController
+        self.configureViewController(destinationController, sender: sender)
         super.prepareForSegue(segue, sender: sender)
     }
     
@@ -124,17 +129,17 @@ extension SyncerEditViewController: StatusProjectEmptyViewControllerDelegate {
         //create full view controller
         let projectViewController = self.storyboardLoader
             .viewControllerWithStoryboardIdentifier("projectViewController") as! StatusProjectViewController
-        
-        projectViewController.storageManager = self.storageManager
-        projectViewController.delegate = self
-        projectViewController.project = self.syncer.project
-        self.projectStatusViewController = projectViewController
+        self.configureViewController(projectViewController, sender: nil)
         
         self.addChildViewController(projectViewController)
         let from = self.projectStatusEmptyViewController!
         let to = projectViewController
         self.transitionFromViewController(from, toViewController: to, options: NSViewControllerTransitionOptions.None, completionHandler: nil)
     }
+}
+
+extension SyncerEditViewController {
+    
 }
 
 extension SyncerEditViewController: StatusSiblingsViewControllerDelegate {
