@@ -74,9 +74,9 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
         self.testDeviceFilterComboBox.usesDataSource = true
         self.testDeviceFilterComboBox.dataSource = self
         
-        let schemes = self.project.schemeNames()
+        let schemeNames = self.project.schemes().map { $0.name }
         self.schemesComboBox.removeAllItems()
-        self.schemesComboBox.addItemsWithObjectValues(schemes)
+        self.schemesComboBox.addItemsWithObjectValues(schemeNames)
         
         let temp = self.buildTemplate
 
@@ -345,14 +345,19 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
         //validate that the selection is valid
         if let selectedScheme = self.schemesComboBox.objectValueOfSelectedItem as? String
         {
-            let schemes = self.project.schemeNames()
-            if schemes.indexOf(selectedScheme) != nil {
+            let schemes = self.project.schemes()
+            let schemeNames = schemes.map { $0.name }
+            let index = schemeNames.indexOf(selectedScheme)
+            if let index = index {
+                
+                let scheme = schemes[index]
+                
                 //found it, good, use it
                 self.buildTemplate.scheme = selectedScheme
                 
                 //also refresh devices for testing based on the scheme type
                 do {
-                    let platformType = try XcodeDeviceParser.parseDeviceTypeFromProjectUrlAndScheme(self.project.url, scheme: selectedScheme).toPlatformType()
+                    let platformType = try XcodeDeviceParser.parseDeviceTypeFromProjectUrlAndScheme(self.project.url, scheme: scheme).toPlatformType()
                     self.buildTemplate.platformType = platformType
                     self.reloadUI()
                     self.fetchDevices({ () -> () in

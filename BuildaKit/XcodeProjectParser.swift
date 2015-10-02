@@ -57,9 +57,9 @@ public class XcodeProjectParser {
         return filtered
     }
     
-    private class func findCheckoutOrBlueprintUrl(workspaceUrl: NSURL) throws -> NSURL {
+    private class func findCheckoutOrBlueprintUrl(projectOrWorkspaceUrl: NSURL) throws -> NSURL {
         
-        if let found = try self.firstItemMatchingTestRecursive(workspaceUrl, test: { (itemUrl: NSURL) -> Bool in
+        if let found = try self.firstItemMatchingTestRecursive(projectOrWorkspaceUrl, test: { (itemUrl: NSURL) -> Bool in
             
             let pathExtension = itemUrl.pathExtension
             return pathExtension == "xccheckout" || pathExtension == "xcscmblueprint"
@@ -95,7 +95,7 @@ public class XcodeProjectParser {
         }
     }
     
-    public class func sharedSchemeUrlsFromProjectOrWorkspaceUrl(url: NSURL) -> [NSURL] {
+    public class func sharedSchemesFromProjectOrWorkspaceUrl(url: NSURL) -> [XcodeScheme] {
         
         var projectUrls: [NSURL]
         if self.isWorkspaceUrl(url) {
@@ -111,16 +111,16 @@ public class XcodeProjectParser {
         }
         
         //we have the project urls, now let's parse schemes from each of them
-        let schemeUrls = projectUrls.map {
+        let schemes = projectUrls.map {
             return self.sharedSchemeUrlsFromProjectUrl($0)
-        }.reduce([NSURL](), combine: { (arr, newUrls) -> [NSURL] in
-            arr + newUrls
+        }.reduce([XcodeScheme](), combine: { (arr, newSchemes) -> [XcodeScheme] in
+            return arr + newSchemes
         })
         
-        return schemeUrls
+        return schemes
     }
     
-    private class func sharedSchemeUrlsFromProjectUrl(url: NSURL) -> [NSURL] {
+    private class func sharedSchemeUrlsFromProjectUrl(url: NSURL) -> [XcodeScheme] {
         
         //the structure is
         //in a project file, if there are any shared schemes, they will be in
@@ -138,17 +138,18 @@ public class XcodeProjectParser {
                         return itemUrl.lastPathComponent == "xcschemes"
                 }) {
                     //we have the right folder, yay! just filter all files ending with xcscheme
-                    let schemes = try self.allItemsMatchingTest(schemesFolder, test: { (itemUrl: NSURL) -> Bool in
+                    let schemeUrls = try self.allItemsMatchingTest(schemesFolder, test: { (itemUrl: NSURL) -> Bool in
                         let ext = itemUrl.pathExtension ?? ""
                         return ext == "xcscheme"
                     })
+                    let schemes = schemeUrls.map { XcodeScheme(path: $0, ownerProjectOrWorkspace: url) }
                     return schemes
                 }
             }
         } catch {
             Log.error(error)
         }
-        return [NSURL]()
+        return []
     }
     
     private class func isProjectUrl(url: NSURL) -> Bool {
@@ -160,46 +161,16 @@ public class XcodeProjectParser {
     }
 
     private class func projectUrlsFromWorkspace(url: NSURL) -> [NSURL]? {
+        
         assert(self.isWorkspaceUrl(url), "Url \(url) is not a workspace url")
         
-        //parse the workspace contents url and get the urls of the contained projects
-        let contentsUrl = url.URLByAppendingPathComponent("contents.xcworkspacedata")
-        
-        if let contentsData = NSFileManager.defaultManager().contentsAtPath(contentsUrl.path!) {
-            
-            if let stringContents = NSString(data: contentsData, encoding: NSUTF8StringEncoding) {
-                //parse by lines
-                let components = stringContents.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
-                
-                let projectRelativePaths = components.map {
-                    (line: String) -> String? in
-                    
-                    //xcode 7 and 6 styles (container vs group)
-                    let range1 = line.rangeOfString("container:") ?? line.rangeOfString("group:")
-                    let range2 = line.rangeOfString("\">", options: NSStringCompareOptions.BackwardsSearch)
-                    if let range1 = range1, let range2 = range2 {
-                        let start = range1.endIndex
-                        let end = range2.startIndex
-                        return line.substringWithRange(Range<String.Index>(start: start, end: end))
-                    }
-                    return nil
-                }.filter {
-                    return $0 != nil
-                }.map {
-                    return $0!
-                }
-
-                //we now have relative paths, let's make them absolute
-                let absolutePaths = projectRelativePaths.map {
-                    return url.URLByAppendingPathComponent("..").URLByAppendingPathComponent($0)
-                }
-                
-                //ok, we're done, return 
-                return absolutePaths
-            }
+        do {
+            let urls = try XcodeProjectXMLParser.parseProjectsInsideOfWorkspace(url)
+            return urls
+        } catch {
+            Log.error("Couldn't load workspace at path \(url) with error \(error)")
+            return nil
         }
-        Log.error("Couldn't load contents of workspace \(url)")
-        return nil
     }
     
     private class func parseSharedSchemesFromProjectURL(url: NSURL) -> (schemeUrls: [NSURL]?, error: NSError?) {

@@ -3,6 +3,11 @@ PODS:
   - BuildaUtils (0.1.1)
   - ekgclient (0.3.0):
     - Alamofire (= 2.0.0-beta.3)
+  - Ji (1.1.2):
+    - Ji/Ji (= 1.1.2)
+  - Ji/Ji (1.1.2):
+    - Ji/Ji-libxml
+  - Ji/Ji-libxml (1.1.2)
   - ReactiveCocoa (4.0.2-alpha-1):
     - ReactiveCocoa/UI (= 4.0.2-alpha-1)
     - Result (~> 0.6-beta.1)
@@ -14,13 +19,14 @@ PODS:
   - ReactiveCocoa/UI (4.0.2-alpha-1):
     - ReactiveCocoa/Core
     - Result (~> 0.6-beta.1)
-  - Result (0.6-beta.1)
+  - Result (0.6.0-beta.3)
   - XcodeServerSDK (0.3.1):
     - BuildaUtils (~> 0.1.0)
 
 DEPENDENCIES:
   - BuildaUtils (~> 0.1.1)
   - ekgclient (~> 0.3.0)
+  - Ji (= 1.1.2)
   - ReactiveCocoa (= 4.0.2-alpha-1)
   - XcodeServerSDK (~> 0.3.1)
 
@@ -28,8 +34,9 @@ SPEC CHECKSUMS:
   Alamofire: 39dddb7d3725d1771b1d2f7099c8bd45bd83ffbb
   BuildaUtils: 9f7719d6cdeb230ba1e2a01f8b77ceb619815848
   ekgclient: 40f5d347e2ede450b3e50ac7c6bd84d96e7b84ad
+  Ji: 477ec17f9abe9d7f016d714f7b5da8c3c67a2e15
   ReactiveCocoa: 652cf90e5de65708e7e2111f77405756da21aabe
-  Result: af24e3e57ab81005ec4221a53fd36dc1e7a52869
+  Result: b80bca7becdda9a2e44c4fd65b4b4a7b5db4cf9a
   XcodeServerSDK: 49a969c576edece50d0886c33f6f42c3fdcf4c1e
 
 COCOAPODS: 0.39.0.beta.3

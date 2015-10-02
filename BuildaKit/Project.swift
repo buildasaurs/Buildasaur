@@ -143,11 +143,10 @@ public class Project : JSONSerializable {
         return json
     }
     
-    public func schemeNames() -> [String] {
+    public func schemes() -> [XcodeScheme] {
         
-        let schemes = XcodeProjectParser.sharedSchemeUrlsFromProjectOrWorkspaceUrl(self.url)
-        let names = schemes.map { ($0.lastPathComponent! as NSString).stringByDeletingPathExtension }
-        return names
+        let schemes = XcodeProjectParser.sharedSchemesFromProjectOrWorkspaceUrl(self.url)
+        return schemes
     }
     
     private class func loadWorkspaceMetadata(url: NSURL) throws -> WorkspaceMetadata {
