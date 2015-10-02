@@ -57,9 +57,9 @@ public class XcodeProjectParser {
         return filtered
     }
     
-    private class func findCheckoutOrBlueprintUrl(workspaceUrl: NSURL) throws -> NSURL {
+    private class func findCheckoutOrBlueprintUrl(projectOrWorkspaceUrl: NSURL) throws -> NSURL {
         
-        if let found = try self.firstItemMatchingTestRecursive(workspaceUrl, test: { (itemUrl: NSURL) -> Bool in
+        if let found = try self.firstItemMatchingTestRecursive(projectOrWorkspaceUrl, test: { (itemUrl: NSURL) -> Bool in
             
             let pathExtension = itemUrl.pathExtension
             return pathExtension == "xccheckout" || pathExtension == "xcscmblueprint"
@@ -160,46 +160,16 @@ public class XcodeProjectParser {
     }
 
     private class func projectUrlsFromWorkspace(url: NSURL) -> [NSURL]? {
+        
         assert(self.isWorkspaceUrl(url), "Url \(url) is not a workspace url")
         
-        //parse the workspace contents url and get the urls of the contained projects
-        let contentsUrl = url.URLByAppendingPathComponent("contents.xcworkspacedata")
-        
-        if let contentsData = NSFileManager.defaultManager().contentsAtPath(contentsUrl.path!) {
-            
-            if let stringContents = NSString(data: contentsData, encoding: NSUTF8StringEncoding) {
-                //parse by lines
-                let components = stringContents.componentsSeparatedByCharactersInSet(NSCharacterSet.newlineCharacterSet())
-                
-                let projectRelativePaths = components.map {
-                    (line: String) -> String? in
-                    
-                    //xcode 7 and 6 styles (container vs group)
-                    let range1 = line.rangeOfString("container:") ?? line.rangeOfString("group:")
-                    let range2 = line.rangeOfString("\">", options: NSStringCompareOptions.BackwardsSearch)
-                    if let range1 = range1, let range2 = range2 {
-                        let start = range1.endIndex
-                        let end = range2.startIndex
-                        return line.substringWithRange(Range<String.Index>(start: start, end: end))
-                    }
-                    return nil
-                }.filter {
-                    return $0 != nil
-                }.map {
-                    return $0!
-                }
-
-                //we now have relative paths, let's make them absolute
-                let absolutePaths = projectRelativePaths.map {
-                    return url.URLByAppendingPathComponent("..").URLByAppendingPathComponent($0)
-                }
-                
-                //ok, we're done, return 
-                return absolutePaths
-            }
+        do {
+            let urls = try XcodeProjectXMLParser.parseProjectsInsideOfWorkspace(url)
+            return urls
+        } catch {
+            Log.error("Couldn't load workspace at path \(url) with error \(error)")
+            return nil
         }
-        Log.error("Couldn't load contents of workspace \(url)")
-        return nil
     }
     
     private class func parseSharedSchemesFromProjectURL(url: NSURL) -> (schemeUrls: [NSURL]?, error: NSError?) {
