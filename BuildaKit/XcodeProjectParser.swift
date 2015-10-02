@@ -95,7 +95,7 @@ public class XcodeProjectParser {
         }
     }
     
-    public class func sharedSchemeUrlsFromProjectOrWorkspaceUrl(url: NSURL) -> [NSURL] {
+    public class func sharedSchemesFromProjectOrWorkspaceUrl(url: NSURL) -> [XcodeScheme] {
         
         var projectUrls: [NSURL]
         if self.isWorkspaceUrl(url) {
@@ -111,16 +111,16 @@ public class XcodeProjectParser {
         }
         
         //we have the project urls, now let's parse schemes from each of them
-        let schemeUrls = projectUrls.map {
+        let schemes = projectUrls.map {
             return self.sharedSchemeUrlsFromProjectUrl($0)
-        }.reduce([NSURL](), combine: { (arr, newUrls) -> [NSURL] in
-            arr + newUrls
+        }.reduce([XcodeScheme](), combine: { (arr, newSchemes) -> [XcodeScheme] in
+            return arr + newSchemes
         })
         
-        return schemeUrls
+        return schemes
     }
     
-    private class func sharedSchemeUrlsFromProjectUrl(url: NSURL) -> [NSURL] {
+    private class func sharedSchemeUrlsFromProjectUrl(url: NSURL) -> [XcodeScheme] {
         
         //the structure is
         //in a project file, if there are any shared schemes, they will be in
@@ -138,17 +138,18 @@ public class XcodeProjectParser {
                         return itemUrl.lastPathComponent == "xcschemes"
                 }) {
                     //we have the right folder, yay! just filter all files ending with xcscheme
-                    let schemes = try self.allItemsMatchingTest(schemesFolder, test: { (itemUrl: NSURL) -> Bool in
+                    let schemeUrls = try self.allItemsMatchingTest(schemesFolder, test: { (itemUrl: NSURL) -> Bool in
                         let ext = itemUrl.pathExtension ?? ""
                         return ext == "xcscheme"
                     })
+                    let schemes = schemeUrls.map { XcodeScheme(path: $0, ownerProjectOrWorkspace: url) }
                     return schemes
                 }
             }
         } catch {
             Log.error(error)
         }
-        return [NSURL]()
+        return []
     }
     
     private class func isProjectUrl(url: NSURL) -> Bool {
