@@ -115,7 +115,7 @@ class SyncerTests: XCTestCase {
             MockBranch(name: "ef/migrating_from_php_to_mongo_db")
         ]
         
-        self.syncer.watchedBranchNames = [
+        self.syncer.watchedBranchNames.value = [
             "cd/broke_something",
             "ef/migrating_from_php_to_mongo_db"
         ]
