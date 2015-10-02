@@ -17,6 +17,7 @@ end
 
 target 'BuildaKit' do
 	also_xcode_pods
+	pod 'Ji', '1.1.2'
 end
 
 target 'BuildaKitTests' do

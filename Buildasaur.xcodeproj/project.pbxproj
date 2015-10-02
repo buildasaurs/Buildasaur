@@ -87,6 +87,7 @@
 		3ACBAE151B5ADE2A00204457 /* XcodeProject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADF91B5ADE2A00204457 /* XcodeProject.swift */; };
 		3ACBAE161B5ADE2A00204457 /* XcodeProjectParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADFA1B5ADE2A00204457 /* XcodeProjectParser.swift */; };
 		3ACBAE171B5ADE2A00204457 /* XcodeServerSyncerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADFB1B5ADE2A00204457 /* XcodeServerSyncerUtils.swift */; };
+		3ACF93A61BBE8D0B00CD888C /* XcodeProjectXMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACF93A51BBE8D0B00CD888C /* XcodeProjectXMLParser.swift */; settings = {ASSET_TAGS = (); }; };
 		3ACF93A41BBE80B400CD888C /* XcodeScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACF93A31BBE80B400CD888C /* XcodeScheme.swift */; settings = {ASSET_TAGS = (); }; };
 		3AD338B01AAE31D500ECD0F2 /* BuildTemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD338AF1AAE31D500ECD0F2 /* BuildTemplateViewController.swift */; };
 		3AF090B81B1134AA0058567F /* BranchWatchingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF090B71B1134AA0058567F /* BranchWatchingViewController.swift */; };
@@ -263,6 +264,7 @@
 		3ACBADF91B5ADE2A00204457 /* XcodeProject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeProject.swift; sourceTree = "<group>"; };
 		3ACBADFA1B5ADE2A00204457 /* XcodeProjectParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeProjectParser.swift; sourceTree = "<group>"; };
 		3ACBADFB1B5ADE2A00204457 /* XcodeServerSyncerUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeServerSyncerUtils.swift; sourceTree = "<group>"; };
+		3ACF93A51BBE8D0B00CD888C /* XcodeProjectXMLParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeProjectXMLParser.swift; sourceTree = "<group>"; };
 		3ACF93A31BBE80B400CD888C /* XcodeScheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeScheme.swift; sourceTree = "<group>"; };
 		3AD338AF1AAE31D500ECD0F2 /* BuildTemplateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildTemplateViewController.swift; sourceTree = "<group>"; };
 		3AF090B71B1134AA0058567F /* BranchWatchingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BranchWatchingViewController.swift; sourceTree = "<group>"; };
@@ -475,6 +477,7 @@
 				3ACBADFB1B5ADE2A00204457 /* XcodeServerSyncerUtils.swift */,
 				3A2024AA1BBAF60A0093807F /* SourceControlFileParser.swift */,
 				3A2024AC1BBAF64B0093807F /* WorkspaceMetadata.swift */,
+				3ACF93A51BBE8D0B00CD888C /* XcodeProjectXMLParser.swift */,
 				3ACF93A31BBE80B400CD888C /* XcodeScheme.swift */,
 			);
 			path = BuildaKit;
@@ -1157,6 +1160,7 @@
 				3ACBAE0B1B5ADE2A00204457 /* SyncPair_Branch_NoBot.swift in Sources */,
 				3ACBAE011B5ADE2A00204457 /* Project.swift in Sources */,
 				3ACBAE0D1B5ADE2A00204457 /* SyncPair_PR_Bot.swift in Sources */,
+				3ACF93A61BBE8D0B00CD888C /* XcodeProjectXMLParser.swift in Sources */,
 				3ACBAE031B5ADE2A00204457 /* StorageManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
