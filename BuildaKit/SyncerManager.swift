@@ -7,24 +7,45 @@
 //
 
 import Foundation
+import ReactiveCocoa
+import XcodeServerSDK
+
+//TODO: remove invalid configs on startup?
 
 //owns running syncers and their children, manages starting/stopping them,
 //creating them from configurations
 
+typealias ConfigTriplet = (SyncerConfig, XcodeServerConfig, ProjectConfig)
+
 public class SyncerManager {
     
-    public func stopSyncers() {
-//        self.syncerConfigs.value.forEach { $0.active = false }
+    public let storageManager: StorageManager
+    
+    public let syncersProducer: SignalProducer<[HDGitHubXCBotSyncer], NoError>
+    
+    private var syncers: [HDGitHubXCBotSyncer]
+    private var configTriplets: SignalProducer<[ConfigTriplet], NoError>
+    
+    public init(storageManager: StorageManager) {
+        self.storageManager = storageManager
+        self.syncers = []
+        let configTriplets = SyncerProducerFactory.createTripletsProducer(storageManager)
+        self.configTriplets = configTriplets
+        let syncersProducer = SyncerProducerFactory.createSyncersProducer(configTriplets)
+        self.syncersProducer = syncersProducer
+        syncersProducer.startWithNext { self.syncers = $0 }
+    }
+    
+    deinit {
+        self.stopSyncers()
     }
     
     public func startSyncers() {
-//        self.syncerConfigs.value.forEach { $0.active = true }
+        self.syncers.forEach { $0.active = true }
     }
-    
-    public func stop() {
-//        self.storageManager.saveAll()
-//        self.saveAll()
-        self.stopSyncers()
+
+    public func stopSyncers() {
+        self.syncers.forEach { $0.active = false }
     }
 
 }

@@ -11,7 +11,7 @@ end
 
 def also_xcode_pods
 	pods_for_errbody
-	pod 'XcodeServerSDK', '~> 0.3.3'
+	pod 'XcodeServerSDK', '~> 0.3.5'
 	pod 'ekgclient', '~> 0.3.0', :inhibit_warnings => true
 end
 
@@ -42,5 +42,9 @@ target 'BuildaHeartbeatKit' do
 	also_xcode_pods
 end
 
-
+post_install do |installer|
+    installer.pods_project.build_configuration_list.build_configurations.each do |configuration|
+        configuration.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+    end
+end
 

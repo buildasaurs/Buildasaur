@@ -21,8 +21,9 @@ import BuildaKit
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     
+    var syncerManager: SyncerManager!
+    
     let menuItemManager = MenuItemManager()
-    let storageManager = StorageManager.sharedInstance
     var storyboardLoader: StoryboardLoader!
     
     var dashboardViewController: DashboardViewController?
@@ -32,7 +33,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         
         Logging.setup(alsoIntoFile: true)
-
+        
+        self.setupPersistence()
+        
         self.storyboardLoader = StoryboardLoader(storyboard: NSStoryboard.mainStoryboard)
         self.storyboardLoader.delegate = self
         
@@ -43,12 +46,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.presentViewControllerInUniqueWindow(dashboard)
         self.dashboardWindow = self.windowForPresentableViewControllerWithIdentifier("dashboard")!.0
     }
+    
+    func setupPersistence() {
+        let storageManager = StorageManager()
+        let syncerManager = SyncerManager(storageManager: storageManager)
+        self.syncerManager = syncerManager
+    }
 
     func createInitialViewController() -> DashboardViewController {
         
         let dashboard: DashboardViewController = self.storyboardLoader
             .presentableViewControllerWithStoryboardIdentifier("dashboardViewController", uniqueIdentifier: "dashboard")
-        dashboard.storageManager = storageManager
+        dashboard.syncerManager = self.syncerManager
         return dashboard
     }
     
@@ -86,7 +95,7 @@ extension AppDelegate: PresentableViewControllerDelegate {
         
         if let syncerEdit = viewController as? SyncerEditViewController {
             //TODO: remove
-            syncerEdit.storageManager = self.storageManager
+            syncerEdit.storageManager = self.syncerManager.storageManager
         }
     }
     

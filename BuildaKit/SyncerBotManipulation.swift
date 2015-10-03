@@ -15,10 +15,10 @@ extension HDGitHubXCBotSyncer {
     
     public func currentBuildTemplate() -> BuildTemplate! {
         
-        let preferredTemplateId = self.config.preferredTemplateRef
-        if let template = StorageManager.sharedInstance.buildTemplates.value.filter({ $0.id == preferredTemplateId }).first {
-            return template
-        }
+//        let preferredTemplateId = self.config.preferredTemplateRef
+//        if let template = StorageManager.sharedInstance.buildTemplates.value.filter({ $0.id == preferredTemplateId }).first {
+//            return template
+//        }
         
         assertionFailure("Couldn't get the current build template, this syncer should NOT be running!")
         return nil

@@ -17,7 +17,7 @@ class DashboardViewController: PresentableViewController {
     @IBOutlet weak var stopAllButton: NSButton!
     
     //injected before viewDidLoad
-    var storageManager: StorageManager!
+    var syncerManager: SyncerManager!
     
     private var syncerViewModels: MutableProperty<[SyncerViewModel]> = MutableProperty([])
     
@@ -57,12 +57,11 @@ class DashboardViewController: PresentableViewController {
         let create: SyncerViewModel.CreateViewControllerType = {
             self.storyboardLoader.presentableViewControllerWithStoryboardIdentifier($0, uniqueIdentifier: $1)
         }
-        self.storageManager.syncerConfigs.producer.startWithNext { newSyncers in
-            //TODO: here get a proper syncer for this config and add to the view model
-//            self.syncerViewModels.value = newSyncers.map {
-//                SyncerViewModel(syncer: $0, presentViewController: present, createViewController: create)
-//            }
-//            self.syncersTableView.reloadData()
+        self.syncerManager.syncersProducer.startWithNext { newSyncers in
+            self.syncerViewModels.value = newSyncers.map {
+                SyncerViewModel(syncer: $0, presentViewController: present, createViewController: create)
+            }
+            self.syncersTableView.reloadData()
         }
     }
     

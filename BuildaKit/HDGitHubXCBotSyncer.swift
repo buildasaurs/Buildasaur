@@ -13,10 +13,10 @@ import ReactiveCocoa
 
 public class HDGitHubXCBotSyncer : Syncer {
     
+    //TODO: change to normal, readonly properties?
     public let github: MutableProperty<GitHubServer?>
     public let xcodeServer: MutableProperty<XcodeServer?>
     public let project: MutableProperty<Project?>
-    
     public let config: SyncerConfig
     
     public init(integrationServer: XcodeServer, sourceServer: GitHubServer, project: Project, config: SyncerConfig) {

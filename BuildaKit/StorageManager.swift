@@ -15,8 +15,6 @@ import ReactiveCocoa
 
 public class StorageManager {
     
-    public static let sharedInstance = StorageManager()
-    
     public let syncerConfigs = MutableProperty<[SyncerConfig]>([])
     public let serverConfigs = MutableProperty<[String: XcodeServerConfig]>([:])
     public let projectConfigs = MutableProperty<[String: ProjectConfig]>([:])
@@ -25,13 +23,13 @@ public class StorageManager {
     
     private var heartbeatManager: HeartbeatManager!
     
-    private init() {
+    public init() {
         self.loadAllFromPersistence()
         self.setupHeartbeatManager()
     }
     
     deinit {
-//        self.stop()
+        self.saveAll()
     }
     
     private func setupHeartbeatManager() {
@@ -58,25 +56,31 @@ public class StorageManager {
     public func addSyncer(syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool,
         projectConfig: ProjectConfig, serverConfig: XcodeServerConfig, watchedBranchNames: [String]) -> SyncerConfig? {
             
-            if syncInterval <= 0 {
-                Log.error("Sync interval must be > 0 seconds.")
-                return nil
-            }
-            
-            //TODO: move preferred build template from project here
-            let projectRef = projectConfig.id
-            let xcodeServerRef = serverConfig.id
-            
-            let syncerConfig = SyncerConfig(
-                preferredTemplateRef: "",
-                projectRef: projectRef,
-                xcodeServerRef: xcodeServerRef,
-                postStatusComments: postStatusComments,
-                syncInterval: syncInterval,
-                waitForLttm: waitForLttm,
-                watchedBranchNames: watchedBranchNames)
-            self.syncerConfigs.value.append(syncerConfig)
-            return syncerConfig
+            //this function should already take a config
+//            if syncInterval <= 0 {
+//                Log.error("Sync interval must be > 0 seconds.")
+//                return nil
+//            }
+//            
+//            //TODO: move preferred build template from project here
+//            
+//            var syncerConfig = SyncerConfig()
+//            syncerConfig.preferredTemplateRef = "" //TODO:
+//            syncerConfig.projectRef = projectConfig.id
+//            syncerConfig.xcodeServerRef = serverConfig.id
+//            
+//            
+//            let syncerConfig = SyncerConfig(
+//                preferredTemplateRef: "",
+//                projectRef: projectRef,
+//                xcodeServerRef: xcodeServerRef,
+//                postStatusComments: postStatusComments,
+//                syncInterval: syncInterval,
+//                waitForLttm: waitForLttm,
+//                watchedBranchNames: watchedBranchNames)
+//            self.syncerConfigs.value.append(syncerConfig)
+//            return syncerConfig
+            return nil
     }
     
     public func saveBuildTemplate(buildTemplate: BuildTemplate) {

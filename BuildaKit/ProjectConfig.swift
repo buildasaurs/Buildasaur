@@ -10,21 +10,22 @@ import Foundation
 import BuildaUtils
 
 public struct ProjectConfig {
-    
-    public let url: String
-    public let githubToken: String
-    public let privateSSHKeyPath: String
-    public let publicSSHKeyPath: String
-    public let sshPassphrase: String?
+
     public let id: RefType
+    public var url: String
+    public var githubToken: String
+    public var privateSSHKeyPath: String
+    public var publicSSHKeyPath: String
+    public var sshPassphrase: String?
     
-    public init(url: String, githubToken: String, privateSSHKeyPath: String, publicSSHKeyPath: String, sshPassphrase: String? = nil, id: RefType? = nil) {
-        self.url = url
-        self.githubToken = githubToken
-        self.privateSSHKeyPath = privateSSHKeyPath
-        self.publicSSHKeyPath = publicSSHKeyPath
-        self.sshPassphrase = sshPassphrase
-        self.id = id ?? Ref.new()
+    //creates a new default ProjectConfig
+    public init() {
+        self.id = Ref.new()
+        self.url = ""
+        self.githubToken = ""
+        self.privateSSHKeyPath = ""
+        self.publicSSHKeyPath = ""
+        self.sshPassphrase = nil
     }
     
     public func validate() throws {

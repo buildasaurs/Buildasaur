@@ -18,29 +18,33 @@ public struct Ref {
 }
 
 public struct SyncerConfig {
-
-    public let preferredTemplateRef: RefType
-    public let projectRef: RefType
-    public let xcodeServerRef: RefType
     
-    public let postStatusComments: Bool
-    public let syncInterval: NSTimeInterval
-    public let waitForLttm: Bool
-    public let watchedBranchNames: [String]
+    public let id: RefType
+    public var preferredTemplateRef: RefType
+    public var projectRef: RefType
+    public var xcodeServerRef: RefType
     
-    public init(preferredTemplateRef: RefType, projectRef: RefType, xcodeServerRef: RefType, postStatusComments: Bool, syncInterval: NSTimeInterval, waitForLttm: Bool, watchedBranchNames: [String]) {
-        self.preferredTemplateRef = preferredTemplateRef
-        self.projectRef = projectRef
-        self.xcodeServerRef = xcodeServerRef
-        self.postStatusComments = postStatusComments
-        self.syncInterval = syncInterval
-        self.waitForLttm = waitForLttm
-        self.watchedBranchNames = watchedBranchNames
+    public var postStatusComments: Bool
+    public var syncInterval: NSTimeInterval
+    public var waitForLttm: Bool
+    public var watchedBranchNames: [String]
+    
+    //creates a default syncer config
+    public init() {
+        self.id = Ref.new()
+        self.preferredTemplateRef = ""
+        self.projectRef = ""
+        self.xcodeServerRef = ""
+        self.postStatusComments = true
+        self.syncInterval = 15
+        self.waitForLttm = false
+        self.watchedBranchNames = []
     }
 }
 
 private struct Keys {
     
+    static let Id = "id"
     static let PreferredTemplateRef = "preferred_template_ref"
     static let ProjectRef = "project_ref"
     static let ServerRef = "server_ref"
@@ -55,6 +59,7 @@ extension SyncerConfig: JSONSerializable {
     
     public func jsonify() -> NSDictionary {
         return [
+            Keys.Id: self.id,
             Keys.PreferredTemplateRef: self.preferredTemplateRef,
             Keys.ProjectRef: self.projectRef,
             Keys.ServerRef: self.xcodeServerRef,
@@ -73,5 +78,6 @@ extension SyncerConfig: JSONSerializable {
         self.syncInterval = try json.get(Keys.SyncInterval)
         self.waitForLttm = try json.get(Keys.WaitForLttm)
         self.watchedBranchNames = try json.get(Keys.WatchedBranches)
+        self.id = try json.getOptionally(Keys.Id) ?? Ref.new()
     }
 }
