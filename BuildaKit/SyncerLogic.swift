@@ -11,29 +11,14 @@ import BuildaGitServer
 import XcodeServerSDK
 import BuildaUtils
 
-extension HDGitHubXCBotSyncer: JSONWritable {
-    
-    public func jsonify() -> NSDictionary {
-        
-        let dict = NSMutableDictionary()
-        dict["sync_interval"] = self.syncInterval
-        dict["project_path"] = self._project.url.absoluteString
-        dict["server_host"] = self._xcodeServer.config.host
-        dict["wait_for_lttm"] = self.waitForLttm
-        dict["post_status_comments"] = self.postStatusComments
-        dict["watched_branches"] = self.watchedBranchNames
-        return dict
-    }
-}
-
 extension HDGitHubXCBotSyncer {
     
     var _project: Project { return self.project.value! }
     var _xcodeServer: XcodeServer { return self.xcodeServer.value! }
     var _github: GitHubServer { return self.github.value! }
-    var _waitForLttm: Bool { return self.waitForLttm.value }
-    var _postStatusComments: Bool { return self.postStatusComments.value }
-    var _watchedBranchNames: [String] { return self.watchedBranchNames.value }
+    var _waitForLttm: Bool { return self.config.waitForLttm }
+    var _postStatusComments: Bool { return self.config.postStatusComments }
+    var _watchedBranchNames: [String] { return self.config.watchedBranchNames }
     
     public typealias BotActions = (
         prsToSync: [(pr: PullRequest, bot: Bot)],

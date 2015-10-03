@@ -17,20 +17,17 @@ public class HDGitHubXCBotSyncer : Syncer {
     public let xcodeServer: MutableProperty<XcodeServer?>
     public let project: MutableProperty<Project?>
     
-    public let waitForLttm: MutableProperty<Bool>
-    public let postStatusComments: MutableProperty<Bool>
-    public let watchedBranchNames: MutableProperty<[String]>
+    public let config: SyncerConfig
     
-    public init(integrationServer: XcodeServer, sourceServer: GitHubServer, project: Project,
-        syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool, watchedBranchNames: [String]) {
+    public init(integrationServer: XcodeServer, sourceServer: GitHubServer, project: Project, config: SyncerConfig) {
             
-            self.github = MutableProperty(sourceServer)
-            self.xcodeServer = MutableProperty(integrationServer)
-            self.project = MutableProperty(project)
-            self.waitForLttm = MutableProperty(waitForLttm)
-            self.postStatusComments = MutableProperty(postStatusComments)
-            self.watchedBranchNames = MutableProperty(watchedBranchNames)
-            super.init(syncInterval: syncInterval)
+        self.github = MutableProperty(sourceServer)
+        self.xcodeServer = MutableProperty(integrationServer)
+        self.project = MutableProperty(project)
+        
+        self.config = config
+        
+        super.init(syncInterval: config.syncInterval)
     }
 }
 

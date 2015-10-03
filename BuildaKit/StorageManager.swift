@@ -17,9 +17,9 @@ public class StorageManager {
     
     public static let sharedInstance = StorageManager()
     
-    public let syncers = MutableProperty<[HDGitHubXCBotSyncer]>([])
+    public let syncers = MutableProperty<[SyncerConfig]>([])
     public let servers = MutableProperty<[String: XcodeServerConfig]>([:])
-    public let projects = MutableProperty<[String: Project]>([:])
+    public let projects = MutableProperty<[String: ProjectConfig]>([:])
     public let buildTemplates = MutableProperty<[BuildTemplate]>([])
     public let config = MutableProperty<[String: AnyObject]>([:])
     
@@ -45,12 +45,13 @@ public class StorageManager {
         }
     }
     
-    public func addProjectAtURL(url: NSURL) throws -> Project {
+    public func addProjectAtURL(url: NSURL) throws -> ProjectConfig {
         
         _ = try Project.attemptToParseFromUrl(url)
-        if let project = Project(url: url) {
-            self.projects.value[project.urlString] = project
-            return project
+        if let path = url.path {
+            let projectConfig = ProjectConfig(url: path)
+            self.projects.value[projectConfig.id] = projectConfig
+            return projectConfig
         }
         throw Error.withInfo("Attempt to parse succeeded but Project still wasn't created")
     }
@@ -63,24 +64,29 @@ public class StorageManager {
     
     public func addSyncer(syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool,
         project: Project, serverConfig: XcodeServerConfig, watchedBranchNames: [String]) -> HDGitHubXCBotSyncer? {
-
-        if syncInterval <= 0 {
-            Log.error("Sync interval must be > 0 seconds.")
-            return nil
-        }
-        
-        let xcodeServer = XcodeServerFactory.server(serverConfig)
-        let github = GitHubFactory.server(project.githubToken)
-        let syncer = HDGitHubXCBotSyncer(
-            integrationServer: xcodeServer,
-            sourceServer: github,
-            project: project,
-            syncInterval: syncInterval,
-            waitForLttm: waitForLttm,
-            postStatusComments: postStatusComments,
-            watchedBranchNames: watchedBranchNames)
-        self.syncers.value.append(syncer)
-        return syncer
+            
+            if syncInterval <= 0 {
+                Log.error("Sync interval must be > 0 seconds.")
+                return nil
+            }
+            
+            let xcodeServer = XcodeServerFactory.server(serverConfig)
+            let github = GitHubFactory.server(project.githubToken)
+            //TODO: move preferred build template from project here
+            let projectRef = project.pro
+            let config = SyncerConfig(
+                preferredTemplateRef: "",
+                projectRef: <#T##RefType#>, xcodeServerRef: <#T##RefType#>, postStatusComments: <#T##Bool#>, syncInterval: <#T##NSTimeInterval#>, waitForLttm: <#T##Bool#>, watchedBranchNames: <#T##[String]#>)
+            let syncer = HDGitHubXCBotSyncer(
+                integrationServer: xcodeServer,
+                sourceServer: github,
+                project: project,
+                syncInterval: syncInterval,
+                waitForLttm: waitForLttm,
+                postStatusComments: postStatusComments,
+                watchedBranchNames: watchedBranchNames)
+            self.syncers.value.append(syncer)
+            return syncer
     }
     
     public func saveBuildTemplate(buildTemplate: BuildTemplate) {

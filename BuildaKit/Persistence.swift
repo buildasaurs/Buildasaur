@@ -87,7 +87,8 @@ public class Persistence {
             
             do {
                 let json = try self.loadJSONFromUrl(url)
-                if let json = json as? NSDictionary, let template = try T(json: json) {
+                if let json = json as? NSDictionary {
+                    let template = try T(json: json)
                     return template
                 }
             } catch {

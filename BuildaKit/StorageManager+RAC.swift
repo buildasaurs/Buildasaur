@@ -12,8 +12,8 @@ import XcodeServerSDK
 
 extension StorageManager {
     
-    public func serverConfigForHost(host: String) -> SignalProducer<XcodeServerConfig, NoError> {
-        let xcodeConfigs = flattenArray(self.servers.producer.map { Array($0.values) })
-        return xcodeConfigs.filter { $0.host == host }
-    }
+//    public func serverConfigForHost(host: String) -> SignalProducer<XcodeServerConfig, NoError> {
+//        let xcodeConfigs = flattenArray(self.servers.producer.map { Array($0.values) })
+//        return xcodeConfigs.filter { $0.host == host }
+//    }
 }

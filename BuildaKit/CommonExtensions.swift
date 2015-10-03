@@ -84,3 +84,25 @@ extension Array {
     }
 }
 
+public enum NSDictionaryParseError: ErrorType {
+    case MissingValueForKey(key: String)
+    case WrongTypeOfValueForKey(key: String, value: AnyObject)
+}
+
+extension NSDictionary {
+    
+    public func get<T>(key: String) throws -> T {
+        
+        guard let value = self[key] else {
+            throw NSDictionaryParseError.MissingValueForKey(key: key)
+        }
+        
+        guard let typedValue = value as? T else {
+            throw NSDictionaryParseError.WrongTypeOfValueForKey(key: key, value: value)
+        }
+        return typedValue
+    }
+}
+
+
+

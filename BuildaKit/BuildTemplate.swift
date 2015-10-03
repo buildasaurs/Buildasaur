@@ -66,7 +66,7 @@ public class BuildTemplate: JSONSerializable {
         self.platformType = nil
     }
     
-    public required init?(json: NSDictionary) {
+    public required init(json: NSDictionary) throws {
         
         self.uniqueId = json.optionalStringForKey(kKeyUniqueId) ?? ""
         self.projectName = json.optionalStringForKey(kKeyProjectName)
@@ -114,7 +114,7 @@ public class BuildTemplate: JSONSerializable {
         }
         
         if !self.validate() {
-            return nil
+            throw Error.withInfo("Invalid input into Build Template")
         }
     }
     

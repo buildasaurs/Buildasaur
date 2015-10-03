@@ -10,11 +10,6 @@ import Cocoa
 import BuildaKit
 import ReactiveCocoa
 
-//we have to cast swift objects back to AnyObject to be accepted by DynamicProperty. sigh.
-func fix<T>(item: T) -> AnyObject? {
-    return item as? AnyObject
-}
-
 class DashboardViewController: PresentableViewController {
 
     @IBOutlet weak var syncersTableView: NSTableView!
@@ -35,59 +30,15 @@ class DashboardViewController: PresentableViewController {
         self.configHeaderView()
     }
     
-    override func viewWillAppear() {
-        super.viewWillAppear()
-    }
-    
-    override func viewDidAppear() {
-        super.viewDidAppear()
-    }
-    
     func configTitle() {
         let version = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as! String
-        self.title = "Buildasaur \(version), at your service"
+        self.title = "Buildasaur \(version), at your service!"
     }
     
     func configHeaderView() {
         
-        let syncerViewModelsProducer = self.syncerViewModels.producer
-        
-        let activeProducers = syncerViewModelsProducer.map { syncerViewModels in
-            return syncerViewModels.map { $0.syncer.activeSignalProducer.producer }
-            }
-        let flatProducers = activeProducers.map { (producers: [SignalProducer<Bool, NoError>]) in
-            return SignalProducer<SignalProducer<Bool, NoError>, NoError> {
-                sink, _ in
-                producers.forEach { sendNext(sink, $0) }
-                sendCompleted(sink)
-            }
-        }.flatten(.Merge)
-        let flatterProducers = flatProducers.flatten(.Merge).map { _ in () }
-        let initial = SignalProducer<Void, NoError>(value: ())
-        
-        let merged = SignalProducer<SignalProducer<Void, NoError>, NoError> {
-            sink, _ in
-            sendNext(sink, flatterProducers)
-            sendNext(sink, initial)
-            sendCompleted(sink)
-        }.flatten(.Merge).on(next: {
-            print("")
-        })
-        
-        //NOT CLEAR why we don't get the initial call so that the state would be correct from the beginnign
-        let syncerViewModelsOnAnyActiveChange = syncerViewModelsProducer.sampleOn(merged).on(next: { _ in
-            print("")
-        })
-        
-        let startAllEnabled = syncerViewModelsOnAnyActiveChange.map { models in
-            return models.filter { !$0.syncer.active }.count > 0
-        }.map(fix)
-        let stopAllEnabled = syncerViewModelsOnAnyActiveChange.map { models in
-            return models.filter { $0.syncer.active }.count > 0
-        }.map(fix)
-        
-        DynamicProperty(object: self.startAllButton, keyPath: "enabled") <~ startAllEnabled
-        DynamicProperty(object: self.stopAllButton, keyPath: "enabled") <~ stopAllEnabled
+        //TODO: once the crashing of Xcode editor is fixed and we can use all of 
+        //RAC, bring back the signals that update the Start/Stop All buttons
     }
     
     func configTableView() {
@@ -131,7 +82,7 @@ class DashboardViewController: PresentableViewController {
     }
     
     @IBAction func newSyncerButtonClicked(sender: AnyObject) {
-        //TODO: configure an editing window with a brand new syncer
+        self.createNewSyncer()
     }
     
     @IBAction func editButtonClicked(sender: BuildaNSButton) {
@@ -141,6 +92,17 @@ class DashboardViewController: PresentableViewController {
     @IBAction func controlButtonClicked(sender: BuildaNSButton) {
         self.syncerViewModelFromSender(sender).controlButtonClicked()
     }
+}
+
+extension DashboardViewController {
+    
+    func createNewSyncer() {
+        //TODO: configure an editing window with a brand new syncer
+        
+        
+        
+    }
+    
 }
 
 extension DashboardViewController: NSTableViewDataSource {
@@ -158,51 +120,44 @@ extension DashboardViewController: NSTableViewDataSource {
         case Edit = "edit"
     }
     
+    func getTypeOfReusableView<T: NSView>(column: Column) -> T {
+        guard let view = self.syncersTableView.makeViewWithIdentifier(column.rawValue, owner: self) else {
+            fatalError("Couldn't get a reusable view for column \(column)")
+        }
+        guard let typedView = view as? T else {
+            fatalError("Couldn't type view \(view) into type \(T.className())")
+        }
+        return typedView
+    }
+    
     func bindTextView(view: NSTableCellView, column: Column, viewModel: SyncerViewModel) {
         
-        let destination = DynamicProperty(object: view.textField!, keyPath: "stringValue")
+        let destination = view.textField!.rac_stringValue
         switch column {
         case .Status:
-            destination <~ viewModel.status.map(fix)
+            destination <~ viewModel.status
         case .XCSHost:
-            destination <~ viewModel.host.map(fix)
+            destination <~ viewModel.host
         case .ProjectName:
-            destination <~ viewModel.projectName.map(fix)
+            destination <~ viewModel.projectName
         case .BuildTemplate:
-            destination <~ viewModel.buildTemplateName.map(fix)
+            destination <~ viewModel.buildTemplateName
         default: break
         }
     }
     
     func bindButtonView(view: BuildaNSButton, column: Column, viewModel: SyncerViewModel) {
         
-        let destination = DynamicProperty(object: view, keyPath: "title")
-        let destinationEnabled = DynamicProperty(object: view, keyPath: "enabled")
+        let destinationTitle = view.rac_title
+        let destinationEnabled = view.rac_enabled
         switch column {
         case .Edit:
-            destination <~ viewModel.editButtonTitle.map(fix)
-            destinationEnabled <~ viewModel.editButtonEnabled.map(fix)
+            destinationTitle <~ viewModel.editButtonTitle
+            destinationEnabled <~ viewModel.editButtonEnabled
         case .Control:
-            destination <~ viewModel.controlButtonTitle.map(fix)
+            destinationTitle <~ viewModel.controlButtonTitle
         default: break
         }
-    }
-    
-    func getButtonView(tableView: NSTableView, column: Column) -> BuildaNSButton {
-        
-        let identifier: String
-        switch column {
-        case .Control:
-            identifier = "controlButtonView"
-        case .Edit:
-            identifier = "editButtonView"
-        default: fatalError("Unrecognized column")
-        }
-        
-        guard let view = tableView.makeViewWithIdentifier(identifier, owner: self) as? BuildaNSButton else {
-            fatalError("Couldn't get a button")
-        }
-        return view
     }
     
     func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
@@ -215,14 +170,13 @@ extension DashboardViewController: NSTableViewDataSource {
         switch column {
         case .Status, .XCSHost, .ProjectName, .BuildTemplate:
             //basic text view
-            let identifier = "textView"
-            guard let view = tableView.makeViewWithIdentifier(identifier, owner: self) as? NSTableCellView else { return nil }
+            let view: NSTableCellView = self.getTypeOfReusableView(column)
             self.bindTextView(view, column: column, viewModel: syncerViewModel)
             return view
             
         case .Control, .Edit:
             //push button
-            let view = self.getButtonView(tableView, column: column)
+            let view: BuildaNSButton = self.getTypeOfReusableView(column)
             self.bindButtonView(view, column: column, viewModel: syncerViewModel)
             view.row = row
             return view

@@ -13,20 +13,18 @@ import XcodeServerSDK
 public class Project : JSONSerializable {
     
     public var url: NSURL {
+        return NSURL(string: self.config.url)!
+    }
+    
+    public var config: ProjectConfig {
         didSet {
-            do { try self.refreshMetadata() } catch {}
+            _ = try? self.refreshMetadata()
         }
     }
     
     public var urlString: String { return self.url.absoluteString }
-    
-    public var preferredTemplateId: String?
-    public var githubToken: String?
-    public var privateSSHKeyUrl: NSURL?
-    public var publicSSHKeyUrl: NSURL?
-    public var sshPassphrase: String?
-    public var privateSSHKey: String? { return self.getContentsOfKeyAtUrl(self.privateSSHKeyUrl) }
-    public var publicSSHKey: String? { return self.getContentsOfKeyAtUrl(self.publicSSHKeyUrl) }
+    public var privateSSHKey: String? { return self.getContentsOfKeyAtPath(self.config.privateSSHKeyPath) }
+    public var publicSSHKey: String? { return self.getContentsOfKeyAtPath(self.config.publicSSHKeyPath) }
     
     public var availabilityState: AvailabilityCheckState
     
@@ -74,7 +72,7 @@ public class Project : JSONSerializable {
         self.workspaceMetadata = meta
     }
     
-    public required init?(json: NSDictionary) {
+    public required init(json: NSDictionary) throws {
         
         self.availabilityState = .Unchecked
         
@@ -102,7 +100,7 @@ public class Project : JSONSerializable {
                 try self.refreshMetadata()
             } catch {
                 Log.error("Error parsing: \(error)")
-                return nil
+                throw error
             }
             
         } else {
@@ -114,7 +112,7 @@ public class Project : JSONSerializable {
             self.privateSSHKeyUrl = nil
             self.sshPassphrase = nil
             self.workspaceMetadata = nil
-            return nil
+            throw Error.withInfo("No Url")
         }
     }
     
@@ -180,18 +178,15 @@ public class Project : JSONSerializable {
         return nil
     }
     
-    private func getContentsOfKeyAtUrl(url: NSURL?) -> String? {
+    private func getContentsOfKeyAtPath(path: String) -> String? {
         
-        if let url = url {
-            do {
-                let key = try NSString(contentsOfURL: url, encoding: NSASCIIStringEncoding)
-                return key as String
-            } catch {
-                Log.error("Couldn't load key at url \(url) with error \(error)")
-            }
-            return nil
+        let url = NSURL(string: path)!
+        do {
+            let key = try NSString(contentsOfURL: url, encoding: NSASCIIStringEncoding)
+            return key as String
+        } catch {
+            Log.error("Couldn't load key at url \(url) with error \(error)")
         }
-        Log.error("Couldn't load key at nil url")
         return nil
     }
 
