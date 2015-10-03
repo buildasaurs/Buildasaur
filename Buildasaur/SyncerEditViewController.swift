@@ -11,9 +11,13 @@ import BuildaKit
 
 class SyncerEditViewController: PresentableViewController {
     
-    var syncer: HDGitHubXCBotSyncer!
-    var storageManager: StorageManager! //TODO: this should be removed for a less capable, read-only version?
+    var syncerManager: SyncerManager!
+    var configTriplet: ConfigTriplet!
     
+    //----------
+
+//    var syncer: HDGitHubXCBotSyncer!
+
     weak var projectStatusViewController: StatusProjectViewController?
     weak var projectStatusEmptyViewController: StatusProjectEmptyViewController?
     
@@ -26,17 +30,17 @@ class SyncerEditViewController: PresentableViewController {
         super.viewDidLoad()
         
         //TODO: move to a better place
-        if self.syncer != nil {
-            if let project = self.syncer.project.value {
-                self.swapInFullProjectViewController(project.url)
-            }
-        }
+//        if self.syncer != nil {
+//            if let project = self.syncer.project.value {
+//                self.swapInFullProjectViewController(project.url)
+//            }
+//        }
     }
     
     override func viewWillAppear() {
         super.viewWillAppear()
         
-        self.title = self.syncer.project.value?.workspaceMetadata?.projectName
+//        self.title = self.syncer.project.value?.workspaceMetadata?.projectName
         
         if let window = self.view.window {
             window.minSize = CGSizeMake(658, 512)
@@ -46,7 +50,7 @@ class SyncerEditViewController: PresentableViewController {
     func configureViewController(viewController: NSViewController, sender: AnyObject?) {
         
         if let storableViewController = viewController as? StorableViewController {
-            storableViewController.storageManager = self.storageManager
+            storableViewController.storageManager = self.syncerManager.storageManager
             
             if let projectStatusEmptyViewController = storableViewController as? StatusProjectEmptyViewController {
                 self.projectStatusEmptyViewController = projectStatusEmptyViewController
@@ -58,23 +62,23 @@ class SyncerEditViewController: PresentableViewController {
                 
                 if let serverStatusViewController = statusViewController as? StatusServerViewController {
                     self.serverStatusViewController = serverStatusViewController
-                    serverStatusViewController.serverConfig = self.syncer.xcodeServer.value!.config
+                    serverStatusViewController.serverConfig = self.configTriplet.server
                 }
                 
                 if let projectStatusViewController = statusViewController as? StatusProjectViewController {
                     self.projectStatusViewController = projectStatusViewController
-                    projectStatusViewController.project = self.syncer.project.value!
+                    projectStatusViewController.projectConfig = self.configTriplet.project
                 }
                 
                 if let syncerStatusViewController = statusViewController as? StatusSyncerViewController {
                     self.syncerStatusViewController = syncerStatusViewController
-                    syncerStatusViewController.syncer = self.syncer
+                    syncerStatusViewController.syncerConfig = self.configTriplet.syncer
                 }
             }
         }
         
         if let buildTemplateViewController = viewController as? BuildTemplateViewController {
-            buildTemplateViewController.storageManager = self.storageManager
+            buildTemplateViewController.storageManager = self.syncerManager.storageManager
             buildTemplateViewController.buildTemplate = self.buildTemplateParams!.buildTemplate
             buildTemplateViewController.project = self.buildTemplateParams!.project
             if let sender = sender as? SetupViewControllerDelegate {

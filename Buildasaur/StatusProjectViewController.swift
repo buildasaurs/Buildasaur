@@ -15,6 +15,10 @@ import BuildaKit
 let kBuildTemplateAddNewString = "Create New..."
 class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, SetupViewControllerDelegate {
     
+    var projectConfig: ProjectConfig!
+    
+    //-----
+    
     var project: Project!
 
     //we have a project

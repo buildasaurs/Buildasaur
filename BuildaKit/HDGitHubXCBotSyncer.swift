@@ -19,6 +19,10 @@ public class HDGitHubXCBotSyncer : Syncer {
     public let project: MutableProperty<Project?>
     public let config: SyncerConfig
     
+    public var configTriplet: ConfigTriplet {
+        return ConfigTriplet(syncer: self.config, server: self.xcodeServer.value!.config, project: self.project.value!.config)
+    }
+    
     public init(integrationServer: XcodeServer, sourceServer: GitHubServer, project: Project, config: SyncerConfig) {
             
         self.github = MutableProperty(sourceServer)

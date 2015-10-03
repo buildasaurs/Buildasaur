@@ -27,16 +27,20 @@ class SyncerProducerFactory {
             tuples.filter { $0.1 != nil && $0.2 != nil }
             }.map { tuples in tuples.map { ($0.0, $0.1!, $0.2!) } }
         
-        //we have triplets of valid configs!
-        return nonNilTuples
+        let triplets = nonNilTuples.map { tuples in
+            return tuples.map {
+                return ConfigTriplet(syncer: $0.0, server: $0.1, project: $0.2)
+            }
+        }
+        return triplets
     }
     
-    static func createSyncersProducer(triplets: SignalProducer<[ConfigTriplet], NoError>) -> SignalProducer<[HDGitHubXCBotSyncer], NoError> {
-        
-        let syncerFactory: SyncerFactoryType = SyncerFactory()
+    static func createSyncersProducer(factory: SyncerFactoryType, triplets: SignalProducer<[ConfigTriplet], NoError>) -> SignalProducer<[HDGitHubXCBotSyncer], NoError> {
         
         let syncers = triplets.map { tripletArray in
-            return tripletArray.map { syncerFactory.createSyncer($0.0, serverConfig: $0.1, projectConfig: $0.2) }
+            return tripletArray.map { factory.createSyncer(
+                $0.syncer, serverConfig: $0.server, projectConfig: $0.project)
+            }
         }
         return syncers
     }

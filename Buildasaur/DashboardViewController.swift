@@ -51,15 +51,12 @@ class DashboardViewController: PresentableViewController {
     
     func configDataSource() {
         
-        let present: SyncerViewModel.PresentViewControllerType = {
-            self.presentingDelegate?.presentViewControllerInUniqueWindow($0)
-        }
-        let create: SyncerViewModel.CreateViewControllerType = {
-            self.storyboardLoader.presentableViewControllerWithStoryboardIdentifier($0, uniqueIdentifier: $1)
+        let present: SyncerViewModel.PresentEditViewControllerType = {
+            self.showSyncerEditViewControllerWithTriplet($0)
         }
         self.syncerManager.syncersProducer.startWithNext { newSyncers in
             self.syncerViewModels.value = newSyncers.map {
-                SyncerViewModel(syncer: $0, presentViewController: present, createViewController: create)
+                SyncerViewModel(syncer: $0, presentEditViewController: present)
             }
             self.syncersTableView.reloadData()
         }
@@ -82,7 +79,7 @@ class DashboardViewController: PresentableViewController {
     }
     
     @IBAction func newSyncerButtonClicked(sender: AnyObject) {
-        self.createNewSyncer()
+        self.showNewSyncerViewController()
     }
     
     @IBAction func editButtonClicked(sender: BuildaNSButton) {
@@ -96,11 +93,19 @@ class DashboardViewController: PresentableViewController {
 
 extension DashboardViewController {
     
-    func createNewSyncer() {
-        //TODO: configure an editing window with a brand new syncer
+    func showNewSyncerViewController() {
         
+        //configure an editing window with a brand new syncer
+        let triplet = self.syncerManager.factory.defaultConfigTriplet()
+        self.showSyncerEditViewControllerWithTriplet(triplet)
+    }
+    
+    func showSyncerEditViewControllerWithTriplet(triplet: ConfigTriplet) {
         
-        
+        let uniqueIdentifier = triplet.syncer.id
+        let viewController: SyncerEditViewController = self.storyboardLoader.presentableViewControllerWithStoryboardIdentifier("syncerEditViewController", uniqueIdentifier: uniqueIdentifier, delegate: self.presentingDelegate)
+        viewController.configTriplet = triplet
+        self.presentingDelegate?.presentViewControllerInUniqueWindow(viewController)
     }
     
 }

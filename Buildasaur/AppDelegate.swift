@@ -49,14 +49,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func setupPersistence() {
         let storageManager = StorageManager()
-        let syncerManager = SyncerManager(storageManager: storageManager)
+        let factory = SyncerFactory()
+        let syncerManager = SyncerManager(storageManager: storageManager, factory: factory)
         self.syncerManager = syncerManager
     }
 
     func createInitialViewController() -> DashboardViewController {
         
         let dashboard: DashboardViewController = self.storyboardLoader
-            .presentableViewControllerWithStoryboardIdentifier("dashboardViewController", uniqueIdentifier: "dashboard")
+            .presentableViewControllerWithStoryboardIdentifier("dashboardViewController", uniqueIdentifier: "dashboard", delegate: self)
         dashboard.syncerManager = self.syncerManager
         return dashboard
     }
@@ -74,8 +75,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationWillTerminate(aNotification: NSNotification) {
         
-        //TODO: syncer manager - stop properly
-//        self.storageManager.stop()
+        //stop syncers properly
+        self.syncerManager.stopSyncers()
     }
     
     //MARK: Showing Window on Reactivation
@@ -94,8 +95,7 @@ extension AppDelegate: PresentableViewControllerDelegate {
     func configureViewController(viewController: PresentableViewController) {
         
         if let syncerEdit = viewController as? SyncerEditViewController {
-            //TODO: remove
-            syncerEdit.storageManager = self.syncerManager.storageManager
+            syncerEdit.syncerManager = self.syncerManager
         }
     }
     

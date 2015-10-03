@@ -14,6 +14,10 @@ import BuildaKit
 
 class StatusSyncerViewController: StatusViewController, SyncerDelegate {
     
+    var syncerConfig: SyncerConfig!
+    
+    //-----
+    
     var syncer: HDGitHubXCBotSyncer! {
         didSet {
             if syncer.delegate == nil {
@@ -26,7 +30,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
             }
         }
     }
-    
+
     @IBOutlet weak var statusTextField: NSTextField!
     @IBOutlet weak var startStopButton: NSButton!
     @IBOutlet weak var statusActivityIndicator: NSProgressIndicator!
