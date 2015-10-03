@@ -21,7 +21,7 @@ class SyncerEditViewController: PresentableViewController {
     weak var projectStatusViewController: StatusProjectViewController?
     weak var projectStatusEmptyViewController: StatusProjectEmptyViewController?
     
-    var serverStatusViewController: StatusServerViewController?
+    var serverStatusViewController: XcodeServerViewController?
     var syncerStatusViewController: StatusSyncerViewController?
     
     private var buildTemplateParams: (buildTemplate: BuildTemplate?, project: Project)?
@@ -60,7 +60,7 @@ class SyncerEditViewController: PresentableViewController {
             if let statusViewController = storableViewController as? StatusViewController {
                 statusViewController.delegate = self
                 
-                if let serverStatusViewController = statusViewController as? StatusServerViewController {
+                if let serverStatusViewController = statusViewController as? XcodeServerViewController {
                     self.serverStatusViewController = serverStatusViewController
                     serverStatusViewController.serverConfig = self.configTriplet.server
                 }
@@ -135,16 +135,18 @@ extension SyncerEditViewController: StatusProjectEmptyViewControllerDelegate {
         let projectViewController = self.storyboardLoader
             .viewControllerWithStoryboardIdentifier("projectViewController") as! StatusProjectViewController
         self.configureViewController(projectViewController, sender: nil)
-        
-        self.addChildViewController(projectViewController)
-        let from = self.projectStatusEmptyViewController!
-        let to = projectViewController
-        self.transitionFromViewController(from, toViewController: to, options: NSViewControllerTransitionOptions.None, completionHandler: nil)
+
+        let old = self.projectStatusEmptyViewController!
+        self.replaceViewController(old, new: projectViewController)
     }
 }
 
 extension SyncerEditViewController {
     
+    func replaceViewController(old: NSViewController, new: NSViewController) {
+        self.addChildViewController(new)
+        self.transitionFromViewController(old, toViewController: new, options: NSViewControllerTransitionOptions.None, completionHandler: nil)
+    }
 }
 
 extension SyncerEditViewController: StatusSiblingsViewControllerDelegate {
@@ -153,7 +155,7 @@ extension SyncerEditViewController: StatusSiblingsViewControllerDelegate {
         return self.projectStatusViewController!
     }
     
-    func getServerStatusViewController() -> StatusServerViewController {
+    func getServerStatusViewController() -> XcodeServerViewController {
         return self.serverStatusViewController!
     }
     

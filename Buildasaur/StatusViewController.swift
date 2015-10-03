@@ -15,7 +15,7 @@ import BuildaKit
 protocol StatusSiblingsViewControllerDelegate: class {
     
     func getProjectStatusViewController() -> StatusProjectViewController
-    func getServerStatusViewController() -> StatusServerViewController
+    func getServerStatusViewController() -> XcodeServerViewController
     func showBuildTemplateViewControllerForTemplate(template: BuildTemplate?, project: Project, sender: SetupViewControllerDelegate?)
 }
 

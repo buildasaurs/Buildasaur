@@ -717,7 +717,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView identifier="xcs_host" id="T5c-UH-Kcx">
-                                                            <rect key="frame" x="104.05380097044406" y="1" width="120" height="17"/>
+                                                            <rect key="frame" x="103.93735366341159" y="1" width="120" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="chB-Jy-cxW">
@@ -751,7 +751,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView identifier="project_name" id="VxK-bY-IC3">
-                                                            <rect key="frame" x="226.28526432276982" y="1" width="120" height="17"/>
+                                                            <rect key="frame" x="226.52315687282282" y="1" width="120" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="28J-1B-dEw">
@@ -785,7 +785,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView identifier="build_template" id="JE6-3o-Px5">
-                                                            <rect key="frame" x="348.51672767509558" y="1" width="120" height="17"/>
+                                                            <rect key="frame" x="349.10896008223403" y="1" width="120" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kfd-Lh-L1f">
@@ -818,7 +818,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <button identifier="control" verticalHuggingPriority="750" id="uVE-l3-mpn" customClass="BuildaNSButton" customModule="Buildasaur" customModuleProvider="target">
-                                                            <rect key="frame" x="470.74819102742134" y="1" width="80" height="32"/>
+                                                            <rect key="frame" x="471.69476329164524" y="1" width="80" height="32"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <animations/>
                                                             <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3hr-hy-pJR">
@@ -844,7 +844,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <button identifier="edit" verticalHuggingPriority="750" id="vsh-hH-b23" customClass="BuildaNSButton" customModule="Buildasaur" customModuleProvider="target">
-                                                            <rect key="frame" x="552.88090576308537" y="1" width="80" height="32"/>
+                                                            <rect key="frame" x="554.98366740905715" y="1" width="80" height="32"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <animations/>
                                                             <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fti-Hu-uEW">
@@ -965,7 +965,7 @@
                                 </constraints>
                                 <animations/>
                                 <connections>
-                                    <segue destination="DmJ-mq-3zl" kind="embed" identifier="embedServerView" id="bCO-J2-4Xl"/>
+                                    <segue destination="bma-ve-8Yv" kind="embed" id="S39-00-eXo"/>
                                 </connections>
                             </containerView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="vYq-Em-Glf" userLabel="Separator 1" customClass="SeparatorView" customModule="Buildasaur" customModuleProvider="target">
@@ -1032,31 +1032,14 @@
             </objects>
             <point key="canvasLocation" x="-157" y="939"/>
         </scene>
-        <!--Status Server View Controller-->
+        <!--Xcode Server View Controller-->
         <scene sceneID="tJp-HU-7xF">
             <objects>
-                <viewController id="DmJ-mq-3zl" customClass="StatusServerViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="xcodeServerViewController" id="DmJ-mq-3zl" customClass="XcodeServerViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="y7F-3X-ngo">
                         <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Se0-1J-SrT">
-                                <rect key="frame" x="55" y="98" width="191" height="104"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="191" id="4BR-WY-1VU"/>
-                                    <constraint firstAttribute="height" constant="101" id="K46-u3-TCx"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="101" id="Usm-Dp-ZxH"/>
-                                    <constraint firstAttribute="width" constant="191" id="vNo-CB-7uw"/>
-                                </constraints>
-                                <animations/>
-                                <buttonCell key="cell" type="squareTextured" title="Add your Xcode Server" bezelStyle="texturedSquare" imagePosition="overlaps" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="b1n-Nj-a1t">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="addServerButtonTapped:" target="DmJ-mq-3zl" id="7o4-cU-Rfa"/>
-                                </connections>
-                            </button>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="Osi-RY-UET">
                                 <rect key="frame" x="5" y="5" width="290" height="290"/>
                                 <subviews>
@@ -1191,15 +1174,12 @@
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="Osi-RY-UET" secondAttribute="trailing" constant="5" id="5g3-RU-dpX"/>
                             <constraint firstAttribute="bottom" secondItem="Osi-RY-UET" secondAttribute="bottom" constant="5" id="JYn-tA-l5n"/>
-                            <constraint firstAttribute="centerY" secondItem="Se0-1J-SrT" secondAttribute="centerY" id="OPw-dX-Qe5"/>
                             <constraint firstItem="Osi-RY-UET" firstAttribute="leading" secondItem="y7F-3X-ngo" secondAttribute="leading" constant="5" id="WoS-iR-bEt"/>
                             <constraint firstItem="Osi-RY-UET" firstAttribute="top" secondItem="y7F-3X-ngo" secondAttribute="top" constant="5" id="lfP-09-kh8"/>
-                            <constraint firstAttribute="centerX" secondItem="Se0-1J-SrT" secondAttribute="centerX" id="zT5-ZG-yjd"/>
                         </constraints>
                         <animations/>
                     </view>
                     <connections>
-                        <outlet property="addServerButton" destination="Se0-1J-SrT" id="LZy-o1-Ybb"/>
                         <outlet property="deleteButton" destination="5Ns-Q1-Jlo" id="S57-mT-N1U"/>
                         <outlet property="editButton" destination="vke-vb-gMJ" id="Wvu-gM-w2n"/>
                         <outlet property="lastConnectionView" destination="EyH-ar-nwu" id="Amg-K4-vXq"/>
@@ -1212,7 +1192,7 @@
                 </viewController>
                 <customObject id="jm8-Ab-75U" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1211" y="1082"/>
+            <point key="canvasLocation" x="-907" y="1258"/>
         </scene>
         <!--Status Project Empty View Controller-->
         <scene sceneID="WS5-8H-q26">
@@ -2663,6 +2643,52 @@
                 <customObject id="JCM-p0-AyE" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-497" y="2162"/>
+        </scene>
+        <!--Empty Xcode Server View Controller-->
+        <scene sceneID="RGd-g9-qqS">
+            <objects>
+                <viewController storyboardIdentifier="emptyXcodeServerViewController" id="bma-ve-8Yv" customClass="EmptyXcodeServerViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="VQi-6I-eHM">
+                        <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1GW-za-jch">
+                                <rect key="frame" x="48" y="182" width="205" height="26"/>
+                                <animations/>
+                                <popUpButtonCell key="cell" type="push" title="No Connected Xcode Server" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="bZu-cx-uWr" id="nIH-7L-Li2">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" size="12" name=".AppleSystemUIFont"/>
+                                    <menu key="menu" id="DC8-zD-Dy8">
+                                        <items>
+                                            <menuItem title="No Connected Xcode Server" state="on" id="bZu-cx-uWr"/>
+                                            <menuItem title="Item 2" id="eqY-5N-Kgu"/>
+                                            <menuItem title="Item 3" id="XCc-K2-7Kh"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="coT-c1-ODI">
+                                <rect key="frame" x="50" y="123" width="200" height="43"/>
+                                <animations/>
+                                <buttonCell key="cell" type="squareTextured" title="New Xcode Server..." bezelStyle="texturedSquare" imagePosition="overlaps" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rty-Dt-QWb">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="newXcodeServerClicked:" target="bma-ve-8Yv" id="ZQv-fi-6Um"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <animations/>
+                    </view>
+                    <connections>
+                        <outlet property="addProjectButton" destination="coT-c1-ODI" id="ocg-KJ-pqO"/>
+                        <outlet property="existingXcodeServersPopup" destination="1GW-za-jch" id="YKg-YW-HH5"/>
+                    </connections>
+                </viewController>
+                <customObject id="fGv-NO-t4U" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1263" y="1258"/>
         </scene>
     </scenes>
     <resources>

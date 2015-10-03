@@ -1,5 +1,5 @@
 //
-//  StatusServerViewController.swift
+//  XcodeServerViewController.swift
 //  Buildasaur
 //
 //  Created by Honza Dvorsky on 08/03/2015.
@@ -11,7 +11,7 @@ import BuildaUtils
 import XcodeServerSDK
 import BuildaKit
 
-class StatusServerViewController: StatusViewController {
+class XcodeServerViewController: StatusViewController {
     
     var serverConfig: XcodeServerConfig!
     
@@ -26,6 +26,8 @@ class StatusServerViewController: StatusViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        precondition(self.serverConfig != nil)
         
         if self.serverConfig == nil {
             self.editing = false
@@ -140,3 +142,4 @@ class StatusServerViewController: StatusViewController {
         self.editing = true
     }
 }
+
