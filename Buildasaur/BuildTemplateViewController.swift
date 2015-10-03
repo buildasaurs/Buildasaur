@@ -65,7 +65,7 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let xcodeServerConfig = self.storageManager.servers.value.values.first {
+        if let xcodeServerConfig = self.storageManager.serverConfigs.value.values.first {
             let xcodeServer = XcodeServerFactory.server(xcodeServerConfig)
             self.xcodeServer = xcodeServer
         }

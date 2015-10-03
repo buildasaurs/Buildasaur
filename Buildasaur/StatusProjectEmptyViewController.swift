@@ -13,7 +13,6 @@ class StatusProjectEmptyViewController: StorableViewController {
     
     weak var emptyProjectDelegate: StatusProjectEmptyViewControllerDelegate?
     
-    //no project yet
     @IBOutlet weak var addProjectButton: NSButton!
     
     @IBAction func addProjectButtonTapped(sender: AnyObject) {
@@ -21,8 +20,8 @@ class StatusProjectEmptyViewController: StorableViewController {
         if let url = StorageUtils.openWorkspaceOrProject() {
             
             do {
-                let project = try self.storageManager.addProjectAtURL(url)
-                self.emptyProjectDelegate?.addedProject(project)
+                try self.storageManager.checkForProjectOrWorkspace(url)
+                self.emptyProjectDelegate?.detectedProjectOrWorkspaceAtUrl(url)
             } catch {
                 //local source is malformed, something terrible must have happened, inform the user this can't be used (log should tell why exactly)
                 UIUtils.showAlertWithText("Couldn't add Xcode project at path \(url.absoluteString), error: \((error as NSError).localizedDescription).", style: NSAlertStyle.CriticalAlertStyle, completion: { (resp) -> () in
@@ -36,5 +35,5 @@ class StatusProjectEmptyViewController: StorableViewController {
 }
 
 protocol StatusProjectEmptyViewControllerDelegate: class {
-    func addedProject(project: Project)
+    func detectedProjectOrWorkspaceAtUrl(url: NSURL)
 }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Cocoa
 import ReactiveCocoa
 
 //taken from https://github.com/ColinEberhardt/ReactiveTwitterSearch/blob/82ab9d2595b07cbefd4c917ae643b568dd858119/ReactiveTwitterSearch/Util/UIKitExtensions.swift

@@ -39,4 +39,4 @@ SPEC CHECKSUMS:
   Result: b80bca7becdda9a2e44c4fd65b4b4a7b5db4cf9a
   XcodeServerSDK: de20bef18c954cb81889a72e1118e51b137c5134
 
-COCOAPODS: 0.39.0.beta.5
+COCOAPODS: 0.38.2

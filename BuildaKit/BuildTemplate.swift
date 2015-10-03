@@ -10,7 +10,7 @@ import Foundation
 import BuildaUtils
 import XcodeServerSDK
 
-private let kKeyUniqueId = "id"
+private let kKeyId = "id"
 private let kKeyProjectName = "project_name"
 private let kKeyName = "name"
 private let kKeyScheme = "scheme"
@@ -26,7 +26,7 @@ private let kKeyShouldArchive = "should_archive"
 
 public class BuildTemplate: JSONSerializable {
     
-    public let uniqueId: String //unique id of this build template, so that we can rename them easily
+    public let id: RefType
     
     public var projectName: String?
     public var name: String?
@@ -43,7 +43,7 @@ public class BuildTemplate: JSONSerializable {
     
     func validate() -> Bool {
         
-        if self.uniqueId.isEmpty { return false }
+        if self.id.isEmpty { return false }
         if self.name == nil { return false }
         if self.scheme == nil { return false }
         //TODO: add all the other required values! this will be called on saving from the UI to make sure we have all the required fields.
@@ -51,7 +51,7 @@ public class BuildTemplate: JSONSerializable {
     }
     
     public init(projectName: String) {
-        self.uniqueId = NSUUID().UUIDString
+        self.id = Ref.new()
         self.projectName = projectName
         self.name = "New Build Template"
         self.scheme = nil
@@ -68,7 +68,7 @@ public class BuildTemplate: JSONSerializable {
     
     public required init(json: NSDictionary) throws {
         
-        self.uniqueId = json.optionalStringForKey(kKeyUniqueId) ?? ""
+        self.id = json.optionalStringForKey(kKeyId) ?? Ref.new()
         self.projectName = json.optionalStringForKey(kKeyProjectName)
         self.name = json.optionalStringForKey(kKeyName)
         self.scheme = json.optionalStringForKey(kKeyScheme)
@@ -121,7 +121,7 @@ public class BuildTemplate: JSONSerializable {
     public func jsonify() -> NSDictionary {
         let dict = NSMutableDictionary()
         
-        dict[kKeyUniqueId] = self.uniqueId
+        dict[kKeyId] = self.id
         dict[kKeyTriggers] = self.triggers.map({ $0.dictionarify() })
         dict[kKeyDeviceFilter] = self.deviceFilter.rawValue
         dict[kKeyTestingDevices] = self.testingDeviceIds ?? []

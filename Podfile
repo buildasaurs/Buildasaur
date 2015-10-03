@@ -12,7 +12,7 @@ end
 def also_xcode_pods
 	pods_for_errbody
 	pod 'XcodeServerSDK', '~> 0.3.3'
-	pod 'ekgclient', '~> 0.3.0'
+	pod 'ekgclient', '~> 0.3.0', :inhibit_warnings => true
 end
 
 target 'Buildasaur' do

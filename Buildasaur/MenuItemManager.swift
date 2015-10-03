@@ -37,7 +37,9 @@ class MenuItemManager : NSObject, NSMenuDelegate {
     func menuWillOpen(menu: NSMenu) {
         
         //update with last sync/statuses
-        let syncers = StorageManager.sharedInstance.syncers.value
+//        let syncers = SyncerManager.sharedInstance.syncers.value.....
+        //TODO: plug back in
+        let syncers: [HDGitHubXCBotSyncer] = []
         
         //remove items for existing syncers
         let itemsForSyncers = menu.numberOfItems - self.firstIndexLastSyncedMenuItem

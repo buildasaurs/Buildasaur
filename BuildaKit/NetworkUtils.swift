@@ -15,7 +15,7 @@ public class NetworkUtils {
     
     public class func checkAvailabilityOfGitHubWithCurrentSettingsOfProject(project: Project, completion: (success: Bool, error: NSError?) -> ()) {
         
-        let token = project.githubToken
+        let token = project.config.githubToken
         let server = GitHubFactory.server(token)
         let credentialValidationBlueprint = project.createSourceControlBlueprintForCredentialVerification()
         

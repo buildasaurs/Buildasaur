@@ -102,7 +102,27 @@ extension NSDictionary {
         }
         return typedValue
     }
+    
+    public func getOptionally<T>(key: String) throws -> T? {
+        
+        guard let value = self[key] else {
+            return nil
+        }
+        
+        guard let typedValue = value as? T else {
+            throw NSDictionaryParseError.WrongTypeOfValueForKey(key: key, value: value)
+        }
+        return typedValue
+    }
 }
 
+extension Array {
+    
+    public func dictionarifyWithKey(key: (item: Element) -> String) -> [String: Element] {
+        var dict = [String: Element]()
+        self.forEach { dict[key(item: $0)] = $0 }
+        return dict
+    }
+}
 
 

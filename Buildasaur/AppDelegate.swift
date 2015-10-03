@@ -65,7 +65,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationWillTerminate(aNotification: NSNotification) {
         
-        self.storageManager.stop()
+        //TODO: syncer manager - stop properly
+//        self.storageManager.stop()
     }
     
     //MARK: Showing Window on Reactivation

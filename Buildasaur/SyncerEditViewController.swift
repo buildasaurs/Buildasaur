@@ -28,7 +28,7 @@ class SyncerEditViewController: PresentableViewController {
         //TODO: move to a better place
         if self.syncer != nil {
             if let project = self.syncer.project.value {
-                self.swapInFullProjectViewController(project)
+                self.swapInFullProjectViewController(project.url)
             }
         }
     }
@@ -118,12 +118,13 @@ class SyncerEditViewController: PresentableViewController {
 
 extension SyncerEditViewController: StatusProjectEmptyViewControllerDelegate {
     
-    func addedProject(project: Project) {
-        //cool, let's take the project and create a proper project status vc and replace the empty with it
-        self.swapInFullProjectViewController(project)
+    func detectedProjectOrWorkspaceAtUrl(url: NSURL) {
+        //cool, let's take the url and create a proper project status vc
+        //and replace the empty with it
+        self.swapInFullProjectViewController(url)
     }
     
-    private func swapInFullProjectViewController(project: Project) {
+    private func swapInFullProjectViewController(url: NSURL) {
         //TODO: call after checking whether we have a project in the first place
         
         //create full view controller

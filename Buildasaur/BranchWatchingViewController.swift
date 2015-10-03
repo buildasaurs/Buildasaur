@@ -27,7 +27,7 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
         super.viewDidLoad()
         
         assert(self.syncer != nil, "Syncer has not been set")
-        self.watchedBranchNames = Set(self.syncer.watchedBranchNames.value)
+        self.watchedBranchNames = Set(self.syncer.config.watchedBranchNames)
     }
     
     override func viewWillAppear() {
@@ -66,10 +66,10 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
     }
     
     @IBAction func doneTapped(sender: AnyObject) {
-        //save the now-selected watched branches to the syncer
-        self.syncer.watchedBranchNames.value = Array(self.watchedBranchNames)
-        StorageManager.sharedInstance.saveSyncers() //think of a better way to force saving
-        self.dismissController(nil)
+        //TODO: save the now-selected watched branches to the syncer config
+//        self.syncer.config.watchedBranchNames.value = Array(self.watchedBranchNames)
+//        StorageManager.sharedInstance.saveSyncers() //think of a better way to force saving
+//        self.dismissController(nil)
     }
     
     //MARK: branches table view

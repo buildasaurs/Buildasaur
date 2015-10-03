@@ -57,11 +57,12 @@ class DashboardViewController: PresentableViewController {
         let create: SyncerViewModel.CreateViewControllerType = {
             self.storyboardLoader.presentableViewControllerWithStoryboardIdentifier($0, uniqueIdentifier: $1)
         }
-        self.storageManager.syncers.producer.startWithNext { newSyncers in
-            self.syncerViewModels.value = newSyncers.map {
-                SyncerViewModel(syncer: $0, presentViewController: present, createViewController: create)
-            }
-            self.syncersTableView.reloadData()
+        self.storageManager.syncerConfigs.producer.startWithNext { newSyncers in
+            //TODO: here get a proper syncer for this config and add to the view model
+//            self.syncerViewModels.value = newSyncers.map {
+//                SyncerViewModel(syncer: $0, presentViewController: present, createViewController: create)
+//            }
+//            self.syncersTableView.reloadData()
         }
     }
     

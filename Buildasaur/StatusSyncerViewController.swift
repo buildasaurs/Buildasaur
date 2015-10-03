@@ -53,8 +53,8 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         }
     }
     
-    private var syncers: [HDGitHubXCBotSyncer] {
-        return self.storageManager.syncers.value
+    private var syncerConfigs: [SyncerConfig] {
+        return self.storageManager.syncerConfigs.value
     }
     
     func syncerBecameActive(syncer: Syncer) {
@@ -156,8 +156,8 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         if let syncer = self.syncer {
             
             self.updateIntervalFromUIToValue(syncer.syncInterval)
-            self.lttmToggle.state = syncer.waitForLttm.value ? NSOnState : NSOffState
-            self.postStatusCommentsToggle.state = syncer.postStatusComments.value ? NSOnState : NSOffState
+            self.lttmToggle.state = syncer.config.waitForLttm ? NSOnState : NSOffState
+            self.postStatusCommentsToggle.state = syncer.config.postStatusComments ? NSOnState : NSOffState
         } else {
             self.updateIntervalFromUIToValue(15) //default
             self.lttmToggle.state = NSOffState //default is false
@@ -235,38 +235,39 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
     
     func startSyncing() {
         
+        //TODO: reinstate
         //create a syncer, delete the old one and kick it off
-        let oldWatchedBranchNames: [String]
-        if let syncer = self.syncer {
-            self.storageManager.removeSyncer(syncer)
-            oldWatchedBranchNames = syncer.watchedBranchNames.value
-        } else {
-            oldWatchedBranchNames = []
-        }
-        
-        let waitForLttm = self.lttmToggle.state == NSOnState
-        let postStatusComments = self.postStatusCommentsToggle.state == NSOnState
-        let syncInterval = self.syncIntervalTextField.doubleValue
-        let project = self.delegate.getProjectStatusViewController().project
-        let serverConfig = self.delegate.getServerStatusViewController().serverConfig
-        
-        if let syncer = self.storageManager.addSyncer(
-            syncInterval,
-            waitForLttm: waitForLttm,
-            postStatusComments: postStatusComments,
-            project: project,
-            serverConfig: serverConfig,
-            watchedBranchNames: oldWatchedBranchNames) {
-            
-            syncer.active = true
-            
-            self.isSyncing = true
-            self.reloadStatus()
-        } else {
-            UIUtils.showAlertWithText("Couldn't start syncer, please make sure the sync interval is > 0 seconds.")
-        }
-        
-        self.storageManager.saveSyncers()
+//        let oldWatchedBranchNames: [String]
+//        if let syncer = self.syncer {
+//            self.storageManager.removeSyncer(syncer)
+//            oldWatchedBranchNames = syncer.config.watchedBranchNames.value
+//        } else {
+//            oldWatchedBranchNames = []
+//        }
+//        
+//        let waitForLttm = self.lttmToggle.state == NSOnState
+//        let postStatusComments = self.postStatusCommentsToggle.state == NSOnState
+//        let syncInterval = self.syncIntervalTextField.doubleValue
+//        let project = self.delegate.getProjectStatusViewController().project
+//        let serverConfig = self.delegate.getServerStatusViewController().serverConfig
+//        
+//        if let syncer = self.storageManager.addSyncer(
+//            syncInterval,
+//            waitForLttm: waitForLttm,
+//            postStatusComments: postStatusComments,
+//            project: project,
+//            serverConfig: serverConfig,
+//            watchedBranchNames: oldWatchedBranchNames) {
+//            
+//            syncer.active = true
+//            
+//            self.isSyncing = true
+//            self.reloadStatus()
+//        } else {
+//            UIUtils.showAlertWithText("Couldn't start syncer, please make sure the sync interval is > 0 seconds.")
+//        }
+//        
+//        self.storageManager.saveSyncers()
     }
     
     func toggleActiveWithCompletion(completion: () -> ()) {

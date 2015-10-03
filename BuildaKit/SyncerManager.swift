@@ -13,4 +13,18 @@ import Foundation
 
 public class SyncerManager {
     
+    public func stopSyncers() {
+//        self.syncerConfigs.value.forEach { $0.active = false }
+    }
+    
+    public func startSyncers() {
+//        self.syncerConfigs.value.forEach { $0.active = true }
+    }
+    
+    public func stop() {
+//        self.storageManager.saveAll()
+//        self.saveAll()
+        self.stopSyncers()
+    }
+
 }

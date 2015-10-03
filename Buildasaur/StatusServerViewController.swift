@@ -36,9 +36,10 @@ class StatusServerViewController: StatusViewController {
     
     override func availabilityChanged(state: AvailabilityCheckState) {
         
-        if let config = self.serverConfig {
-            config.availabilityState = state
-        }
+        //TODO: the VC should have a server created from its config available here
+//        if let config = self.serverConfig {
+//            config.availabilityState = state
+//        }
         super.availabilityChanged(state)
     }
     
@@ -102,7 +103,7 @@ class StatusServerViewController: StatusViewController {
         
         if let config = self.serverConfig {
             self.storageManager.removeServer(config)
-            self.storageManager.saveServers()
+            self.storageManager.saveServerConfigs()
             self.editing = false
             self.serverHostTextField.stringValue = ""
             self.serverUserTextField.stringValue = ""

@@ -229,7 +229,9 @@ extension HDGitHubXCBotSyncer {
             
             //what do we do with deleted branches still in the list of branches to watch long term?
             //we unwatch them right here by just keeping the valid, found branches
-            self.watchedBranchNames.value = foundBranchesToWatch
+//            self.watchedBranchNames.value = foundBranchesToWatch
+            //EDIT: let's not do that for now. i don't like the syncer changing
+            //its own configuration at runtime.
             
             //go through the branches to track
             for branch in branchesToWatch {

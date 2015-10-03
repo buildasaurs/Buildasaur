@@ -17,9 +17,9 @@ public class StorageManager {
     
     public static let sharedInstance = StorageManager()
     
-    public let syncers = MutableProperty<[SyncerConfig]>([])
-    public let servers = MutableProperty<[String: XcodeServerConfig]>([:])
-    public let projects = MutableProperty<[String: ProjectConfig]>([:])
+    public let syncerConfigs = MutableProperty<[SyncerConfig]>([])
+    public let serverConfigs = MutableProperty<[String: XcodeServerConfig]>([:])
+    public let projectConfigs = MutableProperty<[String: ProjectConfig]>([:])
     public let buildTemplates = MutableProperty<[BuildTemplate]>([])
     public let config = MutableProperty<[String: AnyObject]>([:])
     
@@ -31,7 +31,7 @@ public class StorageManager {
     }
     
     deinit {
-        self.stop()
+//        self.stop()
     }
     
     private func setupHeartbeatManager() {
@@ -45,48 +45,38 @@ public class StorageManager {
         }
     }
     
-    public func addProjectAtURL(url: NSURL) throws -> ProjectConfig {
-        
+    public func checkForProjectOrWorkspace(url: NSURL) throws {
         _ = try Project.attemptToParseFromUrl(url)
-        if let path = url.path {
-            let projectConfig = ProjectConfig(url: path)
-            self.projects.value[projectConfig.id] = projectConfig
-            return projectConfig
-        }
-        throw Error.withInfo("Attempt to parse succeeded but Project still wasn't created")
     }
     
     public func addServerConfig(host host: String, user: String?, password: String?) -> XcodeServerConfig {
         let config = try! XcodeServerConfig(host: host, user: user, password: password)
-        self.servers.value[host] = config
+        self.serverConfigs.value[host] = config
         return config
     }
     
     public func addSyncer(syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool,
-        project: Project, serverConfig: XcodeServerConfig, watchedBranchNames: [String]) -> HDGitHubXCBotSyncer? {
+        projectConfig: ProjectConfig, serverConfig: XcodeServerConfig, watchedBranchNames: [String]) -> SyncerConfig? {
             
             if syncInterval <= 0 {
                 Log.error("Sync interval must be > 0 seconds.")
                 return nil
             }
             
-            let xcodeServer = XcodeServerFactory.server(serverConfig)
-            let github = GitHubFactory.server(project.githubToken)
             //TODO: move preferred build template from project here
-            let projectRef = project.pro
-            let config = SyncerConfig(
+            let projectRef = projectConfig.id
+            let xcodeServerRef = serverConfig.id
+            
+            let syncerConfig = SyncerConfig(
                 preferredTemplateRef: "",
-                projectRef: <#T##RefType#>, xcodeServerRef: <#T##RefType#>, postStatusComments: <#T##Bool#>, syncInterval: <#T##NSTimeInterval#>, waitForLttm: <#T##Bool#>, watchedBranchNames: <#T##[String]#>)
-            let syncer = HDGitHubXCBotSyncer(
-                integrationServer: xcodeServer,
-                sourceServer: github,
-                project: project,
+                projectRef: projectRef,
+                xcodeServerRef: xcodeServerRef,
+                postStatusComments: postStatusComments,
                 syncInterval: syncInterval,
                 waitForLttm: waitForLttm,
-                postStatusComments: postStatusComments,
                 watchedBranchNames: watchedBranchNames)
-            self.syncers.value.append(syncer)
-            return syncer
+            self.syncerConfigs.value.append(syncerConfig)
+            return syncerConfig
     }
     
     public func saveBuildTemplate(buildTemplate: BuildTemplate) {
@@ -94,7 +84,7 @@ public class StorageManager {
         //in case we have a duplicate, replace
         var duplicateFound = false
         for (idx, temp) in self.buildTemplates.value.enumerate() {
-            if temp.uniqueId == buildTemplate.uniqueId {
+            if temp.id == buildTemplate.id {
                 self.buildTemplates.value[idx] = buildTemplate
                 duplicateFound = true
                 break
@@ -113,7 +103,7 @@ public class StorageManager {
         
         //remove from the memory storage
         for (idx, temp) in self.buildTemplates.value.enumerate() {
-            if temp.uniqueId == buildTemplate.uniqueId {
+            if temp.id == buildTemplate.id {
                 self.buildTemplates.value.removeAtIndex(idx)
                 break
             }
@@ -121,7 +111,7 @@ public class StorageManager {
         
         //also delete the file
         let templatesFolderUrl = Persistence.getFileInAppSupportWithName("BuildTemplates", isDirectory: true)
-        let id = buildTemplate.uniqueId
+        let id = buildTemplate.id
         let templateUrl = templatesFolderUrl.URLByAppendingPathComponent("\(id).json")
         do { try NSFileManager.defaultManager().removeItemAtURL(templateUrl) } catch {}
         
@@ -141,25 +131,25 @@ public class StorageManager {
     }
     
     public func removeProject(project: Project) {
-        self.projects.value.removeValueForKey(project.urlString)
+        self.projectConfigs.value.removeValueForKey(project.urlString)
     }
     
     public func removeServer(serverConfig: XcodeServerConfig) {
-        self.servers.value.removeValueForKey(serverConfig.host)
+        self.serverConfigs.value.removeValueForKey(serverConfig.host)
     }
     
     public func removeSyncer(syncer: HDGitHubXCBotSyncer) {
         
         //don't know how to compare syncers yet
-        self.syncers.value.removeAll(keepCapacity: true)
+        self.syncerConfigs.value.removeAll(keepCapacity: true)
     }
     
-    private func projectForPath(path: String) -> Project? {
-        return self.projects.value[path]
+    private func projectForRef(ref: RefType) -> ProjectConfig? {
+        return self.projectConfigs.value[ref]
     }
     
     private func serverForHost(host: String) -> XcodeServer? {
-        guard let config = self.servers.value[host] else { return nil }
+        guard let config = self.serverConfigs.value[host] else { return nil }
         let server = XcodeServerFactory.server(config)
         return server
     }
@@ -167,89 +157,67 @@ public class StorageManager {
     public func loadAllFromPersistence() {
         
         self.config.value = Persistence.loadDictionaryFromFile("Config.json") ?? [:]
-        let allProjects: [Project] = Persistence.loadArrayFromFile("Projects.json") ?? []
-        self.projects.value = self.dictionarifyWithKey(allProjects) { $0.urlString }
+        let allProjects: [ProjectConfig] = Persistence.loadArrayFromFile("Projects.json") ?? []
+        self.projectConfigs.value = allProjects.dictionarifyWithKey { $0.id }
         let allServerConfigs: [XcodeServerConfig] = Persistence.loadArrayFromFile("ServerConfigs.json") ?? []
-        self.servers.value = self.dictionarifyWithKey(allServerConfigs) { $0.host }
+        self.serverConfigs.value = allServerConfigs.dictionarifyWithKey { $0.id }
         self.buildTemplates.value = Persistence.loadArrayFromFolder("BuildTemplates") ?? []
-        self.syncers.value = Persistence.loadArrayFromFile("Syncers.json") { self.createSyncerFromJSON($0) } ?? []
-    }
-    
-    private func dictionarifyWithKey<T>(array: [T], key: (item: T) -> String) -> [String: T] {
-        var dict = [String: T]()
-        array.forEach { dict[key(item: $0)] = $0 }
-        return dict
+        self.syncerConfigs.value = Persistence.loadArrayFromFile("Syncers.json") { self.createSyncerConfigFromJSON($0) } ?? []
     }
     
     public func saveConfig() {
         Persistence.saveDictionary("Config.json", item: self.config.value)
     }
     
-    public func saveProjects() {
-        Persistence.saveArray("Projects.json", items: Array(self.projects.value.values))
+    public func saveProjectConfigs() {
+        let projectConfigs: NSArray = Array(self.projectConfigs.value.values).map { $0 as! AnyObject }
+        Persistence.saveArray("Projects.json", items: projectConfigs)
     }
     
-    public func saveServers() {
-        Persistence.saveArray("ServerConfigs.json", items: Array(self.servers.value.values))
+    public func saveServerConfigs() {
+        let serverConfigs = Array(self.serverConfigs.value.values).map { $0 as! AnyObject }
+        Persistence.saveArray("ServerConfigs.json", items: serverConfigs)
     }
     
-    public func saveSyncers() {
-        Persistence.saveArray("Syncers.json", items: self.syncers.value)
+    public func saveSyncerConfigs() {
+        let syncerConfigs = self.syncerConfigs.value.map { $0 as! AnyObject }
+        Persistence.saveArray("Syncers.json", items: syncerConfigs)
     }
     
     func saveBuildTemplates() {
-        Persistence.saveArrayIntoFolder("BuildTemplates", items: self.buildTemplates.value) { $0.uniqueId }
-    }
-    
-    public func stop() {
-        self.saveAll()
-        self.stopSyncers()
+        Persistence.saveArrayIntoFolder("BuildTemplates", items: self.buildTemplates.value) { $0.id }
     }
     
     public func saveAll() {
         //save to persistence
         
         self.saveConfig()
-        self.saveServers()
-        self.saveProjects()
+        self.saveServerConfigs()
+        self.saveProjectConfigs()
         self.saveBuildTemplates()
-        self.saveSyncers()
+        self.saveSyncerConfigs()
     }
     
-    public func stopSyncers() {
-        self.syncers.value.forEach { $0.active = false }
-    }
-    
-    public func startSyncers() {
-        self.syncers.value.forEach { $0.active = true }
-    }
 }
 
 //Syncer Parsing
 extension StorageManager {
     
-    private func createSyncerFromJSON(json: NSDictionary) -> HDGitHubXCBotSyncer? {
+    private func createSyncerConfigFromJSON(json: NSDictionary) -> SyncerConfig? {
         
-        guard
-            let xcodeServerHost = json.optionalStringForKey("server_host"),
-            let xcodeServer = self.serverForHost(xcodeServerHost),
-            let projectPath = json.optionalStringForKey("project_path"),
-            let project = self.projectForPath(projectPath)
-            else { return nil }
-        
-        let syncInterval = json.optionalDoubleForKey("sync_interval") ?? 15
-        let githubServer = GitHubFactory.server(project.githubToken)
-        let waitForLttm = json.optionalBoolForKey("wait_for_lttm") ?? false
-        let postStatusComments = json.optionalBoolForKey("post_status_comments") ?? true
-        let watchedBranchNames = json.optionalArrayForKey("watched_branches") as? [String] ?? []
-        
-        let syncer = HDGitHubXCBotSyncer(integrationServer: xcodeServer, sourceServer: githubServer, project: project, syncInterval: syncInterval, waitForLttm: waitForLttm, postStatusComments: postStatusComments, watchedBranchNames: watchedBranchNames)
-        return syncer
+        do {
+            return try SyncerConfig(json: json)
+        } catch {
+            Log.error(error)
+        }
+        return nil
     }
 }
 
 extension StorageManager: HeartbeatManagerDelegate {
     public func numberOfRunningSyncers() -> Int {
-        return self.syncers.value.filter { $0.active }.count
+        //TODO: move this so the SyncerManager
+        return -1
+//        return self.syncerConfigs.value.filter { $0.active }.count
     }
 }

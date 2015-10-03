@@ -58,7 +58,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     override func reloadStatus() {
         
         //if there is a local project, show status. otherwise show button to add one.
-        let project = self.project
+        let projectConfig = self.project.config
         
         self.statusContentView.hidden = false
         
@@ -69,18 +69,18 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         self.selectSSHPublicKeyButton.enabled = self.editing
         self.sshPassphraseTextField.enabled = self.editing
         
-        self.selectSSHPublicKeyButton.title = project.publicSSHKeyUrl?.lastPathComponent ?? "Select SSH Public Key"
-        self.selectSSHPrivateKeyButton.title = project.privateSSHKeyUrl?.lastPathComponent ?? "Select SSH Private Key"
-        self.sshPassphraseTextField.stringValue = project.sshPassphrase ?? ""
+        self.selectSSHPublicKeyButton.title = (project.config.publicSSHKeyPath as NSString).lastPathComponent ?? "Select SSH Public Key"
+        self.selectSSHPrivateKeyButton.title = (project.config.privateSSHKeyPath as NSString).lastPathComponent ?? "Select SSH Private Key"
+        self.sshPassphraseTextField.stringValue = project.config.sshPassphrase ?? ""
         
         //fill data in
         self.projectNameLabel.stringValue = project.workspaceMetadata?.projectName ?? "<NO NAME>"
         self.projectURLLabel.stringValue = project.workspaceMetadata?.projectURL.absoluteString ?? "<NO URL>"
         self.projectPathLabel.stringValue = project.url.path ?? "<NO PATH>"
         
-        if let githubToken = project.githubToken {
-            self.tokenTextField.stringValue = githubToken
-        }
+        let githubToken = projectConfig.githubToken
+        self.tokenTextField.stringValue = githubToken
+        
         self.tokenTextField.enabled = self.editing
         
         let selectedBefore = self.buildTemplateComboBox.objectValueOfSelectedItem as? String
@@ -88,13 +88,14 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         let buildTemplateNames = self.buildTemplates().map { $0.name! }
         self.buildTemplateComboBox.addItemsWithObjectValues(buildTemplateNames + [kBuildTemplateAddNewString])
         self.buildTemplateComboBox.selectItemWithObjectValue(selectedBefore)
-        
-        if
-            let preferredTemplateId = project.preferredTemplateId,
-            let template = self.buildTemplates().filter({ $0.uniqueId == preferredTemplateId }).first
-        {
-            self.buildTemplateComboBox.selectItemWithObjectValue(template.name!)
-        }
+
+        //TODO: where are we moving build template?
+//        if
+//            let preferredTemplateId = project.preferredTemplateId,
+//            let template = self.buildTemplates().filter({ $0.uniqueId == preferredTemplateId }).first
+//        {
+//            self.buildTemplateComboBox.selectItemWithObjectValue(template.name!)
+//        }
     }
     
     override func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())?) {
@@ -145,19 +146,19 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     
     func pullTemplateFromUI() -> Bool {
         
-        let selectedIndex = self.buildTemplateComboBox.indexOfSelectedItem
-        
-        if selectedIndex == -1 {
-            //not yet selected
-            UIUtils.showAlertWithText("You need to select a Build Template first")
-            return false
-        }
-        
-        let template = self.buildTemplates()[selectedIndex]
-        if let project = self.project {
-            project.preferredTemplateId = template.uniqueId
-            return true
-        }
+//        let selectedIndex = self.buildTemplateComboBox.indexOfSelectedItem
+//        
+//        if selectedIndex == -1 {
+//            //not yet selected
+//            UIUtils.showAlertWithText("You need to select a Build Template first")
+//            return false
+//        }
+//        
+//        let template = self.buildTemplates()[selectedIndex]
+//        if let project = self.project {
+//            project.preferredTemplateId = template.id
+//            return true
+//        }
         return false
     }
     
@@ -174,44 +175,45 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     
     func pullCredentialsFromUI() -> Bool {
         
-        _ = self.pullTokenFromUI()
-        let privateUrl = project.privateSSHKeyUrl
-        let publicUrl = project.publicSSHKeyUrl
-        _ = self.pullSSHPassphraseFromUI() //can't fail
-        let githubToken = project.githubToken
+        //TODO: redo validation
+//        _ = self.pullTokenFromUI()
+//        let privateUrl = project.privateSSHKeyUrl
+//        let publicUrl = project.publicSSHKeyUrl
+//        _ = self.pullSSHPassphraseFromUI() //can't fail
+//        let githubToken = project.githubToken
+//        
+//        let tokenPresent = githubToken != nil
+//        let sshValid = privateUrl != nil && publicUrl != nil
+//        let success = tokenPresent && sshValid
+//        if success {
+//            return true
+//        }
         
-        let tokenPresent = githubToken != nil
-        let sshValid = privateUrl != nil && publicUrl != nil
-        let success = tokenPresent && sshValid
-        if success {
-            return true
-        }
-        
-        UIUtils.showAlertWithText("Credentials error - you need to specify a valid personal GitHub token and valid SSH keys - SSH keys are used by Git and the token is used for talking to the API (Pulling Pull Requests, updating commit statuses etc). Please, also make sure all are added correctly.")
+//        UIUtils.showAlertWithText("Credentials error - you need to specify a valid personal GitHub token and valid SSH keys - SSH keys are used by Git and the token is used for talking to the API (Pulling Pull Requests, updating commit statuses etc). Please, also make sure all are added correctly.")
         return false
     }
     
     func pullSSHPassphraseFromUI() -> Bool {
         
-        let string = self.sshPassphraseTextField.stringValue
-        let project = self.project
-        if !string.isEmpty {
-            project.sshPassphrase = string
-        } else {
-            project.sshPassphrase = nil
-        }
+//        let string = self.sshPassphraseTextField.stringValue
+//        let project = self.project
+//        if !string.isEmpty {
+//            project.sshPassphrase = string
+//        } else {
+//            project.sshPassphrase = nil
+//        }
         return true
     }
     
     func pullTokenFromUI() -> Bool {
         
-        let string = self.tokenTextField.stringValue
-        let project = self.project
-        if !string.isEmpty {
-            project.githubToken = string
-        } else {
-            project.githubToken = nil
-        }
+//        let string = self.tokenTextField.stringValue
+//        let project = self.project
+//        if !string.isEmpty {
+//            project.githubToken = string
+//        } else {
+//            project.githubToken = nil
+//        }
         return true
     }
     
@@ -228,31 +230,31 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     
     override func removeCurrentConfig() {
         
-        let project = self.project
-        
-        //also cleanup comboBoxes
-        self.buildTemplateComboBox.stringValue = ""
-        
-        self.storageManager.removeProject(project)
-        self.storageManager.saveProjects()
-        self.reloadStatus()
+//        let project = self.project
+//        
+//        //also cleanup comboBoxes
+//        self.buildTemplateComboBox.stringValue = ""
+//        
+//        self.storageManager.removeProject(project)
+//        self.storageManager.saveProjects()
+//        self.reloadStatus()
     }
     
     func selectKey(type: String) {
-        if let url = StorageUtils.openSSHKey(type) {
-            do {
-                _ = try NSString(contentsOfURL: url, encoding: NSASCIIStringEncoding)
-                let project = self.project
-                if type == "public" {
-                    project.publicSSHKeyUrl = url
-                } else {
-                    project.privateSSHKeyUrl = url
-                }
-            } catch {
-                UIUtils.showAlertWithError(error as NSError)
-            }
-        }
-        self.reloadStatus()
+//        if let url = StorageUtils.openSSHKey(type) {
+//            do {
+//                _ = try NSString(contentsOfURL: url, encoding: NSASCIIStringEncoding)
+//                let project = self.project
+//                if type == "public" {
+//                    project.publicSSHKeyUrl = url
+//                } else {
+//                    project.privateSSHKeyUrl = url
+//                }
+//            } catch {
+//                UIUtils.showAlertWithError(error as NSError)
+//            }
+//        }
+//        self.reloadStatus()
     }
     
     @IBAction func selectPublicKeyTapped(sender: AnyObject) {
@@ -267,25 +269,25 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         
         if let templateViewController = viewController as? BuildTemplateViewController {
             
-            //select the passed in template
-            var foundIdx: Int? = nil
-            let template = templateViewController.buildTemplate
-            for (idx, obj) in self.buildTemplates().enumerate() {
-                if obj.uniqueId == template.uniqueId {
-                    foundIdx = idx
-                    break
-                }
-            }
-            
-            self.project.preferredTemplateId = template.uniqueId
-            
-            if let foundIdx = foundIdx {
-                self.buildTemplateComboBox.selectItemAtIndex(foundIdx)
-            } else {
-                UIUtils.showAlertWithText("Couldn't find saved template, please report this error!")
-            }
-            
-            self.reloadStatus()
+//            //select the passed in template
+//            var foundIdx: Int? = nil
+//            let template = templateViewController.buildTemplate
+//            for (idx, obj) in self.buildTemplates().enumerate() {
+//                if obj.id == template.id {
+//                    foundIdx = idx
+//                    break
+//                }
+//            }
+//            
+//            self.project.config.preferredTemplateId = template.id
+//            
+//            if let foundIdx = foundIdx {
+//                self.buildTemplateComboBox.selectItemAtIndex(foundIdx)
+//            } else {
+//                UIUtils.showAlertWithText("Couldn't find saved template, please report this error!")
+//            }
+//            
+//            self.reloadStatus()
         }
     }
     
