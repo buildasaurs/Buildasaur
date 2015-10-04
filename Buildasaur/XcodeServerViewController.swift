@@ -39,10 +39,6 @@ class XcodeServerViewController: StatusViewController {
         self.setup()
     }
     
-    deinit {
-        print("Deallocing XcodeServerViewController")
-    }
-    
     func setup() {
         
         let server = self.serverConfig

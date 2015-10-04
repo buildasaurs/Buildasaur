@@ -15,7 +15,7 @@ import BuildaKit
 
 class MockXcodeServer: XcodeServer {
     init() {
-        let config = try! XcodeServerConfig(host: "", user: "", password: "")
+        let config = XcodeServerConfig()
         super.init(config: config, endpoints: XcodeServerEndpoints(serverConfig: config))
     }
 }
@@ -27,8 +27,8 @@ class MockGitHubServer: GitHubServer {
 }
 
 class MockProject: Project {
-    override init() {
-        super.init()
+    init() {
+        try! super.init(config: ProjectConfig())
     }
     required init?(json: NSDictionary) { fatalError("init(json:) has not been implemented") }
 }
