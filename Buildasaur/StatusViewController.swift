@@ -38,15 +38,29 @@ class StatusViewController: StorableViewController {
 
     @IBOutlet weak var lastConnectionView: NSTextField?
     @IBOutlet weak var progressIndicator: NSProgressIndicator?
+    @IBOutlet weak var serverStatusImageView: NSImageView!
 
     let editing = MutableProperty<Bool>(true)
+    var valid: SignalProducer<Bool, NoError>!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupAvailability()
+        self.setupUI()
+        self.setupAvailability()
     }
+    
+    private func setupUI() {
         
+        //status image
+        let statusImage = self
+            .availabilityCheckState
+            .producer
+            .map { StatusViewController.imageNameForStatus($0) }
+            .map { NSImage(named: $0) }
+        self.serverStatusImageView.rac_image <~ statusImage
+    }
+    
     //do not call directly! just override
     func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())) {
         assertionFailure("Must be overriden by subclasses")
@@ -111,12 +125,26 @@ class StatusViewController: StorableViewController {
         case .Checking:
             return "Checking access to server..."
         case .Failed(let error):
-            let desc = error?.localizedDescription ?? "Unknown error"
+            let desc = (error as? NSError)?.localizedDescription ?? "\(error)"
             return "Failed to access server, error: \n\(desc)"
         case .Succeeded:
             return "Verified access, all is well!"
         case .Unchecked:
             return "-"
+        }
+    }
+    
+    private static func imageNameForStatus(status: AvailabilityCheckState) -> String {
+        
+        switch status {
+        case .Unchecked:
+            return NSImageNameStatusNone
+        case .Checking:
+            return NSImageNameStatusPartiallyAvailable
+        case .Succeeded:
+            return NSImageNameStatusAvailable
+        case .Failed(_):
+            return NSImageNameStatusUnavailable
         }
     }
 }

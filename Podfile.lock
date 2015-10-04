@@ -1,6 +1,6 @@
 PODS:
   - Alamofire (2.0.0-beta.3)
-  - BuildaUtils (0.1.5)
+  - BuildaUtils (0.1.7)
   - ekgclient (0.3.0):
     - Alamofire (= 2.0.0-beta.3)
   - Ji (1.1.2):
@@ -32,7 +32,7 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   Alamofire: 39dddb7d3725d1771b1d2f7099c8bd45bd83ffbb
-  BuildaUtils: 25b8a56f9878ab26d2233866242a2d96d143851c
+  BuildaUtils: 2a05312b3a27f85b7b8112c17207444760b49904
   ekgclient: 40f5d347e2ede450b3e50ac7c6bd84d96e7b84ad
   Ji: 477ec17f9abe9d7f016d714f7b5da8c3c67a2e15
   ReactiveCocoa: 652cf90e5de65708e7e2111f77405756da21aabe

@@ -15,6 +15,7 @@ import ReactiveCocoa
 
 public enum StorageManagerError: ErrorType {
     case DuplicateServerConfig(XcodeServerConfig)
+    case DuplicateProjectConfig(ProjectConfig)
 }
 
 public class StorageManager {
@@ -106,6 +107,25 @@ public class StorageManager {
         
         //no duplicate, save!
         self.serverConfigs.value[config.id] = config
+    }
+    
+    public func addProjectConfig(config: ProjectConfig) throws {
+        
+        //verify we don't have a duplicate
+        let currentConfigs: [String: ProjectConfig] = self.projectConfigs.value
+        let dup = currentConfigs
+            .map { $0.1 }
+            //find those matching local file url
+            .filter { $0.url == config.url }
+            //but if it's an exact match (id), it's not a duplicate - it's identity
+            .filter { $0.id != config.id }
+            .first
+        if let duplicate = dup {
+            throw StorageManagerError.DuplicateProjectConfig(duplicate)
+        }
+        
+        //no duplicate, save!
+        self.projectConfigs.value[config.id] = config
     }
     
     //MARK: removing

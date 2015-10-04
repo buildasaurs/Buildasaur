@@ -25,9 +25,6 @@ class XcodeServerViewController: StatusViewController {
     @IBOutlet weak var serverHostTextField: NSTextField!
     @IBOutlet weak var serverUserTextField: NSTextField!
     @IBOutlet weak var serverPasswordTextField: NSSecureTextField!
-    @IBOutlet weak var serverStatusImageView: NSImageView!
-
-    private var valid: SignalProducer<Bool, NoError>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,14 +58,6 @@ class XcodeServerViewController: StatusViewController {
         //change state to .Unchecked whenever any change to a textfield has been done
         self.availabilityCheckState <~ allText.map { _ in AvailabilityCheckState.Unchecked }
         
-        //status image
-        let statusImage = self
-            .availabilityCheckState
-            .producer
-            .map { XcodeServerViewController.imageNameForStatus($0) }
-            .map { NSImage(named: $0) }
-        self.serverStatusImageView.rac_image <~ statusImage
-        
         //enabled
         self.serverHostTextField.rac_enabled <~ editing
         self.serverUserTextField.rac_enabled <~ editing
@@ -83,30 +72,15 @@ class XcodeServerViewController: StatusViewController {
         self.nextButton.rac_enabled <~ enableNext
     }
     
-    private static func imageNameForStatus(status: AvailabilityCheckState) -> String {
-        
-        switch status {
-        case .Unchecked:
-            return NSImageNameStatusNone
-        case .Checking:
-            return NSImageNameStatusPartiallyAvailable
-        case .Succeeded:
-            return NSImageNameStatusAvailable
-        case .Failed(_):
-            return NSImageNameStatusUnavailable
-        }
-    }
-    
     override func next() {
         
         //pull the current credentials
         guard let newConfig = self.pullConfigFromUI() else { return }
         self.serverConfig.value = newConfig
         
-        //first check availability of these credentials
+        //check availability of these credentials
         self.recheckForAvailability { [weak self] (state) -> () in
             
-            print("State: \(state)")
             if case .Succeeded = state {
                 //stop editing
                 self?.editing.value = false

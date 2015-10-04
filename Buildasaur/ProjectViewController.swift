@@ -22,9 +22,10 @@ class ProjectViewController: StatusViewController {
     var projectConfig = MutableProperty<ProjectConfig>(ProjectConfig())
     weak var cancelDelegate: ProjectViewControllerDelegate?
     
-    //-----
+    private var project: Project!
     
-//    var project: Project!
+    private var privateKeyUrl = MutableProperty<NSURL?>(nil)
+    private var publicKeyUrl = MutableProperty<NSURL?>(nil)
 
     //we have a project
     @IBOutlet weak var projectNameLabel: NSTextField!
@@ -44,53 +45,97 @@ class ProjectViewController: StatusViewController {
     
     func setupUI() {
         
-        let proj = self.projectConfig
-        let prod = proj.producer
+        let projConf = self.projectConfig
+        let prod = projConf.producer
         let editing = self.editing
+        let notEditing = editing.producer.map { !$0 }
+        let proj = prod.map { newConfig in
+            //this config already went through validation like a second ago.
+            return try! Project(config: newConfig)
+        }
         
-        //editing
+        //project
+        proj.startWithNext { [weak self] in self?.project = $0 }
+        
+        //enabled
         self.selectSSHPrivateKeyButton.rac_enabled <~ editing
         self.selectSSHPublicKeyButton.rac_enabled <~ editing
         self.sshPassphraseTextField.rac_enabled <~ editing
+        self.tokenTextField.rac_enabled <~ editing
         
-        //strings
-        self.selectSSHPublicKeyButton.rac_title <~ prod.map { $0.publicSSHKeyPath }.map {
-            $0.isEmpty ? "Select SSH Public Key" : ($0 as NSString).lastPathComponent
+        //editable data
+        let privateKey = self.privateKeyUrl.producer
+        let publicKey = self.publicKeyUrl.producer
+        
+        let privateKeyPath = privateKey.map { $0?.path }
+        let publicKeyPath = publicKey.map { $0?.path }
+        
+        self.selectSSHPrivateKeyButton.rac_title <~ privateKeyPath.map {
+            $0 ?? "Select SSH Private Key"
         }
-        self.selectSSHPrivateKeyButton.rac_title <~ prod.map { $0.privateSSHKeyPath }.map {
-            $0.isEmpty ? "Select SSH Private Key" : ($0 as NSString).lastPathComponent
+        self.selectSSHPublicKeyButton.rac_title <~ publicKeyPath.map {
+            $0 ?? "Select SSH Public Key"
         }
-        self.sshPassphraseTextField.rac_stringValue <~ prod.map { $0.sshPassphrase ?? "" }
+        
+        //dump whenever config changes
+        prod.startWithNext { [weak self] in
+            
+            self?.tokenTextField.stringValue = $0.githubToken
+            let priv = $0.privateSSHKeyPath
+            self?.privateKeyUrl.value = priv.isEmpty ? nil : NSURL(string: priv)
+            let pub = $0.publicSSHKeyPath
+            self?.publicKeyUrl.value = pub.isEmpty ? nil : NSURL(string: pub)
+            self?.sshPassphraseTextField.stringValue = $0.sshPassphrase ?? ""
+        }
+        
+        let meta = proj.map { $0.workspaceMetadata! }
         
         //fill data in
-//        self.projectNameLabel.stringValue = project.workspaceMetadata?.projectName ?? "<NO NAME>"
-//        self.projectURLLabel.stringValue = project.workspaceMetadata?.projectURL.absoluteString ?? "<NO URL>"
-//        self.projectPathLabel.stringValue = project.url.path ?? "<NO PATH>"
-//        
-//        let githubToken = projectConfig.githubToken
-//        self.tokenTextField.stringValue = githubToken
-//        
-//        self.tokenTextField.enabled = self.editing
-//        
-//        let selectedBefore = self.buildTemplateComboBox.objectValueOfSelectedItem as? String
-//        self.buildTemplateComboBox.removeAllItems()
-//        let buildTemplateNames = self.buildTemplates().map { $0.name! }
-//        self.buildTemplateComboBox.addItemsWithObjectValues(buildTemplateNames + [kBuildTemplateAddNewString])
-//        self.buildTemplateComboBox.selectItemWithObjectValue(selectedBefore)
-
-        //TODO: where are we moving build template?
-//        if
-//            let preferredTemplateId = project.preferredTemplateId,
-//            let template = self.buildTemplates().filter({ $0.uniqueId == preferredTemplateId }).first
-//        {
-//            self.buildTemplateComboBox.selectItemWithObjectValue(template.name!)
-//        }
+        self.projectNameLabel.rac_stringValue <~ meta.map { $0.projectName }
+        self.projectURLLabel.rac_stringValue <~ meta.map { $0.projectURL.absoluteString }
+        self.projectPathLabel.rac_stringValue <~ meta.map { $0.projectPath }
+        
+        //invalidate availability on change of any input
+        let privateKeyVoid = privateKey.map { _ in }
+        let publicKeyVoid = publicKey.map { _ in }
+        let githubTokenVoid = self.tokenTextField.rac_text.map { _ in }
+        let sshPassphraseVoid = self.sshPassphraseTextField.rac_text.map { _ in }
+        let all = combineLatest(privateKeyVoid, publicKeyVoid, githubTokenVoid, sshPassphraseVoid)
+        all.startWithNext { [weak self] _ in self?.availabilityCheckState.value = .Unchecked }
+        
+        //listen for changes
+        let privateKeyValid = privateKey.map { $0 != nil }
+        let publicKeyValid = publicKey.map { $0 != nil }
+        let githubTokenValid = self.tokenTextField.rac_text.map { !$0.isEmpty }
+        
+        let allInputs = combineLatest(privateKeyValid, publicKeyValid, githubTokenValid)
+        let valid = allInputs.map { $0.0 && $0.1 && $0.2 }
+        self.valid = valid
+        
+        //control buttons
+        let enableNext = combineLatest(self.valid, editing.producer)
+            .map { $0 && $1 }
+        self.nextButton.rac_enabled <~ enableNext
+        self.trashButton.rac_enabled <~ editing
+        self.gearButton.rac_enabled <~ notEditing
+        self.previousButton.rac_enabled <~ editing
     }
     
     override func next() {
-        //pull data from UI, create config, save it and try to validate
-        //TODO:
         
+        //pull data from UI, create config, save it and try to validate
+        guard let newConfig = self.pullConfigFromUI() else { return }
+        self.projectConfig.value = newConfig
+        
+        //check availability of these credentials
+        self.recheckForAvailability { [weak self] (state) -> () in
+            
+            if case .Succeeded = state {
+                //stop editing
+                self?.editing.value = false
+                //TODO: tell delegate this step is done!
+            }
+        }
     }
     
     override func previous() {
@@ -115,118 +160,58 @@ class ProjectViewController: StatusViewController {
     
     override func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())) {
         
-//        let statusChangedPersist: (status: AvailabilityCheckState, done: Bool) -> () = {
-//            (status: AvailabilityCheckState, done: Bool) -> () in
-//            self.lastAvailabilityCheckStatus = status
-//            statusChanged?(status: status, done: done)
-//        }
-//        
-//        let project = self.project
-//        statusChangedPersist(status: .Checking, done: false)
-//        
-//        NetworkUtils.checkAvailabilityOfGitHubWithCurrentSettingsOfProject(project, completion: { (success, error) -> () in
-//            
-//            let status: AvailabilityCheckState
-//            if success {
-//                status = .Succeeded
-//            } else {
-//                Log.error("Checking github availability error: " + (error?.description ?? "Unknown error"))
-//                status = AvailabilityCheckState.Failed(error)
-//            }
-//            
-//            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-//                
-//                statusChangedPersist(status: status, done: true)
-//            })
-//        })
+        statusChanged(status: .Checking, done: false)
+
+        var project: Project!
+        do {
+            project = try Project(config: self.projectConfig.value)
+        } catch {
+            statusChanged(status: AvailabilityCheckState.Failed(error), done: true)
+            return
+        }
+
+        NetworkUtils.checkAvailabilityOfGitHubWithCurrentSettingsOfProject(project, completion: { (success, error) -> () in
+            
+            let status: AvailabilityCheckState
+            if success {
+                status = .Succeeded
+            } else {
+                Log.error("Checking github availability error: " + (error?.description ?? "Unknown error"))
+                status = AvailabilityCheckState.Failed(error)
+            }
+            
+            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+                statusChanged(status: status, done: true)
+            })
+        })
     }
     
-    //Combo Box Delegate
-    func comboBoxWillDismiss(notification: NSNotification) {
+    func pullConfigFromUI() -> ProjectConfig? {
         
-//        if let templatePulled = self.buildTemplateComboBox.objectValueOfSelectedItem as? String {
-//            
-//            //it's string
-//            var buildTemplate: BuildTemplate?
-//            if templatePulled != kBuildTemplateAddNewString {
-//                buildTemplate = self.buildTemplates().filter({ $0.name == templatePulled }).first
-//            }
-//            if buildTemplate == nil {
-//                buildTemplate = BuildTemplate(projectName: self.project.workspaceMetadata!.projectName)
-//            }
-//            
-//            self.delegate.showBuildTemplateViewControllerForTemplate(buildTemplate, project: self.project, sender: self)
-//        }
-    }
-    
-    func pullTemplateFromUI() -> Bool {
+        let sshPassphrase = self.sshPassphraseTextField.stringValue.nonEmpty()
+        guard
+            let privateKeyPath = self.privateKeyUrl.value?.path,
+            let publicKeyPath = self.publicKeyUrl.value?.path,
+            let githubToken = self.tokenTextField.stringValue.nonEmpty() else {
+            return nil
+        }
         
-//        let selectedIndex = self.buildTemplateComboBox.indexOfSelectedItem
-//        
-//        if selectedIndex == -1 {
-//            //not yet selected
-//            UIUtils.showAlertWithText("You need to select a Build Template first")
-//            return false
-//        }
-//        
-//        let template = self.buildTemplates()[selectedIndex]
-//        if let project = self.project {
-//            project.preferredTemplateId = template.id
-//            return true
-//        }
-        return false
-    }
-    
-    func pullDataFromUI() -> Bool {
+        var config = self.projectConfig.value
+        config.githubToken = githubToken
+        config.sshPassphrase = sshPassphrase
+        config.privateSSHKeyPath = privateKeyPath
+        config.publicSSHKeyPath = publicKeyPath
         
-        let successCreds = self.pullCredentialsFromUI()
-        let template = self.pullTemplateFromUI()
-        
-        return successCreds && template
-    }
-    
-    func pullCredentialsFromUI() -> Bool {
-        
-        //TODO: redo validation
-//        _ = self.pullTokenFromUI()
-//        let privateUrl = project.privateSSHKeyUrl
-//        let publicUrl = project.publicSSHKeyUrl
-//        _ = self.pullSSHPassphraseFromUI() //can't fail
-//        let githubToken = project.githubToken
-//        
-//        let tokenPresent = githubToken != nil
-//        let sshValid = privateUrl != nil && publicUrl != nil
-//        let success = tokenPresent && sshValid
-//        if success {
-//            return true
-//        }
-        
-//        UIUtils.showAlertWithText("Credentials error - you need to specify a valid personal GitHub token and valid SSH keys - SSH keys are used by Git and the token is used for talking to the API (Pulling Pull Requests, updating commit statuses etc). Please, also make sure all are added correctly.")
-        return false
-    }
-    
-    func pullSSHPassphraseFromUI() -> Bool {
-        
-//        let string = self.sshPassphraseTextField.stringValue
-//        let project = self.project
-//        if !string.isEmpty {
-//            project.sshPassphrase = string
-//        } else {
-//            project.sshPassphrase = nil
-//        }
-        return true
-    }
-    
-    func pullTokenFromUI() -> Bool {
-        
-//        let string = self.tokenTextField.stringValue
-//        let project = self.project
-//        if !string.isEmpty {
-//            project.githubToken = string
-//        } else {
-//            project.githubToken = nil
-//        }
-        return true
+        do {
+            try self.storageManager.addProjectConfig(config)
+            return config
+        } catch StorageManagerError.DuplicateProjectConfig(let duplicate) {
+            let userError = Error.withInfo("You already have a Project at \"\(duplicate.url)\", please go back and select it from the previous screen.")
+            UIUtils.showAlertWithError(userError)
+        } catch {
+            UIUtils.showAlertWithError(error)
+        }
+        return nil
     }
     
     func removeCurrentConfig() {
@@ -237,16 +222,14 @@ class ProjectViewController: StatusViewController {
     }
     
     func selectKey(type: String) {
-        if
-            let url = StorageUtils.openSSHKey(type),
-            let path = url.path
-        {
+        
+        if let url = StorageUtils.openSSHKey(type) {
             do {
                 _ = try NSString(contentsOfURL: url, encoding: NSASCIIStringEncoding)
                 if type == "public" {
-                    self.projectConfig.value.publicSSHKeyPath = path
+                    self.publicKeyUrl.value = url
                 } else {
-                    self.projectConfig.value.privateSSHKeyPath = path
+                    self.privateKeyUrl.value = url
                 }
             } catch {
                 UIUtils.showAlertWithError(error as NSError)
