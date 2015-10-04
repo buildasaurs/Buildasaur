@@ -45,6 +45,7 @@
 		3A81BB2C1B5A77E9004732CD /* BuildaKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3A81BB161B5A77E9004732CD /* BuildaKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3A81BB351B5A7898004732CD /* BuildaGitServer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AAF6EE41A3CE5BA00C657FB /* BuildaGitServer.framework */; };
 		3A81BB3C1B5A7994004732CD /* UIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A81BB3B1B5A7994004732CD /* UIUtils.swift */; };
+		3A9109B81BC1D87E00C2AECA /* StatusSyncerViewController_BuildTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9109B71BC1D87E00C2AECA /* StatusSyncerViewController_BuildTemplates.swift */; settings = {ASSET_TAGS = (); }; };
 		3A9C95A51BBDAE9F00D37135 /* SyncerLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9C95A41BBDAE9F00D37135 /* SyncerLogic.swift */; settings = {ASSET_TAGS = (); }; };
 		3AAA1B661AAB6E9800FA1598 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAA1B651AAB6E9800FA1598 /* SeparatorView.swift */; };
 		3AAA1B681AAB722600FA1598 /* ProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAA1B671AAB722600FA1598 /* ProjectViewController.swift */; };
@@ -252,6 +253,7 @@
 		3A81BB1F1B5A77E9004732CD /* BuildaKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BuildaKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A81BB281B5A77E9004732CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A81BB3B1B5A7994004732CD /* UIUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIUtils.swift; sourceTree = "<group>"; };
+		3A9109B71BC1D87E00C2AECA /* StatusSyncerViewController_BuildTemplates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusSyncerViewController_BuildTemplates.swift; sourceTree = "<group>"; };
 		3A9C95A41BBDAE9F00D37135 /* SyncerLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerLogic.swift; sourceTree = "<group>"; };
 		3A9DEC7A1A3BDA6C008C8270 /* PullRequestBranch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PullRequestBranch.swift; path = BuildaGitServer/PullRequestBranch.swift; sourceTree = SOURCE_ROOT; };
 		3AAA1B651AAB6E9800FA1598 /* SeparatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
@@ -630,6 +632,7 @@
 				3AE4F6CF1BBC8D250006CA1C /* EmptyProjectViewController.swift */,
 				3AAA1B671AAB722600FA1598 /* ProjectViewController.swift */,
 				3AF1B1231AAC7CA500917EF3 /* StatusSyncerViewController.swift */,
+				3A9109B71BC1D87E00C2AECA /* StatusSyncerViewController_BuildTemplates.swift */,
 				3AAA1B771AAC508A00FA1598 /* StatusViewController.swift */,
 				3A5687771A3B93BD0066DB2B /* SyncerEditViewController.swift */,
 				3A5B04A91AB4ABEB00F60536 /* TriggerViewController.swift */,
@@ -1312,6 +1315,7 @@
 				3AAA1B681AAB722600FA1598 /* ProjectViewController.swift in Sources */,
 				3AB3FDCB1B05644300021197 /* MenuItemManager.swift in Sources */,
 				3A5655741BC077CB008BD142 /* ViewControllerFactory.swift in Sources */,
+				3A9109B81BC1D87E00C2AECA /* StatusSyncerViewController_BuildTemplates.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

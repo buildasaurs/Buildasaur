@@ -27,7 +27,8 @@ class EmptyProjectViewController: StorableViewController {
     weak var emptyProjectDelegate: EmptyProjectViewControllerDelegate?
     
     @IBOutlet weak var existingProjectsPopup: NSPopUpButton!
-
+    @IBOutlet weak var addProjectButton: NSButton!
+    
     private var projectConfigs: [ProjectConfig] = []
 
     override func viewDidLoad() {
@@ -35,6 +36,14 @@ class EmptyProjectViewController: StorableViewController {
         
         self.setupDataSource()
         self.setupPopupAction()
+        self.setupStates()
+    }
+    
+    private func setupStates() {
+        
+        let editingAllowed = self.editingAllowed
+        self.existingProjectsPopup.rac_enabled <~ editingAllowed
+        self.addProjectButton.rac_enabled <~ editingAllowed
     }
 
     private func setupPopupAction() {

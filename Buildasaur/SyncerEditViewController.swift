@@ -9,6 +9,31 @@
 import Cocoa
 import BuildaKit
 import XcodeServerSDK
+import ReactiveCocoa
+
+enum SyncerSetupStage: Int {
+    case NoServer
+    case EditingServer
+    case VerifiedServer
+    case NoProject
+    case EditingProject
+    case VerifiedProject
+    case EditingSyncer
+    case VerifiedSyncer
+    case AllVerified
+}
+
+//OMG - Let's redo this in a step-by-step editing/onboarding
+//otherwise it's too difficult to do well :(
+//it's hard to define the state machine here and understand the
+//transitions properly.
+
+extension SyncerSetupStage: Comparable { }
+
+func <(lhs: SyncerSetupStage, rhs: SyncerSetupStage) -> Bool {
+    return lhs.rawValue < rhs.rawValue
+}
+
 
 class SyncerEditViewController: PresentableViewController {
     
@@ -28,6 +53,8 @@ class SyncerEditViewController: PresentableViewController {
     weak var emptyServerViewController: EmptyXcodeServerViewController?
     
     weak var syncerViewController: StatusSyncerViewController?
+    
+    let currentStage = MutableProperty<SyncerSetupStage>(.NoServer)
     
     private var buildTemplateParams: (buildTemplate: BuildTemplate?, project: Project)?
     
@@ -59,34 +86,49 @@ class SyncerEditViewController: PresentableViewController {
         if let storableViewController = viewController as? StorableViewController {
             storableViewController.storageManager = self.syncerManager.storageManager
             
-            if let emptyProjectViewController = storableViewController as? EmptyProjectViewController {
-                self.emptyProjectViewController = emptyProjectViewController
-                emptyProjectViewController.emptyProjectDelegate = self
-            }
+            let stage = self.currentStage.producer
+            let serverEditable = stage.map { $0 != .AllVerified }
+            let projectEditable = stage.map { $0 >= .EditingProject }
+            let syncerEditable = stage.map { $0 >= .EditingSyncer }
             
             if let emptyServerViewController = storableViewController as? EmptyXcodeServerViewController {
                 self.emptyServerViewController = emptyServerViewController
                 emptyServerViewController.emptyServerDelegate = self
+                emptyServerViewController.editingAllowed <~ serverEditable
+                
+                self.currentStage.value = .NoServer
+            }
+
+            if let emptyProjectViewController = storableViewController as? EmptyProjectViewController {
+                self.emptyProjectViewController = emptyProjectViewController
+                emptyProjectViewController.emptyProjectDelegate = self
+                emptyProjectViewController.editingAllowed <~ projectEditable
             }
             
             if let statusViewController = storableViewController as? StatusViewController {
-                statusViewController.delegate = self
                 
                 if let serverViewController = statusViewController as? XcodeServerViewController {
                     self.serverViewController = serverViewController
                     serverViewController.serverConfig.value = self.configTriplet.server!
                     serverViewController.cancelDelegate = self
+                    serverViewController.editingAllowed <~ serverEditable
+                    
+                    self.currentStage.value = .EditingServer
                 }
                 
                 if let projectViewController = statusViewController as? ProjectViewController {
                     self.projectViewController = projectViewController
                     projectViewController.projectConfig.value = self.configTriplet.project!
                     projectViewController.cancelDelegate = self
+                    projectViewController.editingAllowed <~ projectEditable
+                    
+                    self.currentStage.value = .EditingProject
                 }
                 
                 if let syncerViewController = statusViewController as? StatusSyncerViewController {
                     self.syncerViewController = syncerViewController
                     syncerViewController.syncerConfig.value = self.configTriplet.syncer
+                    syncerViewController.editingAllowed <~ syncerEditable
                 }
             }
         }
@@ -191,23 +233,13 @@ extension SyncerEditViewController {
     }
 }
 
-extension SyncerEditViewController: StatusSiblingsViewControllerDelegate {
-    
-    func getProjectStatusViewController() -> ProjectViewController {
-        return self.projectViewController!
-    }
-    
-    func getServerStatusViewController() -> XcodeServerViewController {
-        return self.serverViewController!
-    }
-    
-    func showBuildTemplateViewControllerForTemplate(template: BuildTemplate?, project: Project, sender: SetupViewControllerDelegate?) {
-        
-        self.buildTemplateParams = (buildTemplate: template, project: project)
-        self.performSegueWithIdentifier("showBuildTemplate", sender: sender)
-        
-        //TODO: read about unwind: http://stackoverflow.com/questions/9732499/how-to-dismiss-a-modal-that-was-presented-in-a-uistoryboard-with-a-modal-segue
-    }
-}
+//    func showBuildTemplateViewControllerForTemplate(template: BuildTemplate?, project: Project, sender: SetupViewControllerDelegate?) {
+//        
+//        self.buildTemplateParams = (buildTemplate: template, project: project)
+//        self.performSegueWithIdentifier("showBuildTemplate", sender: sender)
+//        
+//        //TODO: read about unwind: http://stackoverflow.com/questions/9732499/how-to-dismiss-a-modal-that-was-presented-in-a-uistoryboard-with-a-modal-segue
+//    }
+
 
 

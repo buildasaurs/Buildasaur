@@ -37,11 +37,14 @@ public class SyncerManager {
     public let factory: SyncerFactoryType
     
     public let syncersProducer: SignalProducer<[HDGitHubXCBotSyncer], NoError>
+    public let projectsProducer: SignalProducer<[Project], NoError>
+    public let serversProducer: SignalProducer<[XcodeServer], NoError>
     
     private var syncers: [HDGitHubXCBotSyncer]
     private var configTriplets: SignalProducer<[ConfigTriplet], NoError>
     
     public init(storageManager: StorageManager, factory: SyncerFactoryType) {
+        
         self.storageManager = storageManager
         self.factory = factory
         self.syncers = []
@@ -49,7 +52,13 @@ public class SyncerManager {
         self.configTriplets = configTriplets
         let syncersProducer = SyncerProducerFactory.createSyncersProducer(factory, triplets: configTriplets)
         self.syncersProducer = syncersProducer
-        syncersProducer.startWithNext { self.syncers = $0 }
+        
+        let justProjects = storageManager.projectConfigs.producer.map { $0.map { $0.1 } }
+        let justServers = storageManager.serverConfigs.producer.map { $0.map { $0.1 } }
+        self.projectsProducer = SyncerProducerFactory.createProjectsProducer(factory, configs: justProjects)
+        self.serversProducer = SyncerProducerFactory.createServersProducer(factory, configs: justServers)
+        
+        syncersProducer.startWithNext { [weak self] in self?.syncers = $0 }
     }
     
     deinit {

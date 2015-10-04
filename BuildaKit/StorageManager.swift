@@ -157,17 +157,21 @@ public class StorageManager {
     
     //MARK: lookup
     
-    public func buildTemplatesForProjectName(projectName: String) -> [BuildTemplate] {
-        return self.buildTemplates
-            .value
-            .map { $0.1 }
-            .filter { (template: BuildTemplate) -> Bool in
-                
-                if let templateProjectName = template.projectName {
-                    return projectName == templateProjectName
-                } else {
-                    //if it doesn't yet have a project name associated, assume we have to show it
-                    return true
+    public func buildTemplatesForProjectName(projectName: String) -> SignalProducer<[BuildTemplate], NoError> {
+        
+        //filter all build templates with the project name || with no project name (legacy reasons)
+        return self
+            .buildTemplates
+            .producer
+            .map { Array($0.values) }
+            .map {
+                return $0.filter { (template: BuildTemplate) -> Bool in
+                    if let templateProjectName = template.projectName {
+                        return projectName == templateProjectName
+                    } else {
+                        //if it doesn't yet have a project name associated, assume we have to show it
+                        return true
+                    }
                 }
         }
     }

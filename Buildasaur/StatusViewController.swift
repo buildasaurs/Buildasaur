@@ -13,23 +13,16 @@ import XcodeServerSDK
 import BuildaKit
 import ReactiveCocoa
 
-protocol StatusSiblingsViewControllerDelegate: class {
-    
-    func getProjectStatusViewController() -> ProjectViewController
-    func getServerStatusViewController() -> XcodeServerViewController
-    func showBuildTemplateViewControllerForTemplate(template: BuildTemplate?, project: Project, sender: SetupViewControllerDelegate?)
-}
-
 class StorableViewController: NSViewController {
     var storageManager: StorageManager!
+    let editingAllowed = MutableProperty<Bool>(true)
 }
 
 class StatusViewController: StorableViewController {
     
-    weak var delegate: StatusSiblingsViewControllerDelegate!
-    
     let availabilityCheckState = MutableProperty<AvailabilityCheckState>(.Unchecked)
-
+    let editing = MutableProperty<Bool>(true)
+    
     @IBOutlet weak var trashButton: NSButton!
     @IBOutlet weak var gearButton: NSButton!
     
@@ -40,12 +33,11 @@ class StatusViewController: StorableViewController {
     @IBOutlet weak var progressIndicator: NSProgressIndicator?
     @IBOutlet weak var serverStatusImageView: NSImageView!
 
-    let editing = MutableProperty<Bool>(true)
     var valid: SignalProducer<Bool, NoError>!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.setupUI()
         self.setupAvailability()
     }
@@ -59,6 +51,12 @@ class StatusViewController: StorableViewController {
             .map { StatusViewController.imageNameForStatus($0) }
             .map { NSImage(named: $0) }
         self.serverStatusImageView.rac_image <~ statusImage
+        
+        //only allow the gearButton to be enabled if not editing && editing allowed
+        let gearEnabled =
+        combineLatest(self.editing.producer, self.editingAllowed.producer)
+            .map { !$0 && $1 }
+        self.gearButton.rac_enabled <~ gearEnabled
     }
     
     //do not call directly! just override

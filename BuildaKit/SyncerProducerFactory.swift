@@ -44,4 +44,21 @@ class SyncerProducerFactory {
         }
         return syncers
     }
+    
+    static func createProjectsProducer(factory: SyncerFactoryType, configs: SignalProducer<[ProjectConfig], NoError>) -> SignalProducer<[Project], NoError> {
+        
+        let projects = configs.map { configsArray in
+            return configsArray.map { factory.createProject($0) }
+        }
+        return projects
+    }
+    
+    static func createServersProducer(factory: SyncerFactoryType, configs: SignalProducer<[XcodeServerConfig], NoError>) -> SignalProducer<[XcodeServer], NoError> {
+        
+        let servers = configs.map { configsArray in
+            return configsArray.map { factory.createXcodeServer($0) }
+        }
+        return servers
+    }
+
 }

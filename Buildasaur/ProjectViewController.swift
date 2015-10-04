@@ -48,7 +48,6 @@ class ProjectViewController: StatusViewController {
         let projConf = self.projectConfig
         let prod = projConf.producer
         let editing = self.editing
-        let notEditing = editing.producer.map { !$0 }
         let proj = prod.map { newConfig in
             //this config already went through validation like a second ago.
             return try! Project(config: newConfig)
@@ -117,7 +116,6 @@ class ProjectViewController: StatusViewController {
             .map { $0 && $1 }
         self.nextButton.rac_enabled <~ enableNext
         self.trashButton.rac_enabled <~ editing
-        self.gearButton.rac_enabled <~ notEditing
         self.previousButton.rac_enabled <~ editing
     }
     

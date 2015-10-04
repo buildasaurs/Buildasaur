@@ -37,7 +37,6 @@ class XcodeServerViewController: StatusViewController {
         let server = self.serverConfig
         let servProd = server.producer
         let editing = self.editing.producer
-        let notEditing = editing.producer.map { !$0 }
         
         //pull data in from the provided config (can be changed externally!)
         servProd.startWithNext { [weak self] config in
@@ -63,7 +62,6 @@ class XcodeServerViewController: StatusViewController {
         self.serverUserTextField.rac_enabled <~ editing
         self.serverPasswordTextField.rac_enabled <~ editing
         self.trashButton.rac_enabled <~ editing
-        self.gearButton.rac_enabled <~ notEditing
         self.previousButton.rac_enabled <~ editing
         
         //next is enabled if editing && valid input

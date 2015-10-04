@@ -2245,7 +2245,7 @@
             <objects>
                 <viewController storyboardIdentifier="syncerStatusViewController" id="RHg-5W-Hb1" customClass="StatusSyncerViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="zNe-bD-Pj4">
-                        <rect key="frame" x="0.0" y="0.0" width="618" height="174"/>
+                        <rect key="frame" x="0.0" y="0.0" width="618" height="175"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Fkq-gK-hvs" userLabel="Edit Button">
@@ -2262,7 +2262,7 @@
                                     <action selector="startStopButtonTapped:" target="RHg-5W-Hb1" id="hDZ-in-ehP"/>
                                 </connections>
                             </button>
-                            <progressIndicator horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="cYi-gZ-3MX">
+                            <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="cYi-gZ-3MX">
                                 <rect key="frame" x="119" y="81" width="32" height="32"/>
                                 <animations/>
                             </progressIndicator>
@@ -2296,9 +2296,9 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8VZ-bw-dT5">
-                                <rect key="frame" x="212" y="8" width="401" height="161"/>
+                                <rect key="frame" x="212" y="8" width="401" height="105"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="161" id="JhA-5r-PLq"/>
+                                    <constraint firstAttribute="height" constant="105" id="7NO-d9-7fI"/>
                                 </constraints>
                                 <animations/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Multiline Label" id="4Nm-0d-uud">
@@ -2308,7 +2308,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JKR-Sp-m8Y">
-                                <rect key="frame" x="20" y="150" width="169" height="19"/>
+                                <rect key="frame" x="20" y="151" width="169" height="19"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="169" id="OyQ-h8-Dln"/>
                                 </constraints>
@@ -2360,7 +2360,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SY6-5q-Twj">
-                                <rect key="frame" x="21" y="124" width="169" height="19"/>
+                                <rect key="frame" x="21" y="125" width="169" height="19"/>
                                 <animations/>
                                 <buttonCell key="cell" type="roundTextured" title="Branch Watching" bezelStyle="texturedRounded" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="C7J-2v-t41">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2379,21 +2379,87 @@
                                 <animations/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSStatusNone" id="VV9-Vq-xBO"/>
                             </imageView>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OW4-u7-aQb" userLabel="Delete Button">
+                                <rect key="frame" x="567" y="142" width="50" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="38" id="RcN-Ua-M8V"/>
+                                    <constraint firstAttribute="width" secondItem="OW4-u7-aQb" secondAttribute="height" multiplier="38:21" id="aZC-vb-veM"/>
+                                </constraints>
+                                <animations/>
+                                <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSTrashEmpty" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oSu-y1-fyp">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="trashButtonClicked:" target="RHg-5W-Hb1" id="afJ-gU-OGT"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Yp9-Z4-Ibv" userLabel="Delete Button">
+                                <rect key="frame" x="517" y="142" width="50" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Yp9-Z4-Ibv" secondAttribute="height" multiplier="38:21" id="7jZ-ry-GB0"/>
+                                    <constraint firstAttribute="width" constant="38" id="Ri9-ET-e6M"/>
+                                </constraints>
+                                <animations/>
+                                <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSSmartBadgeTemplate" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="yxf-4U-gsb">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="gearButtonClicked:" target="RHg-5W-Hb1" id="4tu-QD-KRF"/>
+                                </connections>
+                            </button>
+                            <popUpButton verticalHuggingPriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="2vE-UG-7Nn">
+                                <rect key="frame" x="252" y="146" width="232" height="26"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="227" id="eLx-dJ-dc7"/>
+                                </constraints>
+                                <animations/>
+                                <popUpButtonCell key="cell" type="push" title="No Build Template Selected" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="Ahm-Mz-HSC">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" size="12" name=".AppleSystemUIFont"/>
+                                    <menu key="menu" id="Mxg-hn-6yj">
+                                        <items>
+                                            <menuItem title="No Build Template Selected" state="on" id="plM-qy-Pde" userLabel="No Xcode Project"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="p5V-7i-0hr">
+                                <rect key="frame" x="254" y="122" width="227" height="24"/>
+                                <animations/>
+                                <buttonCell key="cell" type="squareTextured" title="Add Xcode Project..." bezelStyle="texturedSquare" imagePosition="overlaps" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="KR7-HD-O9f">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="newBuildTemplateButtonClicked:" target="RHg-5W-Hb1" id="IKA-te-Bm5"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="2vE-UG-7Nn" firstAttribute="leading" secondItem="JKR-Sp-m8Y" secondAttribute="trailing" constant="65" id="2vr-du-e9v"/>
                             <constraint firstItem="A9h-Jh-CP9" firstAttribute="top" secondItem="I34-eZ-a6k" secondAttribute="bottom" constant="6" id="3dX-AM-Tlf"/>
+                            <constraint firstItem="p5V-7i-0hr" firstAttribute="leading" secondItem="2vE-UG-7Nn" secondAttribute="leading" id="48K-Om-KZS"/>
+                            <constraint firstItem="Yp9-Z4-Ibv" firstAttribute="centerY" secondItem="OW4-u7-aQb" secondAttribute="centerY" id="83J-gI-t4W"/>
+                            <constraint firstAttribute="trailing" secondItem="OW4-u7-aQb" secondAttribute="trailing" constant="7" id="8Li-q0-0je"/>
+                            <constraint firstItem="p5V-7i-0hr" firstAttribute="height" secondItem="2vE-UG-7Nn" secondAttribute="height" id="8nQ-EG-1Zp"/>
                             <constraint firstItem="UMY-nn-tW3" firstAttribute="width" secondItem="UMY-nn-tW3" secondAttribute="height" multiplier="1:1" id="Ebe-AK-1nX"/>
                             <constraint firstItem="SY6-5q-Twj" firstAttribute="top" secondItem="JKR-Sp-m8Y" secondAttribute="bottom" constant="8" id="F5P-3r-g9T"/>
                             <constraint firstItem="SY6-5q-Twj" firstAttribute="trailing" secondItem="JKR-Sp-m8Y" secondAttribute="trailing" constant="1" id="FGu-oL-prD"/>
-                            <constraint firstItem="8VZ-bw-dT5" firstAttribute="top" secondItem="zNe-bD-Pj4" secondAttribute="top" constant="5" id="Idf-Wk-1a9"/>
+                            <constraint firstItem="p5V-7i-0hr" firstAttribute="top" secondItem="2vE-UG-7Nn" secondAttribute="bottom" constant="4" id="Gea-Ba-x9D"/>
                             <constraint firstItem="t3o-Ag-QHY" firstAttribute="centerX" secondItem="BkU-KL-lMX" secondAttribute="centerX" id="JBt-fO-4Qt"/>
+                            <constraint firstItem="8VZ-bw-dT5" firstAttribute="top" secondItem="cYi-gZ-3MX" secondAttribute="top" id="JmR-Qi-qxb"/>
                             <constraint firstItem="SL5-bS-Lf1" firstAttribute="trailing" secondItem="I34-eZ-a6k" secondAttribute="trailing" id="K0Z-Rf-B9m"/>
                             <constraint firstAttribute="trailing" secondItem="8VZ-bw-dT5" secondAttribute="trailing" constant="7" id="KhO-CN-dKQ"/>
                             <constraint firstItem="JKR-Sp-m8Y" firstAttribute="top" secondItem="zNe-bD-Pj4" secondAttribute="top" constant="5" id="P0S-FI-EdB"/>
+                            <constraint firstItem="OW4-u7-aQb" firstAttribute="leading" secondItem="Yp9-Z4-Ibv" secondAttribute="trailing" constant="12" id="SPM-Sx-6rD"/>
                             <constraint firstAttribute="centerY" secondItem="Fkq-gK-hvs" secondAttribute="centerY" constant="10" id="Tyj-fy-PKg"/>
+                            <constraint firstItem="2vE-UG-7Nn" firstAttribute="top" secondItem="zNe-bD-Pj4" secondAttribute="top" constant="5" id="UwJ-dQ-N76"/>
                             <constraint firstAttribute="bottom" secondItem="8VZ-bw-dT5" secondAttribute="bottom" constant="8" id="VKM-vY-EPh"/>
                             <constraint firstItem="Fkq-gK-hvs" firstAttribute="centerY" secondItem="cYi-gZ-3MX" secondAttribute="centerY" constant="-0.5" id="Vmg-bM-hj9"/>
                             <constraint firstItem="UMY-nn-tW3" firstAttribute="centerY" secondItem="cYi-gZ-3MX" secondAttribute="centerY" id="XGQ-Iy-aEb"/>
+                            <constraint firstItem="p5V-7i-0hr" firstAttribute="trailing" secondItem="2vE-UG-7Nn" secondAttribute="trailing" id="Xx4-hc-Acs"/>
                             <constraint firstItem="SL5-bS-Lf1" firstAttribute="centerY" secondItem="BkU-KL-lMX" secondAttribute="centerY" constant="-1.5" id="arW-Yk-6ql"/>
                             <constraint firstItem="Fkq-gK-hvs" firstAttribute="leading" secondItem="5mg-80-kNh" secondAttribute="leading" id="cG9-Du-imO"/>
                             <constraint firstAttribute="bottom" secondItem="5mg-80-kNh" secondAttribute="bottom" constant="10" id="cJp-rk-CCh"/>
@@ -2406,16 +2472,22 @@
                             <constraint firstItem="I34-eZ-a6k" firstAttribute="top" secondItem="SL5-bS-Lf1" secondAttribute="bottom" constant="9" id="iY6-IQ-EOK"/>
                             <constraint firstItem="I34-eZ-a6k" firstAttribute="centerY" secondItem="t3o-Ag-QHY" secondAttribute="centerY" constant="0.5" id="idz-E5-OE3"/>
                             <constraint firstItem="A9h-Jh-CP9" firstAttribute="baseline" secondItem="5mg-80-kNh" secondAttribute="baseline" id="n8b-gL-QIi"/>
+                            <constraint firstItem="Yp9-Z4-Ibv" firstAttribute="width" secondItem="Yp9-Z4-Ibv" secondAttribute="height" multiplier="38:21" id="pOW-lp-igD"/>
                             <constraint firstItem="A9h-Jh-CP9" firstAttribute="leading" secondItem="5mg-80-kNh" secondAttribute="trailing" constant="12" id="s3n-tF-0xA"/>
                             <constraint firstItem="I34-eZ-a6k" firstAttribute="leading" secondItem="t3o-Ag-QHY" secondAttribute="trailing" constant="12" id="shw-I6-mBG"/>
+                            <constraint firstItem="OW4-u7-aQb" firstAttribute="top" secondItem="zNe-bD-Pj4" secondAttribute="top" constant="5" id="srW-ns-ECD"/>
                             <constraint firstItem="Fkq-gK-hvs" firstAttribute="leading" secondItem="zNe-bD-Pj4" secondAttribute="leading" constant="20" id="tAH-BV-LCf"/>
                             <constraint firstItem="cYi-gZ-3MX" firstAttribute="leading" secondItem="Fkq-gK-hvs" secondAttribute="trailing" constant="14" id="wg4-z7-3io"/>
                             <constraint firstItem="SY6-5q-Twj" firstAttribute="leading" secondItem="JKR-Sp-m8Y" secondAttribute="leading" constant="1" id="xlq-G3-mnt"/>
+                            <constraint firstItem="OW4-u7-aQb" firstAttribute="width" secondItem="OW4-u7-aQb" secondAttribute="height" multiplier="38:21" id="yjc-uu-5cy"/>
                         </constraints>
                         <animations/>
                     </view>
                     <connections>
+                        <outlet property="buildTemplatePopup" destination="2vE-UG-7Nn" id="i7f-X5-FQp"/>
+                        <outlet property="gearButton" destination="Yp9-Z4-Ibv" id="Lj0-jT-Tp0"/>
                         <outlet property="lttmToggle" destination="SL5-bS-Lf1" id="0d3-tb-sVO"/>
+                        <outlet property="newBuildTemplateButton" destination="p5V-7i-0hr" id="qNj-JG-rb7"/>
                         <outlet property="postStatusCommentsToggle" destination="I34-eZ-a6k" id="DbA-bD-uId"/>
                         <outlet property="serverStatusImageView" destination="UMY-nn-tW3" id="95L-Tq-o2D"/>
                         <outlet property="startStopButton" destination="Fkq-gK-hvs" id="5Ba-3L-5FZ"/>
@@ -2423,6 +2495,7 @@
                         <outlet property="statusTextField" destination="8VZ-bw-dT5" id="2pJ-qt-Dy8"/>
                         <outlet property="syncIntervalStepper" destination="XOz-yR-q3G" id="ZgF-2G-Jyb"/>
                         <outlet property="syncIntervalTextField" destination="A9h-Jh-CP9" id="GAf-Ie-yg8"/>
+                        <outlet property="trashButton" destination="OW4-u7-aQb" id="7W2-m0-Oe4"/>
                         <segue destination="4et-cp-hnb" kind="modal" identifier="showManual" id="2HZ-dc-2CX"/>
                         <segue destination="H0w-7S-xXi" kind="modal" identifier="showBranchWatching" id="tGu-vj-Qes"/>
                     </connections>
@@ -2823,6 +2896,7 @@
                         <animations/>
                     </view>
                     <connections>
+                        <outlet property="addProjectButton" destination="I6y-hm-mrf" id="T8c-T1-uY0"/>
                         <outlet property="existingProjectsPopup" destination="cIF-no-KHe" id="HWl-Mc-iKT"/>
                     </connections>
                 </viewController>

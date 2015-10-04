@@ -15,9 +15,14 @@ import ReactiveCocoa
 
 class StatusSyncerViewController: StatusViewController, SyncerDelegate {
     
+    var syncerManager: SyncerManager!
+    
     var syncerConfig = MutableProperty<SyncerConfig>(SyncerConfig())
     
     //-----
+    
+    let project = MutableProperty<Project?>(nil)
+    let server = MutableProperty<XcodeServer?>(nil)
     
     var syncer: HDGitHubXCBotSyncer! {
         didSet {
@@ -40,7 +45,37 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
     @IBOutlet weak var lttmToggle: NSButton!
     @IBOutlet weak var postStatusCommentsToggle: NSButton!
     
-    private var viewHasLoaded: Bool = false
+    //build templates
+    
+    @IBOutlet weak var buildTemplatePopup: NSPopUpButton!
+    @IBOutlet weak var newBuildTemplateButton: NSButton!
+    
+    let buildTemplates = MutableProperty<[BuildTemplate]>([])
+    
+    //----
+    
+    func setupDataSource() {
+        
+        precondition(self.syncerManager != nil)
+        
+        let allProjects = self.syncerManager.projectsProducer
+        let allServers = self.syncerManager.serversProducer
+        let syncerConfig = self.syncerConfig.producer
+        
+        let combinedWithProjects = combineLatest(syncerConfig, allProjects)
+        self.project <~ combinedWithProjects.map { syncerConfig, allProjects in
+            allProjects
+                .filter { $0.config.id == syncerConfig.projectRef }
+                .first
+        }
+        
+        let combinedWithServers = combineLatest(syncerConfig, allServers)
+        self.server <~ combinedWithServers.map { syncerConfig, allServers in
+            allServers
+                .filter { $0.config.id == syncerConfig.projectRef }
+                .first
+        }
+    }
     
     var isSyncing: Bool {
         set {
@@ -56,6 +91,22 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
                 return syncer.active
             }
             return false
+        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.setupBuildTemplatePopup()
+        
+        self.statusTextField.stringValue = "-"
+    }
+    
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        
+        if let syncer = self.syncer {
+            Log.info("We have a syncer \(syncer)")
         }
     }
     
@@ -132,20 +183,6 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         }
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.statusTextField.stringValue = "-"
-    }
-    
-    override func viewDidAppear() {
-        super.viewDidAppear()
-        
-        if let syncer = self.syncer {
-            Log.info("We have a syncer \(syncer)")
-        }
-    }
-    
     func reloadStatus() {
 
         self.startStopButton.title = self.isSyncing ? "Stop" : "Start"
@@ -175,6 +212,9 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         
         self.syncIntervalTextField.doubleValue = value
         self.syncIntervalStepper.doubleValue = value
+    }
+    
+    @IBAction func newBuildTemplateButtonClicked(sender: AnyObject) {
     }
     
     @IBAction func syncIntervalStepperValueChanged(sender: AnyObject) {
@@ -284,10 +324,10 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
             self.isSyncing = false
             self.reloadStatus()
             
-        } else if self.delegate.getProjectStatusViewController().editing.value ||
-        self.delegate.getServerStatusViewController().editing.value {
+//        } else if self.delegate.getProjectStatusViewController().editing.value ||
+//        self.delegate.getServerStatusViewController().editing.value {
             
-            UIUtils.showAlertWithText("Please save your configurations above by clicking Done")
+//            UIUtils.showAlertWithText("Please save your configurations above by clicking Done")
             
         } else {
             
@@ -296,49 +336,47 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
             //validate - check availability for both sources - github and xcodeserver - only kick off if both work
             //gather data from the UI + storageManager and try to create a syncer with it
             
-            var projectReady: Bool = false
-            dispatch_group_enter(group)
-            self.delegate.getProjectStatusViewController().checkAvailability({ (status, done) -> () in
-                if done {
-                    switch status {
-                    case .Succeeded:
-                        projectReady = true
-                    default:
-                        projectReady = false
-                    }
-                    dispatch_group_leave(group)
-                }
-            })
-            
-            var serverReady: Bool = false
-            dispatch_group_enter(group)
-            self.delegate.getServerStatusViewController().checkAvailability({ (status, done) -> () in
-                if done {
-                    switch status {
-                    case .Succeeded:
-                        serverReady = true
-                    default:
-                        serverReady = false
-                    }
-                    dispatch_group_leave(group)
-                }
-            })
-            
-            dispatch_group_notify(group, dispatch_get_main_queue(), { () -> Void in
-                
-                let allReady = projectReady && serverReady
-                if allReady {
-                    
-                    self.startSyncing()
-                } else {
-                    
-                    let brokenPart = projectReady ? "Xcode Server" : "Xcode Project"
-                    let message = "Couldn't start syncing, please fix your \(brokenPart) settings and try again."
-                    UIUtils.showAlertWithText(message)
-                }
-            })
+//            var projectReady: Bool = false
+//            dispatch_group_enter(group)
+//            self.delegate.getProjectStatusViewController().checkAvailability({ (status, done) -> () in
+//                if done {
+//                    switch status {
+//                    case .Succeeded:
+//                        projectReady = true
+//                    default:
+//                        projectReady = false
+//                    }
+//                    dispatch_group_leave(group)
+//                }
+//            })
+//            
+//            var serverReady: Bool = false
+//            dispatch_group_enter(group)
+//            self.delegate.getServerStatusViewController().checkAvailability({ (status, done) -> () in
+//                if done {
+//                    switch status {
+//                    case .Succeeded:
+//                        serverReady = true
+//                    default:
+//                        serverReady = false
+//                    }
+//                    dispatch_group_leave(group)
+//                }
+//            })
+//            
+//            dispatch_group_notify(group, dispatch_get_main_queue(), { () -> Void in
+//                
+//                let allReady = projectReady && serverReady
+//                if allReady {
+//                    
+//                    self.startSyncing()
+//                } else {
+//                    
+//                    let brokenPart = projectReady ? "Xcode Server" : "Xcode Project"
+//                    let message = "Couldn't start syncing, please fix your \(brokenPart) settings and try again."
+//                    UIUtils.showAlertWithText(message)
+//                }
+//            })
         }
     }
-    
-    
 }
