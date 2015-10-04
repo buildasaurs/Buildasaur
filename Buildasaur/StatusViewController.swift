@@ -30,8 +30,6 @@ class StatusViewController: StorableViewController {
     
     let availabilityCheckState = MutableProperty<AvailabilityCheckState>(.Unchecked)
 
-    @IBOutlet weak var editButton: NSButton!
-    @IBOutlet weak var deleteButton: NSButton!
     @IBOutlet weak var lastConnectionView: NSTextField?
     @IBOutlet weak var progressIndicator: NSProgressIndicator?
 
@@ -42,31 +40,7 @@ class StatusViewController: StorableViewController {
         
         setupAvailability()
     }
-    
-    var editingAllowed: Bool = true {
-        didSet {
-            self.editButton.enabled = self.editingAllowed
-        }
-    }
-    
-    func didSave() -> Bool {
         
-        let success: Bool
-        if self.pullDataFromUI() {
-            self.storageManager.saveAll()
-            success = true
-        } else {
-            success = false
-        }
-        return success
-    }
-    
-    //returns whether all data is inserted, otherwise false - will show a popup explaining what's wrong
-    func pullDataFromUI() -> Bool {
-        //gets overriden in subclasses and called super
-        return true
-    }
-    
     //do not call directly! just override
     func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())) {
         assertionFailure("Must be overriden by subclasses")

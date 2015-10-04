@@ -22,7 +22,7 @@ public class StorageManager {
     public let syncerConfigs = MutableProperty<[SyncerConfig]>([])
     public let serverConfigs = MutableProperty<[String: XcodeServerConfig]>([:])
     public let projectConfigs = MutableProperty<[String: ProjectConfig]>([:])
-    public let buildTemplates = MutableProperty<[BuildTemplate]>([])
+    public let buildTemplates = MutableProperty<[String: BuildTemplate]>([:])
     public let config = MutableProperty<[String: AnyObject]>([:])
     
     private var heartbeatManager: HeartbeatManager!
@@ -30,20 +30,11 @@ public class StorageManager {
     public init() {
         self.loadAllFromPersistence()
         self.setupHeartbeatManager()
-        self.setupSavingSignals()
+        self.setupSaving()
     }
     
     deinit {
-        self.saveAll()
-    }
-    
-    private func setupSavingSignals() {
-        
-        //simple - save on every change after the initial bunch has been loaded
-        self.serverConfigs.producer.startWithNext {
-            StorageManager.saveServerConfigs($0)
-        }
-        
+        //
     }
     
     private func setupHeartbeatManager() {
@@ -61,24 +52,6 @@ public class StorageManager {
         _ = try Project.attemptToParseFromUrl(url)
     }
     
-    public func addServerConfig(config: XcodeServerConfig) throws {
-        
-        //verify we don't have a duplicate
-        let currentConfigs: [String: XcodeServerConfig] = self.serverConfigs.value
-        let dup = currentConfigs
-            .map { $0.1 }
-            //find those matching host and username
-            .filter { $0.host == config.host && $0.user == config.user }
-            //but if it's an exact match (id), it's not a duplicate - it's identity
-            .filter { $0.id != config.id }
-            .first
-        if let duplicate = dup {
-            throw StorageManagerError.DuplicateServerConfig(duplicate)
-        }
-        
-        //no duplicate, save!
-        self.serverConfigs.value[config.id] = config
-    }
     
     public func addSyncer(syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool,
         projectConfig: ProjectConfig, serverConfig: XcodeServerConfig, watchedBranchNames: [String]) -> SyncerConfig? {
@@ -110,58 +83,41 @@ public class StorageManager {
             return nil
     }
     
-    public func saveBuildTemplate(buildTemplate: BuildTemplate) {
-        
-        //in case we have a duplicate, replace
-        var duplicateFound = false
-        for (idx, temp) in self.buildTemplates.value.enumerate() {
-            if temp.id == buildTemplate.id {
-                self.buildTemplates.value[idx] = buildTemplate
-                duplicateFound = true
-                break
-            }
-        }
-        
-        if !duplicateFound {
-            self.buildTemplates.value.append(buildTemplate)
-        }
-        
-        //now save all
-        self.saveBuildTemplates()
+    //MARK: adding
+    
+    public func addBuildTemplate(buildTemplate: BuildTemplate) {
+        self.buildTemplates.value[buildTemplate.id] = buildTemplate
     }
+    
+    public func addServerConfig(config: XcodeServerConfig) throws {
+        
+        //verify we don't have a duplicate
+        let currentConfigs: [String: XcodeServerConfig] = self.serverConfigs.value
+        let dup = currentConfigs
+            .map { $0.1 }
+            //find those matching host and username
+            .filter { $0.host == config.host && $0.user == config.user }
+            //but if it's an exact match (id), it's not a duplicate - it's identity
+            .filter { $0.id != config.id }
+            .first
+        if let duplicate = dup {
+            throw StorageManagerError.DuplicateServerConfig(duplicate)
+        }
+        
+        //no duplicate, save!
+        self.serverConfigs.value[config.id] = config
+    }
+    
+    //MARK: removing
     
     public func removeBuildTemplate(buildTemplate: BuildTemplate) {
-        
-        //remove from the memory storage
-        for (idx, temp) in self.buildTemplates.value.enumerate() {
-            if temp.id == buildTemplate.id {
-                self.buildTemplates.value.removeAtIndex(idx)
-                break
-            }
-        }
-        
-        //also delete the file
-        let templatesFolderUrl = Persistence.getFileInAppSupportWithName("BuildTemplates", isDirectory: true)
-        let id = buildTemplate.id
-        let templateUrl = templatesFolderUrl.URLByAppendingPathComponent("\(id).json")
-        do { try NSFileManager.defaultManager().removeItemAtURL(templateUrl) } catch {}
-        
-        //save
-        self.saveBuildTemplates()
-    }
-    
-    public func buildTemplatesForProjectName(projectName: String) -> [BuildTemplate] {
-        return self.buildTemplates.value.filter { (template: BuildTemplate) -> Bool in
-            if let templateProjectName = template.projectName {
-                return projectName == templateProjectName
-            } else {
-                //if it doesn't yet have a project name associated, assume we have to show it
-                return true
-            }
-        }
+        self.buildTemplates.value.removeValueForKey(buildTemplate.id)
     }
     
     public func removeProject(project: Project) {
+        
+        //TODO: make sure this project config is not owned by a project which
+        //is running right now.
         self.projectConfigs.value.removeValueForKey(project.urlString)
     }
     
@@ -174,8 +130,26 @@ public class StorageManager {
     
     public func removeSyncer(syncer: HDGitHubXCBotSyncer) {
         
-        //don't know how to compare syncers yet
+        //TODO: make sure this syncer config is not owned by a syncer which
+        //is running right now.
         self.syncerConfigs.value.removeAll(keepCapacity: true)
+    }
+    
+    //MARK: lookup
+    
+    public func buildTemplatesForProjectName(projectName: String) -> [BuildTemplate] {
+        return self.buildTemplates
+            .value
+            .map { $0.1 }
+            .filter { (template: BuildTemplate) -> Bool in
+                
+                if let templateProjectName = template.projectName {
+                    return projectName == templateProjectName
+                } else {
+                    //if it doesn't yet have a project name associated, assume we have to show it
+                    return true
+                }
+        }
     }
     
     private func projectForRef(ref: RefType) -> ProjectConfig? {
@@ -188,50 +162,72 @@ public class StorageManager {
         return server
     }
     
-    public func loadAllFromPersistence() {
+    //MARK: loading
+    
+    private func loadAllFromPersistence() {
         
         self.config.value = Persistence.loadDictionaryFromFile("Config.json") ?? [:]
         let allProjects: [ProjectConfig] = Persistence.loadArrayFromFile("Projects.json") ?? []
         self.projectConfigs.value = allProjects.dictionarifyWithKey { $0.id }
         let allServerConfigs: [XcodeServerConfig] = Persistence.loadArrayFromFile("ServerConfigs.json") ?? []
         self.serverConfigs.value = allServerConfigs.dictionarifyWithKey { $0.id }
-        self.buildTemplates.value = Persistence.loadArrayFromFolder("BuildTemplates") ?? []
+        let allTemplates: [BuildTemplate] = Persistence.loadArrayFromFolder("BuildTemplates") ?? []
+        self.buildTemplates.value = allTemplates.dictionarifyWithKey { $0.id }
         self.syncerConfigs.value = Persistence.loadArrayFromFile("Syncers.json") { self.createSyncerConfigFromJSON($0) } ?? []
     }
     
-    public func saveConfig() {
-        Persistence.saveDictionary("Config.json", item: self.config.value)
+    //MARK: Saving
+    
+    private func setupSaving() {
+        
+        //simple - save on every change after the initial bunch has been loaded!
+        
+        self.serverConfigs.producer.startWithNext {
+            StorageManager.saveServerConfigs($0)
+        }
+        self.projectConfigs.producer.startWithNext {
+            StorageManager.saveProjectConfigs($0)
+        }
+        self.config.producer.startWithNext {
+            StorageManager.saveConfig($0)
+        }
+        self.syncerConfigs.producer.startWithNext {
+            StorageManager.saveSyncerConfigs($0)
+        }
+        self.buildTemplates.producer.startWithNext {
+            StorageManager.saveBuildTemplates($0)
+        }
     }
     
-    public func saveProjectConfigs() {
-        let projectConfigs: NSArray = Array(self.projectConfigs.value.values).map { $0.jsonify() }
+    private static func saveConfig(config: [String: AnyObject]) {
+        Persistence.saveDictionary("Config.json", item: config)
+    }
+    
+    private static func saveProjectConfigs(configs: [String: ProjectConfig]) {
+        let projectConfigs: NSArray = Array(configs.values).map { $0.jsonify() }
         Persistence.saveArray("Projects.json", items: projectConfigs)
     }
     
-    public static func saveServerConfigs(configs: [String: XcodeServerConfig]) {
+    private static func saveServerConfigs(configs: [String: XcodeServerConfig]) {
         let serverConfigs = Array(configs.values).map { $0.jsonify() }
         Persistence.saveArray("ServerConfigs.json", items: serverConfigs)
     }
     
-    public func saveSyncerConfigs() {
-        let syncerConfigs = self.syncerConfigs.value.map { $0.jsonify() }
+    private static func saveSyncerConfigs(configs: [SyncerConfig]) {
+        let syncerConfigs = configs.map { $0.jsonify() }
         Persistence.saveArray("Syncers.json", items: syncerConfigs)
     }
     
-    func saveBuildTemplates() {
-        Persistence.saveArrayIntoFolder("BuildTemplates", items: self.buildTemplates.value) { $0.id }
-    }
-    
-    public func saveAll() {
-        //save to persistence
+    private static func saveBuildTemplates(templates: [String: BuildTemplate]) {
         
-        self.saveConfig()
-//        self.saveServerConfigs()
-        self.saveProjectConfigs()
-        self.saveBuildTemplates()
-        self.saveSyncerConfigs()
+        //but first we have to *delete* the directory first.
+        //think of a nicer way to do this, but this at least will always
+        //be consistent.
+        let folderName = "BuildTemplates"
+        Persistence.deleteFolder(folderName)
+        let items = Array(templates.values)
+        Persistence.saveArrayIntoFolder(folderName, items: items) { $0.id }
     }
-    
 }
 
 //Syncer Parsing

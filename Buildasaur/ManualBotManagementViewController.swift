@@ -26,7 +26,8 @@ class ManualBotManagementViewController: NSViewController {
     @IBOutlet weak var creatingActivityIndicator: NSProgressIndicator!
     
     private var buildTemplates: [BuildTemplate] {
-        return self.storageManager.buildTemplates.value
+        return Array(self.storageManager.buildTemplates.value.values)
+            .sort {$0.id < $1.id }
     }
     
     override func viewDidLoad() {

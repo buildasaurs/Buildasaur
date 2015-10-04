@@ -425,7 +425,7 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
     
     override func willSave() {
         
-        self.storageManager.saveBuildTemplate(self.buildTemplate)
+        self.storageManager.addBuildTemplate(self.buildTemplate)
         super.willSave()
     }
     

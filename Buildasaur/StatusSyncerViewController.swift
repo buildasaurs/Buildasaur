@@ -47,8 +47,9 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
             if let syncer = self.syncer {
                 syncer.active = newValue
             }
-            self.delegate.getProjectStatusViewController().editingAllowed = !newValue
-            self.delegate.getServerStatusViewController().editingAllowed = !newValue
+            //TODO: validate we can start syncing
+//            self.delegate.getProjectStatusViewController().editingAllowed = !newValue
+//            self.delegate.getServerStatusViewController().editingAllowed = !newValue
         }
         get {
             if let syncer = self.syncer {

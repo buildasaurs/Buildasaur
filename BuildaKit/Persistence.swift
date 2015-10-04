@@ -11,6 +11,24 @@ import BuildaUtils
 
 public class Persistence {
     
+    class func deleteFile(name: String) {
+        let itemUrl = Persistence.getFileInAppSupportWithName(name, isDirectory: false)
+        self.delete(itemUrl)
+    }
+    
+    class func deleteFolder(name: String) {
+        let itemUrl = Persistence.getFileInAppSupportWithName(name, isDirectory: true)
+        self.delete(itemUrl)
+    }
+    
+    private class func delete(url: NSURL) {
+        do {
+            try NSFileManager.defaultManager().removeItemAtURL(url)
+        } catch {
+            Log.error(error)
+        }
+    }
+    
     class func saveData(name: String, item: AnyObject) {
         
         let itemUrl = Persistence.getFileInAppSupportWithName(name, isDirectory: false)

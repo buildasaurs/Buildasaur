@@ -63,8 +63,6 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         self.statusContentView.hidden = false
         
         self.buildTemplateComboBox.rac_enabled <~ editing
-        self.deleteButton.rac_hidden <~ editing.producer.map { !$0 }
-        self.editButton.rac_title <~ self.editing.producer.map { $0 ? "Done" : "Edit" }
         self.selectSSHPrivateKeyButton.rac_enabled <~ self.editing
         self.selectSSHPublicKeyButton.rac_enabled <~ self.editing
         self.sshPassphraseTextField.rac_enabled <~ self.editing
@@ -168,15 +166,12 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         return false
     }
     
-    override func pullDataFromUI() -> Bool {
+    func pullDataFromUI() -> Bool {
         
-        if super.pullDataFromUI() {
-            let successCreds = self.pullCredentialsFromUI()
-            let template = self.pullTemplateFromUI()
-            
-            return successCreds && template
-        }
-        return false
+        let successCreds = self.pullCredentialsFromUI()
+        let template = self.pullTemplateFromUI()
+        
+        return successCreds && template
     }
     
     func pullCredentialsFromUI() -> Bool {
