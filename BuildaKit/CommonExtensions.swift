@@ -125,4 +125,12 @@ extension Array {
     }
 }
 
+extension String {
+    
+    //returns nil if string is empty
+    public func nonEmpty() -> String? {
+        return self.isEmpty ? nil : self
+    }
+}
+
 

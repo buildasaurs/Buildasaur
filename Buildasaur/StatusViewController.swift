@@ -42,7 +42,7 @@ class StatusViewController: StorableViewController {
         
         setupAvailability()
         
-        self.editing.producer.startWithNext { _ in self.reloadStatus() }
+        self.editing.producer.startWithNext { [weak self] _ in self?.reloadStatus() }
 //        self.editButton.rac_enabled <~
     }
     
@@ -55,7 +55,6 @@ class StatusViewController: StorableViewController {
     var lastAvailabilityCheckStatus: AvailabilityCheckState {
         return self.availabilityCheckState.value
     }
-    
     
     override func viewWillAppear() {
         super.viewWillAppear()
@@ -96,7 +95,6 @@ class StatusViewController: StorableViewController {
         let success: Bool
         if self.pullDataFromUI() {
             self.storageManager.saveAll()
-            self.checkAvailability(nil)
             self.reloadStatus()
             success = true
         } else {
@@ -116,8 +114,18 @@ class StatusViewController: StorableViewController {
         assertionFailure("Must be overriden by subclasses")
     }
     
+    //do not call directly! just override
     func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())?) {
         assertionFailure("Must be overriden by subclasses")
+    }
+    
+    final func recheckForAvailability(completion: ((state: AvailabilityCheckState) -> ())?) {
+        self.checkAvailability { [weak self] (status, done) -> () in
+            self?.availabilityCheckState.value = status
+            if done {
+                completion?(state: status)
+            }
+        }
     }
     
     func setupAvailability() {
@@ -127,11 +135,11 @@ class StatusViewController: StorableViewController {
             progress.rac_animating <~ state.map { $0 == .Checking }
         }
         if let lastConnection = self.lastConnectionView {
-            lastConnection.rac_stringValue <~ state.map { self.stringForState($0) }
+            lastConnection.rac_stringValue <~ state.map { StatusViewController.stringForState($0) }
         }
     }
     
-    private func stringForState(state: AvailabilityCheckState) -> String {
+    private static func stringForState(state: AvailabilityCheckState) -> String {
         
         //TODO: add some emoji!
         switch state {

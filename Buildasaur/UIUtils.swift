@@ -12,7 +12,7 @@ import BuildaUtils
 
 public class UIUtils {
     
-    public class func showAlertWithError(error: NSError) {
+    public class func showAlertWithError(error: ErrorType) {
         
         let alert = self.createErrorAlert(error)
         self.presentAlert(alert, completion: { (resp) -> () in
@@ -50,8 +50,8 @@ public class UIUtils {
         self.presentAlert(alert, completion: completion)
     }
     
-    private class func createErrorAlert(error: NSError) -> NSAlert {
-        return NSAlert(error: error)
+    private class func createErrorAlert(error: ErrorType) -> NSAlert {
+        return NSAlert(error: error as NSError)
     }
     
     private class func createAlert(text: String, style: NSAlertStyle?) -> NSAlert {

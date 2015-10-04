@@ -36,7 +36,8 @@ class EmptyXcodeServerViewController: StorableViewController {
         let handler = SignalProducer<AnyObject, NoError> { [weak self] sink, _ in
             if let sself = self {
                 let index = sself.existingXcodeServersPopup.indexOfSelectedItem
-                let config = sself.xcodeServerConfigs[index]
+                let configs = sself.xcodeServerConfigs
+                let config = configs[index]
                 sself.didSelectXcodeServer(config)
             }
             sendCompleted(sink)
@@ -48,13 +49,17 @@ class EmptyXcodeServerViewController: StorableViewController {
     func setupDataSource() {
 
         let configsProducer = self.storageManager.serverConfigs.producer
-        let allConfigsProducer = configsProducer.map { Array($0.values) }
-        allConfigsProducer.startWithNext { newConfigs in
+        let allConfigsProducer = configsProducer
+            .map { Array($0.values) }
+            .map { configs in configs.sort { $0.host < $1.host } }
+        allConfigsProducer.startWithNext { [weak self] newConfigs in
+            guard let sself = self else { return }
             
-            self.xcodeServerConfigs = newConfigs
-            let popup = self.existingXcodeServersPopup
+            sself.xcodeServerConfigs = newConfigs
+            let popup = sself.existingXcodeServersPopup
             popup.removeAllItems()
-            popup.addItemsWithTitles(newConfigs.map { $0.host })
+            let configDisplayNames = newConfigs.map { "\($0.host) (\($0.user ?? String()))" }
+            popup.addItemsWithTitles(configDisplayNames)
         }
     }
     

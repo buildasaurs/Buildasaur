@@ -39,6 +39,7 @@ struct AssociationKey {
     static var enabled: UInt8 = 3
     static var hidden: UInt8 = 4
     static var animating: UInt8 = 5
+    static var image: UInt8 = 6
 }
 
 //the good stuff
@@ -87,6 +88,12 @@ extension NSProgressIndicator {
     }
 }
 
+extension NSImageView {
+    
+    public var rac_image: MutableProperty<NSImage?> {
+        return lazyMutableProperty(self, key: &AssociationKey.image, setter: { self.image = $0 }, getter: { self.image })
+    }
+}
 
 
 

@@ -13,6 +13,10 @@ import XcodeServerSDK
 import BuildaHeartbeatKit
 import ReactiveCocoa
 
+public enum StorageManagerError: ErrorType {
+    case DuplicateServerConfig(XcodeServerConfig)
+}
+
 public class StorageManager {
     
     public let syncerConfigs = MutableProperty<[SyncerConfig]>([])
@@ -47,10 +51,19 @@ public class StorageManager {
         _ = try Project.attemptToParseFromUrl(url)
     }
     
-    public func addServerConfig(host host: String, user: String?, password: String?) -> XcodeServerConfig {
-        let config = try! XcodeServerConfig(host: host, user: user, password: password)
-        self.serverConfigs.value[host] = config
-        return config
+    public func addServerConfig(config: XcodeServerConfig) throws {
+        
+        //verify we don't have a duplicate
+        let currentConfigs: [String: XcodeServerConfig] = self.serverConfigs.value
+        let dup = currentConfigs
+            .map { $0.1 }
+            .filter { $0.host == config.host && $0.user == config.user }.first
+        if let duplicate = dup {
+            throw StorageManagerError.DuplicateServerConfig(duplicate)
+        }
+        
+        //no duplicate, save!
+        self.serverConfigs.value[config.id] = config
     }
     
     public func addSyncer(syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool,

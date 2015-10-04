@@ -12,15 +12,25 @@ import XcodeServerSDK
 import BuildaKit
 import ReactiveCocoa
 
+protocol XcodeServerViewControllerDelegate: class {
+    func didCancelEditingOfXcodeServerConfig(config: XcodeServerConfig)
+}
+
 class XcodeServerViewController: StatusViewController {
     
     var serverConfig = MutableProperty<XcodeServerConfig>(XcodeServerConfig())
     
-    //we have a project
-    @IBOutlet weak var statusContentView: NSView!
+    weak var cancelDelegate: XcodeServerViewControllerDelegate?
+    
     @IBOutlet weak var serverHostTextField: NSTextField!
     @IBOutlet weak var serverUserTextField: NSTextField!
     @IBOutlet weak var serverPasswordTextField: NSSecureTextField!
+    @IBOutlet weak var serverStatusImageView: NSImageView!
+    @IBOutlet weak var trashButton: NSButton!
+    @IBOutlet weak var gearButton: NSButton!
+    
+    @IBOutlet weak var nextButton: NSButton!
+    @IBOutlet weak var previousButton: NSButton!
     
     private var valid: SignalProducer<Bool, NoError>!
     
@@ -29,58 +39,112 @@ class XcodeServerViewController: StatusViewController {
         self.setup()
     }
     
+    deinit {
+        print("Deallocing XcodeServerViewController")
+    }
+    
     func setup() {
         
         let server = self.serverConfig
         let servProd = server.producer
-        let editing = self.editing
+        let editing = self.editing.producer
+        let notEditing = editing.producer.map { !$0 }
         
+        //listening to changes to textfields
         let host = self.serverHostTextField.rac_text
         let user = self.serverUserTextField.rac_text
         let pass = self.serverPasswordTextField.rac_text
         let combined = combineLatest(host, user, pass)
         let valid = combined
             .map { try? XcodeServerConfig(host: $0, user: $1, password: $2) }
-        .map { $0 != nil }
+            .map { $0 != nil }
         self.valid = valid
         
-        self.editButton.rac_enabled <~ valid
+        //status image
+        let statusImage = self
+            .availabilityCheckState
+            .producer
+            .map { XcodeServerViewController.imageNameForStatus($0) }
+            .map { NSImage(named: $0) }
+        self.serverStatusImageView.rac_image <~ statusImage
         
-        self.deleteButton.rac_enabled <~ editing
-        self.editButton.rac_title <~ editing.producer.map { $0 ? "Done" : "Edit" }
+        //enabled
         self.serverHostTextField.rac_enabled <~ editing
         self.serverUserTextField.rac_enabled <~ editing
         self.serverPasswordTextField.rac_enabled <~ editing
-        self.statusContentView.rac_hidden <~ editing.producer.map { !$0 }
+        self.trashButton.rac_enabled <~ editing
+        self.gearButton.rac_enabled <~ notEditing
+        
+        //string values
         self.serverHostTextField.rac_stringValue <~ servProd.map { $0.host }
         self.serverUserTextField.rac_stringValue <~ servProd.map { $0.user ?? "" }
         self.serverPasswordTextField.rac_stringValue <~ servProd.map { $0.password ?? "" }
     }
+    
+    private static func imageNameForStatus(status: AvailabilityCheckState) -> String {
+        
+        switch status {
+        case .Unchecked:
+            return NSImageNameStatusNone
+        case .Checking:
+            return NSImageNameStatusPartiallyAvailable
+        case .Succeeded:
+            return NSImageNameStatusAvailable
+        case .Failed(_):
+            return NSImageNameStatusUnavailable
+        }
+    }
+    
+    @IBAction func nextButtonClicked(sender: AnyObject) {
+        
+        //first check availability of these credentials
+        self.recheckForAvailability { (state) -> () in
+            
+            print("State: \(state)")
+        }
+    }
+    
+    @IBAction func previousButtonClicked(sender: AnyObject) {
+        
+        //throw away this setup, don't save anything (but don't delete either)
+        self.cancelDelegate?.didCancelEditingOfXcodeServerConfig(self.serverConfig.value)
+    }
+    
+    @IBAction func trashButtonClicked(sender: AnyObject) {
+    }
+    
+    @IBAction func gearButtonClicked(sender: AnyObject) {
+    }
+    
+    
+    //-----
     
     override func reloadStatus() {
         //
     }
     
     override func pullDataFromUI() -> Bool {
+        
         if super.pullDataFromUI() {
             
-            var host: String? = self.serverHostTextField.stringValue
-            if host?.isEmpty ?? true {
-                host = nil
-            }
-
-            var user: String? = self.serverUserTextField.stringValue
-            if user?.isEmpty ?? true {
-                user = nil
-            }
-            var password: String? = self.serverPasswordTextField.stringValue
-            if password?.isEmpty ?? true {
-                password = nil
-            }
+            let host = self.serverHostTextField.stringValue.nonEmpty()
+            let user = self.serverUserTextField.stringValue.nonEmpty()
+            let password = self.serverPasswordTextField.stringValue.nonEmpty()
             
             if let host = host {
-                self.storageManager.addServerConfig(host: host, user: user, password: password)
-                return true
+                let oldConfigId = self.serverConfig.value.id
+                let config = try! XcodeServerConfig(host: host, user: user, password: password, id: oldConfigId)
+                
+                do {
+                    try self.storageManager.addServerConfig(config)
+                    return true
+                } catch StorageManagerError.DuplicateServerConfig(let duplicate) {
+                    let userError = Error.withInfo("You already have a Xcode Server with host \"\(duplicate.host)\" and username \"\(duplicate.user ?? String())\", please go back and select it from the previous screen.")
+                    UIUtils.showAlertWithError(userError)
+                } catch {
+                    UIUtils.showAlertWithError(error)
+                    return false
+                }
             } else {
                 UIUtils.showAlertWithText("Please add a host name and IP address of your Xcode Server")
             }

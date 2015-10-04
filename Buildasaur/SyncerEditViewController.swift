@@ -75,6 +75,7 @@ class SyncerEditViewController: PresentableViewController {
                 if let serverStatusViewController = statusViewController as? XcodeServerViewController {
                     self.serverStatusViewController = serverStatusViewController
                     serverStatusViewController.serverConfig.value = self.configTriplet.server!
+                    serverStatusViewController.cancelDelegate = self
                 }
                 
                 if let projectStatusViewController = statusViewController as? StatusProjectViewController {
@@ -163,6 +164,14 @@ extension SyncerEditViewController: EmptyXcodeServerViewControllerDelegate {
     }
 }
 
+extension SyncerEditViewController: XcodeServerViewControllerDelegate {
+    
+    func didCancelEditingOfXcodeServerConfig(config: XcodeServerConfig) {
+        self.configTriplet.server = nil
+        self.ensureCorrectXcodeServerViewController()
+    }
+}
+
 extension SyncerEditViewController {
     
     private func prepareViewController<T: NSViewController>(type: SyncerEditVCType) -> T {
@@ -173,7 +182,10 @@ extension SyncerEditViewController {
 
     private func replaceViewController(old: NSViewController, new: NSViewController) {
         self.addChildViewController(new)
-        self.transitionFromViewController(old, toViewController: new, options: NSViewControllerTransitionOptions.None, completionHandler: nil)
+        self.transitionFromViewController(old, toViewController: new, options: NSViewControllerTransitionOptions.None, completionHandler: {
+            [weak old] in
+            old?.removeFromParentViewController()
+        })
     }
 }
 
