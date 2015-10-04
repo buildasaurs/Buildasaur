@@ -8,26 +8,33 @@
 
 import Cocoa
 import BuildaKit
+import XcodeServerSDK
 
 class SyncerEditViewController: PresentableViewController {
     
     var syncerManager: SyncerManager!
-    var configTriplet: ConfigTriplet!
+    var configTriplet: EditableConfigTriplet!
     
     //----------
+    
+    var factory: ViewControllerFactory!
 
 //    var syncer: HDGitHubXCBotSyncer!
 
     weak var projectStatusViewController: StatusProjectViewController?
-    weak var projectStatusEmptyViewController: StatusProjectEmptyViewController?
+    weak var emptyProjectStatusViewController: StatusProjectEmptyViewController?
     
-    var serverStatusViewController: XcodeServerViewController?
-    var syncerStatusViewController: StatusSyncerViewController?
+    weak var serverStatusViewController: XcodeServerViewController?
+    weak var emptyServerStatusViewController: EmptyXcodeServerViewController?
+    
+    weak var syncerStatusViewController: StatusSyncerViewController?
     
     private var buildTemplateParams: (buildTemplate: BuildTemplate?, project: Project)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.factory = ViewControllerFactory(storyboardLoader: self.storyboardLoader)
         
         //TODO: move to a better place
 //        if self.syncer != nil {
@@ -52,9 +59,14 @@ class SyncerEditViewController: PresentableViewController {
         if let storableViewController = viewController as? StorableViewController {
             storableViewController.storageManager = self.syncerManager.storageManager
             
-            if let projectStatusEmptyViewController = storableViewController as? StatusProjectEmptyViewController {
-                self.projectStatusEmptyViewController = projectStatusEmptyViewController
-                projectStatusEmptyViewController.emptyProjectDelegate = self
+            if let emptyProjectStatusViewController = storableViewController as? StatusProjectEmptyViewController {
+                self.emptyProjectStatusViewController = emptyProjectStatusViewController
+                emptyProjectStatusViewController.emptyProjectDelegate = self
+            }
+            
+            if let emptyXcodeServerViewController = storableViewController as? EmptyXcodeServerViewController {
+                self.emptyServerStatusViewController = emptyXcodeServerViewController
+                emptyXcodeServerViewController.emptyServerDelegate = self
             }
             
             if let statusViewController = storableViewController as? StatusViewController {
@@ -62,17 +74,17 @@ class SyncerEditViewController: PresentableViewController {
                 
                 if let serverStatusViewController = statusViewController as? XcodeServerViewController {
                     self.serverStatusViewController = serverStatusViewController
-                    serverStatusViewController.serverConfig = self.configTriplet.server
+                    serverStatusViewController.serverConfig.value = self.configTriplet.server!
                 }
                 
                 if let projectStatusViewController = statusViewController as? StatusProjectViewController {
                     self.projectStatusViewController = projectStatusViewController
-                    projectStatusViewController.projectConfig = self.configTriplet.project
+                    projectStatusViewController.projectConfig.value = self.configTriplet.project!
                 }
                 
                 if let syncerStatusViewController = statusViewController as? StatusSyncerViewController {
                     self.syncerStatusViewController = syncerStatusViewController
-                    syncerStatusViewController.syncerConfig = self.configTriplet.syncer
+                    syncerStatusViewController.syncerConfig.value = self.configTriplet.syncer
                 }
             }
         }
@@ -94,30 +106,6 @@ class SyncerEditViewController: PresentableViewController {
         self.configureViewController(destinationController, sender: sender)
         super.prepareForSegue(segue, sender: sender)
     }
-    
-    func open() {
-        NSApp.activateIgnoringOtherApps(true)
-        self.view.window!.makeKeyAndOrderFront(self)
-    }
-    
-    var statusItem: NSStatusItem!
-    var lastPollItem: NSMenuItem!
-    
-    func setupMenuBarIcon() {
-        self.lastPollItem = NSMenuItem()
-        self.lastPollItem.title = "-"
-        self.statusItem = NSStatusBar.systemStatusBar().statusItemWithLength(-1)
-        self.statusItem.title = ""
-        let image = NSImage(named: "icon")
-        self.statusItem.image = image
-        self.statusItem.highlightMode = true
-        let menu = NSMenu()
-        menu.addItem(self.lastPollItem)
-        menu.addItem(NSMenuItem.separatorItem())
-        menu.addItemWithTitle("Open the App", action: "open", keyEquivalent: "")
-        menu.addItemWithTitle("Quit Buildasaur", action: "terminate:", keyEquivalent: "")
-        self.statusItem.menu = menu
-    }
 }
 
 extension SyncerEditViewController: StatusProjectEmptyViewControllerDelegate {
@@ -129,21 +117,61 @@ extension SyncerEditViewController: StatusProjectEmptyViewControllerDelegate {
     }
     
     private func swapInFullProjectViewController(url: NSURL) {
-        //TODO: call after checking whether we have a project in the first place
         
-        //create full view controller
-        let projectViewController = self.storyboardLoader
-            .viewControllerWithStoryboardIdentifier("projectViewController") as! StatusProjectViewController
-        self.configureViewController(projectViewController, sender: nil)
-
-        let old = self.projectStatusEmptyViewController!
+        let projectViewController: StatusProjectViewController = self.prepareViewController(.ProjectViewController)
+//        projectViewController.url = url TODO: use the url
+        let old = self.emptyProjectStatusViewController!
         self.replaceViewController(old, new: projectViewController)
+    }
+}
+
+extension XcodeServerConfig {
+    
+    //means whether we have sufficient data etc, *NOT* whether
+    //the server is reachable etc.
+    func isValid() -> Bool {
+        guard self.host.characters.count > 0 else { return false }
+        let someUsername = self.user != nil
+        let somePassword = self.password != nil
+        
+        //we should either have both or none
+        return someUsername == somePassword
+    }
+}
+
+extension SyncerEditViewController: EmptyXcodeServerViewControllerDelegate {
+    
+    func ensureCorrectXcodeServerViewController() {
+        
+        let old = self.emptyServerStatusViewController ?? self.serverStatusViewController!
+        var new: NSViewController!
+        if let _ = self.configTriplet.server {
+            //present the editing vc
+            let viewController: XcodeServerViewController = self.prepareViewController(SyncerEditVCType.XcodeServerVC)
+            new = viewController
+        } else {
+            //present choice - use existing or new
+            let viewController: EmptyXcodeServerViewController = self.prepareViewController(SyncerEditVCType.EmptyXcodeServerVC)
+            new = viewController
+        }
+        self.replaceViewController(old, new: new)
+    }
+    
+    func didSelectXcodeServerConfig(config: XcodeServerConfig) {
+        self.configTriplet.server = config
+        self.ensureCorrectXcodeServerViewController()
     }
 }
 
 extension SyncerEditViewController {
     
-    func replaceViewController(old: NSViewController, new: NSViewController) {
+    private func prepareViewController<T: NSViewController>(type: SyncerEditVCType) -> T {
+        let viewController: T = self.factory.createViewController(type)
+        self.configureViewController(viewController, sender: self)
+        return viewController
+    }
+
+    private func replaceViewController(old: NSViewController, new: NSViewController) {
         self.addChildViewController(new)
         self.transitionFromViewController(old, toViewController: new, options: NSViewControllerTransitionOptions.None, completionHandler: nil)
     }

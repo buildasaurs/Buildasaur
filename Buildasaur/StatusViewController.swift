@@ -11,6 +11,7 @@ import AppKit
 import BuildaUtils
 import XcodeServerSDK
 import BuildaKit
+import ReactiveCocoa
 
 protocol StatusSiblingsViewControllerDelegate: class {
     
@@ -26,16 +27,23 @@ class StorableViewController: NSViewController {
 class StatusViewController: StorableViewController {
     
     weak var delegate: StatusSiblingsViewControllerDelegate!
+    
+    let availabilityCheckState = MutableProperty<AvailabilityCheckState>(.Unchecked)
 
     @IBOutlet weak var editButton: NSButton!
     @IBOutlet weak var deleteButton: NSButton!
-    @IBOutlet weak var lastConnectionView: NSTextField!
-    @IBOutlet weak var progressIndicator: NSProgressIndicator!
+    @IBOutlet weak var lastConnectionView: NSTextField?
+    @IBOutlet weak var progressIndicator: NSProgressIndicator?
+
+    let editing = MutableProperty<Bool>(true)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.editing = true
+        setupAvailability()
+        
+        self.editing.producer.startWithNext { _ in self.reloadStatus() }
+//        self.editButton.rac_enabled <~
     }
     
     var editingAllowed: Bool = true {
@@ -44,17 +52,10 @@ class StatusViewController: StorableViewController {
         }
     }
     
-    var lastAvailabilityCheckStatus: AvailabilityCheckState = .Unchecked {
-        didSet {
-            self.availabilityChanged(self.lastAvailabilityCheckStatus)
-        }
+    var lastAvailabilityCheckStatus: AvailabilityCheckState {
+        return self.availabilityCheckState.value
     }
     
-    var editing: Bool = false {
-        didSet {
-            self.reloadStatus()
-        }
-    }
     
     override func viewWillAppear() {
         super.viewWillAppear()
@@ -64,14 +65,14 @@ class StatusViewController: StorableViewController {
     
     @IBAction func editButtonTapped(sender: AnyObject) {
         
-        if self.editing {
+        if self.editing.value {
             //done'ing, time to save
             if self.didSave() {
-                self.editing = false
+                self.editing.value = false
             }
         } else {
             //toggle editing
-            self.editing = true
+            self.editing.value = true
         }
     }
     
@@ -119,23 +120,30 @@ class StatusViewController: StorableViewController {
         assertionFailure("Must be overriden by subclasses")
     }
     
-    func availabilityChanged(state: AvailabilityCheckState) {
+    func setupAvailability() {
         
+        let state = self.availabilityCheckState.producer
+        if let progress = self.progressIndicator {
+            progress.rac_animating <~ state.map { $0 == .Checking }
+        }
+        if let lastConnection = self.lastConnectionView {
+            lastConnection.rac_stringValue <~ state.map { self.stringForState($0) }
+        }
+    }
+    
+    private func stringForState(state: AvailabilityCheckState) -> String {
+        
+        //TODO: add some emoji!
         switch state {
-            
         case .Checking:
-            self.progressIndicator.startAnimation(nil)
-            self.lastConnectionView.stringValue = "Checking access to server..."
+            return "Checking access to server..."
         case .Failed(let error):
-            self.progressIndicator.stopAnimation(nil)
             let desc = error?.localizedDescription ?? "Unknown error"
-            self.lastConnectionView.stringValue = "Failed to access server, error: \n\(desc)"
+            return "Failed to access server, error: \n\(desc)"
         case .Succeeded:
-            self.progressIndicator.stopAnimation(nil)
-            self.lastConnectionView.stringValue = "Verified access, all is well!"
+            return "Verified access, all is well!"
         case .Unchecked:
-            self.progressIndicator.stopAnimation(nil)
-            self.lastConnectionView.stringValue = "-"
+            return "-"
         }
     }
 }

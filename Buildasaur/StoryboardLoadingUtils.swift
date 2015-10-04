@@ -44,7 +44,13 @@ class StoryboardLoader {
         viewController.presentingDelegate = delegate
         return viewController as! T
     }
-        
+    
+    func typedViewControllerWithStoryboardIdentifier<T: NSViewController>(storyboardIdentifier: String) -> T {
+        let viewController = self.viewControllerWithStoryboardIdentifier(storyboardIdentifier)
+        let typedViewController = viewController as! T
+        return typedViewController
+    }
+    
     //for all other view controllers
     func viewControllerWithStoryboardIdentifier(storyboardIdentifier: String) -> NSViewController {
         guard let viewController = self.storyboard.instantiateControllerWithIdentifier(storyboardIdentifier) as? NSViewController else {

@@ -52,7 +52,7 @@ class DashboardViewController: PresentableViewController {
     func configDataSource() {
         
         let present: SyncerViewModel.PresentEditViewControllerType = {
-            self.showSyncerEditViewControllerWithTriplet($0)
+            self.showSyncerEditViewControllerWithTriplet($0.toEditable())
         }
         self.syncerManager.syncersProducer.startWithNext { newSyncers in
             self.syncerViewModels.value = newSyncers.map {
@@ -96,11 +96,11 @@ extension DashboardViewController {
     func showNewSyncerViewController() {
         
         //configure an editing window with a brand new syncer
-        let triplet = self.syncerManager.factory.defaultConfigTriplet()
+        let triplet = self.syncerManager.factory.newEditableTriplet()
         self.showSyncerEditViewControllerWithTriplet(triplet)
     }
     
-    func showSyncerEditViewControllerWithTriplet(triplet: ConfigTriplet) {
+    func showSyncerEditViewControllerWithTriplet(triplet: EditableConfigTriplet) {
         
         let uniqueIdentifier = triplet.syncer.id
         let viewController: SyncerEditViewController = self.storyboardLoader.presentableViewControllerWithStoryboardIdentifier("syncerEditViewController", uniqueIdentifier: uniqueIdentifier, delegate: self.presentingDelegate)

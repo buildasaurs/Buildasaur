@@ -18,3 +18,13 @@ import ReactiveCocoa
 //        }
 //    }
 //}
+
+extension SignalProducer {
+    
+    public func ignoreErrors() -> SignalProducer<T, NoError> {
+        return self.flatMapError { _ in
+            return SignalProducer<T, NoError> { _, _ in }
+        }
+    }
+}
+

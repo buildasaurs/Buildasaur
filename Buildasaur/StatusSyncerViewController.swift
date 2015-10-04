@@ -11,10 +11,11 @@ import AppKit
 import BuildaUtils
 import XcodeServerSDK
 import BuildaKit
+import ReactiveCocoa
 
 class StatusSyncerViewController: StatusViewController, SyncerDelegate {
     
-    var syncerConfig: SyncerConfig!
+    var syncerConfig = MutableProperty<SyncerConfig>(SyncerConfig())
     
     //-----
     
@@ -282,8 +283,8 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
             self.isSyncing = false
             self.reloadStatus()
             
-        } else if self.delegate.getProjectStatusViewController().editing ||
-        self.delegate.getServerStatusViewController().editing {
+        } else if self.delegate.getProjectStatusViewController().editing.value ||
+        self.delegate.getServerStatusViewController().editing.value {
             
             UIUtils.showAlertWithText("Please save your configurations above by clicking Done")
             

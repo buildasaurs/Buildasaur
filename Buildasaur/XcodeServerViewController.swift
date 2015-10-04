@@ -10,13 +10,11 @@ import Foundation
 import BuildaUtils
 import XcodeServerSDK
 import BuildaKit
+import ReactiveCocoa
 
 class XcodeServerViewController: StatusViewController {
     
-    var serverConfig: XcodeServerConfig!
-    
-    //no project yet
-    @IBOutlet weak var addServerButton: NSButton!
+    var serverConfig = MutableProperty<XcodeServerConfig>(XcodeServerConfig())
     
     //we have a project
     @IBOutlet weak var statusContentView: NSView!
@@ -24,54 +22,43 @@ class XcodeServerViewController: StatusViewController {
     @IBOutlet weak var serverUserTextField: NSTextField!
     @IBOutlet weak var serverPasswordTextField: NSSecureTextField!
     
+    private var valid: SignalProducer<Bool, NoError>!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        precondition(self.serverConfig != nil)
-        
-        if self.serverConfig == nil {
-            self.editing = false
-        }
-        
-        self.lastConnectionView.stringValue = "-"
+        self.setup()
     }
     
-    override func availabilityChanged(state: AvailabilityCheckState) {
+    func setup() {
         
-        //TODO: the VC should have a server created from its config available here
-//        if let config = self.serverConfig {
-//            config.availabilityState = state
-//        }
-        super.availabilityChanged(state)
+        let server = self.serverConfig
+        let servProd = server.producer
+        let editing = self.editing
+        
+        let host = self.serverHostTextField.rac_text
+        let user = self.serverUserTextField.rac_text
+        let pass = self.serverPasswordTextField.rac_text
+        let combined = combineLatest(host, user, pass)
+        let valid = combined
+            .map { try? XcodeServerConfig(host: $0, user: $1, password: $2) }
+        .map { $0 != nil }
+        self.valid = valid
+        
+        self.editButton.rac_enabled <~ valid
+        
+        self.deleteButton.rac_enabled <~ editing
+        self.editButton.rac_title <~ editing.producer.map { $0 ? "Done" : "Edit" }
+        self.serverHostTextField.rac_enabled <~ editing
+        self.serverUserTextField.rac_enabled <~ editing
+        self.serverPasswordTextField.rac_enabled <~ editing
+        self.statusContentView.rac_hidden <~ editing.producer.map { !$0 }
+        self.serverHostTextField.rac_stringValue <~ servProd.map { $0.host }
+        self.serverUserTextField.rac_stringValue <~ servProd.map { $0.user ?? "" }
+        self.serverPasswordTextField.rac_stringValue <~ servProd.map { $0.password ?? "" }
     }
     
     override func reloadStatus() {
-        
-        self.deleteButton.hidden = !self.editing
-        self.editButton.title = self.editing ? "Done" : "Edit"
-        self.serverHostTextField.enabled = self.editing
-        self.serverUserTextField.enabled = self.editing
-        self.serverPasswordTextField.enabled = self.editing
-        
-        let server = self.serverConfig
-        
-        if self.editing || server != nil {
-
-            self.addServerButton.hidden = true
-            self.statusContentView.hidden = false
-            
-            if let server = server {
-                if self.serverHostTextField.stringValue.isEmpty {
-                    self.serverHostTextField.stringValue = server.host
-                }
-                self.serverUserTextField.stringValue = server.user ?? ""
-                self.serverPasswordTextField.stringValue = server.password ?? ""
-            }
-            
-        } else {
-            self.addServerButton.hidden = false
-            self.statusContentView.hidden = true
-        }
+        //
     }
     
     override func pullDataFromUI() -> Bool {
@@ -103,43 +90,35 @@ class XcodeServerViewController: StatusViewController {
     
     override func removeCurrentConfig() {
         
-        if let config = self.serverConfig {
-            self.storageManager.removeServer(config)
-            self.storageManager.saveServerConfigs()
-            self.editing = false
-            self.serverHostTextField.stringValue = ""
-            self.serverUserTextField.stringValue = ""
-            self.serverPasswordTextField.stringValue = ""
-        }
+        let config = self.serverConfig.value
+        self.storageManager.removeServer(config)
+        self.storageManager.saveServerConfigs()
+        self.editing.value = false
+        self.serverHostTextField.stringValue = ""
+        self.serverUserTextField.stringValue = ""
+        self.serverPasswordTextField.stringValue = ""
         self.reloadStatus()
     }
     
     override func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())?) {
-
+        
         let statusChangedPersist: (status: AvailabilityCheckState, done: Bool) -> () = {
             (status: AvailabilityCheckState, done: Bool) -> () in
-            self.lastAvailabilityCheckStatus = status
+            self.availabilityCheckState.value = status
             statusChanged?(status: status, done: done)
         }
-
-        if let config = self.serverConfig {
-            statusChangedPersist(status: .Checking, done: false)
-            NetworkUtils.checkAvailabilityOfXcodeServerWithCurrentSettings(config, completion: { (success, error) -> () in
-                NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-                    if success {
-                        statusChangedPersist(status: .Succeeded, done: true)
-                    } else {
-                        statusChangedPersist(status: .Failed(error), done: true)
-                    }
-                })
+        
+        let config = self.serverConfig.value
+        statusChangedPersist(status: .Checking, done: false)
+        NetworkUtils.checkAvailabilityOfXcodeServerWithCurrentSettings(config, completion: { (success, error) -> () in
+            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+                if success {
+                    statusChangedPersist(status: .Succeeded, done: true)
+                } else {
+                    statusChangedPersist(status: .Failed(error), done: true)
+                }
             })
-        } else {
-            statusChangedPersist(status: .Unchecked, done: true)
-        }
-    }
-    
-    @IBAction func addServerButtonTapped(sender: AnyObject) {
-        self.editing = true
+        })
     }
 }
 

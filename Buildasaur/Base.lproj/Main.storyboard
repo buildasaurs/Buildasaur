@@ -717,7 +717,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView identifier="xcs_host" id="T5c-UH-Kcx">
-                                                            <rect key="frame" x="103.93735366341159" y="1" width="120" height="17"/>
+                                                            <rect key="frame" x="104" y="1" width="120" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="chB-Jy-cxW">
@@ -751,7 +751,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView identifier="project_name" id="VxK-bY-IC3">
-                                                            <rect key="frame" x="226.52315687282282" y="1" width="120" height="17"/>
+                                                            <rect key="frame" x="227" y="1" width="120" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="28J-1B-dEw">
@@ -785,7 +785,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView identifier="build_template" id="JE6-3o-Px5">
-                                                            <rect key="frame" x="349.10896008223403" y="1" width="120" height="17"/>
+                                                            <rect key="frame" x="350" y="1" width="120" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kfd-Lh-L1f">
@@ -818,7 +818,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <button identifier="control" verticalHuggingPriority="750" id="uVE-l3-mpn" customClass="BuildaNSButton" customModule="Buildasaur" customModuleProvider="target">
-                                                            <rect key="frame" x="471.69476329164524" y="1" width="80" height="32"/>
+                                                            <rect key="frame" x="473" y="1" width="80" height="32"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <animations/>
                                                             <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3hr-hy-pJR">
@@ -844,7 +844,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <button identifier="edit" verticalHuggingPriority="750" id="vsh-hH-b23" customClass="BuildaNSButton" customModule="Buildasaur" customModuleProvider="target">
-                                                            <rect key="frame" x="554.98366740905715" y="1" width="80" height="32"/>
+                                                            <rect key="frame" x="556" y="1" width="80" height="32"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <animations/>
                                                             <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fti-Hu-uEW">
@@ -965,7 +965,7 @@
                                 </constraints>
                                 <animations/>
                                 <connections>
-                                    <segue destination="bma-ve-8Yv" kind="embed" id="S39-00-eXo"/>
+                                    <segue destination="bma-ve-8Yv" kind="embed" identifier="embedEmptyXcodeServerViewController" id="S39-00-eXo"/>
                                 </connections>
                             </containerView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="vYq-Em-Glf" userLabel="Separator 1" customClass="SeparatorView" customModule="Buildasaur" customModuleProvider="target">
@@ -1197,7 +1197,7 @@
         <!--Status Project Empty View Controller-->
         <scene sceneID="WS5-8H-q26">
             <objects>
-                <viewController id="iwK-na-O2D" customClass="StatusProjectEmptyViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="emptyProjectViewController" id="iwK-na-O2D" customClass="StatusProjectEmptyViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="Cbj-uE-OaZ">
                         <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -2180,7 +2180,7 @@
         <!--Status Syncer View Controller-->
         <scene sceneID="N2h-cU-h0l">
             <objects>
-                <viewController id="RHg-5W-Hb1" customClass="StatusSyncerViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="syncerStatusViewController" id="RHg-5W-Hb1" customClass="StatusSyncerViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="zNe-bD-Pj4">
                         <rect key="frame" x="0.0" y="0.0" width="618" height="174"/>
                         <autoresizingMask key="autoresizingMask"/>

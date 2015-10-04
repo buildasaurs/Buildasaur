@@ -18,7 +18,7 @@ protocol EmptyXcodeServerViewControllerDelegate: class {
 
 class EmptyXcodeServerViewController: StorableViewController {
     
-    weak var delegate: EmptyXcodeServerViewControllerDelegate?
+    weak var emptyServerDelegate: EmptyXcodeServerViewControllerDelegate?
     
     @IBOutlet weak var existingXcodeServersPopup: NSPopUpButton!
 
@@ -60,7 +60,7 @@ class EmptyXcodeServerViewController: StorableViewController {
     
     func didSelectXcodeServer(config: XcodeServerConfig) {
         Log.verbose("Selected Xcode Server \(config.host)")
-        self.delegate?.didSelectXcodeServerConfig(config)
+        self.emptyServerDelegate?.didSelectXcodeServerConfig(config)
     }
     
     @IBAction func newXcodeServerClicked(sender: AnyObject) {

@@ -13,6 +13,7 @@ import BuildaGitServer
 public protocol SyncerFactoryType {
     func createSyncer(syncerConfig: SyncerConfig, serverConfig: XcodeServerConfig, projectConfig: ProjectConfig) -> HDGitHubXCBotSyncer
     func defaultConfigTriplet() -> ConfigTriplet
+    func newEditableTriplet() -> EditableConfigTriplet
     func createXcodeServer(config: XcodeServerConfig) -> XcodeServer
     func createProject(config: ProjectConfig) -> Project
     func createSourceServer(token: String) -> GitHubServer
@@ -40,6 +41,10 @@ public class SyncerFactory: SyncerFactoryType {
     
     public func defaultConfigTriplet() -> ConfigTriplet {
         return ConfigTriplet(syncer: SyncerConfig(), server: XcodeServerConfig(), project: ProjectConfig())
+    }
+    
+    public func newEditableTriplet() -> EditableConfigTriplet {
+        return EditableConfigTriplet(syncer: SyncerConfig(), server: nil, project: nil)
     }
     
     //sort of private

@@ -37,6 +37,8 @@ struct AssociationKey {
     static var stringValue: UInt8 = 1
     static var title: UInt8 = 2
     static var enabled: UInt8 = 3
+    static var hidden: UInt8 = 4
+    static var animating: UInt8 = 5
 }
 
 //the good stuff
@@ -60,9 +62,30 @@ extension NSControl {
     public var rac_enabled: MutableProperty<Bool> {
         return lazyMutableProperty(self, key: &AssociationKey.enabled, setter: { self.enabled = $0 }, getter: { self.enabled })
     }
+    
+    public var rac_text: SignalProducer<String, NoError> {
+        return self
+            .rac_textSignal()
+            .toSignalProducer()
+            .map { $0 as? String }
+            .ignoreNil()
+            .ignoreErrors()
+    }
 }
 
+extension NSView {
+    
+    public var rac_hidden: MutableProperty<Bool> {
+        return lazyMutableProperty(self, key: &AssociationKey.hidden, setter: { self.hidden = $0 }, getter: { self.hidden })
+    }
+}
 
+extension NSProgressIndicator {
+    
+    public var rac_animating: MutableProperty<Bool> {
+        return lazyMutableProperty(self, key: &AssociationKey.animating, setter: { $0 ? self.startAnimation(nil) : self.stopAnimation(nil) }, getter: { false })
+    }
+}
 
 
 

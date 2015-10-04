@@ -21,6 +21,7 @@
 		3A56556E1BC059E7008BD142 /* SyncerProducerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A56556D1BC059E7008BD142 /* SyncerProducerFactory.swift */; settings = {ASSET_TAGS = (); }; };
 		3A5655701BC05ACF008BD142 /* SyncerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A56556F1BC05ACF008BD142 /* SyncerFactory.swift */; settings = {ASSET_TAGS = (); }; };
 		3A5655721BC06A55008BD142 /* EmptyXcodeServerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5655711BC06A55008BD142 /* EmptyXcodeServerViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		3A5655741BC077CB008BD142 /* ViewControllerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5655731BC077CB008BD142 /* ViewControllerFactory.swift */; settings = {ASSET_TAGS = (); }; };
 		3A5687761A3B93BD0066DB2B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5687751A3B93BD0066DB2B /* AppDelegate.swift */; };
 		3A5687781A3B93BD0066DB2B /* SyncerEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5687771A3B93BD0066DB2B /* SyncerEditViewController.swift */; };
 		3A56877A1A3B93BD0066DB2B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A5687791A3B93BD0066DB2B /* Images.xcassets */; };
@@ -215,6 +216,7 @@
 		3A56556D1BC059E7008BD142 /* SyncerProducerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerProducerFactory.swift; sourceTree = "<group>"; };
 		3A56556F1BC05ACF008BD142 /* SyncerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerFactory.swift; sourceTree = "<group>"; };
 		3A5655711BC06A55008BD142 /* EmptyXcodeServerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyXcodeServerViewController.swift; sourceTree = "<group>"; };
+		3A5655731BC077CB008BD142 /* ViewControllerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerFactory.swift; sourceTree = "<group>"; };
 		3A5687701A3B93BD0066DB2B /* Buildasaur.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Buildasaur.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A5687741A3B93BD0066DB2B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A5687751A3B93BD0066DB2B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -600,6 +602,7 @@
 				3AF1B1231AAC7CA500917EF3 /* StatusSyncerViewController.swift */,
 				3AAA1B771AAC508A00FA1598 /* StatusViewController.swift */,
 				3A5B04A91AB4ABEB00F60536 /* TriggerViewController.swift */,
+				3A5655731BC077CB008BD142 /* ViewControllerFactory.swift */,
 			);
 			name = Syncer;
 			sourceTree = "<group>";
@@ -1246,6 +1249,7 @@
 				3AD338B01AAE31D500ECD0F2 /* BuildTemplateViewController.swift in Sources */,
 				3AAA1B681AAB722600FA1598 /* StatusProjectViewController.swift in Sources */,
 				3AB3FDCB1B05644300021197 /* MenuItemManager.swift in Sources */,
+				3A5655741BC077CB008BD142 /* ViewControllerFactory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

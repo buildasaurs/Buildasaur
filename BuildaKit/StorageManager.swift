@@ -174,17 +174,17 @@ public class StorageManager {
     }
     
     public func saveProjectConfigs() {
-        let projectConfigs: NSArray = Array(self.projectConfigs.value.values).map { $0 as! AnyObject }
+        let projectConfigs: NSArray = Array(self.projectConfigs.value.values).map { $0.jsonify() }
         Persistence.saveArray("Projects.json", items: projectConfigs)
     }
     
     public func saveServerConfigs() {
-        let serverConfigs = Array(self.serverConfigs.value.values).map { $0 as! AnyObject }
+        let serverConfigs = Array(self.serverConfigs.value.values).map { $0.jsonify() }
         Persistence.saveArray("ServerConfigs.json", items: serverConfigs)
     }
     
     public func saveSyncerConfigs() {
-        let syncerConfigs = self.syncerConfigs.value.map { $0 as! AnyObject }
+        let syncerConfigs = self.syncerConfigs.value.map { $0.jsonify() }
         Persistence.saveArray("Syncers.json", items: syncerConfigs)
     }
     

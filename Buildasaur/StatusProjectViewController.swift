@@ -11,15 +11,16 @@ import AppKit
 import BuildaUtils
 import XcodeServerSDK
 import BuildaKit
+import ReactiveCocoa
 
 let kBuildTemplateAddNewString = "Create New..."
 class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, SetupViewControllerDelegate {
     
-    var projectConfig: ProjectConfig!
+    var projectConfig = MutableProperty<ProjectConfig>(ProjectConfig())
     
     //-----
     
-    var project: Project!
+//    var project: Project!
 
     //we have a project
     @IBOutlet weak var statusContentView: NSView!
@@ -34,12 +35,6 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     //GitHub.com: Settings -> Applications -> Personal access tokens - create one for Buildasaur and put it in this text field
     @IBOutlet weak var tokenTextField: NSTextField!
     
-    override func availabilityChanged(state: AvailabilityCheckState) {
-        
-        self.project.availabilityState = state
-        super.availabilityChanged(state)
-    }
-    
     override func viewWillAppear() {
         super.viewWillAppear()
         
@@ -49,49 +44,60 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.setupUI()
         self.tokenTextField.delegate = self
-        self.lastAvailabilityCheckStatus = .Unchecked
     }
     
     func buildTemplates() -> [BuildTemplate] {
         
-        let projectName = self.project.workspaceMetadata!.projectName
-        return self.storageManager.buildTemplatesForProjectName(projectName)
+//        let projectName = self.project.workspaceMetadata!.projectName
+//        return self.storageManager.buildTemplatesForProjectName(projectName)
+        return []
     }
     
     override func reloadStatus() {
+        //
+    }
+    
+    func setupUI() {
         
-        //if there is a local project, show status. otherwise show button to add one.
-        let projectConfig = self.project.config
+        let proj = self.projectConfig
+        let editing = self.editing
         
         self.statusContentView.hidden = false
         
-        self.buildTemplateComboBox.enabled = self.editing
-        self.deleteButton.hidden = !self.editing
-        self.editButton.title = self.editing ? "Done" : "Edit"
-        self.selectSSHPrivateKeyButton.enabled = self.editing
-        self.selectSSHPublicKeyButton.enabled = self.editing
-        self.sshPassphraseTextField.enabled = self.editing
+        self.buildTemplateComboBox.rac_enabled <~ editing
+        self.deleteButton.rac_hidden <~ editing.producer.map { !$0 }
+        self.editButton.rac_title <~ self.editing.producer.map { $0 ? "Done" : "Edit" }
+        self.selectSSHPrivateKeyButton.rac_enabled <~ self.editing
+        self.selectSSHPublicKeyButton.rac_enabled <~ self.editing
+        self.sshPassphraseTextField.rac_enabled <~ self.editing
         
-        self.selectSSHPublicKeyButton.title = (project.config.publicSSHKeyPath as NSString).lastPathComponent ?? "Select SSH Public Key"
-        self.selectSSHPrivateKeyButton.title = (project.config.privateSSHKeyPath as NSString).lastPathComponent ?? "Select SSH Private Key"
-        self.sshPassphraseTextField.stringValue = project.config.sshPassphrase ?? ""
+        let prod = proj.producer
+        
+        self.selectSSHPublicKeyButton.rac_title <~ prod.map { $0.publicSSHKeyPath }.map {
+            $0.isEmpty ? "Select SSH Public Key" : ($0 as NSString).lastPathComponent
+        }
+        self.selectSSHPrivateKeyButton.rac_title <~ prod.map { $0.privateSSHKeyPath }.map {
+            $0.isEmpty ? "Select SSH Private Key" : ($0 as NSString).lastPathComponent
+        }
+        self.sshPassphraseTextField.rac_stringValue <~ prod.map { $0.sshPassphrase ?? "" }
         
         //fill data in
-        self.projectNameLabel.stringValue = project.workspaceMetadata?.projectName ?? "<NO NAME>"
-        self.projectURLLabel.stringValue = project.workspaceMetadata?.projectURL.absoluteString ?? "<NO URL>"
-        self.projectPathLabel.stringValue = project.url.path ?? "<NO PATH>"
-        
-        let githubToken = projectConfig.githubToken
-        self.tokenTextField.stringValue = githubToken
-        
-        self.tokenTextField.enabled = self.editing
-        
-        let selectedBefore = self.buildTemplateComboBox.objectValueOfSelectedItem as? String
-        self.buildTemplateComboBox.removeAllItems()
-        let buildTemplateNames = self.buildTemplates().map { $0.name! }
-        self.buildTemplateComboBox.addItemsWithObjectValues(buildTemplateNames + [kBuildTemplateAddNewString])
-        self.buildTemplateComboBox.selectItemWithObjectValue(selectedBefore)
+//        self.projectNameLabel.stringValue = project.workspaceMetadata?.projectName ?? "<NO NAME>"
+//        self.projectURLLabel.stringValue = project.workspaceMetadata?.projectURL.absoluteString ?? "<NO URL>"
+//        self.projectPathLabel.stringValue = project.url.path ?? "<NO PATH>"
+//        
+//        let githubToken = projectConfig.githubToken
+//        self.tokenTextField.stringValue = githubToken
+//        
+//        self.tokenTextField.enabled = self.editing
+//        
+//        let selectedBefore = self.buildTemplateComboBox.objectValueOfSelectedItem as? String
+//        self.buildTemplateComboBox.removeAllItems()
+//        let buildTemplateNames = self.buildTemplates().map { $0.name! }
+//        self.buildTemplateComboBox.addItemsWithObjectValues(buildTemplateNames + [kBuildTemplateAddNewString])
+//        self.buildTemplateComboBox.selectItemWithObjectValue(selectedBefore)
 
         //TODO: where are we moving build template?
 //        if
@@ -104,48 +110,48 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     
     override func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())?) {
         
-        let statusChangedPersist: (status: AvailabilityCheckState, done: Bool) -> () = {
-            (status: AvailabilityCheckState, done: Bool) -> () in
-            self.lastAvailabilityCheckStatus = status
-            statusChanged?(status: status, done: done)
-        }
-        
-        let project = self.project
-        statusChangedPersist(status: .Checking, done: false)
-        
-        NetworkUtils.checkAvailabilityOfGitHubWithCurrentSettingsOfProject(project, completion: { (success, error) -> () in
-            
-            let status: AvailabilityCheckState
-            if success {
-                status = .Succeeded
-            } else {
-                Log.error("Checking github availability error: " + (error?.description ?? "Unknown error"))
-                status = AvailabilityCheckState.Failed(error)
-            }
-            
-            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-                
-                statusChangedPersist(status: status, done: true)
-            })
-        })
+//        let statusChangedPersist: (status: AvailabilityCheckState, done: Bool) -> () = {
+//            (status: AvailabilityCheckState, done: Bool) -> () in
+//            self.lastAvailabilityCheckStatus = status
+//            statusChanged?(status: status, done: done)
+//        }
+//        
+//        let project = self.project
+//        statusChangedPersist(status: .Checking, done: false)
+//        
+//        NetworkUtils.checkAvailabilityOfGitHubWithCurrentSettingsOfProject(project, completion: { (success, error) -> () in
+//            
+//            let status: AvailabilityCheckState
+//            if success {
+//                status = .Succeeded
+//            } else {
+//                Log.error("Checking github availability error: " + (error?.description ?? "Unknown error"))
+//                status = AvailabilityCheckState.Failed(error)
+//            }
+//            
+//            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+//                
+//                statusChangedPersist(status: status, done: true)
+//            })
+//        })
     }
     
     //Combo Box Delegate
     func comboBoxWillDismiss(notification: NSNotification) {
         
-        if let templatePulled = self.buildTemplateComboBox.objectValueOfSelectedItem as? String {
-            
-            //it's string
-            var buildTemplate: BuildTemplate?
-            if templatePulled != kBuildTemplateAddNewString {
-                buildTemplate = self.buildTemplates().filter({ $0.name == templatePulled }).first
-            }
-            if buildTemplate == nil {
-                buildTemplate = BuildTemplate(projectName: self.project.workspaceMetadata!.projectName)
-            }
-            
-            self.delegate.showBuildTemplateViewControllerForTemplate(buildTemplate, project: self.project, sender: self)
-        }
+//        if let templatePulled = self.buildTemplateComboBox.objectValueOfSelectedItem as? String {
+//            
+//            //it's string
+//            var buildTemplate: BuildTemplate?
+//            if templatePulled != kBuildTemplateAddNewString {
+//                buildTemplate = self.buildTemplates().filter({ $0.name == templatePulled }).first
+//            }
+//            if buildTemplate == nil {
+//                buildTemplate = BuildTemplate(projectName: self.project.workspaceMetadata!.projectName)
+//            }
+//            
+//            self.delegate.showBuildTemplateViewControllerForTemplate(buildTemplate, project: self.project, sender: self)
+//        }
     }
     
     func pullTemplateFromUI() -> Bool {

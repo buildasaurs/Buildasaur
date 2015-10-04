@@ -115,6 +115,7 @@ extension AppDelegate: PresentableViewControllerDelegate {
             newWindow = existingPair.0
         } else {
             newWindow = NSWindow(contentViewController: viewController)
+            newWindow?.autorecalculatesKeyViewLoop = true
         }
         
         guard let window = newWindow else { fatalError("Unable to create window") }
