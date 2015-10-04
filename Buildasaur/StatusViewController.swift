@@ -15,7 +15,7 @@ import ReactiveCocoa
 
 protocol StatusSiblingsViewControllerDelegate: class {
     
-    func getProjectStatusViewController() -> StatusProjectViewController
+    func getProjectStatusViewController() -> ProjectViewController
     func getServerStatusViewController() -> XcodeServerViewController
     func showBuildTemplateViewControllerForTemplate(template: BuildTemplate?, project: Project, sender: SetupViewControllerDelegate?)
 }
@@ -30,6 +30,12 @@ class StatusViewController: StorableViewController {
     
     let availabilityCheckState = MutableProperty<AvailabilityCheckState>(.Unchecked)
 
+    @IBOutlet weak var trashButton: NSButton!
+    @IBOutlet weak var gearButton: NSButton!
+    
+    @IBOutlet weak var nextButton: NSButton!
+    @IBOutlet weak var previousButton: NSButton!
+
     @IBOutlet weak var lastConnectionView: NSTextField?
     @IBOutlet weak var progressIndicator: NSProgressIndicator?
 
@@ -43,6 +49,38 @@ class StatusViewController: StorableViewController {
         
     //do not call directly! just override
     func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())) {
+        assertionFailure("Must be overriden by subclasses")
+    }
+    
+    @IBAction final func gearButtonClicked(sender: AnyObject) {
+        self.edit()
+    }
+    
+    @IBAction final func trashButtonClicked(sender: AnyObject) {
+        self.delete()
+    }
+    
+    @IBAction final func previousButtonClicked(sender: AnyObject) {
+        self.previous()
+    }
+    
+    @IBAction final func nextButtonClicked(sender: AnyObject) {
+        self.next()
+    }
+    
+    func edit() {
+        self.editing.value = true
+    }
+    
+    func delete() {
+        assertionFailure("Must be overriden by subclasses")
+    }
+    
+    func previous() {
+        assertionFailure("Must be overriden by subclasses")
+    }
+
+    func next() {
         assertionFailure("Must be overriden by subclasses")
     }
     

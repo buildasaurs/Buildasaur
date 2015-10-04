@@ -21,13 +21,13 @@ class SyncerEditViewController: PresentableViewController {
 
 //    var syncer: HDGitHubXCBotSyncer!
 
-    weak var projectStatusViewController: StatusProjectViewController?
-    weak var emptyProjectStatusViewController: StatusProjectEmptyViewController?
+    weak var projectViewController: ProjectViewController?
+    weak var emptyProjectViewController: EmptyProjectViewController?
     
-    weak var serverStatusViewController: XcodeServerViewController?
-    weak var emptyServerStatusViewController: EmptyXcodeServerViewController?
+    weak var serverViewController: XcodeServerViewController?
+    weak var emptyServerViewController: EmptyXcodeServerViewController?
     
-    weak var syncerStatusViewController: StatusSyncerViewController?
+    weak var syncerViewController: StatusSyncerViewController?
     
     private var buildTemplateParams: (buildTemplate: BuildTemplate?, project: Project)?
     
@@ -59,33 +59,34 @@ class SyncerEditViewController: PresentableViewController {
         if let storableViewController = viewController as? StorableViewController {
             storableViewController.storageManager = self.syncerManager.storageManager
             
-            if let emptyProjectStatusViewController = storableViewController as? StatusProjectEmptyViewController {
-                self.emptyProjectStatusViewController = emptyProjectStatusViewController
-                emptyProjectStatusViewController.emptyProjectDelegate = self
+            if let emptyProjectViewController = storableViewController as? EmptyProjectViewController {
+                self.emptyProjectViewController = emptyProjectViewController
+                emptyProjectViewController.emptyProjectDelegate = self
             }
             
-            if let emptyXcodeServerViewController = storableViewController as? EmptyXcodeServerViewController {
-                self.emptyServerStatusViewController = emptyXcodeServerViewController
-                emptyXcodeServerViewController.emptyServerDelegate = self
+            if let emptyServerViewController = storableViewController as? EmptyXcodeServerViewController {
+                self.emptyServerViewController = emptyServerViewController
+                emptyServerViewController.emptyServerDelegate = self
             }
             
             if let statusViewController = storableViewController as? StatusViewController {
                 statusViewController.delegate = self
                 
-                if let serverStatusViewController = statusViewController as? XcodeServerViewController {
-                    self.serverStatusViewController = serverStatusViewController
-                    serverStatusViewController.serverConfig.value = self.configTriplet.server!
-                    serverStatusViewController.cancelDelegate = self
+                if let serverViewController = statusViewController as? XcodeServerViewController {
+                    self.serverViewController = serverViewController
+                    serverViewController.serverConfig.value = self.configTriplet.server!
+                    serverViewController.cancelDelegate = self
                 }
                 
-                if let projectStatusViewController = statusViewController as? StatusProjectViewController {
-                    self.projectStatusViewController = projectStatusViewController
-                    projectStatusViewController.projectConfig.value = self.configTriplet.project!
+                if let projectViewController = statusViewController as? ProjectViewController {
+                    self.projectViewController = projectViewController
+                    projectViewController.projectConfig.value = self.configTriplet.project!
+                    projectViewController.cancelDelegate = self
                 }
                 
-                if let syncerStatusViewController = statusViewController as? StatusSyncerViewController {
-                    self.syncerStatusViewController = syncerStatusViewController
-                    syncerStatusViewController.syncerConfig.value = self.configTriplet.syncer
+                if let syncerViewController = statusViewController as? StatusSyncerViewController {
+                    self.syncerViewController = syncerViewController
+                    syncerViewController.syncerConfig.value = self.configTriplet.syncer
                 }
             }
         }
@@ -109,34 +110,27 @@ class SyncerEditViewController: PresentableViewController {
     }
 }
 
-extension SyncerEditViewController: StatusProjectEmptyViewControllerDelegate {
+extension SyncerEditViewController: EmptyProjectViewControllerDelegate {
     
-    func detectedProjectOrWorkspaceAtUrl(url: NSURL) {
-        //cool, let's take the url and create a proper project status vc
-        //and replace the empty with it
-        self.swapInFullProjectViewController(url)
-    }
-    
-    private func swapInFullProjectViewController(url: NSURL) {
+    func ensureCorrectProjectViewController() {
         
-        let projectViewController: StatusProjectViewController = self.prepareViewController(.ProjectViewController)
-//        projectViewController.url = url TODO: use the url
-        let old = self.emptyProjectStatusViewController!
-        self.replaceViewController(old, new: projectViewController)
+        let old = self.emptyProjectViewController ?? self.projectViewController!
+        var new: NSViewController!
+        if let _ = self.configTriplet.project {
+            //present the editing vc
+            let viewController: ProjectViewController = self.prepareViewController(SyncerEditVCType.ProjectVC)
+            new = viewController
+        } else {
+            //present choice - use existing or new
+            let viewController: EmptyProjectViewController = self.prepareViewController(SyncerEditVCType.EmptyProjectVC)
+            new = viewController
+        }
+        self.replaceViewController(old, new: new)
     }
-}
-
-extension XcodeServerConfig {
-    
-    //means whether we have sufficient data etc, *NOT* whether
-    //the server is reachable etc.
-    func isValid() -> Bool {
-        guard self.host.characters.count > 0 else { return false }
-        let someUsername = self.user != nil
-        let somePassword = self.password != nil
         
-        //we should either have both or none
-        return someUsername == somePassword
+    func selectedProjectConfig(config: ProjectConfig) {
+        self.configTriplet.project = config
+        self.ensureCorrectProjectViewController()
     }
 }
 
@@ -144,7 +138,7 @@ extension SyncerEditViewController: EmptyXcodeServerViewControllerDelegate {
     
     func ensureCorrectXcodeServerViewController() {
         
-        let old = self.emptyServerStatusViewController ?? self.serverStatusViewController!
+        let old = self.emptyServerViewController ?? self.serverViewController!
         var new: NSViewController!
         if let _ = self.configTriplet.server {
             //present the editing vc
@@ -172,6 +166,14 @@ extension SyncerEditViewController: XcodeServerViewControllerDelegate {
     }
 }
 
+extension SyncerEditViewController: ProjectViewControllerDelegate {
+    
+    func didCancelEditingOfProjectConfig(config: ProjectConfig) {
+        self.configTriplet.project = nil
+        self.ensureCorrectProjectViewController()
+    }
+}
+
 extension SyncerEditViewController {
     
     private func prepareViewController<T: NSViewController>(type: SyncerEditVCType) -> T {
@@ -191,12 +193,12 @@ extension SyncerEditViewController {
 
 extension SyncerEditViewController: StatusSiblingsViewControllerDelegate {
     
-    func getProjectStatusViewController() -> StatusProjectViewController {
-        return self.projectStatusViewController!
+    func getProjectStatusViewController() -> ProjectViewController {
+        return self.projectViewController!
     }
     
     func getServerStatusViewController() -> XcodeServerViewController {
-        return self.serverStatusViewController!
+        return self.serverViewController!
     }
     
     func showBuildTemplateViewControllerForTemplate(template: BuildTemplate?, project: Project, sender: SetupViewControllerDelegate?) {

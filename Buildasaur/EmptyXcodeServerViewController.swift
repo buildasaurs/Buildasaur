@@ -31,7 +31,7 @@ class EmptyXcodeServerViewController: StorableViewController {
         self.setupPopupAction()
     }
     
-    func setupPopupAction() {
+    private func setupPopupAction() {
         
         let handler = SignalProducer<AnyObject, NoError> { [weak self] sink, _ in
             if let sself = self {
@@ -46,7 +46,7 @@ class EmptyXcodeServerViewController: StorableViewController {
         self.existingXcodeServersPopup.rac_command = toRACCommand(action)
     }
     
-    func setupDataSource() {
+    private func setupDataSource() {
 
         let configsProducer = self.storageManager.serverConfigs.producer
         let allConfigsProducer = configsProducer
@@ -63,7 +63,7 @@ class EmptyXcodeServerViewController: StorableViewController {
         }
     }
     
-    func didSelectXcodeServer(config: XcodeServerConfig) {
+    private func didSelectXcodeServer(config: XcodeServerConfig) {
         Log.verbose("Selected Xcode Server \(config.host)")
         self.emptyServerDelegate?.didSelectXcodeServerConfig(config)
     }

@@ -11,9 +11,9 @@ import Cocoa
 enum SyncerEditVCType: String {
     case XcodeServerVC = "xcodeServerViewController"
     case EmptyXcodeServerVC = "emptyXcodeServerViewController"
-    case ProjectViewController = "projectViewController"
-    case EmptyProjectViewController = "emptyProjectViewController"
-    case SyncerStatusViewController = "syncerStatusViewController"
+    case ProjectVC = "projectViewController"
+    case EmptyProjectVC = "emptyProjectViewController"
+    case SyncerStatusVC = "syncerStatusViewController"
 }
 
 class ViewControllerFactory {

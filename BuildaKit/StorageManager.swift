@@ -114,11 +114,11 @@ public class StorageManager {
         self.buildTemplates.value.removeValueForKey(buildTemplate.id)
     }
     
-    public func removeProject(project: Project) {
+    public func removeProjectConfig(projectConfig: ProjectConfig) {
         
         //TODO: make sure this project config is not owned by a project which
         //is running right now.
-        self.projectConfigs.value.removeValueForKey(project.urlString)
+        self.projectConfigs.value.removeValueForKey(projectConfig.id)
     }
     
     public func removeServer(serverConfig: XcodeServerConfig) {

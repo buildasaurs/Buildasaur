@@ -1,5 +1,5 @@
 //
-//  StatusProjectViewController.swift
+//  ProjectViewController.swift
 //  Buildasaur
 //
 //  Created by Honza Dvorsky on 07/03/2015.
@@ -13,62 +13,47 @@ import XcodeServerSDK
 import BuildaKit
 import ReactiveCocoa
 
-let kBuildTemplateAddNewString = "Create New..."
-class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, SetupViewControllerDelegate {
+protocol ProjectViewControllerDelegate: class {
+    func didCancelEditingOfProjectConfig(config: ProjectConfig)
+}
+
+class ProjectViewController: StatusViewController {
     
     var projectConfig = MutableProperty<ProjectConfig>(ProjectConfig())
+    weak var cancelDelegate: ProjectViewControllerDelegate?
     
     //-----
     
 //    var project: Project!
 
     //we have a project
-    @IBOutlet weak var statusContentView: NSView!
     @IBOutlet weak var projectNameLabel: NSTextField!
     @IBOutlet weak var projectPathLabel: NSTextField!
     @IBOutlet weak var projectURLLabel: NSTextField!
-    @IBOutlet weak var buildTemplateComboBox: NSComboBox!
+    
+    @IBOutlet weak var tokenTextField: NSTextField!
     @IBOutlet weak var selectSSHPrivateKeyButton: NSButton!
     @IBOutlet weak var selectSSHPublicKeyButton: NSButton!
     @IBOutlet weak var sshPassphraseTextField: NSSecureTextField!
-
-    //GitHub.com: Settings -> Applications -> Personal access tokens - create one for Buildasaur and put it in this text field
-    @IBOutlet weak var tokenTextField: NSTextField!
-    
-    override func viewWillAppear() {
-        super.viewWillAppear()
-        
-        self.buildTemplateComboBox.delegate = self
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.setupUI()
-        self.tokenTextField.delegate = self
-    }
-    
-    func buildTemplates() -> [BuildTemplate] {
-        
-//        let projectName = self.project.workspaceMetadata!.projectName
-//        return self.storageManager.buildTemplatesForProjectName(projectName)
-        return []
     }
     
     func setupUI() {
         
         let proj = self.projectConfig
+        let prod = proj.producer
         let editing = self.editing
         
-        self.statusContentView.hidden = false
+        //editing
+        self.selectSSHPrivateKeyButton.rac_enabled <~ editing
+        self.selectSSHPublicKeyButton.rac_enabled <~ editing
+        self.sshPassphraseTextField.rac_enabled <~ editing
         
-        self.buildTemplateComboBox.rac_enabled <~ editing
-        self.selectSSHPrivateKeyButton.rac_enabled <~ self.editing
-        self.selectSSHPublicKeyButton.rac_enabled <~ self.editing
-        self.sshPassphraseTextField.rac_enabled <~ self.editing
-        
-        let prod = proj.producer
-        
+        //strings
         self.selectSSHPublicKeyButton.rac_title <~ prod.map { $0.publicSSHKeyPath }.map {
             $0.isEmpty ? "Select SSH Public Key" : ($0 as NSString).lastPathComponent
         }
@@ -100,6 +85,32 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
 //        {
 //            self.buildTemplateComboBox.selectItemWithObjectValue(template.name!)
 //        }
+    }
+    
+    override func next() {
+        //pull data from UI, create config, save it and try to validate
+        //TODO:
+        
+    }
+    
+    override func previous() {
+        self.goBack()
+    }
+    
+    private func goBack() {
+        let config = self.projectConfig.value
+        self.cancelDelegate?.didCancelEditingOfProjectConfig(config)
+    }
+    
+    override func delete() {
+        
+        //ask if user really wants to delete
+        UIUtils.showAlertAskingForRemoval("Do you really want to remove this Xcode Project configuration? This cannot be undone.", completion: { (remove) -> () in
+            
+            if remove {
+                self.removeCurrentConfig()
+            }
+        })
     }
     
     override func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())) {
@@ -218,44 +229,29 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         return true
     }
     
-    func control(control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
-        
-        if control == self.tokenTextField {
-            self.pullTokenFromUI()
-        }
-        if control == self.sshPassphraseTextField {
-            self.pullSSHPassphraseFromUI()
-        }
-        return true
+    func removeCurrentConfig() {
+    
+        let config = self.projectConfig.value
+        self.storageManager.removeProjectConfig(config)
+        self.goBack()
     }
     
-//    override func removeCurrentConfig() {
-    
-//        let project = self.project
-//        
-//        //also cleanup comboBoxes
-//        self.buildTemplateComboBox.stringValue = ""
-//        
-//        self.storageManager.removeProject(project)
-//        self.storageManager.saveProjects()
-//        self.reloadStatus()
-//    }
-    
     func selectKey(type: String) {
-//        if let url = StorageUtils.openSSHKey(type) {
-//            do {
-//                _ = try NSString(contentsOfURL: url, encoding: NSASCIIStringEncoding)
-//                let project = self.project
-//                if type == "public" {
-//                    project.publicSSHKeyUrl = url
-//                } else {
-//                    project.privateSSHKeyUrl = url
-//                }
-//            } catch {
-//                UIUtils.showAlertWithError(error as NSError)
-//            }
-//        }
-//        self.reloadStatus()
+        if
+            let url = StorageUtils.openSSHKey(type),
+            let path = url.path
+        {
+            do {
+                _ = try NSString(contentsOfURL: url, encoding: NSASCIIStringEncoding)
+                if type == "public" {
+                    self.projectConfig.value.publicSSHKeyPath = path
+                } else {
+                    self.projectConfig.value.privateSSHKeyPath = path
+                }
+            } catch {
+                UIUtils.showAlertWithError(error as NSError)
+            }
+        }
     }
     
     @IBAction func selectPublicKeyTapped(sender: AnyObject) {
@@ -265,40 +261,4 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
     @IBAction func selectPrivateKeyTapped(sender: AnyObject) {
         self.selectKey("private")
     }
-    
-    func setupViewControllerDidSave(viewController: SetupViewController) {
-        
-        if let templateViewController = viewController as? BuildTemplateViewController {
-            
-//            //select the passed in template
-//            var foundIdx: Int? = nil
-//            let template = templateViewController.buildTemplate
-//            for (idx, obj) in self.buildTemplates().enumerate() {
-//                if obj.id == template.id {
-//                    foundIdx = idx
-//                    break
-//                }
-//            }
-//            
-//            self.project.config.preferredTemplateId = template.id
-//            
-//            if let foundIdx = foundIdx {
-//                self.buildTemplateComboBox.selectItemAtIndex(foundIdx)
-//            } else {
-//                UIUtils.showAlertWithText("Couldn't find saved template, please report this error!")
-//            }
-//            
-//            self.reloadStatus()
-        }
-    }
-    
-    func setupViewControllerDidCancel(viewController: SetupViewController) {
-        
-        if let _ = viewController as? BuildTemplateViewController {
-            //nothing to do really, reset the selection of the combo box to nothing
-            self.buildTemplateComboBox.deselectItemAtIndex(self.buildTemplateComboBox.indexOfSelectedItem)
-//            self.reloadStatus()
-        }
-    }
-    
 }

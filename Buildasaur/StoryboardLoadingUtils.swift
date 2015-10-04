@@ -58,7 +58,6 @@ class StoryboardLoader {
         }
         return viewController
     }
-    
 }
 
 protocol StoryboardLoaderDelegate: class {

@@ -26,12 +26,7 @@ class XcodeServerViewController: StatusViewController {
     @IBOutlet weak var serverUserTextField: NSTextField!
     @IBOutlet weak var serverPasswordTextField: NSSecureTextField!
     @IBOutlet weak var serverStatusImageView: NSImageView!
-    @IBOutlet weak var trashButton: NSButton!
-    @IBOutlet weak var gearButton: NSButton!
-    
-    @IBOutlet weak var nextButton: NSButton!
-    @IBOutlet weak var previousButton: NSButton!
-    
+
     private var valid: SignalProducer<Bool, NoError>!
     
     override func viewDidLoad() {
@@ -102,7 +97,7 @@ class XcodeServerViewController: StatusViewController {
         }
     }
     
-    @IBAction func nextButtonClicked(sender: AnyObject) {
+    override func next() {
         
         //pull the current credentials
         guard let newConfig = self.pullConfigFromUI() else { return }
@@ -120,7 +115,7 @@ class XcodeServerViewController: StatusViewController {
         }
     }
     
-    @IBAction func previousButtonClicked(sender: AnyObject) {
+    override func previous() {
         self.goBack()
     }
     
@@ -129,7 +124,7 @@ class XcodeServerViewController: StatusViewController {
         self.cancelDelegate?.didCancelEditingOfXcodeServerConfig(self.serverConfig.value)
     }
     
-    @IBAction func trashButtonClicked(sender: AnyObject) {
+    override func delete() {
         
         //ask if user really wants to delete
         UIUtils.showAlertAskingForRemoval("Do you really want to remove this Xcode Server configuration? This cannot be undone.", completion: { (remove) -> () in
@@ -138,10 +133,6 @@ class XcodeServerViewController: StatusViewController {
                 self.removeCurrentConfig()
             }
         })
-    }
-    
-    @IBAction func gearButtonClicked(sender: AnyObject) {
-        self.editing.value = true
     }
     
     func pullConfigFromUI() -> XcodeServerConfig? {

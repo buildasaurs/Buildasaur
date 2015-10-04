@@ -1,5 +1,5 @@
 //
-//  StatusProjectEmptyViewController.swift
+//  EmptyProjectViewController.swift
 //  Buildasaur
 //
 //  Created by Honza Dvorsky on 30/09/2015.
@@ -8,12 +8,71 @@
 
 import Cocoa
 import BuildaKit
+import ReactiveCocoa
+import BuildaUtils
 
-class StatusProjectEmptyViewController: StorableViewController {
+protocol EmptyProjectViewControllerDelegate: class {
+    func selectedProjectConfig(config: ProjectConfig)
+}
+
+extension ProjectConfig {
     
-    weak var emptyProjectDelegate: StatusProjectEmptyViewControllerDelegate?
+    var name: String {
+        return (self.url as NSString).lastPathComponent
+    }
+}
+
+class EmptyProjectViewController: StorableViewController {
     
-    @IBOutlet weak var addProjectButton: NSButton!
+    weak var emptyProjectDelegate: EmptyProjectViewControllerDelegate?
+    
+    @IBOutlet weak var existingProjectsPopup: NSPopUpButton!
+
+    private var projectConfigs: [ProjectConfig] = []
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.setupDataSource()
+        self.setupPopupAction()
+    }
+
+    private func setupPopupAction() {
+        
+        let handler = SignalProducer<AnyObject, NoError> { [weak self] sink, _ in
+            if let sself = self {
+                let index = sself.existingProjectsPopup.indexOfSelectedItem
+                let configs = sself.projectConfigs
+                let config = configs[index]
+                sself.didSelectProject(config)
+            }
+            sendCompleted(sink)
+        }
+        let action = Action { (_: AnyObject?) in handler }
+        self.existingProjectsPopup.rac_command = toRACCommand(action)
+    }
+    
+    private func setupDataSource() {
+        
+        let configsProducer = self.storageManager.projectConfigs.producer
+        let allConfigsProducer = configsProducer
+            .map { Array($0.values) }
+            .map { configs in configs.sort { $0.name < $1.name } }
+        allConfigsProducer.startWithNext { [weak self] newConfigs in
+            guard let sself = self else { return }
+            
+            sself.projectConfigs = newConfigs
+            let popup = sself.existingProjectsPopup
+            popup.removeAllItems()
+            let configDisplayNames = newConfigs.map { $0.name }
+            popup.addItemsWithTitles(configDisplayNames)
+        }
+    }
+    
+    private func didSelectProject(config: ProjectConfig) {
+        Log.verbose("Selected Project \(config.name)")
+        self.emptyProjectDelegate?.selectedProjectConfig(config)
+    }
     
     @IBAction func addProjectButtonTapped(sender: AnyObject) {
         
@@ -21,7 +80,9 @@ class StatusProjectEmptyViewController: StorableViewController {
             
             do {
                 try self.storageManager.checkForProjectOrWorkspace(url)
-                self.emptyProjectDelegate?.detectedProjectOrWorkspaceAtUrl(url)
+                var config = ProjectConfig()
+                config.url = url.path!
+                self.didSelectProject(config)
             } catch {
                 //local source is malformed, something terrible must have happened, inform the user this can't be used (log should tell why exactly)
                 UIUtils.showAlertWithText("Couldn't add Xcode project at path \(url.absoluteString), error: \((error as NSError).localizedDescription).", style: NSAlertStyle.CriticalAlertStyle, completion: { (resp) -> () in
@@ -34,6 +95,3 @@ class StatusProjectEmptyViewController: StorableViewController {
     }
 }
 
-protocol StatusProjectEmptyViewControllerDelegate: class {
-    func detectedProjectOrWorkspaceAtUrl(url: NSURL)
-}
