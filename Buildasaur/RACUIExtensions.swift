@@ -47,23 +47,24 @@ struct AssociationKey {
 extension NSTextField {
     
     public var rac_stringValue: MutableProperty<String> {
-        return lazyMutableProperty(self, key: &AssociationKey.stringValue, setter: { self.stringValue = $0 }, getter: { self.stringValue })
+        return lazyMutableProperty(self, key: &AssociationKey.stringValue, setter: { [weak self] in self?.stringValue = $0 }, getter: { [weak self] in self?.stringValue ?? "" })
     }
 }
 
 extension NSButton {
     
     public var rac_title: MutableProperty<String> {
-        return lazyMutableProperty(self, key: &AssociationKey.title, setter: { self.title = $0 }, getter: { self.title })
+        return lazyMutableProperty(self, key: &AssociationKey.title, setter: { [weak self] in self?.title = $0 }, getter: { [weak self] in self?.title ?? "" })
     }
 }
 
 extension NSControl {
     
     public var rac_enabled: MutableProperty<Bool> {
-        return lazyMutableProperty(self, key: &AssociationKey.enabled, setter: { self.enabled = $0 }, getter: { self.enabled })
+        return lazyMutableProperty(self, key: &AssociationKey.enabled, setter: { [weak self] in self?.enabled = $0 }, getter: { [weak self] in self?.enabled ?? false })
     }
     
+    //not sure about the memory management here
     public var rac_text: SignalProducer<String, NoError> {
         return self
             .rac_textSignal()
@@ -77,21 +78,21 @@ extension NSControl {
 extension NSView {
     
     public var rac_hidden: MutableProperty<Bool> {
-        return lazyMutableProperty(self, key: &AssociationKey.hidden, setter: { self.hidden = $0 }, getter: { self.hidden })
+        return lazyMutableProperty(self, key: &AssociationKey.hidden, setter: { [weak self] in self?.hidden = $0 }, getter: { [weak self] in self?.hidden ?? false })
     }
 }
 
 extension NSProgressIndicator {
     
     public var rac_animating: MutableProperty<Bool> {
-        return lazyMutableProperty(self, key: &AssociationKey.animating, setter: { $0 ? self.startAnimation(nil) : self.stopAnimation(nil) }, getter: { false })
+        return lazyMutableProperty(self, key: &AssociationKey.animating, setter: { [weak self] in $0 ? self?.startAnimation(nil) : self?.stopAnimation(nil) }, getter: { false })
     }
 }
 
 extension NSImageView {
     
     public var rac_image: MutableProperty<NSImage?> {
-        return lazyMutableProperty(self, key: &AssociationKey.image, setter: { self.image = $0 }, getter: { self.image })
+        return lazyMutableProperty(self, key: &AssociationKey.image, setter: { [weak self] in self?.image = $0 }, getter: { [weak self] in self?.image })
     }
 }
 

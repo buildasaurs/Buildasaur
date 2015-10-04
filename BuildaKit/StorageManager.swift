@@ -30,10 +30,20 @@ public class StorageManager {
     public init() {
         self.loadAllFromPersistence()
         self.setupHeartbeatManager()
+        self.setupSavingSignals()
     }
     
     deinit {
         self.saveAll()
+    }
+    
+    private func setupSavingSignals() {
+        
+        //simple - save on every change after the initial bunch has been loaded
+        self.serverConfigs.producer.startWithNext {
+            StorageManager.saveServerConfigs($0)
+        }
+        
     }
     
     private func setupHeartbeatManager() {
@@ -57,7 +67,11 @@ public class StorageManager {
         let currentConfigs: [String: XcodeServerConfig] = self.serverConfigs.value
         let dup = currentConfigs
             .map { $0.1 }
-            .filter { $0.host == config.host && $0.user == config.user }.first
+            //find those matching host and username
+            .filter { $0.host == config.host && $0.user == config.user }
+            //but if it's an exact match (id), it's not a duplicate - it's identity
+            .filter { $0.id != config.id }
+            .first
         if let duplicate = dup {
             throw StorageManagerError.DuplicateServerConfig(duplicate)
         }
@@ -152,7 +166,10 @@ public class StorageManager {
     }
     
     public func removeServer(serverConfig: XcodeServerConfig) {
-        self.serverConfigs.value.removeValueForKey(serverConfig.host)
+        
+        //TODO: make sure this server config is not owned by a server which
+        //is running right now.
+        self.serverConfigs.value.removeValueForKey(serverConfig.id)
     }
     
     public func removeSyncer(syncer: HDGitHubXCBotSyncer) {
@@ -191,8 +208,8 @@ public class StorageManager {
         Persistence.saveArray("Projects.json", items: projectConfigs)
     }
     
-    public func saveServerConfigs() {
-        let serverConfigs = Array(self.serverConfigs.value.values).map { $0.jsonify() }
+    public static func saveServerConfigs(configs: [String: XcodeServerConfig]) {
+        let serverConfigs = Array(configs.values).map { $0.jsonify() }
         Persistence.saveArray("ServerConfigs.json", items: serverConfigs)
     }
     
@@ -209,7 +226,7 @@ public class StorageManager {
         //save to persistence
         
         self.saveConfig()
-        self.saveServerConfigs()
+//        self.saveServerConfigs()
         self.saveProjectConfigs()
         self.saveBuildTemplates()
         self.saveSyncerConfigs()

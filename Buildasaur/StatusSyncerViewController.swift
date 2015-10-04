@@ -145,7 +145,7 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
         }
     }
     
-    override func reloadStatus() {
+    func reloadStatus() {
 
         self.startStopButton.title = self.isSyncing ? "Stop" : "Start"
         self.syncIntervalStepper.enabled = !self.isSyncing

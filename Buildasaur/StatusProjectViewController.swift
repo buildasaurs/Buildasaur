@@ -55,10 +55,6 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         return []
     }
     
-    override func reloadStatus() {
-        //
-    }
-    
     func setupUI() {
         
         let proj = self.projectConfig
@@ -108,7 +104,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
 //        }
     }
     
-    override func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())?) {
+    override func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())) {
         
 //        let statusChangedPersist: (status: AvailabilityCheckState, done: Bool) -> () = {
 //            (status: AvailabilityCheckState, done: Bool) -> () in
@@ -238,8 +234,8 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         return true
     }
     
-    override func removeCurrentConfig() {
-        
+//    override func removeCurrentConfig() {
+    
 //        let project = self.project
 //        
 //        //also cleanup comboBoxes
@@ -248,7 +244,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
 //        self.storageManager.removeProject(project)
 //        self.storageManager.saveProjects()
 //        self.reloadStatus()
-    }
+//    }
     
     func selectKey(type: String) {
 //        if let url = StorageUtils.openSSHKey(type) {
@@ -306,7 +302,7 @@ class StatusProjectViewController: StatusViewController, NSComboBoxDelegate, Set
         if let _ = viewController as? BuildTemplateViewController {
             //nothing to do really, reset the selection of the combo box to nothing
             self.buildTemplateComboBox.deselectItemAtIndex(self.buildTemplateComboBox.indexOfSelectedItem)
-            self.reloadStatus()
+//            self.reloadStatus()
         }
     }
     

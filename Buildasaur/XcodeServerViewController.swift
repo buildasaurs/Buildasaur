@@ -36,6 +36,7 @@ class XcodeServerViewController: StatusViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.setup()
     }
     
@@ -46,15 +47,24 @@ class XcodeServerViewController: StatusViewController {
         let editing = self.editing.producer
         let notEditing = editing.producer.map { !$0 }
         
+        //pull data in from the provided config (can be changed externally!)
+        servProd.startWithNext { [weak self] config in
+            self?.serverHostTextField.stringValue = config.host
+            self?.serverUserTextField.stringValue = config.user ?? ""
+            self?.serverPasswordTextField.stringValue = config.password ?? ""
+        }
+        
         //listening to changes to textfields
         let host = self.serverHostTextField.rac_text
         let user = self.serverUserTextField.rac_text
         let pass = self.serverPasswordTextField.rac_text
-        let combined = combineLatest(host, user, pass)
-        let valid = combined
+        let allText = combineLatest(host, user, pass)
+        self.valid = allText
             .map { try? XcodeServerConfig(host: $0, user: $1, password: $2) }
             .map { $0 != nil }
-        self.valid = valid
+        
+        //change state to .Unchecked whenever any change to a textfield has been done
+        self.availabilityCheckState <~ allText.map { _ in AvailabilityCheckState.Unchecked }
         
         //status image
         let statusImage = self
@@ -70,11 +80,12 @@ class XcodeServerViewController: StatusViewController {
         self.serverPasswordTextField.rac_enabled <~ editing
         self.trashButton.rac_enabled <~ editing
         self.gearButton.rac_enabled <~ notEditing
+        self.previousButton.rac_enabled <~ editing
         
-        //string values
-        self.serverHostTextField.rac_stringValue <~ servProd.map { $0.host }
-        self.serverUserTextField.rac_stringValue <~ servProd.map { $0.user ?? "" }
-        self.serverPasswordTextField.rac_stringValue <~ servProd.map { $0.password ?? "" }
+        //next is enabled if editing && valid input
+        let enableNext = combineLatest(self.valid, editing.producer)
+            .map { $0 && $1 }
+        self.nextButton.rac_enabled <~ enableNext
     }
     
     private static func imageNameForStatus(status: AvailabilityCheckState) -> String {
@@ -93,89 +104,89 @@ class XcodeServerViewController: StatusViewController {
     
     @IBAction func nextButtonClicked(sender: AnyObject) {
         
+        //pull the current credentials
+        guard let newConfig = self.pullConfigFromUI() else { return }
+        self.serverConfig.value = newConfig
+        
         //first check availability of these credentials
-        self.recheckForAvailability { (state) -> () in
+        self.recheckForAvailability { [weak self] (state) -> () in
             
             print("State: \(state)")
+            if case .Succeeded = state {
+                //stop editing
+                self?.editing.value = false
+                //TODO: tell delegate this step is done!
+            }
         }
     }
     
     @IBAction func previousButtonClicked(sender: AnyObject) {
-        
+        self.goBack()
+    }
+    
+    private func goBack() {
         //throw away this setup, don't save anything (but don't delete either)
         self.cancelDelegate?.didCancelEditingOfXcodeServerConfig(self.serverConfig.value)
     }
     
     @IBAction func trashButtonClicked(sender: AnyObject) {
+        
+        //ask if user really wants to delete
+        UIUtils.showAlertAskingForRemoval("Do you really want to remove this Xcode Server configuration? This cannot be undone.", completion: { (remove) -> () in
+            
+            if remove {
+                self.removeCurrentConfig()
+            }
+        })
     }
     
     @IBAction func gearButtonClicked(sender: AnyObject) {
+        self.editing.value = true
     }
     
-    
-    //-----
-    
-    override func reloadStatus() {
-        //
-    }
-    
-    override func pullDataFromUI() -> Bool {
+    func pullConfigFromUI() -> XcodeServerConfig? {
         
-        if super.pullDataFromUI() {
+        let host = self.serverHostTextField.stringValue.nonEmpty()
+        let user = self.serverUserTextField.stringValue.nonEmpty()
+        let password = self.serverPasswordTextField.stringValue.nonEmpty()
+        
+        if let host = host {
+            let oldConfigId = self.serverConfig.value.id
+            let config = try! XcodeServerConfig(host: host, user: user, password: password, id: oldConfigId)
             
-            let host = self.serverHostTextField.stringValue.nonEmpty()
-            let user = self.serverUserTextField.stringValue.nonEmpty()
-            let password = self.serverPasswordTextField.stringValue.nonEmpty()
-            
-            if let host = host {
-                let oldConfigId = self.serverConfig.value.id
-                let config = try! XcodeServerConfig(host: host, user: user, password: password, id: oldConfigId)
-                
-                do {
-                    try self.storageManager.addServerConfig(config)
-                    return true
-                } catch StorageManagerError.DuplicateServerConfig(let duplicate) {
-                    let userError = Error.withInfo("You already have a Xcode Server with host \"\(duplicate.host)\" and username \"\(duplicate.user ?? String())\", please go back and select it from the previous screen.")
-                    UIUtils.showAlertWithError(userError)
-                } catch {
-                    UIUtils.showAlertWithError(error)
-                    return false
-                }
-            } else {
-                UIUtils.showAlertWithText("Please add a host name and IP address of your Xcode Server")
+            do {
+                try self.storageManager.addServerConfig(config)
+                return config
+            } catch StorageManagerError.DuplicateServerConfig(let duplicate) {
+                let userError = Error.withInfo("You already have a Xcode Server with host \"\(duplicate.host)\" and username \"\(duplicate.user ?? String())\", please go back and select it from the previous screen.")
+                UIUtils.showAlertWithError(userError)
+            } catch {
+                UIUtils.showAlertWithError(error)
+                return nil
             }
+        } else {
+            UIUtils.showAlertWithText("Please add a host name and IP address of your Xcode Server")
         }
-        return false
+        return nil
     }
     
-    override func removeCurrentConfig() {
+    func removeCurrentConfig() {
         
         let config = self.serverConfig.value
         self.storageManager.removeServer(config)
-        self.storageManager.saveServerConfigs()
-        self.editing.value = false
-        self.serverHostTextField.stringValue = ""
-        self.serverUserTextField.stringValue = ""
-        self.serverPasswordTextField.stringValue = ""
-        self.reloadStatus()
+        self.goBack()
     }
     
-    override func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())?) {
-        
-        let statusChangedPersist: (status: AvailabilityCheckState, done: Bool) -> () = {
-            (status: AvailabilityCheckState, done: Bool) -> () in
-            self.availabilityCheckState.value = status
-            statusChanged?(status: status, done: done)
-        }
+    override func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())) {
         
         let config = self.serverConfig.value
-        statusChangedPersist(status: .Checking, done: false)
+        statusChanged(status: .Checking, done: false)
         NetworkUtils.checkAvailabilityOfXcodeServerWithCurrentSettings(config, completion: { (success, error) -> () in
             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
                 if success {
-                    statusChangedPersist(status: .Succeeded, done: true)
+                    statusChanged(status: .Succeeded, done: true)
                 } else {
-                    statusChangedPersist(status: .Failed(error), done: true)
+                    statusChanged(status: .Failed(error), done: true)
                 }
             })
         })

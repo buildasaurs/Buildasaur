@@ -41,9 +41,6 @@ class StatusViewController: StorableViewController {
         super.viewDidLoad()
         
         setupAvailability()
-        
-        self.editing.producer.startWithNext { [weak self] _ in self?.reloadStatus() }
-//        self.editButton.rac_enabled <~
     }
     
     var editingAllowed: Bool = true {
@@ -52,55 +49,15 @@ class StatusViewController: StorableViewController {
         }
     }
     
-    var lastAvailabilityCheckStatus: AvailabilityCheckState {
-        return self.availabilityCheckState.value
-    }
-    
-    override func viewWillAppear() {
-        super.viewWillAppear()
-        
-        self.reloadStatus()
-    }
-    
-    @IBAction func editButtonTapped(sender: AnyObject) {
-        
-        if self.editing.value {
-            //done'ing, time to save
-            if self.didSave() {
-                self.editing.value = false
-            }
-        } else {
-            //toggle editing
-            self.editing.value = true
-        }
-    }
-    
-    @IBAction func deleteButtonTapped(sender: AnyObject) {
-        
-        //ask if user really wants to delete
-        UIUtils.showAlertAskingForRemoval("Do you really want to remove this config?", completion: { (remove) -> () in
-            
-            if remove {
-                self.removeCurrentConfig()
-            }
-        })
-    }
-    
-    func removeCurrentConfig() {
-        assertionFailure("Must be overriden by subclasses")
-    }
-    
     func didSave() -> Bool {
         
         let success: Bool
         if self.pullDataFromUI() {
             self.storageManager.saveAll()
-            self.reloadStatus()
             success = true
         } else {
             success = false
         }
-        self.reloadStatus()
         return success
     }
     
@@ -110,12 +67,8 @@ class StatusViewController: StorableViewController {
         return true
     }
     
-    func reloadStatus() {
-        assertionFailure("Must be overriden by subclasses")
-    }
-    
     //do not call directly! just override
-    func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())?) {
+    func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())) {
         assertionFailure("Must be overriden by subclasses")
     }
     
@@ -128,7 +81,7 @@ class StatusViewController: StorableViewController {
         }
     }
     
-    func setupAvailability() {
+    private func setupAvailability() {
         
         let state = self.availabilityCheckState.producer
         if let progress = self.progressIndicator {

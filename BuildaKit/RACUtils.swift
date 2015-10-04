@@ -9,15 +9,15 @@
 import Foundation
 import ReactiveCocoa
 
-//func flattenArray<T, E>(inProducer: SignalProducer<[T], E>) -> SignalProducer<T, E> {
-//    
-//    return inProducer.flatMap(.Merge) { (vals: [T]) -> SignalProducer<T, E> in
-//        return SignalProducer { sink, _ in
-//            vals.forEach { sendNext(sink, $0) }
-//            sendCompleted(sink)
-//        }
-//    }
-//}
+public func flattenArray<T, E>(inProducer: SignalProducer<[T], E>) -> SignalProducer<T, E> {
+    
+    return inProducer.flatMap(.Merge) { (vals: [T]) -> SignalProducer<T, E> in
+        return SignalProducer { sink, _ in
+            vals.forEach { sendNext(sink, $0) }
+            sendCompleted(sink)
+        }
+    }
+}
 
 extension SignalProducer {
     

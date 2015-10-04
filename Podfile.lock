@@ -20,7 +20,7 @@ PODS:
     - ReactiveCocoa/Core
     - Result (~> 0.6-beta.1)
   - Result (0.6.0-beta.3)
-  - XcodeServerSDK (0.3.6):
+  - XcodeServerSDK (0.3.7):
     - BuildaUtils (~> 0.1.5)
 
 DEPENDENCIES:
@@ -37,6 +37,6 @@ SPEC CHECKSUMS:
   Ji: 477ec17f9abe9d7f016d714f7b5da8c3c67a2e15
   ReactiveCocoa: 652cf90e5de65708e7e2111f77405756da21aabe
   Result: b80bca7becdda9a2e44c4fd65b4b4a7b5db4cf9a
-  XcodeServerSDK: 520c971825310bed5c8733a6e3b2e05ed062d6c1
+  XcodeServerSDK: 354f0277af692cc02ac473f2e5f7653f8e10ea00
 
 COCOAPODS: 0.39.0.beta.5
