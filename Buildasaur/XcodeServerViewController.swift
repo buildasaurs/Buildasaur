@@ -62,18 +62,19 @@ class XcodeServerViewController: StatusViewController {
         self.serverUserTextField.rac_enabled <~ editing
         self.serverPasswordTextField.rac_enabled <~ editing
         self.trashButton.rac_enabled <~ editing
-        self.previousButton.rac_enabled <~ editing
+
+        self.previousAllowed <~ editing
         
         //next is enabled if editing && valid input
         let enableNext = combineLatest(self.valid, editing.producer)
             .map { $0 && $1 }
-        self.nextButton.rac_enabled <~ enableNext
+        self.nextAllowed <~ enableNext
     }
     
-    override func next() {
+    override func shouldGoNext() -> Bool {
         
         //pull the current credentials
-        guard let newConfig = self.pullConfigFromUI() else { return }
+        guard let newConfig = self.pullConfigFromUI() else { return false }
         self.serverConfig.value = newConfig
         
         //check availability of these credentials
@@ -82,16 +83,15 @@ class XcodeServerViewController: StatusViewController {
             if case .Succeeded = state {
                 //stop editing
                 self?.editing.value = false
-                //TODO: tell delegate this step is done!
+                
+                //wait for a bit? 1 second?
+                self?.goNext(withDelay: 1)
             }
         }
+        return false
     }
     
-    override func previous() {
-        self.goBack()
-    }
-    
-    private func goBack() {
+    private func cancel() {
         //throw away this setup, don't save anything (but don't delete either)
         self.cancelDelegate?.didCancelEditingOfXcodeServerConfig(self.serverConfig.value)
     }
@@ -137,7 +137,7 @@ class XcodeServerViewController: StatusViewController {
         
         let config = self.serverConfig.value
         self.storageManager.removeServer(config)
-        self.goBack()
+        self.cancel()
     }
     
     override func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())) {

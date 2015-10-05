@@ -9,6 +9,7 @@
 import Cocoa
 import BuildaKit
 import ReactiveCocoa
+import BuildaUtils
 
 protocol EditorViewControllerFactoryType {
     
@@ -54,6 +55,19 @@ class MainEditorViewController: PresentableViewController {
     
     func previous() {
         
+        //check with the current controller first
+        if let content = self._contentViewController {
+            if !content.shouldGoPrevious() {
+                return
+            }
+        }
+        
+        self._previous()
+    }
+    
+    //not verified that vc is okay with it
+    func _previous() {
+        
         if let previous = self.state.value.previous() {
             self.state.value = previous
         } else {
@@ -62,6 +76,18 @@ class MainEditorViewController: PresentableViewController {
     }
     
     func next() {
+        
+        //check with the current controller first
+        if let content = self._contentViewController {
+            if !content.shouldGoNext() {
+                return
+            }
+        }
+        
+        self._next()
+    }
+    
+    func _next() {
         
         if let next = self.state.value.next() {
             self.state.value = next
@@ -86,16 +112,6 @@ class MainEditorViewController: PresentableViewController {
     //state manipulation
     
     private func stateChanged(fromState: EditorState, toState: EditorState) {
-        
-        if let content = self._contentViewController {
-            //give the controller to be removed callbacks about previous/next
-            precondition(fromState != toState)
-            if fromState < toState {
-                content.willGoNext()
-            } else {
-                content.willGoPrevious()
-            }
-        }
 
         let viewController = self.factory.supplyViewControllerForState(toState, context: self.context)
         self.setContentViewController(viewController)

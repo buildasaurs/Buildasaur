@@ -112,14 +112,14 @@ class ProjectViewController: StatusViewController {
         self.valid = valid
         
         //control buttons
-        let enableNext = combineLatest(self.valid, editing.producer)
-            .map { $0 && $1 }
-        self.nextButton.rac_enabled <~ enableNext
+//        let enableNext = combineLatest(self.valid, editing.producer)
+//            .map { $0 && $1 }
+//        self.nextButton.rac_enabled <~ enableNext
         self.trashButton.rac_enabled <~ editing
-        self.previousButton.rac_enabled <~ editing
+//        self.previousButton.rac_enabled <~ editing
     }
     
-    override func next() {
+    func next() {
         
         //pull data from UI, create config, save it and try to validate
         guard let newConfig = self.pullConfigFromUI() else { return }
@@ -136,7 +136,7 @@ class ProjectViewController: StatusViewController {
         }
     }
     
-    override func previous() {
+    func previous() {
         self.goBack()
     }
     

@@ -19,6 +19,8 @@ extension MainEditorViewController {
         
         self.nextButton.rac_enabled <~ content.nextAllowed
         self.previousButton.rac_enabled <~ content.previousAllowed
+        content.wantsNext.observeNext { [weak self] in self?._next() }
+        content.wantsPrevious.observeNext { [weak self] in self?._previous() }
     }
 
     func setContentViewController(viewController: EditableViewController) {

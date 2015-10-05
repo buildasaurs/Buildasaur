@@ -55,10 +55,9 @@ class EmptyXcodeServerViewController: EditableViewController {
         return XcodeServerConfig()
     }
     
-    override func willGoNext() {
-        super.willGoNext()
-        
+    override func shouldGoNext() -> Bool {
         self.didSelectXcodeServer(self.selectedConfig.value!)
+        return super.shouldGoNext()
     }
     
     private func setupEditableStates() {

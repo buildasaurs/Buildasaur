@@ -17,11 +17,6 @@ class StatusViewController: EditableViewController {
     let availabilityCheckState = MutableProperty<AvailabilityCheckState>(.Unchecked)
     
     @IBOutlet weak var trashButton: NSButton!
-    @IBOutlet weak var gearButton: NSButton!
-    
-    @IBOutlet weak var nextButton: NSButton!
-    @IBOutlet weak var previousButton: NSButton!
-
     @IBOutlet weak var lastConnectionView: NSTextField?
     @IBOutlet weak var progressIndicator: NSProgressIndicator?
     @IBOutlet weak var serverStatusImageView: NSImageView!
@@ -44,33 +39,15 @@ class StatusViewController: EditableViewController {
             .map { StatusViewController.imageNameForStatus($0) }
             .map { NSImage(named: $0) }
         self.serverStatusImageView.rac_image <~ statusImage
-        
-        //only allow the gearButton to be enabled if not editing && editing allowed
-        let gearEnabled =
-        combineLatest(self.editing.producer, self.editingAllowed.producer)
-            .map { !$0 && $1 }
-        self.gearButton.rac_enabled <~ gearEnabled
     }
     
     //do not call directly! just override
     func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())) {
         assertionFailure("Must be overriden by subclasses")
     }
-    
-    @IBAction final func gearButtonClicked(sender: AnyObject) {
-        self.edit()
-    }
-    
+        
     @IBAction final func trashButtonClicked(sender: AnyObject) {
         self.delete()
-    }
-    
-    @IBAction final func previousButtonClicked(sender: AnyObject) {
-        self.previous()
-    }
-    
-    @IBAction final func nextButtonClicked(sender: AnyObject) {
-        self.next()
     }
     
     func edit() {
@@ -81,19 +58,13 @@ class StatusViewController: EditableViewController {
         assertionFailure("Must be overriden by subclasses")
     }
     
-    func previous() {
-        assertionFailure("Must be overriden by subclasses")
-    }
-
-    func next() {
-        assertionFailure("Must be overriden by subclasses")
-    }
-    
     final func recheckForAvailability(completion: ((state: AvailabilityCheckState) -> ())?) {
+        self.editingAllowed.value = false
         self.checkAvailability { [weak self] (status, done) -> () in
             self?.availabilityCheckState.value = status
             if done {
                 completion?(state: status)
+                self?.editingAllowed.value = true
             }
         }
     }
