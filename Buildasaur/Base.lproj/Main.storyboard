@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8191"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="stacking Non-gravity area distributions on NSStackView" minToolsVersion="7.0" minSystemVersion="10.11"/>
@@ -963,8 +964,22 @@
                                 <rect key="frame" x="10" y="43" width="580" height="340"/>
                                 <animations/>
                             </customView>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tal-qg-xGF">
+                                <rect key="frame" x="493" y="4" width="93" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="81" id="mXV-QF-jpP"/>
+                                </constraints>
+                                <animations/>
+                                <buttonCell key="cell" type="push" title="Next" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="s2x-ez-DEJ">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="nextButtonClicked:" target="ygC-te-PBP" id="WzU-0V-Rwf"/>
+                                </connections>
+                            </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="F1d-he-8ZT">
-                                <rect key="frame" x="14" y="4" width="93" height="32"/>
+                                <rect key="frame" x="400" y="4" width="93" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="81" id="pAH-Bq-wgM"/>
                                 </constraints>
@@ -977,15 +992,21 @@
                                     <action selector="previousButtonClicked:" target="ygC-te-PBP" id="oti-yW-EOQ"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tal-qg-xGF">
-                                <rect key="frame" x="493" y="4" width="93" height="32"/>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qcQ-6w-kqU">
+                                <rect key="frame" x="14" y="4" width="93" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="81" id="lxh-ru-5FR"/>
+                                </constraints>
                                 <animations/>
-                                <buttonCell key="cell" type="push" title="Next" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="s2x-ez-DEJ">
+                                <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7fe-AH-TvN">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="nextButtonClicked:" target="ygC-te-PBP" id="WzU-0V-Rwf"/>
+                                    <action selector="cancelButtonClicked:" target="ygC-te-PBP" id="stC-cg-xh8"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -993,16 +1014,20 @@
                             <constraint firstItem="F1d-he-8ZT" firstAttribute="top" secondItem="sH2-e9-sj5" secondAttribute="bottom" constant="11" id="1HC-V3-IRn"/>
                             <constraint firstItem="sH2-e9-sj5" firstAttribute="top" secondItem="BtG-4D-dwt" secondAttribute="top" constant="17" id="3gO-Ef-gNC"/>
                             <constraint firstAttribute="trailing" secondItem="tal-qg-xGF" secondAttribute="trailing" constant="20" id="59A-nG-e0z"/>
+                            <constraint firstItem="qcQ-6w-kqU" firstAttribute="baseline" secondItem="F1d-he-8ZT" secondAttribute="baseline" id="6sS-fC-SHl"/>
+                            <constraint firstItem="qcQ-6w-kqU" firstAttribute="width" secondItem="F1d-he-8ZT" secondAttribute="width" id="BfZ-p1-anb"/>
                             <constraint firstAttribute="trailing" secondItem="sH2-e9-sj5" secondAttribute="trailing" constant="10" id="DAZ-Lq-dn6"/>
-                            <constraint firstItem="F1d-he-8ZT" firstAttribute="leading" secondItem="BtG-4D-dwt" secondAttribute="leading" constant="20" id="DyO-fi-GBR"/>
                             <constraint firstItem="tal-qg-xGF" firstAttribute="width" secondItem="F1d-he-8ZT" secondAttribute="width" id="Rvx-7I-RVv"/>
                             <constraint firstItem="tal-qg-xGF" firstAttribute="centerY" secondItem="F1d-he-8ZT" secondAttribute="centerY" id="XKE-Ey-N0B"/>
+                            <constraint firstItem="qcQ-6w-kqU" firstAttribute="leading" secondItem="BtG-4D-dwt" secondAttribute="leading" constant="20" id="f5C-JE-O2f"/>
+                            <constraint firstItem="tal-qg-xGF" firstAttribute="leading" secondItem="F1d-he-8ZT" secondAttribute="trailing" constant="12" id="l9Q-r1-4IR"/>
                             <constraint firstAttribute="bottom" secondItem="F1d-he-8ZT" secondAttribute="bottom" constant="11" id="qhh-Dr-HMO"/>
                             <constraint firstItem="sH2-e9-sj5" firstAttribute="leading" secondItem="BtG-4D-dwt" secondAttribute="leading" constant="10" id="wIj-3c-PFs"/>
                         </constraints>
                         <animations/>
                     </view>
                     <connections>
+                        <outlet property="cancelButton" destination="qcQ-6w-kqU" id="aKZ-br-aKJ"/>
                         <outlet property="containerView" destination="sH2-e9-sj5" id="LfI-5D-iXh"/>
                         <outlet property="nextButton" destination="tal-qg-xGF" id="Q4I-DU-PQf"/>
                         <outlet property="previousButton" destination="F1d-he-8ZT" id="KCD-YM-man"/>

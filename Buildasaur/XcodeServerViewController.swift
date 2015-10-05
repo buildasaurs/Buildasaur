@@ -62,8 +62,6 @@ class XcodeServerViewController: StatusViewController {
         self.serverUserTextField.rac_enabled <~ editing
         self.serverPasswordTextField.rac_enabled <~ editing
         self.trashButton.rac_enabled <~ editing
-
-        self.previousAllowed <~ editing
         
         //next is enabled if editing && valid input
         let enableNext = combineLatest(self.valid, editing.producer)
@@ -85,7 +83,9 @@ class XcodeServerViewController: StatusViewController {
                 self?.editing.value = false
                 
                 //animated!
-                self?.goNext(animated: true)
+                delayClosure(1) {
+                    self?.goNext(animated: true)
+                }
             }
         }
         return false

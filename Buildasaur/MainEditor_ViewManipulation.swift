@@ -18,7 +18,7 @@ extension MainEditorViewController {
         let content = self._contentViewController!
         
         self.nextButton.rac_enabled <~ content.nextAllowed
-        self.previousButton.rac_enabled <~ content.previousAllowed
+        self.cancelButton.rac_enabled <~ content.cancelAllowed
         content.wantsNext.observeNext { [weak self] in self?._next(animated: $0) }
         content.wantsPrevious.observeNext { [weak self] in self?._previous(animated: false) }
     }
@@ -69,7 +69,7 @@ extension MainEditorViewController {
         //4. start an animation from right to the center
         NSAnimationContext.runAnimationGroup({ (context: NSAnimationContext) -> Void in
             
-            context.duration = 0.4
+            context.duration = 0.3
             newView.animator().frame = originalFrame
             
             }) { /* do nothing */ }

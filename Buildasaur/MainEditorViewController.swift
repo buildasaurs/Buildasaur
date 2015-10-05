@@ -25,14 +25,15 @@ class MainEditorViewController: PresentableViewController {
     
     @IBOutlet weak var previousButton: NSButton!
     @IBOutlet weak var nextButton: NSButton!
+    @IBOutlet weak var cancelButton: NSButton!
     
     //state and animated?
     var state = MutableProperty<(EditorState, Bool)>(.NoServer, false)
 
     var _contentViewController: EditableViewController?
-        
+    
     @IBAction func previousButtonClicked(sender: AnyObject) {
-        //state machine - will say "Cancel" and dismiss if on first page,
+        //state machine - will be disabled on the first page,
         //otherwise will say "Previous" and move one back in the flow
         self.previous(animated: false)
     }
@@ -41,6 +42,11 @@ class MainEditorViewController: PresentableViewController {
         //state machine - will say "Save" and dismiss if on the last page,
         //otherwise will say "Next" and move one forward in the flow
         self.next(animated: true)
+    }
+    
+    @IBAction func cancelButtonClicked(sender: AnyObject) {
+        //just a cancel button.
+        self.cancel()
     }
     
     override func viewDidLoad() {
@@ -97,6 +103,23 @@ class MainEditorViewController: PresentableViewController {
         }
     }
     
+    func cancel() {
+        
+        //check with the current controller first
+        if let content = self._contentViewController {
+            if !content.shouldCancel() {
+                return
+            }
+        }
+        
+        self._cancel()
+    }
+    
+    func _cancel() {
+        
+        self.dismissWindow()
+    }
+    
     //setup RAC
     
     private func setupBindings() {
@@ -108,6 +131,8 @@ class MainEditorViewController: PresentableViewController {
             .startWithNext { [weak self] in
                 self?.stateChanged(fromState: $0.0, toState: $1.0, animated: $1.1)
         }
+        
+        self.previousButton.rac_enabled <~ self.state.producer.map { $0.0 != .NoServer }
     }
     
     //state manipulation
