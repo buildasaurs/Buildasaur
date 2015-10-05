@@ -48,6 +48,11 @@
 		3A9109B81BC1D87E00C2AECA /* StatusSyncerViewController_BuildTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9109B71BC1D87E00C2AECA /* StatusSyncerViewController_BuildTemplates.swift */; settings = {ASSET_TAGS = (); }; };
 		3A9109BB1BC27C3700C2AECA /* MainEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9109BA1BC27C3700C2AECA /* MainEditorViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		3A9109BD1BC27C5500C2AECA /* EditorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9109BC1BC27C5500C2AECA /* EditorState.swift */; settings = {ASSET_TAGS = (); }; };
+		3A9109BF1BC29E0A00C2AECA /* EditorViewControllerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9109BE1BC29E0A00C2AECA /* EditorViewControllerFactory.swift */; settings = {ASSET_TAGS = (); }; };
+		3A9109C11BC2A42600C2AECA /* EditorContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9109C01BC2A42600C2AECA /* EditorContext.swift */; settings = {ASSET_TAGS = (); }; };
+		3A9109C31BC2B05C00C2AECA /* MainEditor_EditeeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9109C21BC2B05C00C2AECA /* MainEditor_EditeeDelegate.swift */; settings = {ASSET_TAGS = (); }; };
+		3A9109C51BC2B0B200C2AECA /* MainEditor_ViewManipulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9109C41BC2B0B200C2AECA /* MainEditor_ViewManipulation.swift */; settings = {ASSET_TAGS = (); }; };
+		3A9109C71BC2B67100C2AECA /* EditableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9109C61BC2B67100C2AECA /* EditableViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		3A9C95A51BBDAE9F00D37135 /* SyncerLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9C95A41BBDAE9F00D37135 /* SyncerLogic.swift */; settings = {ASSET_TAGS = (); }; };
 		3AAA1B661AAB6E9800FA1598 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAA1B651AAB6E9800FA1598 /* SeparatorView.swift */; };
 		3AAA1B681AAB722600FA1598 /* ProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAA1B671AAB722600FA1598 /* ProjectViewController.swift */; };
@@ -257,6 +262,11 @@
 		3A9109B71BC1D87E00C2AECA /* StatusSyncerViewController_BuildTemplates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusSyncerViewController_BuildTemplates.swift; sourceTree = "<group>"; };
 		3A9109BA1BC27C3700C2AECA /* MainEditorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainEditorViewController.swift; sourceTree = "<group>"; };
 		3A9109BC1BC27C5500C2AECA /* EditorState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorState.swift; sourceTree = "<group>"; };
+		3A9109BE1BC29E0A00C2AECA /* EditorViewControllerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorViewControllerFactory.swift; sourceTree = "<group>"; };
+		3A9109C01BC2A42600C2AECA /* EditorContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorContext.swift; sourceTree = "<group>"; };
+		3A9109C21BC2B05C00C2AECA /* MainEditor_EditeeDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainEditor_EditeeDelegate.swift; sourceTree = "<group>"; };
+		3A9109C41BC2B0B200C2AECA /* MainEditor_ViewManipulation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainEditor_ViewManipulation.swift; sourceTree = "<group>"; };
+		3A9109C61BC2B67100C2AECA /* EditableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditableViewController.swift; sourceTree = "<group>"; };
 		3A9C95A41BBDAE9F00D37135 /* SyncerLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerLogic.swift; sourceTree = "<group>"; };
 		3A9DEC7A1A3BDA6C008C8270 /* PullRequestBranch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PullRequestBranch.swift; path = BuildaGitServer/PullRequestBranch.swift; sourceTree = SOURCE_ROOT; };
 		3AAA1B651AAB6E9800FA1598 /* SeparatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
@@ -562,7 +572,12 @@
 			isa = PBXGroup;
 			children = (
 				3A9109BA1BC27C3700C2AECA /* MainEditorViewController.swift */,
+				3A9109C21BC2B05C00C2AECA /* MainEditor_EditeeDelegate.swift */,
+				3A9109C41BC2B0B200C2AECA /* MainEditor_ViewManipulation.swift */,
 				3A9109BC1BC27C5500C2AECA /* EditorState.swift */,
+				3A9109BE1BC29E0A00C2AECA /* EditorViewControllerFactory.swift */,
+				3A9109C01BC2A42600C2AECA /* EditorContext.swift */,
+				3A9109C61BC2B67100C2AECA /* EditableViewController.swift */,
 			);
 			name = Editor;
 			sourceTree = "<group>";
@@ -1304,6 +1319,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A9109BF1BC29E0A00C2AECA /* EditorViewControllerFactory.swift in Sources */,
 				3A0FF5A01BBFDA7E00FB8051 /* RACUIExtensions.swift in Sources */,
 				3AE0AB2B1BB991AB00A52D20 /* SyncerViewModel.swift in Sources */,
 				3AAA1B761AAC504700FA1598 /* XcodeServerViewController.swift in Sources */,
@@ -1312,6 +1328,7 @@
 				3A5655721BC06A55008BD142 /* EmptyXcodeServerViewController.swift in Sources */,
 				3AF090B81B1134AA0058567F /* BranchWatchingViewController.swift in Sources */,
 				3A5B04AC1AB4AC0F00F60536 /* SetupViewController.swift in Sources */,
+				3A9109C11BC2A42600C2AECA /* EditorContext.swift in Sources */,
 				3A5B04AA1AB4ABEB00F60536 /* TriggerViewController.swift in Sources */,
 				3AF1B1241AAC7CA500917EF3 /* StatusSyncerViewController.swift in Sources */,
 				3A5B04B01AB5144700F60536 /* ManualBotManagementViewController.swift in Sources */,
@@ -1321,9 +1338,12 @@
 				3A5687761A3B93BD0066DB2B /* AppDelegate.swift in Sources */,
 				3AC7D5DF1BBC22A900786198 /* PresentableViewController.swift in Sources */,
 				3AAA1B781AAC508A00FA1598 /* StatusViewController.swift in Sources */,
+				3A9109C51BC2B0B200C2AECA /* MainEditor_ViewManipulation.swift in Sources */,
 				3AC7D5E11BBC231400786198 /* StoryboardLoadingUtils.swift in Sources */,
 				3AAA1B661AAB6E9800FA1598 /* SeparatorView.swift in Sources */,
+				3A9109C71BC2B67100C2AECA /* EditableViewController.swift in Sources */,
 				3AD338B01AAE31D500ECD0F2 /* BuildTemplateViewController.swift in Sources */,
+				3A9109C31BC2B05C00C2AECA /* MainEditor_EditeeDelegate.swift in Sources */,
 				3A9109BD1BC27C5500C2AECA /* EditorState.swift in Sources */,
 				3AAA1B681AAB722600FA1598 /* ProjectViewController.swift in Sources */,
 				3AB3FDCB1B05644300021197 /* MenuItemManager.swift in Sources */,

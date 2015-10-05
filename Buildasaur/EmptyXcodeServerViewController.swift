@@ -16,19 +16,63 @@ protocol EmptyXcodeServerViewControllerDelegate: class {
     func didSelectXcodeServerConfig(config: XcodeServerConfig)
 }
 
-class EmptyXcodeServerViewController: StorableViewController {
+class EmptyXcodeServerViewController: EditableViewController {
+    
+    //for cases when we're editing an existing syncer - show the
+    //right preference.
+    var existingConfigId: RefType?
     
     weak var emptyServerDelegate: EmptyXcodeServerViewControllerDelegate?
     
     @IBOutlet weak var existingXcodeServersPopup: NSPopUpButton!
 
     private var xcodeServerConfigs: [XcodeServerConfig] = []
+    private var selectedConfig = MutableProperty<XcodeServerConfig?>(nil)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.setupDataSource()
         self.setupPopupAction()
+        self.setupEditableStates()
+        
+        //select
+        let index: Int
+        if let configId = self.existingConfigId {
+            let ids = self.xcodeServerConfigs.map { $0.id }
+            index = ids.indexOf(configId) ?? 0
+        } else {
+            index = 0
+        }
+        self.selectItemAtIndex(index)
+    }
+    
+    func addNewString() -> String {
+        return "Add new Xcode Server..."
+    }
+    
+    func newConfig() -> XcodeServerConfig {
+        return XcodeServerConfig()
+    }
+    
+    override func willGoNext() {
+        super.willGoNext()
+        
+        self.didSelectXcodeServer(self.selectedConfig.value!)
+    }
+    
+    private func setupEditableStates() {
+        
+        self.nextAllowed <~ self.selectedConfig.producer.map { $0 != nil }
+    }
+    
+    private func selectItemAtIndex(index: Int) {
+        
+        let configs = self.xcodeServerConfigs
+        
+        //                                      last item is "add new"
+        let config = (index == configs.count) ? self.newConfig() : configs[index]
+        self.selectedConfig.value = config
     }
     
     private func setupPopupAction() {
@@ -36,9 +80,7 @@ class EmptyXcodeServerViewController: StorableViewController {
         let handler = SignalProducer<AnyObject, NoError> { [weak self] sink, _ in
             if let sself = self {
                 let index = sself.existingXcodeServersPopup.indexOfSelectedItem
-                let configs = sself.xcodeServerConfigs
-                let config = configs[index]
-                sself.didSelectXcodeServer(config)
+                sself.selectItemAtIndex(index)
             }
             sendCompleted(sink)
         }
@@ -58,19 +100,15 @@ class EmptyXcodeServerViewController: StorableViewController {
             sself.xcodeServerConfigs = newConfigs
             let popup = sself.existingXcodeServersPopup
             popup.removeAllItems()
-            let configDisplayNames = newConfigs.map { "\($0.host) (\($0.user ?? String()))" }
+            var configDisplayNames = newConfigs.map { "\($0.host) (\($0.user ?? String()))" }
+            configDisplayNames.append(self?.addNewString() ?? ":(")
             popup.addItemsWithTitles(configDisplayNames)
         }
     }
     
     private func didSelectXcodeServer(config: XcodeServerConfig) {
-        Log.verbose("Selected Xcode Server \(config.host)")
+        Log.verbose("Selected \(config.host)")
         self.emptyServerDelegate?.didSelectXcodeServerConfig(config)
-    }
-    
-    @IBAction func newXcodeServerClicked(sender: AnyObject) {
-        let newConfig = XcodeServerConfig()
-        self.didSelectXcodeServer(newConfig)
     }
 }
 

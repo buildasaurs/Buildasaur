@@ -12,7 +12,7 @@ import ReactiveCocoa
 import BuildaUtils
 
 protocol EmptyProjectViewControllerDelegate: class {
-    func selectedProjectConfig(config: ProjectConfig)
+    func didSelectProjectConfig(config: ProjectConfig)
 }
 
 extension ProjectConfig {
@@ -22,7 +22,7 @@ extension ProjectConfig {
     }
 }
 
-class EmptyProjectViewController: StorableViewController {
+class EmptyProjectViewController: EditableViewController {
     
     weak var emptyProjectDelegate: EmptyProjectViewControllerDelegate?
     
@@ -80,7 +80,7 @@ class EmptyProjectViewController: StorableViewController {
     
     private func didSelectProject(config: ProjectConfig) {
         Log.verbose("Selected Project \(config.name)")
-        self.emptyProjectDelegate?.selectedProjectConfig(config)
+        self.emptyProjectDelegate?.didSelectProjectConfig(config)
     }
     
     @IBAction func addProjectButtonTapped(sender: AnyObject) {

@@ -950,6 +950,67 @@
             </objects>
             <point key="canvasLocation" x="-691" y="311"/>
         </scene>
+        <!--Main Editor View Controller-->
+        <scene sceneID="XBj-hW-H4h">
+            <objects>
+                <viewController storyboardIdentifier="editorViewController" id="ygC-te-PBP" customClass="MainEditorViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="BtG-4D-dwt">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="400"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="sH2-e9-sj5">
+                                <rect key="frame" x="10" y="43" width="580" height="337"/>
+                                <animations/>
+                            </customView>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="F1d-he-8ZT">
+                                <rect key="frame" x="14" y="4" width="93" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="81" id="pAH-Bq-wgM"/>
+                                </constraints>
+                                <animations/>
+                                <buttonCell key="cell" type="push" title="Previous" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xXL-d1-LVK">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="previousButtonClicked:" target="ygC-te-PBP" id="oti-yW-EOQ"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tal-qg-xGF">
+                                <rect key="frame" x="493" y="4" width="93" height="32"/>
+                                <animations/>
+                                <buttonCell key="cell" type="push" title="Next" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="s2x-ez-DEJ">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="nextButtonClicked:" target="ygC-te-PBP" id="WzU-0V-Rwf"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="F1d-he-8ZT" firstAttribute="top" secondItem="sH2-e9-sj5" secondAttribute="bottom" constant="11" id="1HC-V3-IRn"/>
+                            <constraint firstItem="sH2-e9-sj5" firstAttribute="top" secondItem="BtG-4D-dwt" secondAttribute="top" constant="20" id="3gO-Ef-gNC"/>
+                            <constraint firstAttribute="trailing" secondItem="tal-qg-xGF" secondAttribute="trailing" constant="20" id="59A-nG-e0z"/>
+                            <constraint firstAttribute="trailing" secondItem="sH2-e9-sj5" secondAttribute="trailing" constant="10" id="DAZ-Lq-dn6"/>
+                            <constraint firstItem="F1d-he-8ZT" firstAttribute="leading" secondItem="BtG-4D-dwt" secondAttribute="leading" constant="20" id="DyO-fi-GBR"/>
+                            <constraint firstItem="tal-qg-xGF" firstAttribute="width" secondItem="F1d-he-8ZT" secondAttribute="width" id="Rvx-7I-RVv"/>
+                            <constraint firstItem="tal-qg-xGF" firstAttribute="centerY" secondItem="F1d-he-8ZT" secondAttribute="centerY" id="XKE-Ey-N0B"/>
+                            <constraint firstAttribute="bottom" secondItem="F1d-he-8ZT" secondAttribute="bottom" constant="11" id="qhh-Dr-HMO"/>
+                            <constraint firstItem="sH2-e9-sj5" firstAttribute="leading" secondItem="BtG-4D-dwt" secondAttribute="leading" constant="10" id="wIj-3c-PFs"/>
+                        </constraints>
+                        <animations/>
+                    </view>
+                    <connections>
+                        <outlet property="containerView" destination="sH2-e9-sj5" id="LfI-5D-iXh"/>
+                        <outlet property="nextButton" destination="tal-qg-xGF" id="Q4I-DU-PQf"/>
+                        <outlet property="previousButton" destination="F1d-he-8ZT" id="KCD-YM-man"/>
+                    </connections>
+                </viewController>
+                <customObject id="HTT-4s-5b9" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="128" y="311"/>
+        </scene>
         <!--Buildasaur-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
@@ -1743,7 +1804,7 @@
                                     <constraint firstAttribute="height" constant="56" id="7Nb-aF-8GR"/>
                                 </constraints>
                                 <animations/>
-                                <scroller key="horizontalScroller" verticalHuggingPriority="750" doubleValue="0.5" horizontal="YES" id="dZ6-jK-9d0">
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="0.5" horizontal="YES" id="dZ6-jK-9d0">
                                     <rect key="frame" x="1" y="39" width="348" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <animations/>
@@ -1847,7 +1908,7 @@
                                     <constraint firstAttribute="height" constant="113" id="akl-ae-qWk"/>
                                 </constraints>
                                 <animations/>
-                                <scroller key="horizontalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="RFK-qC-17J">
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="RFK-qC-17J">
                                     <rect key="frame" x="1" y="96" width="349" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <animations/>
@@ -2756,7 +2817,7 @@
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </clipView>
                                 <animations/>
-                                <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="zLT-KA-AWK">
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="zLT-KA-AWK">
                                     <rect key="frame" x="1" y="213" width="349" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <animations/>
@@ -2802,7 +2863,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1GW-za-jch">
-                                <rect key="frame" x="48" y="182" width="205" height="26"/>
+                                <rect key="frame" x="52" y="137" width="198" height="26"/>
                                 <animations/>
                                 <popUpButtonCell key="cell" type="push" title="No Connected Xcode Server" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="bZu-cx-uWr" id="nIH-7L-Li2">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -2816,28 +2877,11 @@
                                     </menu>
                                 </popUpButtonCell>
                             </popUpButton>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="coT-c1-ODI">
-                                <rect key="frame" x="50" y="123" width="200" height="43"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="CWL-MB-8O7"/>
-                                    <constraint firstAttribute="height" constant="40" id="MGg-Uj-MgE"/>
-                                </constraints>
-                                <animations/>
-                                <buttonCell key="cell" type="squareTextured" title="New Xcode Server..." bezelStyle="texturedSquare" imagePosition="overlaps" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rty-Dt-QWb">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="newXcodeServerClicked:" target="bma-ve-8Yv" id="ZQv-fi-6Um"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="1GW-za-jch" firstAttribute="trailing" secondItem="coT-c1-ODI" secondAttribute="trailing" id="5J4-m8-16m"/>
-                            <constraint firstItem="coT-c1-ODI" firstAttribute="top" secondItem="1GW-za-jch" secondAttribute="bottom" constant="20" id="9bI-aX-9NH"/>
-                            <constraint firstItem="1GW-za-jch" firstAttribute="leading" secondItem="coT-c1-ODI" secondAttribute="leading" id="h7s-mR-9Io"/>
-                            <constraint firstItem="coT-c1-ODI" firstAttribute="centerX" secondItem="VQi-6I-eHM" secondAttribute="centerX" id="lIq-lE-Scx"/>
-                            <constraint firstItem="coT-c1-ODI" firstAttribute="centerY" secondItem="VQi-6I-eHM" secondAttribute="centerY" constant="5" id="qTA-X7-D21"/>
+                            <constraint firstItem="1GW-za-jch" firstAttribute="leading" secondItem="VQi-6I-eHM" secondAttribute="leading" constant="54" id="EpE-J4-vdf"/>
+                            <constraint firstItem="1GW-za-jch" firstAttribute="centerY" secondItem="VQi-6I-eHM" secondAttribute="centerY" id="YhJ-nW-n2u"/>
+                            <constraint firstItem="1GW-za-jch" firstAttribute="centerX" secondItem="VQi-6I-eHM" secondAttribute="centerX" id="v5G-YV-Qkm"/>
                         </constraints>
                         <animations/>
                     </view>

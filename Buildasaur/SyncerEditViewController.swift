@@ -59,65 +59,65 @@ class SyncerEditViewController: PresentableViewController {
     
     func configureViewController(viewController: NSViewController, sender: AnyObject?) {
         
-        if let storableViewController = viewController as? StorableViewController {
-            storableViewController.storageManager = self.syncerManager.storageManager
-            
-            let stage = self.currentStage.producer
-            let serverEditable = stage.map { $0 != .AllVerified }
-            let projectEditable = stage.map { $0 >= .EditingProject }
-            let syncerEditable = stage.map { $0 >= .EditingSyncer }
-            
-            if let emptyServerViewController = storableViewController as? EmptyXcodeServerViewController {
-                self.emptyServerViewController = emptyServerViewController
-                emptyServerViewController.emptyServerDelegate = self
-                emptyServerViewController.editingAllowed <~ serverEditable
-                
-                self.currentStage.value = .NoServer
-            }
-
-            if let emptyProjectViewController = storableViewController as? EmptyProjectViewController {
-                self.emptyProjectViewController = emptyProjectViewController
-                emptyProjectViewController.emptyProjectDelegate = self
-                emptyProjectViewController.editingAllowed <~ projectEditable
-            }
-            
-            if let statusViewController = storableViewController as? StatusViewController {
-                
-                if let serverViewController = statusViewController as? XcodeServerViewController {
-                    self.serverViewController = serverViewController
-                    serverViewController.serverConfig.value = self.configTriplet.server!
-                    serverViewController.cancelDelegate = self
-                    serverViewController.editingAllowed <~ serverEditable
-                    
-                    self.currentStage.value = .EditingServer
-                }
-                
-                if let projectViewController = statusViewController as? ProjectViewController {
-                    self.projectViewController = projectViewController
-                    projectViewController.projectConfig.value = self.configTriplet.project!
-                    projectViewController.cancelDelegate = self
-                    projectViewController.editingAllowed <~ projectEditable
-                    
-                    self.currentStage.value = .EditingProject
-                }
-                
-                if let syncerViewController = statusViewController as? StatusSyncerViewController {
-                    self.syncerViewController = syncerViewController
-                    syncerViewController.syncerConfig.value = self.configTriplet.syncer
-                    syncerViewController.editingAllowed <~ syncerEditable
-                }
-            }
-        }
-        
-        if let buildTemplateViewController = viewController as? BuildTemplateViewController {
-            buildTemplateViewController.storageManager = self.syncerManager.storageManager
-            buildTemplateViewController.buildTemplate = self.buildTemplateParams!.buildTemplate
-            buildTemplateViewController.project = self.buildTemplateParams!.project
-            if let sender = sender as? SetupViewControllerDelegate {
-                buildTemplateViewController.delegate = sender
-            }
-            self.buildTemplateParams = nil
-        }
+//        if let editableViewController = viewController as? EditableViewController {
+//            editableViewController.storageManager = self.syncerManager.storageManager
+//            
+//            let stage = self.currentStage.producer
+//            let serverEditable = stage.map { $0 != .AllVerified }
+//            let projectEditable = stage.map { $0 >= .EditingProject }
+//            let syncerEditable = stage.map { $0 >= .EditingSyncer }
+//            
+//            if let emptyServerViewController = storableViewController as? EmptyXcodeServerViewController {
+//                self.emptyServerViewController = emptyServerViewController
+//                emptyServerViewController.emptyServerDelegate = self
+//                emptyServerViewController.editingAllowed <~ serverEditable
+//                
+//                self.currentStage.value = .NoServer
+//            }
+//
+//            if let emptyProjectViewController = storableViewController as? EmptyProjectViewController {
+//                self.emptyProjectViewController = emptyProjectViewController
+//                emptyProjectViewController.emptyProjectDelegate = self
+//                emptyProjectViewController.editingAllowed <~ projectEditable
+//            }
+//            
+//            if let statusViewController = storableViewController as? StatusViewController {
+//                
+//                if let serverViewController = statusViewController as? XcodeServerViewController {
+//                    self.serverViewController = serverViewController
+//                    serverViewController.serverConfig.value = self.configTriplet.server!
+//                    serverViewController.cancelDelegate = self
+//                    serverViewController.editingAllowed <~ serverEditable
+//                    
+//                    self.currentStage.value = .EditingServer
+//                }
+//                
+//                if let projectViewController = statusViewController as? ProjectViewController {
+//                    self.projectViewController = projectViewController
+//                    projectViewController.projectConfig.value = self.configTriplet.project!
+//                    projectViewController.cancelDelegate = self
+//                    projectViewController.editingAllowed <~ projectEditable
+//                    
+//                    self.currentStage.value = .EditingProject
+//                }
+//                
+//                if let syncerViewController = statusViewController as? StatusSyncerViewController {
+//                    self.syncerViewController = syncerViewController
+//                    syncerViewController.syncerConfig.value = self.configTriplet.syncer
+//                    syncerViewController.editingAllowed <~ syncerEditable
+//                }
+//            }
+//        }
+//        
+//        if let buildTemplateViewController = viewController as? BuildTemplateViewController {
+//            buildTemplateViewController.storageManager = self.syncerManager.storageManager
+//            buildTemplateViewController.buildTemplate = self.buildTemplateParams!.buildTemplate
+//            buildTemplateViewController.project = self.buildTemplateParams!.project
+//            if let sender = sender as? SetupViewControllerDelegate {
+//                buildTemplateViewController.delegate = sender
+//            }
+//            self.buildTemplateParams = nil
+//        }
     }
     
     override func prepareForSegue(segue: NSStoryboardSegue, sender: AnyObject?) {
@@ -146,7 +146,7 @@ extension SyncerEditViewController: EmptyProjectViewControllerDelegate {
         self.replaceViewController(old, new: new)
     }
         
-    func selectedProjectConfig(config: ProjectConfig) {
+    func didSelectProjectConfig(config: ProjectConfig) {
         self.configTriplet.project = config
         self.ensureCorrectProjectViewController()
     }

@@ -10,6 +10,8 @@ import Cocoa
 import BuildaKit
 import ReactiveCocoa
 
+protocol EditeeDelegate: class, EmptyXcodeServerViewControllerDelegate, XcodeServerViewControllerDelegate, EmptyProjectViewControllerDelegate, ProjectViewControllerDelegate { }
+
 class DashboardViewController: PresentableViewController {
 
     @IBOutlet weak var syncersTableView: NSTableView!
@@ -103,11 +105,17 @@ extension DashboardViewController {
     func showSyncerEditViewControllerWithTriplet(triplet: EditableConfigTriplet) {
         
         let uniqueIdentifier = triplet.syncer.id
-        let viewController: SyncerEditViewController = self.storyboardLoader.presentableViewControllerWithStoryboardIdentifier("syncerEditViewController", uniqueIdentifier: uniqueIdentifier, delegate: self.presentingDelegate)
-        viewController.configTriplet = triplet
+        let viewController: MainEditorViewController = self.storyboardLoader.presentableViewControllerWithStoryboardIdentifier("editorViewController", uniqueIdentifier: uniqueIdentifier, delegate: self.presentingDelegate)
+        
+        var context = EditorContext()
+        context.configTriplet = triplet
+        context.syncerManager = self.syncerManager
+        viewController.factory = EditorViewControllerFactory(storyboardLoader: self.storyboardLoader)
+        context.editeeDelegate = viewController
+        viewController.context = context
+
         self.presentingDelegate?.presentViewControllerInUniqueWindow(viewController)
     }
-    
 }
 
 extension DashboardViewController: NSTableViewDataSource {

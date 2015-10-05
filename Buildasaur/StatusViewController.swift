@@ -6,22 +6,15 @@
 //  Copyright (c) 2015 Honza Dvorsky. All rights reserved.
 //
 
-import Foundation
-import AppKit
+import Cocoa
 import BuildaUtils
 import XcodeServerSDK
 import BuildaKit
 import ReactiveCocoa
 
-class StorableViewController: NSViewController {
-    var storageManager: StorageManager!
-    let editingAllowed = MutableProperty<Bool>(true)
-}
-
-class StatusViewController: StorableViewController {
+class StatusViewController: EditableViewController {
     
     let availabilityCheckState = MutableProperty<AvailabilityCheckState>(.Unchecked)
-    let editing = MutableProperty<Bool>(true)
     
     @IBOutlet weak var trashButton: NSButton!
     @IBOutlet weak var gearButton: NSButton!
