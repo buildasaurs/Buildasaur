@@ -92,7 +92,7 @@ extension HDGitHubXCBotSyncer {
         
         let xcodeServer = self._xcodeServer
         
-        XcodeServerSyncerUtils.createBotFromBuildTemplate(botName, template: template, project: project, branch: branch, scheduleOverride: schedule, xcodeServer: xcodeServer) { (bot, error) -> () in
+        XcodeServerSyncerUtils.createBotFromBuildTemplate(botName, syncer: self, template: template, project: project, branch: branch, scheduleOverride: schedule, xcodeServer: xcodeServer) { (bot, error) -> () in
             
             if error != nil {
                 self.notifyError(error, context: "Failed to create bot with name \(botName)")

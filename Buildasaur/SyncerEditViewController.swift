@@ -11,30 +11,6 @@ import BuildaKit
 import XcodeServerSDK
 import ReactiveCocoa
 
-enum SyncerSetupStage: Int {
-    case NoServer
-    case EditingServer
-    case VerifiedServer
-    case NoProject
-    case EditingProject
-    case VerifiedProject
-    case EditingSyncer
-    case VerifiedSyncer
-    case AllVerified
-}
-
-//OMG - Let's redo this in a step-by-step editing/onboarding
-//otherwise it's too difficult to do well :(
-//it's hard to define the state machine here and understand the
-//transitions properly.
-
-extension SyncerSetupStage: Comparable { }
-
-func <(lhs: SyncerSetupStage, rhs: SyncerSetupStage) -> Bool {
-    return lhs.rawValue < rhs.rawValue
-}
-
-
 class SyncerEditViewController: PresentableViewController {
     
     var syncerManager: SyncerManager!
@@ -54,7 +30,7 @@ class SyncerEditViewController: PresentableViewController {
     
     weak var syncerViewController: StatusSyncerViewController?
     
-    let currentStage = MutableProperty<SyncerSetupStage>(.NoServer)
+    let currentStage = MutableProperty<EditorState>(.NoServer)
     
     private var buildTemplateParams: (buildTemplate: BuildTemplate?, project: Project)?
     

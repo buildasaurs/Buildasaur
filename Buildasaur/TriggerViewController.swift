@@ -14,8 +14,8 @@ import BuildaKit
 
 class TriggerViewController: SetupViewController, NSComboBoxDelegate {
     
-    var inTrigger: Trigger?
-    var outTrigger: Trigger?
+    var inTrigger: TriggerConfig!
+    var outTrigger: TriggerConfig?
     
     @IBOutlet weak var nameTextField: NSTextField!
     @IBOutlet weak var typeComboBox: NSComboBox!
@@ -60,7 +60,7 @@ class TriggerViewController: SetupViewController, NSComboBoxDelegate {
                 self.typeComboBox.selectItemAtIndex(idx)
             }
             
-            if trigger.kind == Trigger.Kind.RunScript {
+            if trigger.kind == TriggerConfig.Kind.RunScript {
                 self.bodyTextField.stringValue = trigger.scriptBody
             } else {
                 self.bodyTextField.stringValue = trigger.emailConfiguration!.additionalRecipients.joinWithSeparator(",")
@@ -85,17 +85,17 @@ class TriggerViewController: SetupViewController, NSComboBoxDelegate {
         }
     }
     
-    func allPhases() -> [Trigger.Phase] {
+    func allPhases() -> [TriggerConfig.Phase] {
         return [
-            Trigger.Phase.Prebuild,
-            Trigger.Phase.Postbuild
+            TriggerConfig.Phase.Prebuild,
+            TriggerConfig.Phase.Postbuild
         ]
     }
     
-    func allKinds() -> [Trigger.Kind] {
+    func allKinds() -> [TriggerConfig.Kind] {
         return [
-            Trigger.Kind.RunScript,
-            Trigger.Kind.EmailNotification
+            TriggerConfig.Kind.RunScript,
+            TriggerConfig.Kind.EmailNotification
         ]
     }
     
@@ -123,17 +123,17 @@ class TriggerViewController: SetupViewController, NSComboBoxDelegate {
         let kindIndex = self.typeComboBox.indexOfSelectedItem
         if kindIndex > -1 {
             let triggerKind = self.allKinds()[kindIndex]
-            let desc = (triggerKind == Trigger.Kind.RunScript) ? "Script body:" : "Additional Email recipients (comma separated)"
+            let desc = (triggerKind == TriggerConfig.Kind.RunScript) ? "Script body:" : "Additional Email recipients (comma separated)"
             self.bodyDescriptionLabel.stringValue = desc
             
-            let isEmail = triggerKind == Trigger.Kind.EmailNotification
+            let isEmail = triggerKind == TriggerConfig.Kind.EmailNotification
             self.emailCheckboxes().forEach { $0.enabled = isEmail }
         }
         
         let phaseIndex = self.phaseComboBox.indexOfSelectedItem
         if phaseIndex > -1 {
             let triggerPhase = self.allPhases()[phaseIndex]
-            let isPostbuild = triggerPhase == Trigger.Phase.Postbuild
+            let isPostbuild = triggerPhase == TriggerConfig.Phase.Postbuild
             self.conditionsCheckboxes().forEach { $0.enabled = isPostbuild }
         }
         
@@ -176,7 +176,7 @@ class TriggerViewController: SetupViewController, NSComboBoxDelegate {
             let body: String
             var emailConfig: EmailConfiguration?
 
-            if kind == Trigger.Kind.RunScript {
+            if kind == TriggerConfig.Kind.RunScript {
                 //must have a body
                 
                 body = bodyString
@@ -200,7 +200,7 @@ class TriggerViewController: SetupViewController, NSComboBoxDelegate {
             }
             
             var conditions: TriggerConditions?
-            if phase == Trigger.Phase.Postbuild {
+            if phase == TriggerConfig.Phase.Postbuild {
                 
                 let onAnalyzerWarnings = self.conditionAnalyzerWarningsCheckbox.state == NSOnState
                 let onBuildErrors = self.conditionBuildErrorsCheckbox.state == NSOnState
@@ -213,7 +213,15 @@ class TriggerViewController: SetupViewController, NSComboBoxDelegate {
             }
             
             //if we've gotten all the way here, we can create a trigger
-            self.outTrigger = Trigger(phase: phase, kind: kind, scriptBody: body, name: name, conditions: conditions, emailConfiguration: emailConfig)
+            var trigger = self.inTrigger
+            trigger.phase = phase
+            trigger.kind = kind
+            trigger.scriptBody = body
+            trigger.name = name
+            trigger.conditions = conditions
+            trigger.emailConfiguration = emailConfig
+            self.outTrigger = trigger
+            
             return true
         }
         return false

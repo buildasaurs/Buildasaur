@@ -24,6 +24,7 @@ public class StorageManager {
     public let serverConfigs = MutableProperty<[String: XcodeServerConfig]>([:])
     public let projectConfigs = MutableProperty<[String: ProjectConfig]>([:])
     public let buildTemplates = MutableProperty<[String: BuildTemplate]>([:])
+    public let triggerConfigs = MutableProperty<[String: TriggerConfig]>([:])
     public let config = MutableProperty<[String: AnyObject]>([:])
     
     private var heartbeatManager: HeartbeatManager!
@@ -86,6 +87,10 @@ public class StorageManager {
     
     //MARK: adding
     
+    public func addTriggerConfig(triggerConfig: TriggerConfig) {
+        self.triggerConfigs.value[triggerConfig.id] = triggerConfig
+    }
+    
     public func addBuildTemplate(buildTemplate: BuildTemplate) {
         self.buildTemplates.value[buildTemplate.id] = buildTemplate
     }
@@ -129,6 +134,10 @@ public class StorageManager {
     }
     
     //MARK: removing
+    
+    public func removeTriggerConfig(triggerConfig: TriggerConfig) {
+        self.triggerConfigs.value.removeValueForKey(triggerConfig.id)
+    }
     
     public func removeBuildTemplate(buildTemplate: BuildTemplate) {
         self.buildTemplates.value.removeValueForKey(buildTemplate.id)
@@ -197,6 +206,8 @@ public class StorageManager {
         self.serverConfigs.value = allServerConfigs.dictionarifyWithKey { $0.id }
         let allTemplates: [BuildTemplate] = Persistence.loadArrayFromFolder("BuildTemplates") ?? []
         self.buildTemplates.value = allTemplates.dictionarifyWithKey { $0.id }
+        let allTriggers: [TriggerConfig] = Persistence.loadArrayFromFolder("Triggers") ?? []
+        self.triggerConfigs.value = allTriggers.dictionarifyWithKey { $0.id }
         self.syncerConfigs.value = Persistence.loadArrayFromFile("Syncers.json") { self.createSyncerConfigFromJSON($0) } ?? []
     }
     
@@ -220,6 +231,9 @@ public class StorageManager {
         }
         self.buildTemplates.producer.startWithNext {
             StorageManager.saveBuildTemplates($0)
+        }
+        self.triggerConfigs.producer.startWithNext {
+            StorageManager.saveTriggerConfigs($0)
         }
     }
     
@@ -251,6 +265,24 @@ public class StorageManager {
         Persistence.deleteFolder(folderName)
         let items = Array(templates.values)
         Persistence.saveArrayIntoFolder(folderName, items: items) { $0.id }
+    }
+    
+    private static func saveTriggerConfigs(configs: [String: TriggerConfig]) {
+        
+        //but first we have to *delete* the directory first.
+        //think of a nicer way to do this, but this at least will always
+        //be consistent.
+        let folderName = "Triggers"
+        Persistence.deleteFolder(folderName)
+        let items = Array(configs.values)
+        Persistence.saveArrayIntoFolder(folderName, items: items) { $0.id }
+    }
+}
+
+//HACK: move to XcodeServerSDK
+extension TriggerConfig: JSONReadable, JSONWritable {
+    public func jsonify() -> NSDictionary {
+        return self.dictionarify()
     }
 }
 

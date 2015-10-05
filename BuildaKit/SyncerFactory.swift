@@ -17,6 +17,7 @@ public protocol SyncerFactoryType {
     func createXcodeServer(config: XcodeServerConfig) -> XcodeServer
     func createProject(config: ProjectConfig) -> Project
     func createSourceServer(token: String) -> GitHubServer
+    func createTrigger(config: TriggerConfig) -> Trigger
 }
 
 public class SyncerFactory: SyncerFactoryType {
@@ -62,5 +63,10 @@ public class SyncerFactory: SyncerFactoryType {
     public func createSourceServer(token: String) -> GitHubServer {
         let server = GitHubFactory.server(token)
         return server
+    }
+    
+    public func createTrigger(config: TriggerConfig) -> Trigger {
+        let trigger = Trigger(config: config)
+        return trigger
     }
 }

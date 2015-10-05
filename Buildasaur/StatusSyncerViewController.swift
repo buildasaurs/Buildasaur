@@ -13,7 +13,7 @@ import XcodeServerSDK
 import BuildaKit
 import ReactiveCocoa
 
-class StatusSyncerViewController: StatusViewController, SyncerDelegate {
+class StatusSyncerViewController: StatusViewController, SyncerStateChangeDelegate {
     
     var syncerManager: SyncerManager!
     
@@ -26,8 +26,8 @@ class StatusSyncerViewController: StatusViewController, SyncerDelegate {
     
     var syncer: HDGitHubXCBotSyncer! {
         didSet {
-            if syncer.delegate == nil {
-                syncer.delegate = self
+            if syncer.stateChangeDelegate == nil {
+                syncer.stateChangeDelegate = self
                 if syncer.active {
                     self.syncerBecameActive(syncer)
                 } else {

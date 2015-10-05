@@ -60,5 +60,18 @@ class SyncerProducerFactory {
         }
         return servers
     }
+    
+    static func createBuildTemplateProducer(_: SyncerFactoryType, templates: SignalProducer<[BuildTemplate], NoError>) -> SignalProducer<[BuildTemplate], NoError> {
+        //no transformation
+        return templates
+    }
+    
+    static func createTriggersProducer(factory: SyncerFactoryType, configs: SignalProducer<[TriggerConfig], NoError>) -> SignalProducer<[Trigger], NoError> {
+        
+        let triggers = configs.map { configsArray in
+            return configsArray.map { factory.createTrigger($0) }
+        }
+        return triggers
+    }
 
 }

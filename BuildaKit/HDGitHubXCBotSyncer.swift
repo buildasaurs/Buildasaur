@@ -11,7 +11,15 @@ import BuildaGitServer
 import XcodeServerSDK
 import ReactiveCocoa
 
+public protocol SyncerDelegate: class {
+    
+    func syncerBuildTemplates(syncer: HDGitHubXCBotSyncer) -> [BuildTemplate]
+    func syncer(syncer: HDGitHubXCBotSyncer, triggersWithIds triggerIds: [RefType]) -> [Trigger]
+}
+
 public class HDGitHubXCBotSyncer : Syncer {
+    
+    weak var delegate: SyncerDelegate?
     
     //TODO: change to normal, readonly properties?
     public let github: MutableProperty<GitHubServer?>

@@ -111,7 +111,7 @@ class ManualBotManagementViewController: NSViewController {
             let xcodeServer = self.syncer.xcodeServer.value!
             
             self.creatingActivityIndicator.startAnimation(nil)
-            XcodeServerSyncerUtils.createBotFromBuildTemplate(name, template: template, project: project, branch: branch, scheduleOverride: nil, xcodeServer: xcodeServer, completion: { (bot, error) -> () in
+            XcodeServerSyncerUtils.createBotFromBuildTemplate(name, syncer: syncer,template: template, project: project, branch: branch, scheduleOverride: nil, xcodeServer: xcodeServer, completion: { (bot, error) -> () in
                 
                 self.creatingActivityIndicator.stopAnimation(nil)
                 

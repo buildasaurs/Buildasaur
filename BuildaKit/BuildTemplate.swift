@@ -33,7 +33,7 @@ public class BuildTemplate: JSONSerializable {
     public var scheme: String?
     public var schedule: BotSchedule? //will be ignored for Synced bots, only useful for Manual creation. default: Manual
     public var cleaningPolicy: BotConfiguration.CleaningPolicy
-    public var triggers: [Trigger]
+    public var triggers: [RefType]
     public var shouldAnalyze: Bool?
     public var shouldTest: Bool?
     public var shouldArchive: Bool?
@@ -84,8 +84,8 @@ public class BuildTemplate: JSONSerializable {
         } else {
             self.cleaningPolicy = BotConfiguration.CleaningPolicy.Never
         }
-        if let array = (json.optionalArrayForKey(kKeyTriggers) as? [NSDictionary]) {
-            self.triggers = array.map { Trigger(json: $0) }
+        if let array = (json.optionalArrayForKey(kKeyTriggers) as? [RefType]) {
+            self.triggers = array
         } else {
             self.triggers = []
         }
@@ -122,7 +122,7 @@ public class BuildTemplate: JSONSerializable {
         let dict = NSMutableDictionary()
         
         dict[kKeyId] = self.id
-        dict[kKeyTriggers] = self.triggers.map({ $0.dictionarify() })
+        dict[kKeyTriggers] = self.triggers
         dict[kKeyDeviceFilter] = self.deviceFilter.rawValue
         dict[kKeyTestingDevices] = self.testingDeviceIds ?? []
         dict[kKeyCleaningPolicy] = self.cleaningPolicy.rawValue

@@ -34,7 +34,7 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
     @IBOutlet weak var testDevicesTableView: NSTableView!
     @IBOutlet weak var testDevicesActivityIndicator: NSProgressIndicator!
     
-    private var triggerToEdit: Trigger?
+    private var triggerToEdit: TriggerConfig?
     private var allAvailableTestingDevices: [Device] = []
     private var viewDidLoadCalled: Bool = false //huge hack to prevent cleaning of data source on initial loading calls (will get removed with the transition to RAC)
     
@@ -475,12 +475,13 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
     func tableView(tableView: NSTableView, objectValueForTableColumn tableColumn: NSTableColumn?, row: Int) -> AnyObject? {
         if self.buildTemplate != nil {
             if tableView == self.triggersTableView {
-                let triggers = self.buildTemplate.triggers
-                if tableColumn!.identifier == "names" {
-                    
-                    let trigger = triggers[row]
-                    return trigger.name
-                }
+                return "NOT IMPLEMENTED ATM"
+//                let triggers = self.buildTemplate.triggers
+//                if tableColumn!.identifier == "names" {
+//                    
+//                    let trigger = triggers[row]
+//                    return trigger.name
+//                }
             } else if tableView == self.testDevicesTableView {
                 
                 let device = self.allAvailableTestingDevices[row]
@@ -506,38 +507,40 @@ class BuildTemplateViewController: SetupViewController, NSComboBoxDelegate, NSTa
     
     func setupViewControllerDidSave(viewController: SetupViewController) {
         
-        if let triggerViewController = viewController as? TriggerViewController {
-            
-            if let outTrigger = triggerViewController.outTrigger {
-                
-                if let inTrigger = triggerViewController.inTrigger {
-                    //was an existing trigger, just replace in place
-                    let index = self.buildTemplate.triggers.indexOfFirstObjectPassingTest { $0.uniqueId == inTrigger.uniqueId }!
-                    self.buildTemplate.triggers[index] = outTrigger
-                    
-                } else {
-                    //new trigger, just add
-                    self.buildTemplate.triggers.append(outTrigger)
-                }
-            }
-        }
+        //TODO: reinstate saving
+//        if let triggerViewController = viewController as? TriggerViewController {
+//            
+//            if let outTrigger = triggerViewController.outTrigger {
+//                
+//                if let inTrigger = triggerViewController.inTrigger {
+//                    //was an existing trigger, just replace in place
+//                    let index = self.buildTemplate.triggers.indexOfFirstObjectPassingTest { $0.id == inTrigger.id }!
+//                    self.buildTemplate.triggers[index] = outTrigger
+//                    
+//                } else {
+//                    //new trigger, just add
+//                    self.buildTemplate.triggers.append(outTrigger)
+//                }
+//            }
+//        }
         
-        self.reloadUI()
+//        self.reloadUI()
     }
     
     func setupViewControllerDidCancel(viewController: SetupViewController) {
         //
     }
     
-    func editTrigger(trigger: Trigger?) {
+    func editTrigger(trigger: TriggerConfig?) {
         self.triggerToEdit = trigger
         self.performSegueWithIdentifier("showTrigger", sender: self)
     }
     
     @IBAction func triggerTableViewEditTapped(sender: AnyObject) {
-        let index = self.triggersTableView.selectedRow
-        let trigger = self.buildTemplate.triggers[index]
-        self.editTrigger(trigger)
+//        let index = self.triggersTableView.selectedRow
+//        let trigger = self.buildTemplate.triggers[index]
+        //TODO: pull the right config
+//        self.editTrigger(trigger)
     }
     
     @IBAction func triggerTableViewDeleteTapped(sender: AnyObject) {

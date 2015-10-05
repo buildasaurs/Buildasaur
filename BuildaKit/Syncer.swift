@@ -12,7 +12,7 @@ import BuildaUtils
 import XcodeServerSDK
 import ReactiveCocoa
 
-public protocol SyncerDelegate: class {
+public protocol SyncerStateChangeDelegate: class {
     
     func syncerBecameActive(syncer: Syncer)
     func syncerStopped(syncer: Syncer)
@@ -23,7 +23,7 @@ public protocol SyncerDelegate: class {
 
 @objc public class Syncer: NSObject {
     
-    public weak var delegate: SyncerDelegate?
+    public weak var stateChangeDelegate: SyncerStateChangeDelegate?
     
     //public
     public internal(set) var reports: [String: String] = [:]
@@ -41,10 +41,10 @@ public protocol SyncerDelegate: class {
         didSet {
             if !oldValue && self.isSyncing {
                 self.lastSyncStartDate = NSDate()
-                self.delegate?.syncerDidStartSyncing(self)
+                self.stateChangeDelegate?.syncerDidStartSyncing(self)
             } else if oldValue && !self.isSyncing {
                 self.lastSyncFinishedDate = NSDate()
-                self.delegate?.syncerDidFinishSyncing(self)
+                self.stateChangeDelegate?.syncerDidFinishSyncing(self)
             }
         }
     }
@@ -57,11 +57,11 @@ public protocol SyncerDelegate: class {
                 self.timer = timer
                 NSRunLoop.mainRunLoop().addTimer(timer, forMode: kCFRunLoopCommonModes as String)
                 self._sync() //call for the first time, next one will be called by the timer
-                self.delegate?.syncerBecameActive(self)
+                self.stateChangeDelegate?.syncerBecameActive(self)
             } else if !active && oldValue {
                 self.timer?.invalidate()
                 self.timer = nil
-                self.delegate?.syncerStopped(self)
+                self.stateChangeDelegate?.syncerStopped(self)
             }
             self.activeSignalProducer.value = active
         }
@@ -137,7 +137,7 @@ public protocol SyncerDelegate: class {
         }
         Log.error(message)
         self.currentSyncError = error
-        self.delegate?.syncerEncounteredError(self, error: Error.withInfo(message))
+        self.stateChangeDelegate?.syncerEncounteredError(self, error: Error.withInfo(message))
     }
     
     /**
