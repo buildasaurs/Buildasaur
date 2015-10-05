@@ -29,14 +29,10 @@ extension MainEditorViewController {
         vc.removeFromParentViewController()
     }
     
-    private func add(viewController: EditableViewController, offsetMultiplier: Double) {
+    private func add(viewController: EditableViewController) {
         self.addChildViewController(viewController)
         let view = viewController.view
         self.containerView.addSubview(view)
-        
-        var frame = self.containerView.bounds
-        frame.origin.x += (CGFloat(offsetMultiplier) * frame.size.width)
-        view.frame = frame
         
         //also match backgrounds?
         view.wantsLayer = true
@@ -49,36 +45,33 @@ extension MainEditorViewController {
     
     func setContentViewController(viewController: EditableViewController, animated: Bool) {
         
-        let oldViewController: NSViewController? = self._contentViewController
-        let completion = {
-            self.remove(oldViewController)
-        }
+        //1. remove the old view
+        self.remove(self._contentViewController)
         
-        //add the new one immediately
-        let offsetMultiplier = animated ? 1.0 : 0.0
-        self.add(viewController, offsetMultiplier: offsetMultiplier)
+        //2. add the new view on top of the old one
+        self.add(viewController)
         
         //if no animation, complete immediately
         if !animated {
-            completion()
             return
         }
         
         //animation, yay!
         
-        //1. move the new controller out of screen on the right
-        let originalFrame = self.containerView.bounds
+        let newView = viewController.view
         
-        //2. start an animation from right to the center
+        //3. offset the new view to the right
+        var startingFrame = newView.frame
+        let originalFrame = startingFrame
+        startingFrame.origin.x += startingFrame.size.width
+        newView.frame = startingFrame
+        
+        //4. start an animation from right to the center
         NSAnimationContext.runAnimationGroup({ (context: NSAnimationContext) -> Void in
             
-            context.duration = 1
-            viewController.view.animator().frame = originalFrame
+            context.duration = 0.4
+            newView.animator().frame = originalFrame
             
-            }) { () -> Void in
-                
-                //3. completion, remove the old view
-                completion()
-        }
+            }) { /* do nothing */ }
     }
 }

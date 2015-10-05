@@ -17,9 +17,12 @@ class EditorViewControllerFactory: EditorViewControllerFactoryType {
         self.storyboardLoader = storyboardLoader
     }
     
-    func supplyViewControllerForState(state: EditorState, context: EditorContext) -> EditableViewController {
+    func supplyViewControllerForState(state: EditorState, context: EditorContext) -> EditableViewController? {
         
         switch state {
+            
+        case .Initial, .Final:
+            return nil
             
         case .NoServer:
             let vc: EmptyXcodeServerViewController = self.storyboardLoader.typedViewControllerWithStoryboardIdentifier("emptyXcodeServerViewController")

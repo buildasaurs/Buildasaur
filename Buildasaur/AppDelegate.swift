@@ -124,6 +124,16 @@ extension AppDelegate: PresentableViewControllerDelegate {
         self.windows.insert(window)
         window.makeKeyAndOrderFront(self)
     }
+    
+    func closeWindowWithViewController(viewController: PresentableViewController) {
+        
+        if let window = self.windowForPresentableViewControllerWithIdentifier(viewController.uniqueIdentifier)?.0 {
+            
+            if window.delegate?.windowShouldClose!(self) ?? true {
+                window.close()
+            }
+        }
+    }
 }
 
 extension AppDelegate: StoryboardLoaderDelegate {

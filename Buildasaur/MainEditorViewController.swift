@@ -13,7 +13,7 @@ import BuildaUtils
 
 protocol EditorViewControllerFactoryType {
     
-    func supplyViewControllerForState(state: EditorState, context: EditorContext) -> EditableViewController
+    func supplyViewControllerForState(state: EditorState, context: EditorContext) -> EditableViewController?
 }
 
 class MainEditorViewController: PresentableViewController {
@@ -114,8 +114,15 @@ class MainEditorViewController: PresentableViewController {
     
     private func stateChanged(fromState fromState: EditorState, toState: EditorState, animated: Bool) {
 
-        let viewController = self.factory.supplyViewControllerForState(toState, context: self.context)
-        self.setContentViewController(viewController, animated: animated)
+        if let viewController = self.factory.supplyViewControllerForState(toState, context: self.context) {
+            self.setContentViewController(viewController, animated: animated)
+        } else {
+            self.dismissWindow()
+        }
+    }
+    
+    private func dismissWindow() {
+        self.presentingDelegate?.closeWindowWithViewController(self)
     }
 }
 

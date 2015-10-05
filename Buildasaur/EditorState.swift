@@ -29,6 +29,8 @@ enum EditorState: Int {
     
     case AllVerified
     
+    case Final
+    
     func next() -> EditorState? {
         return self + 1
     }
