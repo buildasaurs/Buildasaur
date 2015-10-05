@@ -26,7 +26,7 @@ extension MainEditorViewController: XcodeServerViewControllerDelegate {
     
     func didCancelEditingOfXcodeServerConfig(config: XcodeServerConfig) {
         self.context.configTriplet.server = nil
-        self.previous()
+        self.previous(animated: false)
     }
 }
 

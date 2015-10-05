@@ -26,34 +26,35 @@ class MainEditorViewController: PresentableViewController {
     @IBOutlet weak var previousButton: NSButton!
     @IBOutlet weak var nextButton: NSButton!
     
-    var state = MutableProperty<EditorState>(.NoServer)
+    //state and animated?
+    var state = MutableProperty<(EditorState, Bool)>(.NoServer, false)
 
     var _contentViewController: EditableViewController?
         
     @IBAction func previousButtonClicked(sender: AnyObject) {
         //state machine - will say "Cancel" and dismiss if on first page,
         //otherwise will say "Previous" and move one back in the flow
-        self.previous()
+        self.previous(animated: false)
     }
     
     @IBAction func nextButtonClicked(sender: AnyObject) {
         //state machine - will say "Save" and dismiss if on the last page,
         //otherwise will say "Next" and move one forward in the flow
-        self.next()
+        self.next(animated: true)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.setupBindings()
-        
+
         self.containerView.wantsLayer = true
         self.containerView.layer!.backgroundColor = NSColor.grayColor().CGColor
+
+        self.setupBindings()
     }
     
     // moving forward and back
     
-    func previous() {
+    func previous(animated animated: Bool) {
         
         //check with the current controller first
         if let content = self._contentViewController {
@@ -62,20 +63,20 @@ class MainEditorViewController: PresentableViewController {
             }
         }
         
-        self._previous()
+        self._previous(animated: animated)
     }
     
     //not verified that vc is okay with it
-    func _previous() {
+    func _previous(animated animated: Bool) {
         
-        if let previous = self.state.value.previous() {
-            self.state.value = previous
+        if let previous = self.state.value.0.previous() {
+            self.state.value = (previous, animated)
         } else {
             //we're at the beginning, dismiss?
         }
     }
     
-    func next() {
+    func next(animated animated: Bool) {
         
         //check with the current controller first
         if let content = self._contentViewController {
@@ -84,13 +85,13 @@ class MainEditorViewController: PresentableViewController {
             }
         }
         
-        self._next()
+        self._next(animated: animated)
     }
     
-    func _next() {
+    func _next(animated animated: Bool) {
         
-        if let next = self.state.value.next() {
-            self.state.value = next
+        if let next = self.state.value.0.next() {
+            self.state.value = (next, animated)
         } else {
             //we're at the end, dismiss?
         }
@@ -102,19 +103,19 @@ class MainEditorViewController: PresentableViewController {
         
         self.state
             .producer
-            .combinePrevious(.Initial) //keep history
-            .filter { $0.0 != $0.1 } //only take changes
+            .combinePrevious((.Initial, false)) //keep history
+            .filter { $0.0.0 != $0.1.0 } //only take changes
             .startWithNext { [weak self] in
-                self?.stateChanged($0, toState: $1)
+                self?.stateChanged(fromState: $0.0, toState: $1.0, animated: $1.1)
         }
     }
     
     //state manipulation
     
-    private func stateChanged(fromState: EditorState, toState: EditorState) {
+    private func stateChanged(fromState fromState: EditorState, toState: EditorState, animated: Bool) {
 
         let viewController = self.factory.supplyViewControllerForState(toState, context: self.context)
-        self.setContentViewController(viewController)
+        self.setContentViewController(viewController, animated: animated)
     }
 }
 

@@ -84,8 +84,8 @@ class XcodeServerViewController: StatusViewController {
                 //stop editing
                 self?.editing.value = false
                 
-                //wait for a bit? 1 second?
-                self?.goNext(withDelay: 1)
+                //animated!
+                self?.goNext(animated: true)
             }
         }
         return false

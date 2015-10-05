@@ -21,18 +21,20 @@ class EditableViewController: NSViewController {
     let previousAllowed = MutableProperty<Bool>(true)
     
     typealias ActionSignal = Signal<Void, NoError>
+    typealias AnimatableSignal = Signal<Bool, NoError>
     private typealias ActionObserver = ActionSignal.Observer
+    private typealias AnimatableObserver = AnimatableSignal.Observer
     
-    var wantsNext: ActionSignal!
+    var wantsNext: AnimatableSignal!
     var wantsPrevious: ActionSignal!
     
-    private var sinkNext: ActionObserver!
+    private var sinkNext: AnimatableObserver!
     private var sinkPrevious: ActionObserver!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let (wn, sn) = ActionSignal.pipe()
+        let (wn, sn) = AnimatableSignal.pipe()
         self.wantsNext = wn
         self.sinkNext = sn
         let (wp, sp) = ActionSignal.pipe()
@@ -45,13 +47,8 @@ class EditableViewController: NSViewController {
     //call goNext to finish going next. otherwise don't call
     //and force user to fix the problem.
     
-    final func goNext(withDelay delay: NSTimeInterval? = nil) {
-        let send = { sendNext(self.sinkNext, ()) }
-        if let delay = delay {
-            delayClosure(delay, closure: send)
-        } else {
-            send()
-        }
+    final func goNext(animated animated: Bool = false) {
+        sendNext(self.sinkNext, animated)
     }
     
     final func goPrevious() {
