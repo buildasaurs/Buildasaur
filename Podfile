@@ -11,13 +11,17 @@ def also_xcode_pods
 	pod 'ekgclient', '0.3.0'
 end
 
-target 'Buildasaur' do
+def builda_meat
 	also_xcode_pods
+	pod 'Ji', '1.1.2'
+end
+
+target 'Buildasaur' do
+	builda_meat
 end
 
 target 'BuildaKit' do
-	also_xcode_pods
-	pod 'Ji', '1.1.2'
+	builda_meat
 end
 
 target 'BuildaKitTests' do
