@@ -45,3 +45,10 @@ extension MainEditorViewController: ProjectViewControllerDelegate {
     }
 }
 
+extension MainEditorViewController: EmptyBuildTemplateViewControllerDelegate {
+    
+    func didSelectBuildTemplate(buildTemplate: BuildTemplate) {
+        self.context.configTriplet.buildTemplate = buildTemplate
+    }
+}
+

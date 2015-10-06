@@ -2800,9 +2800,23 @@ Gw
                                     </menu>
                                 </popUpButtonCell>
                             </popUpButton>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NSd-bm-lRD">
+                                <rect key="frame" x="52" y="189" width="263" height="19"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="19" id="3IG-bJ-cfW"/>
+                                </constraints>
+                                <animations/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Select Xcode Server to build and test on...." id="Aui-GK-mG0">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="NSd-bm-lRD" firstAttribute="leading" secondItem="1GW-za-jch" secondAttribute="leading" id="BYk-4P-2NQ"/>
                             <constraint firstItem="1GW-za-jch" firstAttribute="leading" secondItem="VQi-6I-eHM" secondAttribute="leading" constant="54" id="EpE-J4-vdf"/>
+                            <constraint firstItem="1GW-za-jch" firstAttribute="top" secondItem="NSd-bm-lRD" secondAttribute="bottom" constant="8" id="PEo-Tw-IFQ"/>
                             <constraint firstItem="1GW-za-jch" firstAttribute="centerY" secondItem="VQi-6I-eHM" secondAttribute="centerY" id="YhJ-nW-n2u"/>
                             <constraint firstItem="1GW-za-jch" firstAttribute="centerX" secondItem="VQi-6I-eHM" secondAttribute="centerX" id="v5G-YV-Qkm"/>
                         </constraints>
@@ -2837,10 +2851,24 @@ Gw
                                     </menu>
                                 </popUpButtonCell>
                             </popUpButton>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LSE-dM-MmU">
+                                <rect key="frame" x="52" y="189" width="331" height="19"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="19" id="Xxw-hu-gc4"/>
+                                </constraints>
+                                <animations/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Select Xcode Project or Workspace to build and test..." id="mv8-Dp-SEr">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstItem="Jbb-AF-xdp" firstAttribute="centerY" secondItem="3E2-gr-vab" secondAttribute="centerY" id="ID7-43-ICW"/>
                             <constraint firstItem="Jbb-AF-xdp" firstAttribute="leading" secondItem="3E2-gr-vab" secondAttribute="leading" constant="54" id="Rlg-Az-M6x"/>
+                            <constraint firstItem="LSE-dM-MmU" firstAttribute="leading" secondItem="Jbb-AF-xdp" secondAttribute="leading" id="lEc-Ka-yZ9"/>
+                            <constraint firstItem="Jbb-AF-xdp" firstAttribute="top" secondItem="LSE-dM-MmU" secondAttribute="bottom" constant="8" id="tcS-aa-962"/>
                             <constraint firstItem="Jbb-AF-xdp" firstAttribute="centerX" secondItem="3E2-gr-vab" secondAttribute="centerX" id="yES-sZ-ZhV"/>
                         </constraints>
                         <animations/>
@@ -2864,24 +2892,41 @@ Gw
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gWX-ip-dAU">
                                 <rect key="frame" x="52" y="157" width="477" height="26"/>
                                 <animations/>
-                                <popUpButtonCell key="cell" type="push" title="No Item" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="T4A-bh-MrK">
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="T4A-bh-MrK">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" size="12" name=".AppleSystemUIFont"/>
                                     <menu key="menu" id="SIx-1u-OhO">
                                         <items>
-                                            <menuItem title="No Item" state="on" id="DN1-9v-E6d"/>
+                                            <menuItem title="No Item" id="DN1-9v-E6d"/>
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
                             </popUpButton>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PsY-Yw-wiG">
+                                <rect key="frame" x="52" y="189" width="336" height="19"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="19" id="5PE-LD-9er"/>
+                                </constraints>
+                                <animations/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Specify how to build your code with a Build Template..." id="q61-zU-wmM">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstItem="gWX-ip-dAU" firstAttribute="centerX" secondItem="avQ-W0-Tog" secondAttribute="centerX" id="1Zd-zZ-QsB"/>
                             <constraint firstItem="gWX-ip-dAU" firstAttribute="centerY" secondItem="avQ-W0-Tog" secondAttribute="centerY" id="Tie-m7-Oyj"/>
                             <constraint firstItem="gWX-ip-dAU" firstAttribute="leading" secondItem="avQ-W0-Tog" secondAttribute="leading" constant="54" id="fEG-tx-hk8"/>
+                            <constraint firstItem="PsY-Yw-wiG" firstAttribute="leading" secondItem="gWX-ip-dAU" secondAttribute="leading" id="kg1-Ol-np0"/>
+                            <constraint firstItem="gWX-ip-dAU" firstAttribute="top" secondItem="PsY-Yw-wiG" secondAttribute="bottom" constant="8" id="qwD-gW-tHq"/>
                         </constraints>
                         <animations/>
                     </view>
+                    <connections>
+                        <outlet property="existingBuildTemplatesPopup" destination="gWX-ip-dAU" id="MOm-4p-kZn"/>
+                    </connections>
                 </viewController>
                 <customObject id="7R7-Ka-TRB" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>

@@ -47,5 +47,70 @@ class EmptyBuildTemplateViewController: EditableViewController {
         self.selectItemAtIndex(index)
     }
 
+    func addNewString() -> String {
+        return "Add new build template..."
+    }
     
+    func newTemplate() -> BuildTemplate {
+        return BuildTemplate() //TODO: pass the project name!
+    }
+    
+    override func shouldGoNext() -> Bool {
+        self.didSelectBuildTemplate(self.selectedTemplate.value!)
+        return super.shouldGoNext()
+    }
+    
+    private func setupEditableStates() {
+        
+        self.nextAllowed <~ self.selectedTemplate.producer.map { $0 != nil }
+    }
+    
+    private func selectItemAtIndex(index: Int) {
+        
+        let templates = self.buildTemplates
+        
+        //                                      last item is "add new"
+        let template = (index == templates.count) ? self.newTemplate() : templates[index]
+        self.selectedTemplate.value = template
+    }
+    
+    private func setupPopupAction() {
+        
+        let handler = SignalProducer<AnyObject, NoError> { [weak self] sink, _ in
+            if let sself = self {
+                let index = sself.existingBuildTemplatesPopup.indexOfSelectedItem
+                sself.selectItemAtIndex(index)
+            }
+            sendCompleted(sink)
+        }
+        let action = Action { (_: AnyObject?) in handler }
+        self.existingBuildTemplatesPopup.rac_command = toRACCommand(action)
+    }
+    
+    private func setupDataSource() {
+        
+        let templatesProducer = self.storageManager.buildTemplates.producer
+        let allTemplatesProducer = templatesProducer
+            .map { Array($0.values) }
+            .map { templates in templates.sort { $0.name < $1.name } }
+        allTemplatesProducer.startWithNext { [weak self] newTemplates in
+            guard let sself = self else { return }
+            
+            sself.buildTemplates = newTemplates
+            let popup = sself.existingBuildTemplatesPopup
+            popup.removeAllItems()
+            let unnamed = "Untitled template"
+            var configDisplayNames = newTemplates.map { template -> String in
+                let project = template.projectName ?? ""
+                return "\(template.name ?? unnamed) (\(project))"
+            }
+            configDisplayNames.append(self?.addNewString() ?? ":(")
+            popup.addItemsWithTitles(configDisplayNames)
+        }
+    }
+    
+    private func didSelectBuildTemplate(template: BuildTemplate) {
+        Log.verbose("Selected \(template.name)")
+        self.emptyTemplateDelegate?.didSelectBuildTemplate(template)
+    }
 }

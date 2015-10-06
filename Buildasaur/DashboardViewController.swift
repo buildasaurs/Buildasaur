@@ -10,7 +10,7 @@ import Cocoa
 import BuildaKit
 import ReactiveCocoa
 
-protocol EditeeDelegate: class, EmptyXcodeServerViewControllerDelegate, XcodeServerViewControllerDelegate, EmptyProjectViewControllerDelegate, ProjectViewControllerDelegate { }
+protocol EditeeDelegate: class, EmptyXcodeServerViewControllerDelegate, XcodeServerViewControllerDelegate, EmptyProjectViewControllerDelegate, ProjectViewControllerDelegate, EmptyBuildTemplateViewControllerDelegate { }
 
 class DashboardViewController: PresentableViewController {
 

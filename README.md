@@ -28,6 +28,19 @@ Looking for Xcode Server SDK?
 ----------------
 The code that makes talking to Xcode Server easy lives in a separate project: [XcodeServerSDK](https://github.com/czechboy0/XcodeServerSDK). Buildasaur is just one app that uses this SDK, but now you can build your own!
 
+How about Build Badges?
+----------------
+Yes, I built a tiny service called [satellite](https://github.com/czechboy0/satellite), which serves down badges based on GitHub status of a branch. And this status is automatically updated by Buildasaur when a build finishes (enable a *watched branch* in Buildasaur for whichever branch you'd like to base your badge on, usually `master`).
+
+TL;DR?
+Just add this to your README and replace `USER`, `REPO` and `BRANCH` with your info. And you'll get a build badge like this: ![](https://stlt.herokuapp.com/v1/badge/czechboy0/buildasaur/master)
+
+```
+[![satellite badge](https://stlt.herokuapp.com/v1/badge/USER/REPO/BRANCH)](https://github.com/USER/REPO/branches)
+```
+If you don't specify a branch, *master* will be used.
+
+
 :nut_and_bolt: Configurable
 ------------
 Buildasaur was designed to be easy to setup, while still giving you all the customization you need. By choosing the right defaults, most projects can get Buildasaur setup in minutes, start it and never have to worry about it again.
