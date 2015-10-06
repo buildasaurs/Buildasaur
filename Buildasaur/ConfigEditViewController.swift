@@ -42,7 +42,7 @@ class ConfigEditViewController: EditableViewController {
     }
     
     //do not call directly! just override
-    func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())) {
+    func checkAvailability(statusChanged: ((status: AvailabilityCheckState) -> ())) {
         assertionFailure("Must be overriden by subclasses")
     }
         
@@ -60,9 +60,9 @@ class ConfigEditViewController: EditableViewController {
     
     final func recheckForAvailability(completion: ((state: AvailabilityCheckState) -> ())?) {
         self.editingAllowed.value = false
-        self.checkAvailability { [weak self] (status, done) -> () in
+        self.checkAvailability { [weak self] (status) -> () in
             self?.availabilityCheckState.value = status
-            if done {
+            if status.isDone() {
                 completion?(state: status)
                 self?.editingAllowed.value = true
             }

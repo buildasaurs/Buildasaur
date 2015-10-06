@@ -160,32 +160,14 @@ class ProjectViewController: ConfigEditViewController {
         })
     }
     
-    override func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())) {
+    override func checkAvailability(statusChanged: ((status: AvailabilityCheckState) -> ())) {
         
-        statusChanged(status: .Checking, done: false)
-
-        var project: Project!
-        do {
-            project = try Project(config: self.projectConfig.value)
-        } catch {
-            statusChanged(status: AvailabilityCheckState.Failed(error), done: true)
-            return
+        AvailabilityChecker
+            .projectAvailability()
+            .apply(self.projectConfig.value)
+            .startWithNext {
+                statusChanged(status: $0)
         }
-
-        NetworkUtils.checkAvailabilityOfGitHubWithCurrentSettingsOfProject(project, completion: { (success, error) -> () in
-            
-            let status: AvailabilityCheckState
-            if success {
-                status = .Succeeded
-            } else {
-                Log.error("Checking github availability error: " + (error?.description ?? "Unknown error"))
-                status = AvailabilityCheckState.Failed(error)
-            }
-            
-            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-                statusChanged(status: status, done: true)
-            })
-        })
     }
     
     func pullConfigFromUI() -> ProjectConfig? {

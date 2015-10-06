@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0C6E8E976FAB2B146BB63F8C /* Pods_BuildaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 409645FDE8C457A87CC0EB9E /* Pods_BuildaKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		154D3411C304C50E12812E45 /* Pods_BuildaGitServerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21B0AE10E358430305B81EBA /* Pods_BuildaGitServerTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		21C649AA1663908B2167603A /* Pods_BuildaKitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3ABBB131BFB1C5835825208 /* Pods_BuildaKitTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		0C6E8E976FAB2B146BB63F8C /* Pods_BuildaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 409645FDE8C457A87CC0EB9E /* Pods_BuildaKit.framework */; };
+		154D3411C304C50E12812E45 /* Pods_BuildaGitServerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21B0AE10E358430305B81EBA /* Pods_BuildaGitServerTests.framework */; };
+		21C649AA1663908B2167603A /* Pods_BuildaKitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3ABBB131BFB1C5835825208 /* Pods_BuildaKitTests.framework */; };
 		3A0FF5A01BBFDA7E00FB8051 /* RACUIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0FF59F1BBFDA7E00FB8051 /* RACUIExtensions.swift */; settings = {ASSET_TAGS = (); }; };
 		3A0FF5A21BBFE8BA00FB8051 /* SyncerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0FF5A11BBFE8BA00FB8051 /* SyncerConfig.swift */; settings = {ASSET_TAGS = (); }; };
 		3A0FF5A41BBFF9FA00FB8051 /* ProjectConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0FF5A31BBFF9FA00FB8051 /* ProjectConfig.swift */; settings = {ASSET_TAGS = (); }; };
@@ -120,9 +120,9 @@
 		3AE4F6D01BBC8D250006CA1C /* EmptyProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE4F6CF1BBC8D250006CA1C /* EmptyProjectViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		3AF090B81B1134AA0058567F /* BranchWatchingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF090B71B1134AA0058567F /* BranchWatchingViewController.swift */; };
 		3AF1B1241AAC7CA500917EF3 /* SyncerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF1B1231AAC7CA500917EF3 /* SyncerViewController.swift */; };
-		817A44A89CAB03124CE9925B /* Pods_BuildaHeartbeatKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C9FDB0AA17010C20AB70498 /* Pods_BuildaHeartbeatKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		B296090E1F6B511A00573E77 /* Pods_BuildaGitServer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FCA59A65B3984159FFD54DE8 /* Pods_BuildaGitServer.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		D590531E12B56A32770FAB51 /* Pods_Buildasaur.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86DA269AC84E7339A8A0EF16 /* Pods_Buildasaur.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		817A44A89CAB03124CE9925B /* Pods_BuildaHeartbeatKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C9FDB0AA17010C20AB70498 /* Pods_BuildaHeartbeatKit.framework */; };
+		B296090E1F6B511A00573E77 /* Pods_BuildaGitServer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FCA59A65B3984159FFD54DE8 /* Pods_BuildaGitServer.framework */; };
+		D590531E12B56A32770FAB51 /* Pods_Buildasaur.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86DA269AC84E7339A8A0EF16 /* Pods_Buildasaur.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */

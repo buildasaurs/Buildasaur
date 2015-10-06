@@ -140,19 +140,13 @@ class XcodeServerViewController: ConfigEditViewController {
         self.cancel()
     }
     
-    override func checkAvailability(statusChanged: ((status: AvailabilityCheckState, done: Bool) -> ())) {
+    override func checkAvailability(statusChanged: ((status: AvailabilityCheckState) -> ())) {
         
         let config = self.serverConfig.value
-        statusChanged(status: .Checking, done: false)
-        NetworkUtils.checkAvailabilityOfXcodeServerWithCurrentSettings(config, completion: { (success, error) -> () in
-            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-                if success {
-                    statusChanged(status: .Succeeded, done: true)
-                } else {
-                    statusChanged(status: .Failed(error), done: true)
-                }
-            })
-        })
+        let checkAction = AvailabilityChecker.xcodeServerAvailability()
+        checkAction.apply(config).startWithNext {
+            statusChanged(status: $0)
+        }
     }
 }
 
