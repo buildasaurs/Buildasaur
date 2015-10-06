@@ -94,9 +94,7 @@ extension AppDelegate: PresentableViewControllerDelegate {
     
     func configureViewController(viewController: PresentableViewController) {
         
-        if let syncerEdit = viewController as? SyncerEditViewController {
-            syncerEdit.syncerManager = self.syncerManager
-        }
+        //
     }
     
     func presentViewControllerInUniqueWindow(viewController: PresentableViewController) {

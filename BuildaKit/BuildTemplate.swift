@@ -24,7 +24,7 @@ private let kKeyShouldAnalyze = "should_analyze"
 private let kKeyShouldTest = "should_test"
 private let kKeyShouldArchive = "should_archive"
 
-public class BuildTemplate: JSONSerializable {
+public struct BuildTemplate: JSONSerializable {
     
     public let id: RefType
     
@@ -50,7 +50,7 @@ public class BuildTemplate: JSONSerializable {
         return true
     }
     
-    public init(projectName: String) {
+    public init(projectName: String? = nil) {
         self.id = Ref.new()
         self.projectName = projectName
         self.name = "New Build Template"
@@ -66,7 +66,7 @@ public class BuildTemplate: JSONSerializable {
         self.platformType = nil
     }
     
-    public required init(json: NSDictionary) throws {
+    public init(json: NSDictionary) throws {
         
         self.id = json.optionalStringForKey(kKeyId) ?? Ref.new()
         self.projectName = json.optionalStringForKey(kKeyProjectName)

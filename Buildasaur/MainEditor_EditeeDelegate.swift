@@ -41,6 +41,7 @@ extension MainEditorViewController: ProjectViewControllerDelegate {
     
     func didCancelEditingOfProjectConfig(config: ProjectConfig) {
         self.context.configTriplet.project = nil
+        self.previous(animated: false)
     }
 }
 

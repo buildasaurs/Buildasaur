@@ -16,7 +16,7 @@ protocol XcodeServerViewControllerDelegate: class {
     func didCancelEditingOfXcodeServerConfig(config: XcodeServerConfig)
 }
 
-class XcodeServerViewController: StatusViewController {
+class XcodeServerViewController: ConfigEditViewController {
     
     var serverConfig = MutableProperty<XcodeServerConfig>(XcodeServerConfig())
     

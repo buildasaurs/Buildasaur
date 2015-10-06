@@ -53,8 +53,8 @@ class ManualBotManagementViewController: NSViewController {
     func fetchBranches(completion: ([Branch]?, NSError?) -> ()) {
         
         self.branchActivityIndicator.startAnimation(nil)
-        let repoName = self.syncer.project.value!.githubRepoName()!
-        self.syncer.github.value!.getBranchesOfRepo(repoName, completion: { (branches, error) -> () in
+        let repoName = self.syncer.project.githubRepoName()!
+        self.syncer.github.getBranchesOfRepo(repoName, completion: { (branches, error) -> () in
             
             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
                 
@@ -107,8 +107,8 @@ class ManualBotManagementViewController: NSViewController {
             let branch = self.pullBranchName(),
             let template = self.pullTemplate()
         {
-            let project = self.syncer.project.value!
-            let xcodeServer = self.syncer.xcodeServer.value!
+            let project = self.syncer.project
+            let xcodeServer = self.syncer.xcodeServer
             
             self.creatingActivityIndicator.startAnimation(nil)
             XcodeServerSyncerUtils.createBotFromBuildTemplate(name, syncer: syncer,template: template, project: project, branch: branch, scheduleOverride: nil, xcodeServer: xcodeServer, completion: { (bot, error) -> () in

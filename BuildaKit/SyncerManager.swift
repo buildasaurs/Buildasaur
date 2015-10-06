@@ -16,9 +16,18 @@ public struct ConfigTriplet {
     public var syncer: SyncerConfig
     public var server: XcodeServerConfig
     public var project: ProjectConfig
+    public var buildTemplate: BuildTemplate
+    
+    init(syncer: SyncerConfig, server: XcodeServerConfig, project: ProjectConfig, buildTemplate: BuildTemplate) {
+        self.syncer = syncer
+        self.server = server
+        self.project = project
+        self.buildTemplate = buildTemplate
+        self.syncer.preferredTemplateRef = buildTemplate.id
+    }
     
     public func toEditable() -> EditableConfigTriplet {
-        return EditableConfigTriplet(syncer: self.syncer, server: self.server, project: self.project)
+        return EditableConfigTriplet(syncer: self.syncer, server: self.server, project: self.project, buildTemplate: self.buildTemplate)
     }
 }
 
@@ -26,6 +35,13 @@ public struct EditableConfigTriplet {
     public var syncer: SyncerConfig
     public var server: XcodeServerConfig?
     public var project: ProjectConfig?
+    public var buildTemplate: BuildTemplate?
+    
+    public func toFinal() -> ConfigTriplet {
+        var syncer = self.syncer
+        syncer.preferredTemplateRef = self.buildTemplate!.id
+        return ConfigTriplet(syncer: syncer, server: self.server!, project: self.project!, buildTemplate: self.buildTemplate!)
+    }
 }
 
 //owns running syncers and their children, manages starting/stopping them,

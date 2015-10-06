@@ -1,5 +1,5 @@
 //
-//  StatusSyncerViewController.swift
+//  SyncerViewController.swift
 //  Buildasaur
 //
 //  Created by Honza Dvorsky on 08/03/2015.
@@ -13,7 +13,7 @@ import XcodeServerSDK
 import BuildaKit
 import ReactiveCocoa
 
-class StatusSyncerViewController: StatusViewController, SyncerStateChangeDelegate {
+class SyncerViewController: ConfigEditViewController, SyncerStateChangeDelegate {
     
     var syncerManager: SyncerManager!
     
@@ -97,7 +97,7 @@ class StatusSyncerViewController: StatusViewController, SyncerStateChangeDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.setupBuildTemplatePopup()
+//        self.setupBuildTemplatePopup()
         
         self.statusTextField.stringValue = "-"
     }

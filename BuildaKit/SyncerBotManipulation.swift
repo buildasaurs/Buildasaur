@@ -13,17 +13,6 @@ import BuildaUtils
 
 extension HDGitHubXCBotSyncer {
     
-    public func currentBuildTemplate() -> BuildTemplate! {
-        
-//        let preferredTemplateId = self.config.preferredTemplateRef
-//        if let template = StorageManager.sharedInstance.buildTemplates.value.filter({ $0.id == preferredTemplateId }).first {
-//            return template
-//        }
-        
-        assertionFailure("Couldn't get the current build template, this syncer should NOT be running!")
-        return nil
-    }
-    
     //MARK: Bot manipulation utils
     
     func cancelIntegrations(integrations: [Integration], completion: () -> ()) {
@@ -67,7 +56,7 @@ extension HDGitHubXCBotSyncer {
         logic. here I'm just explaining why "On Commit" schedule isn't generally a good idea for when managed by Builda.
         */
         let schedule = BotSchedule.manualBotSchedule()
-        let template = self.currentBuildTemplate()
+        let template = self.buildTemplate
         
         //to handle forks
         let headOriginUrl = repo.repoUrlSSH

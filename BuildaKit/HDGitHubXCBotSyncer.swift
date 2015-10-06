@@ -21,21 +21,22 @@ public class HDGitHubXCBotSyncer : Syncer {
     
     weak var delegate: SyncerDelegate?
     
-    //TODO: change to normal, readonly properties?
-    public let github: MutableProperty<GitHubServer?>
-    public let xcodeServer: MutableProperty<XcodeServer?>
-    public let project: MutableProperty<Project?>
+    public let github: GitHubServer
+    public let xcodeServer: XcodeServer
+    public let project: Project
+    public let buildTemplate: BuildTemplate
     public let config: SyncerConfig
     
     public var configTriplet: ConfigTriplet {
-        return ConfigTriplet(syncer: self.config, server: self.xcodeServer.value!.config, project: self.project.value!.config)
+        return ConfigTriplet(syncer: self.config, server: self.xcodeServer.config, project: self.project.config, buildTemplate: self.buildTemplate)
     }
     
-    public init(integrationServer: XcodeServer, sourceServer: GitHubServer, project: Project, config: SyncerConfig) {
+    public init(integrationServer: XcodeServer, sourceServer: GitHubServer, project: Project, buildTemplate: BuildTemplate, config: SyncerConfig) {
             
-        self.github = MutableProperty(sourceServer)
-        self.xcodeServer = MutableProperty(integrationServer)
-        self.project = MutableProperty(project)
+        self.github = sourceServer
+        self.xcodeServer = integrationServer
+        self.project = project
+        self.buildTemplate = buildTemplate
         
         self.config = config
         

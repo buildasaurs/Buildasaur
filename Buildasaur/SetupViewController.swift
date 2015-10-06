@@ -9,6 +9,8 @@
 import Foundation
 import AppKit
 
+//TODO: remove!
+
 protocol SetupViewControllerDelegate: class {
     
     func setupViewControllerDidSave(viewController: SetupViewController)

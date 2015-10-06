@@ -46,8 +46,8 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
     func fetchBranches(completion: ([Branch]?, NSError?) -> ()) {
         
         self.branchActivityIndicator.startAnimation(nil)
-        let repoName = self.syncer.project.value!.githubRepoName()!
-        self.syncer.github.value!.getBranchesOfRepo(repoName, completion: { (branches, error) -> () in
+        let repoName = self.syncer.project.githubRepoName()!
+        self.syncer.github.getBranchesOfRepo(repoName, completion: { (branches, error) -> () in
             
             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
                 

@@ -11,7 +11,7 @@ import XcodeServerSDK
 import BuildaGitServer
 
 public protocol SyncerFactoryType {
-    func createSyncer(syncerConfig: SyncerConfig, serverConfig: XcodeServerConfig, projectConfig: ProjectConfig) -> HDGitHubXCBotSyncer
+    func createSyncer(syncerConfig: SyncerConfig, serverConfig: XcodeServerConfig, projectConfig: ProjectConfig, buildTemplate: BuildTemplate) -> HDGitHubXCBotSyncer
     func defaultConfigTriplet() -> ConfigTriplet
     func newEditableTriplet() -> EditableConfigTriplet
     func createXcodeServer(config: XcodeServerConfig) -> XcodeServer
@@ -24,7 +24,7 @@ public class SyncerFactory: SyncerFactoryType {
     
     public init() { }
     
-    public func createSyncer(syncerConfig: SyncerConfig, serverConfig: XcodeServerConfig, projectConfig: ProjectConfig) -> HDGitHubXCBotSyncer {
+    public func createSyncer(syncerConfig: SyncerConfig, serverConfig: XcodeServerConfig, projectConfig: ProjectConfig, buildTemplate: BuildTemplate) -> HDGitHubXCBotSyncer {
         
         let xcodeServer = self.createXcodeServer(serverConfig)
         let githubServer = self.createSourceServer(projectConfig.githubToken)
@@ -34,6 +34,7 @@ public class SyncerFactory: SyncerFactoryType {
             integrationServer: xcodeServer,
             sourceServer: githubServer,
             project: project,
+            buildTemplate: buildTemplate,
             config: syncerConfig)
         
         //TADAAA
@@ -41,11 +42,11 @@ public class SyncerFactory: SyncerFactoryType {
     }
     
     public func defaultConfigTriplet() -> ConfigTriplet {
-        return ConfigTriplet(syncer: SyncerConfig(), server: XcodeServerConfig(), project: ProjectConfig())
+        return ConfigTriplet(syncer: SyncerConfig(), server: XcodeServerConfig(), project: ProjectConfig(), buildTemplate: BuildTemplate())
     }
     
     public func newEditableTriplet() -> EditableConfigTriplet {
-        return EditableConfigTriplet(syncer: SyncerConfig(), server: nil, project: nil)
+        return EditableConfigTriplet(syncer: SyncerConfig(), server: nil, project: nil, buildTemplate: nil)
     }
     
     //sort of private

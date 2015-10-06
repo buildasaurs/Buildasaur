@@ -13,9 +13,11 @@ import BuildaUtils
 
 extension HDGitHubXCBotSyncer {
     
-    var _project: Project { return self.project.value! }
-    var _xcodeServer: XcodeServer { return self.xcodeServer.value! }
-    var _github: GitHubServer { return self.github.value! }
+    //TODO: clean this up
+    var _project: Project { return self.project }
+    var _xcodeServer: XcodeServer { return self.xcodeServer }
+    var _github: GitHubServer { return self.github }
+    var _buildTemplate: BuildTemplate { return self.buildTemplate }
     var _waitForLttm: Bool { return self.config.waitForLttm }
     var _postStatusComments: Bool { return self.config.postStatusComments }
     var _watchedBranchNames: [String] { return self.config.watchedBranchNames }

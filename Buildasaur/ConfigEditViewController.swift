@@ -1,5 +1,5 @@
 //
-//  StatusViewController.swift
+//  ConfigEditViewController.swift
 //  Buildasaur
 //
 //  Created by Honza Dvorsky on 08/03/2015.
@@ -12,7 +12,7 @@ import XcodeServerSDK
 import BuildaKit
 import ReactiveCocoa
 
-class StatusViewController: EditableViewController {
+class ConfigEditViewController: EditableViewController {
     
     let availabilityCheckState = MutableProperty<AvailabilityCheckState>(.Unchecked)
     
@@ -36,7 +36,7 @@ class StatusViewController: EditableViewController {
         let statusImage = self
             .availabilityCheckState
             .producer
-            .map { StatusViewController.imageNameForStatus($0) }
+            .map { ConfigEditViewController.imageNameForStatus($0) }
             .map { NSImage(named: $0) }
         self.serverStatusImageView.rac_image <~ statusImage
     }
@@ -76,7 +76,7 @@ class StatusViewController: EditableViewController {
             progress.rac_animating <~ state.map { $0 == .Checking }
         }
         if let lastConnection = self.lastConnectionView {
-            lastConnection.rac_stringValue <~ state.map { StatusViewController.stringForState($0) }
+            lastConnection.rac_stringValue <~ state.map { ConfigEditViewController.stringForState($0) }
         }
     }
     

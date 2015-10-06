@@ -17,7 +17,7 @@ protocol ProjectViewControllerDelegate: class {
     func didCancelEditingOfProjectConfig(config: ProjectConfig)
 }
 
-class ProjectViewController: StatusViewController {
+class ProjectViewController: ConfigEditViewController {
     
     var projectConfig = MutableProperty<ProjectConfig>(ProjectConfig())
     weak var cancelDelegate: ProjectViewControllerDelegate?

@@ -67,7 +67,7 @@ class MenuItemManager : NSObject, NSMenuDelegate {
             }
             
             let repo: String
-            if let repoName = syncer.project.value?.githubRepoName() {
+            if let repoName = syncer.project.githubRepoName() {
                 repo = repoName
             } else {
                 repo = "???"
