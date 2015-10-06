@@ -1,7 +1,28 @@
 # Change Log
 
-## [v0.5.0](https://github.com/czechboy0/Buildasaur/tree/v0.5.0) (2015-09-29)
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.4.0...v0.5.0)
+## [v0.5.1](https://github.com/czechboy0/buildasaur/tree/v0.5.1) (2015-10-06)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.5.0...v0.5.1)
+
+**Fixed bugs:**
+
+- Buildasaur post multiple comments for the same integration [\#147](https://github.com/czechboy0/Buildasaur/issues/147)
+- Schemes not detected when owned by workspace [\#144](https://github.com/czechboy0/Buildasaur/issues/144)
+
+**Closed issues:**
+
+- Parse workspace as proper XML [\#148](https://github.com/czechboy0/Buildasaur/issues/148)
+- Can you put bots or at least triggers under source control? [\#145](https://github.com/czechboy0/Buildasaur/issues/145)
+- Can't add Xcode Project/Workspace [\#140](https://github.com/czechboy0/Buildasaur/issues/140)
+- Generate Settings UI Dynamically from a JSON [\#111](https://github.com/czechboy0/Buildasaur/issues/111)
+- Adaptive sync interval  [\#57](https://github.com/czechboy0/Buildasaur/issues/57)
+
+**Merged pull requests:**
+
+- Proper workspace XML parsing [\#150](https://github.com/czechboy0/Buildasaur/pull/150) ([czechboy0](https://github.com/czechboy0))
+- Fixed unrecognized schemes owned by workspace [\#149](https://github.com/czechboy0/Buildasaur/pull/149) ([czechboy0](https://github.com/czechboy0))
+
+## [v0.5.0](https://github.com/czechboy0/buildasaur/tree/v0.5.0) (2015-09-29)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.4.0...v0.5.0)
 
 **Fixed bugs:**
 
@@ -25,8 +46,8 @@
 - Disable App Transport Security to connect to self-signed XCS [\#134](https://github.com/czechboy0/Buildasaur/pull/134) ([Brett-Best](https://github.com/Brett-Best))
 - lttm barrier default changed to disabled [\#131](https://github.com/czechboy0/Buildasaur/pull/131) ([czechboy0](https://github.com/czechboy0))
 
-## [v0.4.0](https://github.com/czechboy0/Buildasaur/tree/v0.4.0) (2015-09-17)
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3.1...v0.4.0)
+## [v0.4.0](https://github.com/czechboy0/buildasaur/tree/v0.4.0) (2015-09-17)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.3.1...v0.4.0)
 
 **Closed issues:**
 
@@ -36,8 +57,8 @@
 
 - Anonymous Heartbeat Sending [\#125](https://github.com/czechboy0/Buildasaur/pull/125) ([czechboy0](https://github.com/czechboy0))
 
-## [v0.3.1](https://github.com/czechboy0/Buildasaur/tree/v0.3.1) (2015-09-17)
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3...v0.3.1)
+## [v0.3.1](https://github.com/czechboy0/buildasaur/tree/v0.3.1) (2015-09-17)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.3...v0.3.1)
 
 **Fixed bugs:**
 
@@ -47,8 +68,8 @@
 
 - Testing devices don't show up when editing a build template [\#123](https://github.com/czechboy0/Buildasaur/issues/123)
 
-## [v0.3](https://github.com/czechboy0/Buildasaur/tree/v0.3) (2015-09-10)
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3-beta5...v0.3)
+## [v0.3](https://github.com/czechboy0/buildasaur/tree/v0.3) (2015-09-10)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.3-beta5...v0.3)
 
 **Closed issues:**
 
@@ -58,8 +79,8 @@
 
 - Swift 2! [\#122](https://github.com/czechboy0/Buildasaur/pull/122) ([czechboy0](https://github.com/czechboy0))
 
-## [v0.3-beta5](https://github.com/czechboy0/Buildasaur/tree/v0.3-beta5) (2015-08-25)
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3-beta4...v0.3-beta5)
+## [v0.3-beta5](https://github.com/czechboy0/buildasaur/tree/v0.3-beta5) (2015-08-25)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.3-beta4...v0.3-beta5)
 
 **Closed issues:**
 
@@ -70,8 +91,8 @@
 - Xcode 7 Beta 6 fixes [\#116](https://github.com/czechboy0/Buildasaur/pull/116) ([czechboy0](https://github.com/czechboy0))
 - Remove "Buildasaur:" from GitHub build status messages [\#115](https://github.com/czechboy0/Buildasaur/pull/115) ([accatyyc](https://github.com/accatyyc))
 
-## [v0.3-beta4](https://github.com/czechboy0/Buildasaur/tree/v0.3-beta4) (2015-07-25)
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3-beta3...v0.3-beta4)
+## [v0.3-beta4](https://github.com/czechboy0/buildasaur/tree/v0.3-beta4) (2015-07-25)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.3-beta3...v0.3-beta4)
 
 **Closed issues:**
 
@@ -84,8 +105,8 @@
 - Singular/Plural Noun Fixes [\#104](https://github.com/czechboy0/Buildasaur/pull/104) ([czechboy0](https://github.com/czechboy0))
 - Update README.md [\#103](https://github.com/czechboy0/Buildasaur/pull/103) ([czechboy0](https://github.com/czechboy0))
 
-## [v0.3-beta3](https://github.com/czechboy0/Buildasaur/tree/v0.3-beta3) (2015-07-19)
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3-beta2...v0.3-beta3)
+## [v0.3-beta3](https://github.com/czechboy0/buildasaur/tree/v0.3-beta3) (2015-07-19)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.3-beta2...v0.3-beta3)
 
 **Fixed bugs:**
 
@@ -107,8 +128,8 @@
 - Update README.md [\#95](https://github.com/czechboy0/Buildasaur/pull/95) ([czechboy0](https://github.com/czechboy0))
 - Adding Code Coverage and Test Number changes to comments [\#91](https://github.com/czechboy0/Buildasaur/pull/91) ([czechboy0](https://github.com/czechboy0))
 
-## [v0.3-beta2](https://github.com/czechboy0/Buildasaur/tree/v0.3-beta2) (2015-07-15)
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.3-beta1...v0.3-beta2)
+## [v0.3-beta2](https://github.com/czechboy0/buildasaur/tree/v0.3-beta2) (2015-07-15)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.3-beta1...v0.3-beta2)
 
 **Merged pull requests:**
 
@@ -117,8 +138,8 @@
 - sync master [\#86](https://github.com/czechboy0/Buildasaur/pull/86) ([czechboy0](https://github.com/czechboy0))
 - New App Icon and small fixes. [\#74](https://github.com/czechboy0/Buildasaur/pull/74) ([Higgcz](https://github.com/Higgcz))
 
-## [v0.3-beta1](https://github.com/czechboy0/Buildasaur/tree/v0.3-beta1) (2015-07-02)
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.2.9...v0.3-beta1)
+## [v0.3-beta1](https://github.com/czechboy0/buildasaur/tree/v0.3-beta1) (2015-07-02)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.2.9...v0.3-beta1)
 
 **Fixed bugs:**
 
@@ -152,8 +173,8 @@
 - Initial refactor of syncer [\#51](https://github.com/czechboy0/Buildasaur/pull/51) ([czechboy0](https://github.com/czechboy0))
 - Add a build status badge [\#50](https://github.com/czechboy0/Buildasaur/pull/50) ([czechboy0](https://github.com/czechboy0))
 
-## [v0.2.9](https://github.com/czechboy0/Buildasaur/tree/v0.2.9) (2015-05-14)
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.2.8...v0.2.9)
+## [v0.2.9](https://github.com/czechboy0/buildasaur/tree/v0.2.9) (2015-05-14)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.2.8...v0.2.9)
 
 **Closed issues:**
 
@@ -163,8 +184,8 @@
 
 - Menu bar, running in the background [\#48](https://github.com/czechboy0/Buildasaur/pull/48) ([czechboy0](https://github.com/czechboy0))
 
-## [v0.2.8](https://github.com/czechboy0/Buildasaur/tree/v0.2.8) (2015-05-14)
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.2.7...v0.2.8)
+## [v0.2.8](https://github.com/czechboy0/buildasaur/tree/v0.2.8) (2015-05-14)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.2.7...v0.2.8)
 
 **Fixed bugs:**
 
@@ -174,8 +195,8 @@
 
 - Fix for canceled integrations during Checkout [\#47](https://github.com/czechboy0/Buildasaur/pull/47) ([czechboy0](https://github.com/czechboy0))
 
-## [v0.2.7](https://github.com/czechboy0/Buildasaur/tree/v0.2.7) (2015-05-13)
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.2.6...v0.2.7)
+## [v0.2.7](https://github.com/czechboy0/buildasaur/tree/v0.2.7) (2015-05-13)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.2.6...v0.2.7)
 
 **Fixed bugs:**
 
@@ -201,8 +222,8 @@
 - Integration duration in status comments [\#35](https://github.com/czechboy0/Buildasaur/pull/35) ([czechboy0](https://github.com/czechboy0))
 - Simplify 'findCheckoutUrl' method [\#32](https://github.com/czechboy0/Buildasaur/pull/32) ([garnett](https://github.com/garnett))
 
-## [v0.2.6](https://github.com/czechboy0/Buildasaur/tree/v0.2.6) (2015-05-04)
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.2.5...v0.2.6)
+## [v0.2.6](https://github.com/czechboy0/buildasaur/tree/v0.2.6) (2015-05-04)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.2.5...v0.2.6)
 
 **Fixed bugs:**
 
@@ -213,8 +234,8 @@
 - added support for cross-fork pull requests [\#24](https://github.com/czechboy0/Buildasaur/pull/24) ([czechboy0](https://github.com/czechboy0))
 - Fixed repo permissions check [\#22](https://github.com/czechboy0/Buildasaur/pull/22) ([mdio](https://github.com/mdio))
 
-## [v0.2.5](https://github.com/czechboy0/Buildasaur/tree/v0.2.5) (2015-05-03)
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.2.4...v0.2.5)
+## [v0.2.5](https://github.com/czechboy0/buildasaur/tree/v0.2.5) (2015-05-03)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.2.4...v0.2.5)
 
 **Fixed bugs:**
 
@@ -236,24 +257,24 @@
 - Added running integration's current step into github status [\#16](https://github.com/czechboy0/Buildasaur/pull/16) ([czechboy0](https://github.com/czechboy0))
 - Added note about r/w repository access to README.md [\#14](https://github.com/czechboy0/Buildasaur/pull/14) ([mdio](https://github.com/mdio))
 
-## [v0.2.4](https://github.com/czechboy0/Buildasaur/tree/v0.2.4) (2015-04-26)
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.2.3...v0.2.4)
+## [v0.2.4](https://github.com/czechboy0/buildasaur/tree/v0.2.4) (2015-04-26)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.2.3...v0.2.4)
 
-## [v0.2.3](https://github.com/czechboy0/Buildasaur/tree/v0.2.3) (2015-04-12)
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/v0.2.2...v0.2.3)
+## [v0.2.3](https://github.com/czechboy0/buildasaur/tree/v0.2.3) (2015-04-12)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.2.2...v0.2.3)
 
 **Closed issues:**
 
 - Add logging into a file [\#5](https://github.com/czechboy0/Buildasaur/issues/5)
 
-## [v0.2.2](https://github.com/czechboy0/Buildasaur/tree/v0.2.2) (2015-04-12)
-[Full Changelog](https://github.com/czechboy0/Buildasaur/compare/0.2.1...v0.2.2)
+## [v0.2.2](https://github.com/czechboy0/buildasaur/tree/v0.2.2) (2015-04-12)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/0.2.1...v0.2.2)
 
 **Merged pull requests:**
 
 - Logging into file and console [\#6](https://github.com/czechboy0/Buildasaur/pull/6) ([czechboy0](https://github.com/czechboy0))
 
-## [0.2.1](https://github.com/czechboy0/Buildasaur/tree/0.2.1) (2015-04-12)
+## [0.2.1](https://github.com/czechboy0/buildasaur/tree/0.2.1) (2015-04-12)
 
 
 \* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
