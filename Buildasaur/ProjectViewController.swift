@@ -112,17 +112,16 @@ class ProjectViewController: StatusViewController {
         self.valid = valid
         
         //control buttons
-//        let enableNext = combineLatest(self.valid, editing.producer)
-//            .map { $0 && $1 }
-//        self.nextButton.rac_enabled <~ enableNext
+        let enableNext = combineLatest(self.valid, editing.producer)
+            .map { $0 && $1 }
+        self.nextAllowed <~ enableNext
         self.trashButton.rac_enabled <~ editing
-//        self.previousButton.rac_enabled <~ editing
     }
     
-    func next() {
+    override func shouldGoNext() -> Bool {
         
         //pull data from UI, create config, save it and try to validate
-        guard let newConfig = self.pullConfigFromUI() else { return }
+        guard let newConfig = self.pullConfigFromUI() else { return false }
         self.projectConfig.value = newConfig
         
         //check availability of these credentials
@@ -131,9 +130,14 @@ class ProjectViewController: StatusViewController {
             if case .Succeeded = state {
                 //stop editing
                 self?.editing.value = false
-                //TODO: tell delegate this step is done!
+
+                //animated!
+                delayClosure(1) {
+                    self?.goNext(animated: true)
+                }
             }
         }
+        return false
     }
     
     func previous() {

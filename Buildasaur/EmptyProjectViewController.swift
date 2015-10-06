@@ -24,36 +24,76 @@ extension ProjectConfig {
 
 class EmptyProjectViewController: EditableViewController {
     
+    //for cases when we're editing an existing syncer - show the
+    //right preference.
+    var existingConfigId: RefType?
+    
     weak var emptyProjectDelegate: EmptyProjectViewControllerDelegate?
     
     @IBOutlet weak var existingProjectsPopup: NSPopUpButton!
-    @IBOutlet weak var addProjectButton: NSButton!
     
     private var projectConfigs: [ProjectConfig] = []
-
+    private var selectedConfig = MutableProperty<ProjectConfig?>(nil)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.setupDataSource()
         self.setupPopupAction()
-        self.setupStates()
+        self.setupEditableStates()
+        
+        //select if existing config is being edited
+        let index: Int
+        if let configId = self.existingConfigId {
+            let ids = self.projectConfigs.map { $0.id }
+            index = ids.indexOf(configId) ?? 0
+        } else {
+            index = 0
+        }
+        self.selectItemAtIndex(index)
     }
     
-    private func setupStates() {
-        
-        let editingAllowed = self.editingAllowed
-        self.existingProjectsPopup.rac_enabled <~ editingAllowed
-        self.addProjectButton.rac_enabled <~ editingAllowed
+    func addNewString() -> String {
+        return "Add new Xcode Project..."
     }
-
+    
+    func newConfig() -> ProjectConfig {
+        return ProjectConfig()
+    }
+    
+    override func shouldGoNext() -> Bool {
+        
+        var current = self.selectedConfig.value!
+        if current.url.isEmpty {
+            //just new config, needs to be picked
+            guard let picked = self.pickNewProject() else { return false }
+            current = picked
+        }
+        
+        self.didSelectProjectConfig(current)
+        return super.shouldGoNext()
+    }
+    
+    private func setupEditableStates() {
+        
+        self.nextAllowed <~ self.selectedConfig.producer.map { $0 != nil }
+    }
+    
+    private func selectItemAtIndex(index: Int) {
+        
+        let configs = self.projectConfigs
+        
+        //                                      last item is "add new"
+        let config = (index == configs.count) ? self.newConfig() : configs[index]
+        self.selectedConfig.value = config
+    }
+    
     private func setupPopupAction() {
         
         let handler = SignalProducer<AnyObject, NoError> { [weak self] sink, _ in
             if let sself = self {
                 let index = sself.existingProjectsPopup.indexOfSelectedItem
-                let configs = sself.projectConfigs
-                let config = configs[index]
-                sself.didSelectProject(config)
+                sself.selectItemAtIndex(index)
             }
             sendCompleted(sink)
         }
@@ -73,17 +113,18 @@ class EmptyProjectViewController: EditableViewController {
             sself.projectConfigs = newConfigs
             let popup = sself.existingProjectsPopup
             popup.removeAllItems()
-            let configDisplayNames = newConfigs.map { $0.name }
+            var configDisplayNames = newConfigs.map { $0.name }
+            configDisplayNames.append(self?.addNewString() ?? ":(")
             popup.addItemsWithTitles(configDisplayNames)
         }
     }
     
-    private func didSelectProject(config: ProjectConfig) {
-        Log.verbose("Selected Project \(config.name)")
+    private func didSelectProjectConfig(config: ProjectConfig) {
+        Log.verbose("Selected \(config.url)")
         self.emptyProjectDelegate?.didSelectProjectConfig(config)
     }
     
-    @IBAction func addProjectButtonTapped(sender: AnyObject) {
+    private func pickNewProject() -> ProjectConfig? {
         
         if let url = StorageUtils.openWorkspaceOrProject() {
             
@@ -91,7 +132,7 @@ class EmptyProjectViewController: EditableViewController {
                 try self.storageManager.checkForProjectOrWorkspace(url)
                 var config = ProjectConfig()
                 config.url = url.path!
-                self.didSelectProject(config)
+                return config
             } catch {
                 //local source is malformed, something terrible must have happened, inform the user this can't be used (log should tell why exactly)
                 UIUtils.showAlertWithText("Couldn't add Xcode project at path \(url.absoluteString), error: \((error as NSError).localizedDescription).", style: NSAlertStyle.CriticalAlertStyle, completion: { (resp) -> () in
@@ -101,6 +142,7 @@ class EmptyProjectViewController: EditableViewController {
         } else {
             //user cancelled
         }
+        return nil
     }
 }
 

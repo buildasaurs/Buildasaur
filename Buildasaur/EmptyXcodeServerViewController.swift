@@ -36,7 +36,7 @@ class EmptyXcodeServerViewController: EditableViewController {
         self.setupPopupAction()
         self.setupEditableStates()
         
-        //select
+        //select if existing config is being edited
         let index: Int
         if let configId = self.existingConfigId {
             let ids = self.xcodeServerConfigs.map { $0.id }

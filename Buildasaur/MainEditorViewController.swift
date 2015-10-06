@@ -53,7 +53,7 @@ class MainEditorViewController: PresentableViewController {
         super.viewDidLoad()
 
         self.containerView.wantsLayer = true
-        self.containerView.layer!.backgroundColor = NSColor.grayColor().CGColor
+        self.containerView.layer!.backgroundColor = NSColor.lightGrayColor().CGColor
 
         self.setupBindings()
     }
