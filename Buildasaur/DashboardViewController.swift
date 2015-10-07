@@ -102,7 +102,7 @@ extension DashboardViewController {
         
         //Debugging hack - insert the first server and project we have
         triplet.server = self.syncerManager.storageManager.serverConfigs.value.first!.1
-        triplet.project = self.syncerManager.storageManager.projectConfigs.value.first!.1
+        triplet.project = self.syncerManager.storageManager.projectConfigs.value["E94BAED5-7D91-426A-B6B6-5C39BF1F7032"]!
         
         self.showSyncerEditViewControllerWithTriplet(triplet)
     }

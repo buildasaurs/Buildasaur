@@ -2188,14 +2188,14 @@ Gw
                     <connections>
                         <outlet property="analyzeButton" destination="5NP-N5-HL5" id="anh-3f-uSq"/>
                         <outlet property="archiveButton" destination="Sy4-2B-PXP" id="eY9-kl-hLt"/>
-                        <outlet property="cleaninPolicyPopup" destination="0ct-8g-TSC" id="P0k-vg-ffj"/>
+                        <outlet property="cleaningPolicyPopup" destination="0ct-8g-TSC" id="uDV-mm-18w"/>
+                        <outlet property="deviceFilterPopup" destination="bV7-h4-cgv" id="mQV-eF-1hr"/>
+                        <outlet property="devicesTableView" destination="8jQ-1w-bC4" id="oRK-sT-CAv"/>
                         <outlet property="nameTextField" destination="WPc-CF-v7P" id="fxe-z2-vZl"/>
                         <outlet property="schedulePopup" destination="zZG-wO-VNy" id="NNR-qY-7gx"/>
                         <outlet property="schemesPopup" destination="NV9-PP-XzH" id="BFF-MT-lZ8"/>
                         <outlet property="testButton" destination="uhv-2l-5xn" id="wU2-bu-fTN"/>
-                        <outlet property="testDeviceFilterPopup" destination="bV7-h4-cgv" id="uW3-PN-7eA"/>
                         <outlet property="testDevicesActivityIndicator" destination="VY0-39-fd9" id="omW-hD-iMO"/>
-                        <outlet property="testDevicesTableView" destination="8jQ-1w-bC4" id="ioY-T3-5oI"/>
                         <outlet property="triggersTableView" destination="3LH-7K-zWF" id="mJs-5d-eR7"/>
                         <segue destination="761-zL-6B5" kind="sheet" identifier="showTrigger" id="lK8-ED-l22"/>
                     </connections>

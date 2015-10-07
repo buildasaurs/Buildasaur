@@ -36,16 +36,24 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
     @IBOutlet weak var testButton: NSButton!
     @IBOutlet weak var archiveButton: NSButton!
     @IBOutlet weak var schedulePopup: NSPopUpButton!
-    @IBOutlet weak var cleaninPolicyPopup: NSPopUpButton!
+    @IBOutlet weak var cleaningPolicyPopup: NSPopUpButton!
     @IBOutlet weak var triggersTableView: NSTableView!
-    @IBOutlet weak var testDeviceFilterPopup: NSPopUpButton!
-    @IBOutlet weak var testDevicesTableView: NSTableView!
+    @IBOutlet weak var deviceFilterPopup: NSPopUpButton!
+    @IBOutlet weak var devicesTableView: NSTableView!
     
     private var triggerToEdit: TriggerConfig? //?
     
     private let isFetchingDevices = MutableProperty<Bool>(false)
-    private var testingDevices = MutableProperty<[Device]>([])
-    private var schemes = MutableProperty<[XcodeScheme]>([])
+    private let testingDevices = MutableProperty<[Device]>([])
+    private let schemes = MutableProperty<[XcodeScheme]>([])
+    private let schedules = MutableProperty<[BotSchedule.Schedule]>([])
+    private let cleaningPolicies = MutableProperty<[BotConfiguration.CleaningPolicy]>([])
+    private var deviceFilters = MutableProperty<[DeviceFilter.FilterType]>([])
+    
+    private var selectedScheme: MutableProperty<String>!
+    private var platformType: SignalProducer<DevicePlatform.PlatformType, NoError>!
+    private var cleaningPolicy = MutableProperty<BotConfiguration.CleaningPolicy>(.Never)
+    private var deviceFilter = MutableProperty<DeviceFilter.FilterType>(.AllAvailableDevicesAndSimulators)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,10 +82,34 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         //ui
         self.testDevicesActivityIndicator.rac_animating <~ self.isFetchingDevices
         self.testingDevices.producer.startWithNext { [weak self] _ -> () in
-            self?.testDevicesTableView.reloadData()
+            self?.devicesTableView.reloadData()
         }
         
-        self.setupSchemesDataSource()
+        let buildTemplate = self.buildTemplate.value
+        self.selectedScheme = MutableProperty<String>(buildTemplate.scheme)
+        self.platformType = self.selectedScheme
+            .producer
+            .observeOn(QueueScheduler())
+            .flatMap(.Latest) { [weak self] schemeName in
+                return self!.devicePlatformFromScheme(schemeName)
+            }.observeOn(UIScheduler())
+        self.platformType.startWithNext { [weak self] platform in
+            //refetch/refilter devices
+            self?.fetchDevices(platform) { () -> () in
+                Log.verbose("Finished fetching devices")
+            }
+        }
+        
+        self.setupSchemes()
+        self.setupSchedules()
+        self.setupCleaningPolicies()
+        self.setupDeviceFilter()
+        
+        //more ui
+        self.devicesTableView.rac_enabled <~ self.deviceFilter.producer.map {
+            filter in
+            return filter == .SelectedDevicesAndSimulators
+        }
         
         //initial dump
         self.buildTemplate.producer.startWithNext {
@@ -85,122 +117,141 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
             
             guard let sself = self else { return }
             sself.nameTextField.stringValue = buildTemplate.name
+            sself.selectedScheme.value = buildTemplate.scheme
             sself.schemesPopup.selectItemWithTitle(buildTemplate.scheme)
             sself.analyzeButton.on = buildTemplate.shouldAnalyze
             sself.testButton.on = buildTemplate.shouldTest
             sself.archiveButton.on = buildTemplate.shouldArchive
+            
+            if let schedule = buildTemplate.schedule?.schedule {
+                let scheduleIndex = sself.schedules.value.indexOf(schedule)
+                sself.schedulePopup.selectItemAtIndex(scheduleIndex ?? 0)
+            }
+            
+            let cleaningPolicyIndex = sself.cleaningPolicies.value.indexOf(buildTemplate.cleaningPolicy)
+            sself.cleaningPolicyPopup.selectItemAtIndex(cleaningPolicyIndex ?? 0)
+            sself.deviceFilter.value = buildTemplate.deviceFilter
         }
     }
     
-    func setupSchemesDataSource() {
+    private func devicePlatformFromScheme(schemeName: String) -> SignalProducer<DevicePlatform.PlatformType, NoError> {
+        return SignalProducer { sink, _ in
+            guard let scheme = self.schemes.value.filter({ $0.name == schemeName }).first else {
+                UIUtils.showAlertWithError(Error.withInfo("No scheme named \(schemeName)"))
+                return
+            }
+            
+            do {
+                let platformType = try XcodeDeviceParser.parseDeviceTypeFromProjectUrlAndScheme(self.project.value.url, scheme: scheme).toPlatformType()
+                sendNext(sink, platformType)
+                sendCompleted(sink)
+            } catch {
+                UIUtils.showAlertWithError(error)
+            }
+        }
+    }
+    
+    func setupSchemes() {
         
+        //data source
         let schemeNames = self.schemes.producer
             .map { templates in templates.sort { $0.name < $1.name } }
             .map { $0.map { $0.name } }
         schemeNames.startWithNext { [weak self] in
             self?.schemesPopup.replaceItems($0)
         }
-    }
-    
-    
-    
-    
-    
-    
-    func allSchedules() -> [BotSchedule.Schedule] {
-        //scheduled not yet supported, just manual vs commit
-        return [
-            BotSchedule.Schedule.Manual,
-            BotSchedule.Schedule.Commit
-            //TODO: add UI support for proper schedule - hourly/daily/weekly
-        ]
-    }
-    
-    func allCleaningPolicies() -> [BotConfiguration.CleaningPolicy] {
-        return [
-            BotConfiguration.CleaningPolicy.Never,
-            BotConfiguration.CleaningPolicy.Always,
-            BotConfiguration.CleaningPolicy.Once_a_Day,
-            BotConfiguration.CleaningPolicy.Once_a_Week
-        ]
-    }
-    
-    func allFilters() -> [DeviceFilter.FilterType] {
-        let currentPlatformType = self.buildTemplate.value.platformType ?? .Unknown
-        let allFilters = DeviceFilter.FilterType.availableFiltersForPlatform(currentPlatformType)
-        return allFilters
-    }
-    
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-    
-//        if let xcodeServerConfig = self.storageManager.serverConfigs.value.values.first {
-//            let xcodeServer = XcodeServerFactory.server(xcodeServerConfig)
-//            self.xcodeServer = xcodeServer
-//        }
-//        
-//        self.testDeviceFilterComboBox.delegate = self
-//        self.testDeviceFilterComboBox.usesDataSource = true
-//        self.testDeviceFilterComboBox.dataSource = self
-//        
-//        let schemeNames = self.project.schemes().map { $0.name }
-//        self.schemesComboBox.removeAllItems()
-//        self.schemesComboBox.addItemsWithObjectValues(schemeNames)
-//        
-//        let temp = self.buildTemplate
-//
-//        let projectName = self.project.workspaceMetadata!.projectName
-//        self.buildTemplate.value.projectName = projectName
-//
-//        //name
-//        self.nameTextField.stringValue = temp.name ?? ""
-//        
-//        //schemes
-//        if let preferredScheme = temp.scheme {
-//            self.schemesComboBox.selectItemWithObjectValue(preferredScheme)
-//        }
-//        
-//        //stages
-//        self.analyzeButton.state = (temp.shouldAnalyze ?? false) ? NSOnState : NSOffState
-//        self.testButton.state = (temp.shouldTest ?? false) ? NSOnState : NSOffState
-//        self.archiveButton.state = (temp.shouldArchive ?? false) ? NSOnState : NSOffState
-//        
-//        //cleaning policy and schedule
-//        self.scheduleComboBox.removeAllItems()
-//        self.scheduleComboBox.addItemsWithObjectValues(self.allSchedules().map({ $0.toString() }))
-//        if let schedule = self.buildTemplate.schedule {
-//            let index = self.allSchedules().indexOfFirstObjectPassingTest({ $0 == schedule.schedule })!
-//            self.scheduleComboBox.selectItemAtIndex(index)
-//        }
-//        self.scheduleComboBox.delegate = self
-//        
-//        self.cleaninPolicyComboBox.removeAllItems()
-//        self.cleaninPolicyComboBox.addItemsWithObjectValues(self.allCleaningPolicies().map({ $0.toString() }))
-//        let cleaningPolicy = self.buildTemplate.cleaningPolicy
-//        let cleaningIndex = self.allCleaningPolicies().indexOfFirstObjectPassingTest({ $0 == cleaningPolicy })!
-//        self.cleaninPolicyComboBox.selectItemAtIndex(cleaningIndex)
-//        
-//        self.cleaninPolicyComboBox.delegate = self
-//        
-//        self.refreshDataInDeviceFilterComboBox()
-//        
-//        self.triggersTableView.reloadData()
-//        self.testDeviceFilterComboBox.reloadData()
-//    }
-    
-    func refreshDataInDeviceFilterComboBox() {
         
-//        self.testDeviceFilterComboBox.reloadData()
-//        
-//        let filters = self.allFilters()
-//        
-//        let filter = self.buildTemplate.deviceFilter ?? .AllAvailableDevicesAndSimulators
-        //        if let destinationIndex = filters.indexOfFirstObjectPassingTest({ $0 == filter }) {
-        //            self.testDeviceFilterComboBox.selectItemAtIndex(destinationIndex)
-        //        }
+        //action
+        let handler = SignalProducer<AnyObject, NoError> { [weak self] sink, _ in
+            if let sself = self {
+                let index = sself.schemesPopup.indexOfSelectedItem
+                let schemes = sself.schemes.value
+                let scheme = schemes[index]
+                sself.selectedScheme.value = scheme.name
+            }
+            sendCompleted(sink)
+        }
+        let action = Action { (_: AnyObject?) in handler }
+        self.schemesPopup.rac_command = toRACCommand(action)
     }
     
-    func fetchDevices(completion: () -> ()) {
+    func setupSchedules() {
+        
+        self.schedules.value = self.allSchedules()
+        let scheduleNames = self.schedules
+            .producer
+            .map { $0.map { $0.toString() } }
+        scheduleNames.startWithNext { [weak self] in
+            self?.schedulePopup.replaceItems($0)
+        }
+    }
+    
+    func setupCleaningPolicies() {
+        
+        //data source
+        self.cleaningPolicies.value = self.allCleaningPolicies()
+        let cleaningPolicyNames = self.cleaningPolicies
+            .producer
+            .map { $0.map { $0.toString() } }
+        cleaningPolicyNames.startWithNext { [weak self] in
+            self?.cleaningPolicyPopup.replaceItems($0)
+        }
+        
+        //action
+        let handler = SignalProducer<AnyObject, NoError> { [weak self] sink, _ in
+            if let sself = self {
+                let index = sself.cleaningPolicyPopup.indexOfSelectedItem
+                let policies = sself.cleaningPolicies.value
+                let policy = policies[index]
+                sself.cleaningPolicy.value = policy
+            }
+            sendCompleted(sink)
+        }
+        let action = Action { (_: AnyObject?) in handler }
+        self.cleaningPolicyPopup.rac_command = toRACCommand(action)
+    }
+    
+    func setupDeviceFilter() {
+        
+        //data source
+        self.deviceFilters <~ self.platformType.map {
+            BuildTemplateViewController.allDeviceFilters($0)
+        }
+        let filterNames = self.deviceFilters
+            .producer
+            .map { $0.map { $0.toString() } }
+        filterNames.startWithNext { [weak self] in
+            self?.deviceFilterPopup.replaceItems($0)
+        }
+        
+        self.deviceFilters.producer.startWithNext { [weak self] in
+            //ensure that when the device filters change that we
+            //make sure our selected one is still valid
+            guard let sself = self else { return }
+            if $0.indexOf(sself.deviceFilter.value) == nil {
+                sself.deviceFilter.value = .AllAvailableDevicesAndSimulators
+            }
+            
+            //also ensure that the selected filter is in fact visually selected
+            let deviceFilterIndex = $0.indexOf(sself.deviceFilter.value)
+            sself.deviceFilterPopup.selectItemAtIndex(deviceFilterIndex ?? 0)
+        }
+        
+        //action
+        let handler = SignalProducer<AnyObject, NoError> { [weak self] sink, _ in
+            if let sself = self {
+                let index = sself.deviceFilterPopup.indexOfSelectedItem
+                let filters = sself.deviceFilters.value
+                let filter = filters[index]
+                sself.deviceFilter.value = filter
+            }
+            sendCompleted(sink)
+        }
+        let action = Action { (_: AnyObject?) in handler }
+        self.deviceFilterPopup.rac_command = toRACCommand(action)
+    }
+    
+    func fetchDevices(platform: DevicePlatform.PlatformType, completion: () -> ()) {
         
         SignalProducer<[Device], NSError> { sink, _ in
             
@@ -218,19 +269,13 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
                 error: { UIUtils.showAlertWithError($0) },
                 completed: completion,
                 next: { [weak self] (devices) -> () in
-                    if let sself = self {
-                        let processed = sself.processReceivedDevices(devices)
-                        sself.testingDevices.value = processed
-                    }
+                    let processed = BuildTemplateViewController
+                        .processReceivedDevices(devices, platform: platform)
+                    self?.testingDevices.value = processed
                 }))
     }
     
-    private func processReceivedDevices(devices: [Device]) -> [Device] {
-        
-        //pull filter from platform type
-        guard let platform = self.buildTemplate.value.platformType else {
-            return []
-        }
+    private static func processReceivedDevices(devices: [Device], platform: DevicePlatform.PlatformType) -> [Device] {
         
         let allowedPlatforms: Set<DevicePlatform.PlatformType>
         switch platform {
@@ -294,27 +339,6 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         super.prepareForSegue(segue, sender: sender)
     }
 
-    override func viewWillAppear() {
-        super.viewWillAppear()
-        
-        self.fetchDevices { () -> () in
-            Log.verbose("Finished fetching devices")
-        }
-    }
-    
-    func reloadUI() {
-        
-        self.triggersTableView.reloadData()
-        
-        //enable devices table view only if selected devices is chosen
-        let filter = self.buildTemplate.value.deviceFilter ?? .AllAvailableDevicesAndSimulators
-        let selectable = filter == .SelectedDevicesAndSimulators
-        self.testDevicesTableView.enabled = selectable
-        
-        //also change the device filter picker based on the platform
-        self.refreshDataInDeviceFilterComboBox()
-    }
-    
     func pullStagesFromUI(interactive: Bool) -> Bool {
         
         let analyze = (self.analyzeButton.state == NSOnState)
@@ -336,7 +360,7 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
     
     func pullDataFromUI(interactive: Bool) -> Bool {
         
-        let scheme = self.pullSchemeFromUI(interactive)
+        let scheme = !self.pullSchemeFromUI(interactive).isEmpty
         let name = self.pullNameFromUI()
         let stages = self.pullStagesFromUI(interactive)
         let schedule = self.pullScheduleFromUI(interactive)
@@ -395,18 +419,9 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         }
     }
     
-    func pullSchemeFromUI(interactive: Bool) -> Bool {
+    func pullSchemeFromUI(interactive: Bool) -> String {
         
         //validate that the selection is valid
-//        if let selectedScheme = self.schemesComboBox.objectValueOfSelectedItem as? String
-//        {
-//            let schemes = self.project.schemes()
-//            let schemeNames = schemes.map { $0.name }
-//            let index = schemeNames.indexOf(selectedScheme)
-//            if let index = index {
-//                
-//                let scheme = schemes[index]
-//                
 //                //found it, good, use it
 //                self.buildTemplate.value.scheme = selectedScheme
 //                
@@ -423,13 +438,7 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
 //                    print("\(error)")
 //                    return false
 //                }
-//            }
-//        }
-//        
-//        if interactive {
-//            UIUtils.showAlertWithText("Please select a scheme to build with")
-//        }
-        return false
+        return ""
     }
     
     func pullFilterFromUI(interactive: Bool) -> Bool {
@@ -519,7 +528,7 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         
         if tableView == self.triggersTableView {
             return self.buildTemplate.value.triggers.count
-        } else if tableView == self.testDevicesTableView {
+        } else if tableView == self.devicesTableView {
             return self.testingDevices.value.count
         }
         return 0
@@ -534,7 +543,7 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
             //                    let trigger = triggers[row]
             //                    return trigger.name
             //                }
-        } else if tableView == self.testDevicesTableView {
+        } else if tableView == self.devicesTableView {
             
             let device = self.testingDevices.value[row]
             
@@ -597,7 +606,7 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
     @IBAction func triggerTableViewDeleteTapped(sender: AnyObject) {
         let index = self.triggersTableView.selectedRow
         self.buildTemplate.value.triggers.removeAtIndex(index)
-        self.reloadUI()
+//        self.reloadUI()
     }
     
     @IBAction func testDevicesTableViewRowCheckboxTapped(sender: AnyObject) {
@@ -605,7 +614,7 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         //toggle selection in model and reload data
         
         //get device at index first
-        let device = self.testingDevices.value[self.testDevicesTableView.selectedRow]
+        let device = self.testingDevices.value[self.devicesTableView.selectedRow]
         
         //see if we are checking or unchecking
         let foundIndex = self.buildTemplate.value.testingDeviceIds.indexOfFirstObjectPassingTest({ $0 == device.id })
@@ -618,6 +627,32 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
             self.buildTemplate.value.testingDeviceIds.append(device.id)
         }
         
-        self.testDevicesTableView.reloadData()
+        self.devicesTableView.reloadData()
+    }
+}
+
+extension BuildTemplateViewController {
+    
+    private func allSchedules() -> [BotSchedule.Schedule] {
+        //scheduled not yet supported, just manual vs commit
+        return [
+            BotSchedule.Schedule.Manual,
+            BotSchedule.Schedule.Commit
+            //TODO: add UI support for proper schedule - hourly/daily/weekly
+        ]
+    }
+    
+    private func allCleaningPolicies() -> [BotConfiguration.CleaningPolicy] {
+        return [
+            BotConfiguration.CleaningPolicy.Never,
+            BotConfiguration.CleaningPolicy.Always,
+            BotConfiguration.CleaningPolicy.Once_a_Day,
+            BotConfiguration.CleaningPolicy.Once_a_Week
+        ]
+    }
+    
+    private static func allDeviceFilters(platform: DevicePlatform.PlatformType) -> [DeviceFilter.FilterType] {
+        let allFilters = DeviceFilter.FilterType.availableFiltersForPlatform(platform)
+        return allFilters
     }
 }

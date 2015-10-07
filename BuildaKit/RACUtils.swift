@@ -21,8 +21,9 @@ public func flattenArray<T, E>(inProducer: SignalProducer<[T], E>) -> SignalProd
 
 extension SignalProducer {
     
-    public func ignoreErrors() -> SignalProducer<T, NoError> {
-        return self.flatMapError { _ in
+    public func ignoreErrors(action: ((E) -> ())? = nil) -> SignalProducer<T, NoError> {
+        return self.flatMapError {
+            action?($0)
             return SignalProducer<T, NoError> { _, _ in }
         }
     }
