@@ -95,7 +95,7 @@ public class Project {
     
     private func getContentsOfKeyAtPath(path: String) -> String? {
         
-        let url = NSURL(string: path)!
+        let url = NSURL(fileURLWithPath: path)
         do {
             let key = try NSString(contentsOfURL: url, encoding: NSASCIIStringEncoding)
             return key as String

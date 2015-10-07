@@ -18,7 +18,9 @@ protocol EmptyProjectViewControllerDelegate: class {
 extension ProjectConfig {
     
     var name: String {
-        return (self.url as NSString).lastPathComponent
+        let fileWithExtension = (self.url as NSString).lastPathComponent
+        let file = (fileWithExtension as NSString).stringByDeletingPathExtension
+        return file
     }
 }
 

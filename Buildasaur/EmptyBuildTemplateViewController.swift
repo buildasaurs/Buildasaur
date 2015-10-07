@@ -21,6 +21,7 @@ class EmptyBuildTemplateViewController: EditableViewController {
     //for cases when we're editing an existing syncer - show the
     //right preference.
     var existingTemplateId: RefType?
+    var projectConfig: ProjectConfig!
 
     weak var emptyTemplateDelegate: EmptyBuildTemplateViewControllerDelegate?
     
@@ -31,6 +32,8 @@ class EmptyBuildTemplateViewController: EditableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        precondition(self.projectConfig != nil)
         
         self.setupDataSource()
         self.setupPopupAction()
@@ -89,9 +92,9 @@ class EmptyBuildTemplateViewController: EditableViewController {
     
     private func setupDataSource() {
         
-        let templatesProducer = self.storageManager.buildTemplates.producer
+        let templatesProducer = self.storageManager
+            .buildTemplatesForProjectName(self.projectConfig.name)
         let allTemplatesProducer = templatesProducer
-            .map { Array($0.values) }
             .map { templates in templates.sort { $0.name < $1.name } }
         allTemplatesProducer.startWithNext { [weak self] newTemplates in
             guard let sself = self else { return }

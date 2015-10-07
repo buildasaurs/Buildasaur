@@ -112,7 +112,7 @@ extension DashboardViewController {
         context.syncerManager = self.syncerManager
         viewController.factory = EditorViewControllerFactory(storyboardLoader: self.storyboardLoader)
         context.editeeDelegate = viewController
-        viewController.context = context
+        viewController.context.value = context
 
         self.presentingDelegate?.presentViewControllerInUniqueWindow(viewController)
     }

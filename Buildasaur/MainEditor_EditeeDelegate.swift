@@ -18,14 +18,14 @@ extension MainEditorViewController: EditeeDelegate { }
 extension MainEditorViewController: EmptyXcodeServerViewControllerDelegate {
     
     func didSelectXcodeServerConfig(config: XcodeServerConfig) {
-        self.context.configTriplet.server = config
+        self.context.value.configTriplet.server = config
     }
 }
 
 extension MainEditorViewController: XcodeServerViewControllerDelegate {
     
     func didCancelEditingOfXcodeServerConfig(config: XcodeServerConfig) {
-        self.context.configTriplet.server = nil
+        self.context.value.configTriplet.server = nil
         self.previous(animated: false)
     }
 }
@@ -33,14 +33,14 @@ extension MainEditorViewController: XcodeServerViewControllerDelegate {
 extension MainEditorViewController: EmptyProjectViewControllerDelegate {
     
     func didSelectProjectConfig(config: ProjectConfig) {
-        self.context.configTriplet.project = config
+        self.context.value.configTriplet.project = config
     }
 }
 
 extension MainEditorViewController: ProjectViewControllerDelegate {
     
     func didCancelEditingOfProjectConfig(config: ProjectConfig) {
-        self.context.configTriplet.project = nil
+        self.context.value.configTriplet.project = nil
         self.previous(animated: false)
     }
 }
@@ -48,7 +48,7 @@ extension MainEditorViewController: ProjectViewControllerDelegate {
 extension MainEditorViewController: EmptyBuildTemplateViewControllerDelegate {
     
     func didSelectBuildTemplate(buildTemplate: BuildTemplate) {
-        self.context.configTriplet.buildTemplate = buildTemplate
+        self.context.value.configTriplet.buildTemplate = buildTemplate
     }
 }
 

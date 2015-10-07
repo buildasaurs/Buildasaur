@@ -65,6 +65,8 @@ class EditorViewControllerFactory: EditorViewControllerFactoryType {
         
         case .NoBuildTemplate:
             let vc: EmptyBuildTemplateViewController = self.storyboardLoader.typedViewControllerWithStoryboardIdentifier(EditorVCType.EmptyBuildTemplateVC.rawValue)
+            vc.projectConfig = context.configTriplet.project!
+            vc.existingTemplateId = context.configTriplet.buildTemplate?.id
             vc.storageManager = context.syncerManager.storageManager
             vc.emptyTemplateDelegate = context.editeeDelegate
             return vc

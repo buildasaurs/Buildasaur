@@ -19,7 +19,7 @@ protocol EditorViewControllerFactoryType {
 class MainEditorViewController: PresentableViewController {
     
     var factory: EditorViewControllerFactoryType!
-    var context: EditorContext!
+    let context = MutableProperty<EditorContext>(EditorContext())
     
     @IBOutlet weak var containerView: NSView!
     
@@ -51,7 +51,7 @@ class MainEditorViewController: PresentableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.containerView.wantsLayer = true
         self.containerView.layer!.backgroundColor = NSColor.lightGrayColor().CGColor
 
@@ -133,13 +133,38 @@ class MainEditorViewController: PresentableViewController {
         }
         
         self.previousButton.rac_enabled <~ self.state.producer.map { $0.0 != .NoServer }
+        
+        //create a title
+        self.context.producer.map { context -> String in
+            let triplet = context.configTriplet
+            var comps = [String]()
+            if let host = triplet.server?.host {
+                comps.append(host)
+            } else {
+                comps.append("New Server")
+            }
+            if let projectName = triplet.project?.name {
+                comps.append(projectName)
+            } else {
+                comps.append("New Project")
+            }
+            if let templateName = triplet.buildTemplate?.name {
+                comps.append(templateName)
+            } else {
+                comps.append("New Build Template")
+            }
+            return comps.joinWithSeparator(" + ")
+        }.startWithNext { [weak self] in
+            self?.title = $0
+        }
     }
     
     //state manipulation
     
     private func stateChanged(fromState fromState: EditorState, toState: EditorState, animated: Bool) {
 
-        if let viewController = self.factory.supplyViewControllerForState(toState, context: self.context) {
+        let context = self.context.value
+        if let viewController = self.factory.supplyViewControllerForState(toState, context: context) {
             self.setContentViewController(viewController, animated: animated)
         } else {
             self.dismissWindow()

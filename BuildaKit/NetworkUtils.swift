@@ -53,7 +53,7 @@ public class NetworkUtils {
                             }
                         
                             //now complete
-                            completion(success: true, error: nil)
+                            completion(success: success, error: error)
                         })
                     }
                 } else {
