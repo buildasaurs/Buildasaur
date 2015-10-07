@@ -1605,7 +1605,10 @@ Gw
                                                 <animations/>
                                             </progressIndicator>
                                             <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Crg-Um-THf">
-                                                <rect key="frame" x="-2" y="0.0" width="425" height="22"/>
+                                                <rect key="frame" x="34" y="0.0" width="389" height="22"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="22" id="7In-kK-ct1"/>
+                                                </constraints>
                                                 <animations/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Build Template Settings" id="ToE-5T-NYo">
                                                     <font key="font" metaFont="system" size="18"/>
@@ -1617,7 +1620,6 @@ Gw
                                         <animations/>
                                         <constraints>
                                             <constraint firstItem="Crg-Um-THf" firstAttribute="centerY" secondItem="VY0-39-fd9" secondAttribute="centerY" id="KVW-Gi-zxH"/>
-                                            <constraint firstItem="Crg-Um-THf" firstAttribute="centerX" secondItem="udR-mz-HJ8" secondAttribute="centerX" id="LGa-6c-hOn"/>
                                         </constraints>
                                         <visibilityPriorities>
                                             <integer value="1000"/>
@@ -1707,10 +1709,10 @@ Gw
                                             <real value="3.4028234663852886e+38"/>
                                         </customSpacing>
                                     </stackView>
-                                    <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="20" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8th-oj-fKp">
-                                        <rect key="frame" x="0.0" y="219" width="285" height="17"/>
+                                    <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" misplaced="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8th-oj-fKp">
+                                        <rect key="frame" x="0.0" y="219" width="261" height="17"/>
                                         <subviews>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gKV-Tt-Z3f">
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gKV-Tt-Z3f">
                                                 <rect key="frame" x="-2" y="0.0" width="67" height="17"/>
                                                 <animations/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Actions:" id="nnV-jT-sMq">
@@ -1727,16 +1729,16 @@ Gw
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                             </button>
-                                            <button translatesAutoresizingMaskIntoConstraints="NO" id="uhv-2l-5xn">
-                                                <rect key="frame" x="155" y="-1" width="48" height="20"/>
+                                            <button misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uhv-2l-5xn">
+                                                <rect key="frame" x="143" y="-1" width="48" height="20"/>
                                                 <animations/>
                                                 <buttonCell key="cell" type="check" title="Test" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="yFe-8s-l1k">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                             </button>
-                                            <button translatesAutoresizingMaskIntoConstraints="NO" id="Sy4-2B-PXP">
-                                                <rect key="frame" x="219" y="-1" width="68" height="20"/>
+                                            <button misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sy4-2B-PXP">
+                                                <rect key="frame" x="195" y="-1" width="68" height="20"/>
                                                 <animations/>
                                                 <buttonCell key="cell" type="check" title="Archive" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="vpx-cl-svQ">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2121,7 +2123,6 @@ Gw
                                 <animations/>
                                 <constraints>
                                     <constraint firstItem="zZG-wO-VNy" firstAttribute="leading" secondItem="NV9-PP-XzH" secondAttribute="leading" id="3Nc-Mj-W08"/>
-                                    <constraint firstItem="sIf-Ud-w7y" firstAttribute="trailing" secondItem="gKV-Tt-Z3f" secondAttribute="trailing" id="CBT-hw-mPz"/>
                                     <constraint firstItem="bV7-h4-cgv" firstAttribute="trailing" secondItem="3LH-7K-zWF" secondAttribute="trailing" id="CXG-cS-w3c"/>
                                     <constraint firstItem="0ct-8g-TSC" firstAttribute="trailing" secondItem="zZG-wO-VNy" secondAttribute="trailing" id="EpA-aJ-8Zy"/>
                                     <constraint firstItem="NV9-PP-XzH" firstAttribute="trailing" secondItem="WPc-CF-v7P" secondAttribute="trailing" id="FQY-79-3fU"/>
@@ -2132,7 +2133,6 @@ Gw
                                     <constraint firstItem="zZG-wO-VNy" firstAttribute="trailing" secondItem="NV9-PP-XzH" secondAttribute="trailing" id="NG3-ZK-peF"/>
                                     <constraint firstItem="NV9-PP-XzH" firstAttribute="leading" secondItem="WPc-CF-v7P" secondAttribute="leading" id="SVe-Ay-pAq"/>
                                     <constraint firstItem="udR-mz-HJ8" firstAttribute="leading" secondItem="dfr-Yh-aaE" secondAttribute="leading" id="Y1r-gW-RYq"/>
-                                    <constraint firstItem="gKV-Tt-Z3f" firstAttribute="trailing" secondItem="xoc-b2-AfH" secondAttribute="trailing" id="d9u-MX-UbO"/>
                                     <constraint firstItem="xoc-b2-AfH" firstAttribute="trailing" secondItem="vyg-hu-vfp" secondAttribute="trailing" id="dp9-Tl-1gR"/>
                                     <constraint firstAttribute="trailing" secondItem="udR-mz-HJ8" secondAttribute="trailing" id="mG1-h9-uIb"/>
                                     <constraint firstItem="0ct-8g-TSC" firstAttribute="leading" secondItem="zZG-wO-VNy" secondAttribute="leading" id="qC8-Mc-dSd"/>

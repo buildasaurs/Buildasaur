@@ -53,6 +53,7 @@ class EmptyProjectViewController: EditableViewController {
             index = 0
         }
         self.selectItemAtIndex(index)
+        self.existingProjectsPopup.selectItemAtIndex(index)
     }
     
     func addNewString() -> String {

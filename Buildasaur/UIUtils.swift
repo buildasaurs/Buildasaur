@@ -76,3 +76,11 @@ public class UIUtils {
         }
     }
 }
+
+extension NSPopUpButton {
+    
+    public func replaceItems(newItems: [String]) {
+        self.removeAllItems()
+        self.addItemsWithTitles(newItems)
+    }
+}

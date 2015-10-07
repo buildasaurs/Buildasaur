@@ -29,14 +29,14 @@ public struct BuildTemplate: JSONSerializable {
     public let id: RefType
     
     public var projectName: String?
-    public var name: String?
-    public var scheme: String?
+    public var name: String
+    public var scheme: String
     public var schedule: BotSchedule? //will be ignored for Synced bots, only useful for Manual creation. default: Manual
     public var cleaningPolicy: BotConfiguration.CleaningPolicy
     public var triggers: [RefType]
-    public var shouldAnalyze: Bool?
-    public var shouldTest: Bool?
-    public var shouldArchive: Bool?
+    public var shouldAnalyze: Bool
+    public var shouldTest: Bool
+    public var shouldArchive: Bool
     public var testingDeviceIds: [String]
     public var deviceFilter: DeviceFilter.FilterType
     public var platformType: DevicePlatform.PlatformType?
@@ -44,8 +44,6 @@ public struct BuildTemplate: JSONSerializable {
     func validate() -> Bool {
         
         if self.id.isEmpty { return false }
-        if self.name == nil { return false }
-        if self.scheme == nil { return false }
         //TODO: add all the other required values! this will be called on saving from the UI to make sure we have all the required fields.
         return true
     }
@@ -54,7 +52,7 @@ public struct BuildTemplate: JSONSerializable {
         self.id = Ref.new()
         self.projectName = projectName
         self.name = "New Build Template"
-        self.scheme = nil
+        self.scheme = "Select scheme to build"
         self.schedule = BotSchedule.manualBotSchedule()
         self.cleaningPolicy = BotConfiguration.CleaningPolicy.Never
         self.triggers = []
@@ -70,8 +68,8 @@ public struct BuildTemplate: JSONSerializable {
         
         self.id = json.optionalStringForKey(kKeyId) ?? Ref.new()
         self.projectName = json.optionalStringForKey(kKeyProjectName)
-        self.name = json.optionalStringForKey(kKeyName)
-        self.scheme = json.optionalStringForKey(kKeyScheme)
+        self.name = json.stringForKey(kKeyName)
+        self.scheme = json.stringForKey(kKeyScheme)
         if let scheduleDict = json.optionalDictionaryForKey(kKeySchedule) {
             self.schedule = BotSchedule(json: scheduleDict)
         } else {
@@ -90,9 +88,9 @@ public struct BuildTemplate: JSONSerializable {
             self.triggers = []
         }
 
-        self.shouldAnalyze = json.optionalBoolForKey(kKeyShouldAnalyze)
-        self.shouldTest = json.optionalBoolForKey(kKeyShouldTest)
-        self.shouldArchive = json.optionalBoolForKey(kKeyShouldArchive)
+        self.shouldAnalyze = json.boolForKey(kKeyShouldAnalyze)
+        self.shouldTest = json.boolForKey(kKeyShouldTest)
+        self.shouldArchive = json.boolForKey(kKeyShouldArchive)
         
         self.testingDeviceIds = json.optionalArrayForKey(kKeyTestingDevices) as? [String] ?? []
         
@@ -126,13 +124,13 @@ public struct BuildTemplate: JSONSerializable {
         dict[kKeyDeviceFilter] = self.deviceFilter.rawValue
         dict[kKeyTestingDevices] = self.testingDeviceIds ?? []
         dict[kKeyCleaningPolicy] = self.cleaningPolicy.rawValue
+        dict[kKeyName] = self.name
+        dict[kKeyScheme] = self.scheme
+        dict[kKeyShouldAnalyze] = self.shouldAnalyze
+        dict[kKeyShouldTest] = self.shouldTest
+        dict[kKeyShouldArchive] = self.shouldArchive
         dict.optionallyAddValueForKey(self.projectName, key: kKeyProjectName)
-        dict.optionallyAddValueForKey(self.name, key: kKeyName)
-        dict.optionallyAddValueForKey(self.scheme, key: kKeyScheme)
         dict.optionallyAddValueForKey(self.schedule?.dictionarify(), key: kKeySchedule)
-        dict.optionallyAddValueForKey(self.shouldAnalyze, key: kKeyShouldAnalyze)
-        dict.optionallyAddValueForKey(self.shouldTest, key: kKeyShouldTest)
-        dict.optionallyAddValueForKey(self.shouldArchive, key: kKeyShouldArchive)
         dict.optionallyAddValueForKey(self.platformType?.rawValue, key: kKeyPlatformType)
         
         return dict

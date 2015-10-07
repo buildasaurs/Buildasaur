@@ -13,7 +13,7 @@ class GeneralTests: XCTestCase {
 
     func testXcodeWorkspaceParsing() {
         
-        let url = NSURL(string: "/Users/honzadvorsky/Documents/Buildasaur/Buildasaur.xcworkspace")!
+        let url = NSURL(fileURLWithPath: "/Users/honzadvorsky/Documents/Buildasaur/Buildasaur.xcworkspace")
         let projects = try? XcodeProjectXMLParser.parseProjectsInsideOfWorkspace(url)
         XCTAssert(projects != nil)
         XCTAssert(projects?.count > 0)

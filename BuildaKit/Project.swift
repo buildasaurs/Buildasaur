@@ -13,7 +13,7 @@ import XcodeServerSDK
 public class Project {
     
     public var url: NSURL {
-        return NSURL(string: self.config.url)!
+        return NSURL(fileURLWithPath: self.config.url)
     }
     
     public var config: ProjectConfig {

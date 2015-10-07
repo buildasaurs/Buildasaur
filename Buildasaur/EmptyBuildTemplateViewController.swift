@@ -42,6 +42,7 @@ class EmptyBuildTemplateViewController: EditableViewController {
         self.setupEditableStates()
         
         //select if existing template is being edited
+        //TODO: also the actual index in the popup must be selected!
         let index: Int
         if let configId = self.existingTemplateId {
             let ids = self.buildTemplates.map { $0.id }
@@ -50,6 +51,7 @@ class EmptyBuildTemplateViewController: EditableViewController {
             index = 0
         }
         self.selectItemAtIndex(index)
+        self.existingBuildTemplatesPopup.selectItemAtIndex(index)
     }
 
     func addNewString() -> String {

@@ -16,7 +16,7 @@ public class XcodeServerSyncerUtils {
     public class func createBotFromBuildTemplate(botName: String, syncer: HDGitHubXCBotSyncer, template: BuildTemplate, project: Project, branch: String, scheduleOverride: BotSchedule?, xcodeServer: XcodeServer, completion: (bot: Bot?, error: NSError?) -> ()) {
         
         //pull info from template
-        let schemeName = template.scheme!
+        let schemeName = template.scheme
         
         //optionally override the schedule, if nil, takes it from the template
         let schedule = scheduleOverride ?? template.schedule!

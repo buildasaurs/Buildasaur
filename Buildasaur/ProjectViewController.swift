@@ -81,9 +81,9 @@ class ProjectViewController: ConfigEditViewController {
             
             self?.tokenTextField.stringValue = $0.githubToken
             let priv = $0.privateSSHKeyPath
-            self?.privateKeyUrl.value = priv.isEmpty ? nil : NSURL(string: priv)
+            self?.privateKeyUrl.value = priv.isEmpty ? nil : NSURL(fileURLWithPath: priv)
             let pub = $0.publicSSHKeyPath
-            self?.publicKeyUrl.value = pub.isEmpty ? nil : NSURL(string: pub)
+            self?.publicKeyUrl.value = pub.isEmpty ? nil : NSURL(fileURLWithPath: pub)
             self?.sshPassphraseTextField.stringValue = $0.sshPassphrase ?? ""
         }
         

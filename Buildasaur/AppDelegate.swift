@@ -34,6 +34,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         Logging.setup(alsoIntoFile: true)
         
+        let defs = NSUserDefaults.standardUserDefaults()
+        defs.setBool(true, forKey: "NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints")
+        defs.synchronize()
+        
         self.setupPersistence()
         
         self.storyboardLoader = StoryboardLoader(storyboard: NSStoryboard.mainStoryboard)

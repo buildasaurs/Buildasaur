@@ -35,7 +35,7 @@ class ManualBotManagementViewController: NSViewController {
         
         assert(self.syncer != nil, "We need a syncer here")
         
-        let names = self.buildTemplates.map({ $0.name! })
+        let names = self.buildTemplates.map({ $0.name })
         self.templateComboBox.addItemsWithObjectValues(names)
     }
     

@@ -45,6 +45,7 @@ class EmptyXcodeServerViewController: EditableViewController {
             index = 0
         }
         self.selectItemAtIndex(index)
+        self.existingXcodeServersPopup.selectItemAtIndex(index)
     }
     
     func addNewString() -> String {

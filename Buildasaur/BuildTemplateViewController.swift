@@ -26,8 +26,8 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
     
     // ---
     
-    private var project: Project!
-    private var xcodeServer: XcodeServer!
+    private var project = MutableProperty<Project!>(nil)
+    private var xcodeServer = MutableProperty<XcodeServer!>(nil)
     
     @IBOutlet weak var nameTextField: NSTextField!
     @IBOutlet weak var testDevicesActivityIndicator: NSProgressIndicator!
@@ -45,6 +45,7 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
     
     private let isFetchingDevices = MutableProperty<Bool>(false)
     private var testingDevices = MutableProperty<[Device]>([])
+    private var schemes = MutableProperty<[XcodeScheme]>([])
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,12 +59,16 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         self.syncerManager
             .projectWithRef(self.projectRef)
             .startWithNext { [weak self] in
-                self?.project = $0
+                self?.project.value = $0
         }
         self.syncerManager
             .xcodeServerWithRef(self.xcodeServerRef)
             .startWithNext { [weak self] in
-            self?.xcodeServer = $0
+                self?.xcodeServer.value = $0
+        }
+        
+        self.project.producer.startWithNext { [weak self] in
+            self?.schemes.value = $0.schemes()
         }
         
         //ui
@@ -71,9 +76,28 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         self.testingDevices.producer.startWithNext { [weak self] _ -> () in
             self?.testDevicesTableView.reloadData()
         }
+        
+        self.setupSchemesDataSource()
+        
+        //initial dump
+        self.buildTemplate.producer.startWithNext {
+            [weak self] (buildTemplate: BuildTemplate) -> () in
+            
+            guard let sself = self else { return }
+            sself.nameTextField.stringValue = buildTemplate.name
+            sself.schemesPopup.selectItemWithTitle(buildTemplate.scheme)
+        }
     }
     
-    
+    func setupSchemesDataSource() {
+        
+        let schemeNames = self.schemes.producer
+            .map { templates in templates.sort { $0.name < $1.name } }
+            .map { $0.map { $0.name } }
+        schemeNames.startWithNext { [weak self] in
+            self?.schemesPopup.replaceItems($0)
+        }
+    }
     
     
     
@@ -177,7 +201,7 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         
         SignalProducer<[Device], NSError> { sink, _ in
             
-            self.xcodeServer.getDevices { (devices, error) -> () in
+            self.xcodeServer.value.getDevices { (devices, error) -> () in
                 if let error = error {
                     sendError(sink, error)
                 } else {
@@ -364,7 +388,6 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
             self.buildTemplate.value.name = name
             return true
         } else {
-            self.buildTemplate.value.name = nil
             return false
         }
     }
