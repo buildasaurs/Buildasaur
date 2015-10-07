@@ -86,6 +86,9 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
             guard let sself = self else { return }
             sself.nameTextField.stringValue = buildTemplate.name
             sself.schemesPopup.selectItemWithTitle(buildTemplate.scheme)
+            sself.analyzeButton.on = buildTemplate.shouldAnalyze
+            sself.testButton.on = buildTemplate.shouldTest
+            sself.archiveButton.on = buildTemplate.shouldArchive
         }
     }
     

@@ -84,3 +84,11 @@ extension NSPopUpButton {
         self.addItemsWithTitles(newItems)
     }
 }
+
+extension NSButton {
+    
+    public var on: Bool {
+        get { return self.state == NSOnState }
+        set { self.state = newValue ? NSOnState : NSOffState }
+    }
+}
