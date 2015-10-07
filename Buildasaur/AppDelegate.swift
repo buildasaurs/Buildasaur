@@ -86,7 +86,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.activateIgnoringOtherApps(true)
         
         //first window. i wish there was a nicer way (please some tell me there is)
-        self.dashboardWindow.makeKeyAndOrderFront(self)
+        if NSApp.windows.count < 3 {
+            self.dashboardWindow.makeKeyAndOrderFront(self)
+        }
     }
 }
 
