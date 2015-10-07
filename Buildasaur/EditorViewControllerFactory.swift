@@ -39,36 +39,45 @@ class EditorViewControllerFactory: EditorViewControllerFactoryType {
             if let serverConfig = context.configTriplet.server {
                 vc.existingConfigId = serverConfig.id
             }
-            vc.storageManager = context.syncerManager.storageManager
+            vc.syncerManager = context.syncerManager
             vc.emptyServerDelegate = context.editeeDelegate
             return vc
             
         case .EditingServer:
             let vc: XcodeServerViewController = self.storyboardLoader.typedViewControllerWithStoryboardIdentifier(EditorVCType.XcodeServerVC.rawValue)
             vc.serverConfig.value = context.configTriplet.server!
-            vc.storageManager = context.syncerManager.storageManager
+            vc.syncerManager = context.syncerManager
             vc.cancelDelegate = context.editeeDelegate
             return vc
             
         case .NoProject:
             let vc: EmptyProjectViewController = self.storyboardLoader.typedViewControllerWithStoryboardIdentifier(EditorVCType.EmptyProjectVC.rawValue)
-            vc.storageManager = context.syncerManager.storageManager
+            vc.syncerManager = context.syncerManager
             vc.emptyProjectDelegate = context.editeeDelegate
             return vc
             
         case .EditingProject:
             let vc: ProjectViewController = self.storyboardLoader.typedViewControllerWithStoryboardIdentifier(EditorVCType.ProjectVC.rawValue)
             vc.projectConfig.value = context.configTriplet.project!
-            vc.storageManager = context.syncerManager.storageManager
+            vc.syncerManager = context.syncerManager
             vc.cancelDelegate = context.editeeDelegate
             return vc
         
         case .NoBuildTemplate:
             let vc: EmptyBuildTemplateViewController = self.storyboardLoader.typedViewControllerWithStoryboardIdentifier(EditorVCType.EmptyBuildTemplateVC.rawValue)
-            vc.projectConfig = context.configTriplet.project!
+            vc.projectName = context.configTriplet.project!.name
             vc.existingTemplateId = context.configTriplet.buildTemplate?.id
-            vc.storageManager = context.syncerManager.storageManager
+            vc.syncerManager = context.syncerManager
             vc.emptyTemplateDelegate = context.editeeDelegate
+            return vc
+            
+        case .EditingBuildTemplate:
+            let vc: BuildTemplateViewController = self.storyboardLoader.typedViewControllerWithStoryboardIdentifier(EditorVCType.BuildTemplateVC.rawValue)
+            vc.buildTemplate.value = context.configTriplet.buildTemplate!
+            vc.projectRef = context.configTriplet.project!.id
+            vc.xcodeServerRef = context.configTriplet.server!.id
+            vc.syncerManager = context.syncerManager
+            vc.cancelDelegate = context.editeeDelegate
             return vc
             
         default: break

@@ -52,3 +52,11 @@ extension MainEditorViewController: EmptyBuildTemplateViewControllerDelegate {
     }
 }
 
+extension MainEditorViewController: BuildTemplateViewControllerDelegate {
+    
+    func didCancelEditingOfBuildTemplate(template: BuildTemplate) {
+        self.context.value.configTriplet.buildTemplate = nil
+        self.previous(animated: false)
+    }
+}
+

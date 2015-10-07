@@ -56,6 +56,10 @@ class MainEditorViewController: PresentableViewController {
         self.containerView.layer!.backgroundColor = NSColor.lightGrayColor().CGColor
 
         self.setupBindings()
+        
+        
+        //hack for debugging - jump ahead
+        self.state.value = (.NoBuildTemplate, false)
     }
     
     // moving forward and back

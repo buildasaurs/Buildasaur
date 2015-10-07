@@ -13,7 +13,10 @@ import ReactiveCocoa
 
 class EditableViewController: NSViewController {
     
-    var storageManager: StorageManager!
+    var storageManager: StorageManager {
+        return self.syncerManager.storageManager
+    }
+    var syncerManager: SyncerManager!
     let editingAllowed = MutableProperty<Bool>(true)
     let editing = MutableProperty<Bool>(true)
     

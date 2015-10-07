@@ -35,6 +35,15 @@ extension Array {
         }
         return nil
     }
+    
+    public func firstObjectPassingTest(test: (Element) -> Bool) -> Element? {
+        for item in self {
+            if test(item) {
+                return item
+            }
+        }
+        return nil
+    }
 }
 
 extension Array {

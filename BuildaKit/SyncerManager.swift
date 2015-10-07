@@ -78,6 +78,13 @@ public class SyncerManager {
         let justBuildTemplates = storageManager.buildTemplates.producer.map { $0.map { $0.1 } }
         let justTriggerConfigs = storageManager.triggerConfigs.producer.map { $0.map { $0.1 } }
 
+        //TODO: shouldn't we keep the actual classes (project, xcode server) in
+        //memory just once and whenever their config changes, change them live?
+        //otherwise on any change of any config all syncers will need to completely reload. :(
+        //! we should keep a pool of weak refs to the created objects.
+        //and resend the same one when found. otherwise create.
+        //should probably be an implementation detail of the library.
+        
         self.projectsProducer = SyncerProducerFactory.createProjectsProducer(factory, configs: justProjects)
         self.serversProducer = SyncerProducerFactory.createServersProducer(factory, configs: justServers)
         self.buildTemplatesProducer = SyncerProducerFactory.createBuildTemplateProducer(factory, templates: justBuildTemplates)
@@ -87,6 +94,20 @@ public class SyncerManager {
         
         //also attach self as delegate
         syncersProducer.startWithNext { [weak self] in $0.forEach { $0.delegate = self } }
+    }
+    
+    public func xcodeServerWithRef(ref: RefType) -> SignalProducer<XcodeServer?, NoError> {
+        
+        return self.serversProducer.map { allServers -> XcodeServer? in
+            return allServers.filter { $0.config.id == ref }.first
+        }
+    }
+    
+    public func projectWithRef(ref: RefType) -> SignalProducer<Project?, NoError> {
+        
+        return self.projectsProducer.map { allProjects -> Project? in
+            return allProjects.filter { $0.config.id == ref }.first
+        }
     }
     
     deinit {

@@ -1589,7 +1589,7 @@ Gw
         <!--Build Template View Controller-->
         <scene sceneID="tL6-3S-gnF">
             <objects>
-                <viewController id="gBo-v0-Miz" customClass="BuildTemplateViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="buildTemplateViewController" id="gBo-v0-Miz" customClass="BuildTemplateViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="W0P-mG-va0">
                         <rect key="frame" x="0.0" y="0.0" width="580" height="340"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1604,7 +1604,7 @@ Gw
                                                 <rect key="frame" x="0.0" y="3" width="16" height="16"/>
                                                 <animations/>
                                             </progressIndicator>
-                                            <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Crg-Um-THf">
+                                            <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Crg-Um-THf">
                                                 <rect key="frame" x="-2" y="0.0" width="425" height="22"/>
                                                 <animations/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Build Template Settings" id="ToE-5T-NYo">
@@ -1851,7 +1851,7 @@ Gw
                                             <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yp3-gn-PeT">
                                                 <rect key="frame" x="0.0" y="1" width="54" height="54"/>
                                                 <subviews>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="44T-kR-MXL">
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="44T-kR-MXL">
                                                         <rect key="frame" x="-2" y="29" width="58" height="25"/>
                                                         <animations/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Triggers:" id="UDU-ml-1bK">
@@ -1860,7 +1860,7 @@ Gw
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="er9-G2-3Vk">
+                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="er9-G2-3Vk">
                                                         <rect key="frame" x="18" y="-7" width="42" height="32"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="30" id="fOe-4Y-yQH"/>
@@ -2188,8 +2188,12 @@ Gw
                     <connections>
                         <outlet property="analyzeButton" destination="5NP-N5-HL5" id="anh-3f-uSq"/>
                         <outlet property="archiveButton" destination="Sy4-2B-PXP" id="eY9-kl-hLt"/>
+                        <outlet property="cleaninPolicyPopup" destination="0ct-8g-TSC" id="P0k-vg-ffj"/>
                         <outlet property="nameTextField" destination="WPc-CF-v7P" id="fxe-z2-vZl"/>
+                        <outlet property="schedulePopup" destination="zZG-wO-VNy" id="NNR-qY-7gx"/>
+                        <outlet property="schemesPopup" destination="NV9-PP-XzH" id="BFF-MT-lZ8"/>
                         <outlet property="testButton" destination="uhv-2l-5xn" id="wU2-bu-fTN"/>
+                        <outlet property="testDeviceFilterPopup" destination="bV7-h4-cgv" id="uW3-PN-7eA"/>
                         <outlet property="testDevicesActivityIndicator" destination="VY0-39-fd9" id="omW-hD-iMO"/>
                         <outlet property="testDevicesTableView" destination="8jQ-1w-bC4" id="ioY-T3-5oI"/>
                         <outlet property="triggersTableView" destination="3LH-7K-zWF" id="mJs-5d-eR7"/>

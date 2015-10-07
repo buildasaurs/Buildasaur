@@ -14,9 +14,7 @@ import BuildaKit
 import ReactiveCocoa
 
 class SyncerViewController: ConfigEditViewController, SyncerStateChangeDelegate {
-    
-    var syncerManager: SyncerManager!
-    
+        
     var syncerConfig = MutableProperty<SyncerConfig>(SyncerConfig())
     
     //-----

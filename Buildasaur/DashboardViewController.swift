@@ -10,7 +10,7 @@ import Cocoa
 import BuildaKit
 import ReactiveCocoa
 
-protocol EditeeDelegate: class, EmptyXcodeServerViewControllerDelegate, XcodeServerViewControllerDelegate, EmptyProjectViewControllerDelegate, ProjectViewControllerDelegate, EmptyBuildTemplateViewControllerDelegate { }
+protocol EditeeDelegate: class, EmptyXcodeServerViewControllerDelegate, XcodeServerViewControllerDelegate, EmptyProjectViewControllerDelegate, ProjectViewControllerDelegate, EmptyBuildTemplateViewControllerDelegate, BuildTemplateViewControllerDelegate { }
 
 class DashboardViewController: PresentableViewController {
 
@@ -98,7 +98,12 @@ extension DashboardViewController {
     func showNewSyncerViewController() {
         
         //configure an editing window with a brand new syncer
-        let triplet = self.syncerManager.factory.newEditableTriplet()
+        var triplet = self.syncerManager.factory.newEditableTriplet()
+        
+        //Debugging hack - insert the first server and project we have
+        triplet.server = self.syncerManager.storageManager.serverConfigs.value.first!.1
+        triplet.project = self.syncerManager.storageManager.projectConfigs.value.first!.1
+        
         self.showSyncerEditViewControllerWithTriplet(triplet)
     }
     
