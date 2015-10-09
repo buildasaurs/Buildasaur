@@ -44,6 +44,8 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
     private var triggerToEdit: TriggerConfig? //?
     
     private let isFetchingDevices = MutableProperty<Bool>(false)
+    private let isParsingPlatforms = MutableProperty<Bool>(false)
+    
     private let testingDevices = MutableProperty<[Device]>([])
     private let schemes = MutableProperty<[XcodeScheme]>([])
     private let schedules = MutableProperty<[BotSchedule.Schedule]>([])
@@ -52,8 +54,13 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
     
     private var selectedScheme: MutableProperty<String>!
     private var platformType: SignalProducer<DevicePlatform.PlatformType, NoError>!
-    private var cleaningPolicy = MutableProperty<BotConfiguration.CleaningPolicy>(.Never)
-    private var deviceFilter = MutableProperty<DeviceFilter.FilterType>(.AllAvailableDevicesAndSimulators)
+    private let cleaningPolicy = MutableProperty<BotConfiguration.CleaningPolicy>(.Never)
+    private let deviceFilter = MutableProperty<DeviceFilter.FilterType>(.AllAvailableDevicesAndSimulators)
+    private let selectedSchedule = MutableProperty<BotSchedule>(BotSchedule.manualBotSchedule())
+    private let selectedDeviceIds = MutableProperty<[String]>([])
+    
+    private let isValid = MutableProperty<Bool>(false)
+    private var generatedTemplate: MutableProperty<BuildTemplate>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +68,7 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         self.setupBindings()
     }
     
-    func setupBindings() {
+    private func setupBindings() {
         
         //request project and server for specific refs from the syncer manager
         self.syncerManager
@@ -81,7 +88,8 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         
         //ui
         self.testDevicesActivityIndicator.rac_animating <~ self.isFetchingDevices
-        self.testingDevices.producer.startWithNext { [weak self] _ -> () in
+        let devicesTableViewChangeSources = combineLatest(self.testingDevices.producer, self.selectedDeviceIds.producer)
+        devicesTableViewChangeSources.startWithNext { [weak self] _ -> () in
             self?.devicesTableView.reloadData()
         }
         
@@ -89,10 +97,13 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         self.selectedScheme = MutableProperty<String>(buildTemplate.scheme)
         self.platformType = self.selectedScheme
             .producer
+            .on(next: { [weak self] _ in self?.isParsingPlatforms.value = true })
             .observeOn(QueueScheduler())
             .flatMap(.Latest) { [weak self] schemeName in
                 return self!.devicePlatformFromScheme(schemeName)
             }.observeOn(UIScheduler())
+            .on(next: { [weak self] _ in self?.isParsingPlatforms.value = false })
+
         self.platformType.startWithNext { [weak self] platform in
             //refetch/refilter devices
             self?.fetchDevices(platform) { () -> () in
@@ -105,33 +116,50 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         self.setupCleaningPolicies()
         self.setupDeviceFilter()
         
-        //more ui
+        let nextAllowed = combineLatest(
+            self.isValid.producer,
+            self.isFetchingDevices.producer,
+            self.isParsingPlatforms.producer
+        ).map {
+            $0 && !$1 && !$2
+        }
+        self.nextAllowed <~ nextAllowed
+        
         self.devicesTableView.rac_enabled <~ self.deviceFilter.producer.map {
             filter in
             return filter == .SelectedDevicesAndSimulators
         }
         
         //initial dump
-        self.buildTemplate.producer.startWithNext {
+        self.buildTemplate
+            .producer
+            .startWithNext {
             [weak self] (buildTemplate: BuildTemplate) -> () in
             
             guard let sself = self else { return }
             sself.nameTextField.stringValue = buildTemplate.name
+            
             sself.selectedScheme.value = buildTemplate.scheme
             sself.schemesPopup.selectItemWithTitle(buildTemplate.scheme)
             sself.analyzeButton.on = buildTemplate.shouldAnalyze
             sself.testButton.on = buildTemplate.shouldTest
             sself.archiveButton.on = buildTemplate.shouldArchive
             
-            if let schedule = buildTemplate.schedule?.schedule {
-                let scheduleIndex = sself.schedules.value.indexOf(schedule)
-                sself.schedulePopup.selectItemAtIndex(scheduleIndex ?? 0)
-            }
+            let schedule = buildTemplate.schedule
+            let scheduleIndex = sself.schedules.value.indexOf(schedule.schedule)
+            sself.schedulePopup.selectItemAtIndex(scheduleIndex ?? 0)
+            sself.selectedSchedule.value = schedule
             
             let cleaningPolicyIndex = sself.cleaningPolicies.value.indexOf(buildTemplate.cleaningPolicy)
             sself.cleaningPolicyPopup.selectItemAtIndex(cleaningPolicyIndex ?? 0)
             sself.deviceFilter.value = buildTemplate.deviceFilter
+            sself.selectedDeviceIds.value = buildTemplate.testingDeviceIds
         }
+        
+        //this must be ran AFTER the initial dump (runs synchronously), othwerise
+        //the callback for name text field doesn't contain the right value.
+        //the RAC text signal doesn't fire on code-trigger text changes :(
+        self.setupGeneratedTemplate()
     }
     
     private func devicePlatformFromScheme(schemeName: String) -> SignalProducer<DevicePlatform.PlatformType, NoError> {
@@ -151,7 +179,7 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         }
     }
     
-    func setupSchemes() {
+    private func setupSchemes() {
         
         //data source
         let schemeNames = self.schemes.producer
@@ -175,7 +203,7 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         self.schemesPopup.rac_command = toRACCommand(action)
     }
     
-    func setupSchedules() {
+    private func setupSchedules() {
         
         self.schedules.value = self.allSchedules()
         let scheduleNames = self.schedules
@@ -184,9 +212,33 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         scheduleNames.startWithNext { [weak self] in
             self?.schedulePopup.replaceItems($0)
         }
+        
+        //action
+        let handler = SignalProducer<AnyObject, NoError> { [weak self] sink, _ in
+            if let sself = self {
+                let index = sself.schedulePopup.indexOfSelectedItem
+                let schedules = sself.schedules.value
+                let scheduleType = schedules[index]
+                var schedule: BotSchedule!
+                
+                switch scheduleType {
+                case .Commit:
+                    schedule = BotSchedule.commitBotSchedule()
+                case .Manual:
+                    schedule = BotSchedule.manualBotSchedule()
+                default:
+                    assertionFailure("Other schedules not yet supported")
+                }
+                
+                sself.selectedSchedule.value = schedule
+            }
+            sendCompleted(sink)
+        }
+        let action = Action { (_: AnyObject?) in handler }
+        self.schedulePopup.rac_command = toRACCommand(action)
     }
     
-    func setupCleaningPolicies() {
+    private func setupCleaningPolicies() {
         
         //data source
         self.cleaningPolicies.value = self.allCleaningPolicies()
@@ -211,7 +263,7 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         self.cleaningPolicyPopup.rac_command = toRACCommand(action)
     }
     
-    func setupDeviceFilter() {
+    private func setupDeviceFilter() {
         
         //data source
         self.deviceFilters <~ self.platformType.map {
@@ -237,6 +289,12 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
             sself.deviceFilterPopup.selectItemAtIndex(deviceFilterIndex ?? 0)
         }
         
+        self.deviceFilter.producer.startWithNext { [weak self] in
+            if $0 != .SelectedDevicesAndSimulators {
+                self?.selectedDeviceIds.value = []
+            }
+        }
+        
         //action
         let handler = SignalProducer<AnyObject, NoError> { [weak self] sink, _ in
             if let sself = self {
@@ -251,11 +309,67 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         self.deviceFilterPopup.rac_command = toRACCommand(action)
     }
     
+    private var mySignal: RACSignal!
+    
+    private func setupGeneratedTemplate() {
+        
+        //sources
+        let name = self.nameTextField.rac_text
+        let scheme = self.selectedScheme.producer
+        let analyze = self.analyzeButton.rac_on
+        let test = self.testButton.rac_on
+        let archive = self.archiveButton.rac_on
+        let schedule = self.selectedSchedule.producer
+        let cleaningPolicy = self.cleaningPolicy.producer
+        //triggers
+        let deviceFilter = self.deviceFilter.producer
+        let deviceIds = self.selectedDeviceIds.producer
+        
+        let original = self.buildTemplate.producer
+        let combined = combineLatest(original, name, scheme, analyze, test, archive, schedule, cleaningPolicy, deviceFilter, deviceIds)
+        
+        let validated = combined.map {
+            original, name, scheme, analyze, test, archive, schedule, cleaningPolicy, deviceFilter, deviceIds -> Bool in
+            
+            if name.isEmpty {
+                return false
+            }
+            
+            //TODO: add more things that need to be true
+            
+            return true
+        }
+        
+        self.isValid <~ validated
+        
+        let generated = combined.forwardIf(validated).map {
+            original, name, scheme, analyze, test, archive, schedule, cleaningPolicy, deviceFilter, deviceIds -> BuildTemplate in
+            
+            var mod = original
+            mod.name = name
+            mod.scheme = scheme
+            mod.shouldAnalyze = analyze
+            mod.shouldTest = test
+            mod.shouldArchive = archive
+            mod.schedule = schedule
+            mod.cleaningPolicy = cleaningPolicy
+            mod.deviceFilter = deviceFilter
+            mod.testingDeviceIds = deviceIds
+            
+            return mod
+        }
+        
+        self.generatedTemplate = MutableProperty<BuildTemplate>(self.buildTemplate.value)
+        self.generatedTemplate <~ generated
+    }
+    
     func fetchDevices(platform: DevicePlatform.PlatformType, completion: () -> ()) {
         
-        SignalProducer<[Device], NSError> { sink, _ in
+        SignalProducer<[Device], NSError> { [weak self] sink, _ in
+            guard let sself = self else { return }
             
-            self.xcodeServer.value.getDevices { (devices, error) -> () in
+            sself.isFetchingDevices.value = true
+            sself.xcodeServer.value.getDevices { (devices, error) -> () in
                 if let error = error {
                     sendError(sink, error)
                 } else {
@@ -267,7 +381,10 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
             .observeOn(UIScheduler())
             .start(Event.sink(
                 error: { UIUtils.showAlertWithError($0) },
-                completed: completion,
+                completed: { [weak self] in
+                    self?.isFetchingDevices.value = false
+                    completion()
+                },
                 next: { [weak self] (devices) -> () in
                     let processed = BuildTemplateViewController
                         .processReceivedDevices(devices, platform: platform)
@@ -358,56 +475,6 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         return passed
     }
     
-    func pullDataFromUI(interactive: Bool) -> Bool {
-        
-        let scheme = !self.pullSchemeFromUI(interactive).isEmpty
-        let name = self.pullNameFromUI()
-        let stages = self.pullStagesFromUI(interactive)
-        let schedule = self.pullScheduleFromUI(interactive)
-        let cleaning = self.pullCleaningPolicyFromUI(interactive)
-        let filter = self.pullFilterFromUI(interactive)
-        
-        return scheme && name && stages && schedule && cleaning && filter
-    }
-    
-    func pullCleaningPolicyFromUI(interactive: Bool) -> Bool {
-        
-//        let index = self.cleaninPolicyComboBox.indexOfSelectedItem
-//        if index > -1 {
-//            let policy = self.allCleaningPolicies()[index]
-//            self.buildTemplate.value.cleaningPolicy = policy
-//            return true
-//        }
-//        if interactive {
-//            UIUtils.showAlertWithText("Please choose a cleaning policy")
-//        }
-        return false
-    }
-
-    func pullScheduleFromUI(interactive: Bool) -> Bool {
-        
-//        let index = self.scheduleComboBox.indexOfSelectedItem
-//        if index > -1 {
-//            let scheduleType = self.allSchedules()[index]
-//            let schedule: BotSchedule
-//            switch scheduleType {
-//            case .Commit:
-//                schedule = BotSchedule.commitBotSchedule()
-//            case .Manual:
-//                schedule = BotSchedule.manualBotSchedule()
-//            default:
-//                assertionFailure("Other schedules not yet supported")
-//                schedule = BotSchedule(json: NSDictionary())
-//            }
-//            self.buildTemplate.value.schedule = schedule
-//            return true
-//        }
-//        if interactive {
-//            UIUtils.showAlertWithText("Please choose a bot schedule (choose 'Manual' for Syncer-controller bots)")
-//        }
-        return false
-    }
-
     func pullNameFromUI() -> Bool {
         
         let name = self.nameTextField.stringValue
@@ -417,72 +484,6 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         } else {
             return false
         }
-    }
-    
-    func pullSchemeFromUI(interactive: Bool) -> String {
-        
-        //validate that the selection is valid
-//                //found it, good, use it
-//                self.buildTemplate.value.scheme = selectedScheme
-//                
-//                //also refresh devices for testing based on the scheme type
-//                do {
-//                    let platformType = try XcodeDeviceParser.parseDeviceTypeFromProjectUrlAndScheme(self.project.url, scheme: scheme).toPlatformType()
-//                    self.buildTemplate.value.platformType = platformType
-//                    self.reloadUI()
-//                    self.fetchDevices({ () -> () in
-//                        //
-//                    })
-//                    return true
-//                } catch {
-//                    print("\(error)")
-//                    return false
-//                }
-        return ""
-    }
-    
-    func pullFilterFromUI(interactive: Bool) -> Bool {
-        
-//        let index = self.testDeviceFilterComboBox.indexOfSelectedItem
-//        if index > -1 {
-//            let filter = self.allFilters()[index]
-//            self.buildTemplate.value.deviceFilter = filter
-//            return true
-//        }
-//        if interactive && self.testDeviceFilterComboBox.numberOfItems > 0 {
-//            UIUtils.showAlertWithText("Please select a device filter to test on")
-//        }
-        return false
-    }
-
-    private func cleanTestingDeviceIds() {
-        //don't call this during initial loading calls (this is a hack, don't try this at home kids)
-        self.buildTemplate.value.testingDeviceIds = []
-    }
-    
-    func comboBoxSelectionDidChange(notification: NSNotification) {
-        
-//        if let comboBox = notification.object as? NSComboBox {
-//            
-//            if comboBox == self.testDeviceFilterComboBox {
-//                
-//                self.pullFilterFromUI(true)
-//                self.reloadUI()
-//                self.cleanTestingDeviceIds()
-//                
-//                //filter changed, refetch
-//                self.fetchDevices({ () -> () in
-//                    //
-//                })
-//            } else if comboBox == self.schemesComboBox {
-//                
-//                if self.testDeviceFilterComboBox.numberOfItems > 0 {
-//                    self.testDeviceFilterComboBox.selectItemAtIndex(0)
-//                }
-//                self.pullSchemeFromUI(true)
-//                self.cleanTestingDeviceIds()
-//            }
-//        }
     }
     
     func willSave() {
@@ -504,23 +505,6 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
 //                self.cancel()
             }
         })
-    }
-    
-    //MARK: filter combo box
-    func numberOfItemsInComboBox(aComboBox: NSComboBox) -> Int {
-//        if (aComboBox == self.testDeviceFilterComboBox) {
-//            return self.allFilters().count
-//        }
-        return 0
-    }
-    
-    func comboBox(aComboBox: NSComboBox, objectValueForItemAtIndex index: Int) -> AnyObject {
-//        if (aComboBox == self.testDeviceFilterComboBox) {
-//            if index >= 0 {
-//                return self.allFilters()[index].toString()
-//            }
-//        }
-        return ""
     }
     
     //MARK: triggers table view
@@ -554,8 +538,8 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
                 let string = "\(simString)\(device.name) (\(device.osVersion)) \(connString)"
                 return string
             case "enabled":
-                let devices = self.buildTemplate.value.testingDeviceIds ?? []
-                let index = devices.indexOfFirstObjectPassingTest({ $0 == device.id })
+                let index = self.selectedDeviceIds.value
+                    .indexOfFirstObjectPassingTest { $0 == device.id }
                 let enabled = index > -1
                 return enabled
             default:
@@ -617,17 +601,15 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         let device = self.testingDevices.value[self.devicesTableView.selectedRow]
         
         //see if we are checking or unchecking
-        let foundIndex = self.buildTemplate.value.testingDeviceIds.indexOfFirstObjectPassingTest({ $0 == device.id })
+        let foundIndex = self.selectedDeviceIds.value.indexOfFirstObjectPassingTest({ $0 == device.id })
         
         if let foundIndex = foundIndex {
             //found, remove it
-            self.buildTemplate.value.testingDeviceIds.removeAtIndex(foundIndex)
+            self.selectedDeviceIds.value.removeAtIndex(foundIndex)
         } else {
             //not found, add it
-            self.buildTemplate.value.testingDeviceIds.append(device.id)
+            self.selectedDeviceIds.value.append(device.id)
         }
-        
-        self.devicesTableView.reloadData()
     }
 }
 

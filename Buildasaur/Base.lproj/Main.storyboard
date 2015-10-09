@@ -1709,10 +1709,10 @@ Gw
                                             <real value="3.4028234663852886e+38"/>
                                         </customSpacing>
                                     </stackView>
-                                    <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" misplaced="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8th-oj-fKp">
+                                    <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8th-oj-fKp">
                                         <rect key="frame" x="0.0" y="219" width="261" height="17"/>
                                         <subviews>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gKV-Tt-Z3f">
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gKV-Tt-Z3f">
                                                 <rect key="frame" x="-2" y="0.0" width="67" height="17"/>
                                                 <animations/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Actions:" id="nnV-jT-sMq">
@@ -1729,7 +1729,7 @@ Gw
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                             </button>
-                                            <button misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uhv-2l-5xn">
+                                            <button translatesAutoresizingMaskIntoConstraints="NO" id="uhv-2l-5xn">
                                                 <rect key="frame" x="143" y="-1" width="48" height="20"/>
                                                 <animations/>
                                                 <buttonCell key="cell" type="check" title="Test" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="yFe-8s-l1k">
@@ -1737,7 +1737,7 @@ Gw
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                             </button>
-                                            <button misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sy4-2B-PXP">
+                                            <button translatesAutoresizingMaskIntoConstraints="NO" id="Sy4-2B-PXP">
                                                 <rect key="frame" x="195" y="-1" width="68" height="20"/>
                                                 <animations/>
                                                 <buttonCell key="cell" type="check" title="Archive" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="vpx-cl-svQ">
@@ -2048,7 +2048,7 @@ Gw
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" id="8jQ-1w-bC4">
-                                                            <rect key="frame" x="0.0" y="0.0" width="347" height="58"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="346" height="19"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <animations/>
                                                             <size key="intercellSpacing" width="3" height="2"/>

@@ -15,13 +15,23 @@ import ReactiveCocoa
 //book keeping
 
 func lazyAssociatedProperty<T: AnyObject>(host: AnyObject, key: UnsafePointer<Void>, factory: () -> T) -> T {
-    if let object = objc_getAssociatedObject(host, key) as? T {
+    
+    let obj: T? = getAssociatedProperty(host, key: key) as? T
+    if let object = obj {
         return object
     }
     
     let associatedProperty = factory()
-    objc_setAssociatedObject(host, key, associatedProperty, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
+    setAssociatedProperty(host, key: key, value: associatedProperty)
     return associatedProperty
+}
+
+func setAssociatedProperty<T: AnyObject>(host: AnyObject, key: UnsafePointer<Void>, value: T) {
+    objc_setAssociatedObject(host, key, value, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
+}
+
+func getAssociatedProperty(host: AnyObject, key: UnsafePointer<Void>) -> AnyObject! {
+    return objc_getAssociatedObject(host, key)
 }
 
 func lazyMutableProperty<T>(host: AnyObject, key: UnsafePointer<Void>, setter: (T) -> (), getter: () -> T) -> MutableProperty<T> {
@@ -40,6 +50,8 @@ struct AssociationKey {
     static var hidden: UInt8 = 4
     static var animating: UInt8 = 5
     static var image: UInt8 = 6
+    static var on: UInt8 = 7
+    static var on_action: UInt8 = 8
 }
 
 //the good stuff
@@ -55,6 +67,24 @@ extension NSButton {
     
     public var rac_title: MutableProperty<String> {
         return lazyMutableProperty(self, key: &AssociationKey.title, setter: { [weak self] in self?.title = $0 }, getter: { [weak self] in self?.title ?? "" })
+    }
+    
+    public var rac_on: SignalProducer<Bool, NoError> {
+        
+        let on = lazyMutableProperty(self, key: &AssociationKey.on, setter: { [weak self] in self?.on = $0 }, getter: { [weak self] in self?.on ?? false })
+        
+        let action = Action<AnyObject?, AnyObject, NoError> {
+            input in
+            let button = input as! NSButton
+            return SignalProducer { sink, _ in
+                on.value = button.on
+                sendCompleted(sink)
+            }
+        }
+        
+        self.rac_command = toRACCommand(action)
+        
+        return on.producer
     }
 }
 

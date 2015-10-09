@@ -19,7 +19,7 @@ public class XcodeServerSyncerUtils {
         let schemeName = template.scheme
         
         //optionally override the schedule, if nil, takes it from the template
-        let schedule = scheduleOverride ?? template.schedule!
+        let schedule = scheduleOverride ?? template.schedule
         let cleaningPolicy = template.cleaningPolicy
         let triggerIds = template.triggers
         let triggers = syncer.delegate!.syncer(syncer, triggersWithIds: triggerIds)

@@ -31,7 +31,7 @@ public struct BuildTemplate: JSONSerializable {
     public var projectName: String?
     public var name: String
     public var scheme: String
-    public var schedule: BotSchedule? //will be ignored for Synced bots, only useful for Manual creation. default: Manual
+    public var schedule: BotSchedule
     public var cleaningPolicy: BotConfiguration.CleaningPolicy
     public var triggers: [RefType]
     public var shouldAnalyze: Bool
@@ -129,8 +129,8 @@ public struct BuildTemplate: JSONSerializable {
         dict[kKeyShouldAnalyze] = self.shouldAnalyze
         dict[kKeyShouldTest] = self.shouldTest
         dict[kKeyShouldArchive] = self.shouldArchive
+        dict[kKeySchedule] = self.schedule.dictionarify()
         dict.optionallyAddValueForKey(self.projectName, key: kKeyProjectName)
-        dict.optionallyAddValueForKey(self.schedule?.dictionarify(), key: kKeySchedule)
         dict.optionallyAddValueForKey(self.platformType?.rawValue, key: kKeyPlatformType)
         
         return dict
