@@ -13,14 +13,13 @@ import BuildaUtils
 
 extension HDGitHubXCBotSyncer {
     
-    //TODO: clean this up
     var _project: Project { return self.project }
     var _xcodeServer: XcodeServer { return self.xcodeServer }
     var _github: GitHubServer { return self.github }
     var _buildTemplate: BuildTemplate { return self.buildTemplate }
-    var _waitForLttm: Bool { return self.config.waitForLttm }
-    var _postStatusComments: Bool { return self.config.postStatusComments }
-    var _watchedBranchNames: [String] { return self.config.watchedBranchNames }
+    var _waitForLttm: Bool { return self.config.value.waitForLttm }
+    var _postStatusComments: Bool { return self.config.value.postStatusComments }
+    var _watchedBranchNames: [String] { return self.config.value.watchedBranchNames }
     
     public typealias BotActions = (
         prsToSync: [(pr: PullRequest, bot: Bot)],
@@ -34,21 +33,8 @@ extension HDGitHubXCBotSyncer {
     public func repoName() -> String? {
         return self._project.githubRepoName()
     }
-    
-    //TODO: migrate this shit to RAC, the callback hell below hurts my eyes (you've been warned)
-    
-    public override func sync(completion: () -> ()) {
         
-        if let repoName = self.repoName() {
-            
-            self.syncRepoWithName(repoName, completion: completion)
-        } else {
-            self.notifyErrorString("Nil repo name", context: "Syncing")
-            completion()
-        }
-    }
-    
-    private func syncRepoWithName(repoName: String, completion: () -> ()) {
+    internal func syncRepoWithName(repoName: String, completion: () -> ()) {
         
         self._github.getRepo(repoName, completion: { (repo, error) -> () in
             

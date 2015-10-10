@@ -379,7 +379,7 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
             original, name, scheme, analyze, test, archive, schedule, cleaningPolicy, triggers, deviceFilter, deviceIds -> BuildTemplate in
             
             var mod = original
-            mod.projectName = self?.project.value.config.name
+            mod.projectName = self?.project.value.config.value.name
             mod.name = name
             mod.scheme = scheme
             mod.shouldAnalyze = analyze

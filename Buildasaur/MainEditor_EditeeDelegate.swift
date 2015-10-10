@@ -60,3 +60,14 @@ extension MainEditorViewController: BuildTemplateViewControllerDelegate {
     }
 }
 
+extension MainEditorViewController: SyncerViewControllerDelegate {
+    
+    func didCancelEditingOfSyncerConfig(config: SyncerConfig) {
+        //no-op
+    }
+    
+    func didSaveSyncerConfig(config: SyncerConfig) {
+        self.context.value.configTriplet.syncer = config
+    }
+}
+

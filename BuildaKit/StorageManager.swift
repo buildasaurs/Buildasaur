@@ -20,7 +20,7 @@ public enum StorageManagerError: ErrorType {
 
 public class StorageManager {
     
-    public let syncerConfigs = MutableProperty<[SyncerConfig]>([])
+    public let syncerConfigs = MutableProperty<[String: SyncerConfig]>([:])
     public let serverConfigs = MutableProperty<[String: XcodeServerConfig]>([:])
     public let projectConfigs = MutableProperty<[String: ProjectConfig]>([:])
     public let buildTemplates = MutableProperty<[String: BuildTemplate]>([:])
@@ -54,39 +54,12 @@ public class StorageManager {
         _ = try Project.attemptToParseFromUrl(url)
     }
     
-    
-    public func addSyncer(syncInterval: NSTimeInterval, waitForLttm: Bool, postStatusComments: Bool,
-        projectConfig: ProjectConfig, serverConfig: XcodeServerConfig, watchedBranchNames: [String]) -> SyncerConfig? {
-            
-            //this function should already take a config
-//            if syncInterval <= 0 {
-//                Log.error("Sync interval must be > 0 seconds.")
-//                return nil
-//            }
-//            
-//            //TODO: move preferred build template from project here
-//            
-//            var syncerConfig = SyncerConfig()
-//            syncerConfig.preferredTemplateRef = "" //TODO:
-//            syncerConfig.projectRef = projectConfig.id
-//            syncerConfig.xcodeServerRef = serverConfig.id
-//            
-//            
-//            let syncerConfig = SyncerConfig(
-//                preferredTemplateRef: "",
-//                projectRef: projectRef,
-//                xcodeServerRef: xcodeServerRef,
-//                postStatusComments: postStatusComments,
-//                syncInterval: syncInterval,
-//                waitForLttm: waitForLttm,
-//                watchedBranchNames: watchedBranchNames)
-//            self.syncerConfigs.value.append(syncerConfig)
-//            return syncerConfig
-            return nil
-    }
-    
     //MARK: adding
-    
+
+    public func addSyncerConfig(config: SyncerConfig) {
+        self.syncerConfigs.value[config.id] = config
+    }
+
     public func addTriggerConfig(triggerConfig: TriggerConfig) {
         self.triggerConfigs.value[triggerConfig.id] = triggerConfig
     }
@@ -214,7 +187,8 @@ public class StorageManager {
         self.buildTemplates.value = allTemplates.dictionarifyWithKey { $0.id }
         let allTriggers: [TriggerConfig] = Persistence.loadArrayFromFolder("Triggers") ?? []
         self.triggerConfigs.value = allTriggers.dictionarifyWithKey { $0.id }
-        self.syncerConfigs.value = Persistence.loadArrayFromFile("Syncers.json") { self.createSyncerConfigFromJSON($0) } ?? []
+        let allSyncers: [SyncerConfig] = Persistence.loadArrayFromFile("Syncers.json") { self.createSyncerConfigFromJSON($0) } ?? []
+        self.syncerConfigs.value = allSyncers.dictionarifyWithKey { $0.id }
     }
     
     //MARK: Saving
@@ -257,8 +231,8 @@ public class StorageManager {
         Persistence.saveArray("ServerConfigs.json", items: serverConfigs)
     }
     
-    private static func saveSyncerConfigs(configs: [SyncerConfig]) {
-        let syncerConfigs = configs.map { $0.jsonify() }
+    private static func saveSyncerConfigs(configs: [String: SyncerConfig]) {
+        let syncerConfigs = Array(configs.values).map { $0.jsonify() }
         Persistence.saveArray("Syncers.json", items: syncerConfigs)
     }
     

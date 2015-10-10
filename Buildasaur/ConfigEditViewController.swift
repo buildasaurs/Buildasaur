@@ -41,6 +41,11 @@ class ConfigEditViewController: EditableViewController {
                 .map { NSImage(named: $0) }
             self.serverStatusImageView.rac_image <~ statusImage
         }
+        
+        if self.trashButton != nil {
+            //only enable the delete button in editing mode
+            self.trashButton.rac_enabled <~ self.editing
+        }
     }
     
     //do not call directly! just override

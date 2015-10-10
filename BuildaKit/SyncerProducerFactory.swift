@@ -18,24 +18,51 @@ class SyncerProducerFactory {
         let serverConfigs = st.serverConfigs.producer
         let syncerConfigs = st.syncerConfigs.producer
         let buildTemplates = st.buildTemplates.producer
+        let triggerConfigs = st.triggerConfigs.producer
         
-        let configs = combineLatest(syncerConfigs, serverConfigs, projectConfigs, buildTemplates)
+        let configs = combineLatest(
+            syncerConfigs,
+            serverConfigs,
+            projectConfigs,
+            buildTemplates,
+            triggerConfigs
+        )
         
+        typealias OptionalTuple = (SyncerConfig, XcodeServerConfig?, ProjectConfig?, BuildTemplate?, [TriggerConfig]?)
+        typealias OptionalTuples = [OptionalTuple]
+
         //create the new set of syncers from the available data
-        let latestTuples = configs.map { syncers, servers, projects, buildTemplates in
-            syncers.map { (
-                $0,
-                servers[$0.xcodeServerRef],
-                projects[$0.projectRef],
-                buildTemplates[$0.preferredTemplateRef]) }
+        let latestTuples = configs.map { syncers, servers, projects, buildTemplates, triggers in
+            Array(syncers.values).map { (syncerConfig: SyncerConfig) -> OptionalTuple in
+                let bt = buildTemplates[syncerConfig.preferredTemplateRef]
+                let triggerIds = Set(bt?.triggers ?? [])
+                let ourTriggers = triggers.filter { triggerIds.contains($0.0) }.map { $0.1 }
+                return (
+                    syncerConfig,
+                    servers[syncerConfig.xcodeServerRef],
+                    projects[syncerConfig.projectRef],
+                    bt,
+                    ourTriggers
+                )
+            }
         }
-        let nonNilTuples = latestTuples.map { tuples in
-            tuples.filter { $0.1 != nil && $0.2 != nil }
-            }.map { tuples in tuples.map { ($0.0, $0.1!, $0.2!, $0.3!) } }
         
-        let triplets = nonNilTuples.map { tuples in
+        let nonNilTuples = latestTuples.map { (tuples: OptionalTuples) -> OptionalTuples in
+            tuples.filter { (tuple: OptionalTuple) -> Bool in
+                tuple.1 != nil && tuple.2 != nil && tuple.3 != nil && tuple.4 != nil
+            }
+        }
+        let unwrapped = nonNilTuples
+            .map { tuples in tuples.map { ($0.0, $0.1!, $0.2!, $0.3!, $0.4!) } }
+        
+        let triplets = unwrapped.map { tuples in
             return tuples.map {
-                return ConfigTriplet(syncer: $0.0, server: $0.1, project: $0.2, buildTemplate: $0.3)
+                return ConfigTriplet(
+                    syncer: $0.0,
+                    server: $0.1,
+                    project: $0.2,
+                    buildTemplate: $0.3,
+                    triggers: $0.4)
             }
         }
         return triplets
@@ -43,9 +70,15 @@ class SyncerProducerFactory {
     
     static func createSyncersProducer(factory: SyncerFactoryType, triplets: SignalProducer<[ConfigTriplet], NoError>) -> SignalProducer<[HDGitHubXCBotSyncer], NoError> {
         
-        let syncers = triplets.map { tripletArray in
-            return tripletArray.map { factory.createSyncer(
-                $0.syncer, serverConfig: $0.server, projectConfig: $0.project, buildTemplate: $0.buildTemplate)
+        let syncers = triplets.map { (tripletArray: [ConfigTriplet]) -> [HDGitHubXCBotSyncer] in
+            return tripletArray.map { (triplet: ConfigTriplet) -> HDGitHubXCBotSyncer in
+                factory.createSyncer(
+                    triplet.syncer,
+                    serverConfig: triplet.server,
+                    projectConfig: triplet.project,
+                    buildTemplate: triplet.buildTemplate,
+                    triggerConfigs: triplet.triggers
+                )
             }
         }
         return syncers

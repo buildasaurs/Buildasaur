@@ -14,29 +14,34 @@ enum EditorState: Int {
     
     case NoServer
     case EditingServer
-//    case VerifiedServer
     
     case NoProject
     case EditingProject
-//    case VerifiedProject
     
     case NoBuildTemplate
     case EditingBuildTemplate
-//    case VerifiedBuildTemplate
     
     case EditingSyncer
-    case VerifiedSyncer
-    
-    case AllVerified
+    case ReadonlySyncer
     
     case Final
     
     func next() -> EditorState? {
-        return self + 1
+        
+        switch self {
+        case .EditingSyncer:
+            return .Final
+        default: return self + 1
+        }
     }
     
     func previous() -> EditorState? {
-        return self + (-1)
+        
+        switch self {
+        case .ReadonlySyncer:
+            return .EditingBuildTemplate
+        default: return self + (-1)
+        }
     }
 }
 

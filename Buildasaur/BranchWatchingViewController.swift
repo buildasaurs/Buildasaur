@@ -27,7 +27,7 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
         super.viewDidLoad()
         
         assert(self.syncer != nil, "Syncer has not been set")
-        self.watchedBranchNames = Set(self.syncer.config.watchedBranchNames)
+        self.watchedBranchNames = Set(self.syncer.config.value.watchedBranchNames)
     }
     
     override func viewWillAppear() {

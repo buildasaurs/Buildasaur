@@ -57,9 +57,8 @@ class MainEditorViewController: PresentableViewController {
 
         self.setupBindings()
         
-        
-        //hack for debugging - jump ahead
-        self.state.value = (.NoBuildTemplate, false)
+        //HACK: hack for debugging - jump ahead
+        self.state.value = (.EditingSyncer, false)
     }
     
     // moving forward and back

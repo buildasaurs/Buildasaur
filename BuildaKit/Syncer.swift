@@ -12,18 +12,22 @@ import BuildaUtils
 import XcodeServerSDK
 import ReactiveCocoa
 
-public protocol SyncerStateChangeDelegate: class {
+public enum SyncerEventType {
     
-    func syncerBecameActive(syncer: Syncer)
-    func syncerStopped(syncer: Syncer)
-    func syncerDidStartSyncing(syncer: Syncer)
-    func syncerDidFinishSyncing(syncer: Syncer)
-    func syncerEncounteredError(syncer: Syncer, error: NSError)
+    case Initial
+    
+    case DidBecomeActive
+    case DidStop
+    
+    case DidStartSyncing
+    case DidFinishSyncing
+    
+    case DidEncounterError(ErrorType)
 }
 
 @objc public class Syncer: NSObject {
     
-    public weak var stateChangeDelegate: SyncerStateChangeDelegate?
+    public let state = MutableProperty<SyncerEventType>(.Initial)
     
     //public
     public internal(set) var reports: [String: String] = [:]
@@ -41,10 +45,10 @@ public protocol SyncerStateChangeDelegate: class {
         didSet {
             if !oldValue && self.isSyncing {
                 self.lastSyncStartDate = NSDate()
-                self.stateChangeDelegate?.syncerDidStartSyncing(self)
+                self.state.value = .DidStartSyncing
             } else if oldValue && !self.isSyncing {
                 self.lastSyncFinishedDate = NSDate()
-                self.stateChangeDelegate?.syncerDidFinishSyncing(self)
+                self.state.value = .DidFinishSyncing
             }
         }
     }
@@ -57,16 +61,19 @@ public protocol SyncerStateChangeDelegate: class {
                 self.timer = timer
                 NSRunLoop.mainRunLoop().addTimer(timer, forMode: kCFRunLoopCommonModes as String)
                 self._sync() //call for the first time, next one will be called by the timer
-                self.stateChangeDelegate?.syncerBecameActive(self)
+                self.state.value = .DidBecomeActive
             } else if !active && oldValue {
                 self.timer?.invalidate()
                 self.timer = nil
-                self.stateChangeDelegate?.syncerStopped(self)
+                self.state.value = .DidStop
             }
             self.activeSignalProducer.value = active
         }
     }
     
+    //TODO: shouldn't be a mutableproperty, because nothing happens
+    //when you actually set it (the syncer isn't affected). only using
+    //for observing the active state from the outside world.
     public let activeSignalProducer = MutableProperty<Bool>(false)
 
     //private
@@ -137,7 +144,7 @@ public protocol SyncerStateChangeDelegate: class {
         }
         Log.error(message)
         self.currentSyncError = error
-        self.stateChangeDelegate?.syncerEncounteredError(self, error: Error.withInfo(message))
+        self.state.value = .DidEncounterError(Error.withInfo(message))
     }
     
     /**

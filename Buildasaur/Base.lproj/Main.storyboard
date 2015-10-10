@@ -2223,11 +2223,11 @@ Gw
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ydq-Xo-INr">
-                                <rect key="frame" x="45" y="18" width="410" height="402"/>
+                            <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" misplaced="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ydq-Xo-INr">
+                                <rect key="frame" x="45" y="20" width="410" height="400"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vcJ-Qb-qMS">
-                                        <rect key="frame" x="-2" y="380" width="414" height="22"/>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vcJ-Qb-qMS">
+                                        <rect key="frame" x="-2" y="378" width="414" height="22"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="22" id="6EO-jg-4rk"/>
                                         </constraints>
@@ -2238,8 +2238,8 @@ Gw
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UQg-lL-3qm">
-                                        <rect key="frame" x="0.0" y="348" width="410" height="24"/>
+                                    <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" misplaced="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UQg-lL-3qm">
+                                        <rect key="frame" x="0.0" y="348" width="410" height="22"/>
                                         <subviews>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Zro-lT-uWr">
                                                 <rect key="frame" x="-2" y="3" width="45" height="17"/>
@@ -2253,8 +2253,8 @@ Gw
                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7QV-li-7Ag">
-                                                <rect key="frame" x="49" y="0.0" width="361" height="24"/>
+                                            <textField verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7QV-li-7Ag">
+                                                <rect key="frame" x="49" y="0.0" width="361" height="22"/>
                                                 <animations/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="Name me " drawsBackground="YES" id="Fdh-ne-f1L">
                                                     <font key="font" metaFont="system"/>
@@ -2843,9 +2843,6 @@ Gw
                                                 <rect key="frame" x="204" y="-3" width="19" height="27"/>
                                                 <animations/>
                                                 <stepperCell key="cell" continuous="YES" alignment="left" maxValue="1000" doubleValue="15" id="rxO-tX-mnE"/>
-                                                <connections>
-                                                    <action selector="syncIntervalStepperValueChanged:" target="RHg-5W-Hb1" id="H7X-T0-MPD"/>
-                                                </connections>
                                             </stepper>
                                         </subviews>
                                         <animations/>
@@ -2995,6 +2992,9 @@ Gw
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
+                                        <connections>
+                                            <action selector="editButtonClicked:" target="RHg-5W-Hb1" id="02v-tZ-u27"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <animations/>
@@ -3030,7 +3030,10 @@ Gw
                         <animations/>
                     </view>
                     <connections>
+                        <outlet property="branchWatchingButton" destination="SY6-5q-Twj" id="Y8a-td-j1j"/>
+                        <outlet property="editButton" destination="WVe-pQ-Rdt" id="CU6-nu-gnV"/>
                         <outlet property="lttmToggle" destination="SL5-bS-Lf1" id="0d3-tb-sVO"/>
+                        <outlet property="manualBotManagementButton" destination="JKR-Sp-m8Y" id="EDe-b8-HJN"/>
                         <outlet property="postStatusCommentsToggle" destination="I34-eZ-a6k" id="DbA-bD-uId"/>
                         <outlet property="serverStatusImageView" destination="UMY-nn-tW3" id="95L-Tq-o2D"/>
                         <outlet property="startStopButton" destination="Fkq-gK-hvs" id="5Ba-3L-5FZ"/>

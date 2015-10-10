@@ -10,7 +10,7 @@ import Cocoa
 import BuildaKit
 import ReactiveCocoa
 
-protocol EditeeDelegate: class, EmptyXcodeServerViewControllerDelegate, XcodeServerViewControllerDelegate, EmptyProjectViewControllerDelegate, ProjectViewControllerDelegate, EmptyBuildTemplateViewControllerDelegate, BuildTemplateViewControllerDelegate { }
+protocol EditeeDelegate: class, EmptyXcodeServerViewControllerDelegate, XcodeServerViewControllerDelegate, EmptyProjectViewControllerDelegate, ProjectViewControllerDelegate, EmptyBuildTemplateViewControllerDelegate, BuildTemplateViewControllerDelegate, SyncerViewControllerDelegate { }
 
 class DashboardViewController: PresentableViewController {
 
@@ -103,6 +103,7 @@ extension DashboardViewController {
         //Debugging hack - insert the first server and project we have
         triplet.server = self.syncerManager.storageManager.serverConfigs.value.first!.1
         triplet.project = self.syncerManager.storageManager.projectConfigs.value["E94BAED5-7D91-426A-B6B6-5C39BF1F7032"]!
+        triplet.buildTemplate = self.syncerManager.storageManager.buildTemplates.value["EB0C3E74-C303-4C33-AF0E-012B650D2E9F"]
         
         self.showSyncerEditViewControllerWithTriplet(triplet)
     }

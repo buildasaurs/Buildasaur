@@ -9,22 +9,23 @@
 import Foundation
 import BuildaUtils
 import XcodeServerSDK
+import ReactiveCocoa
 
 public class Project {
     
     public var url: NSURL {
-        return NSURL(fileURLWithPath: self.config.url)
+        return NSURL(fileURLWithPath: self._config.url)
     }
     
-    public var config: ProjectConfig {
-        didSet {
-            _ = try? self.refreshMetadata()
-        }
+    public let config: MutableProperty<ProjectConfig>
+    
+    private var _config: ProjectConfig {
+        return self.config.value
     }
     
     public var urlString: String { return self.url.absoluteString }
-    public var privateSSHKey: String? { return self.getContentsOfKeyAtPath(self.config.privateSSHKeyPath) }
-    public var publicSSHKey: String? { return self.getContentsOfKeyAtPath(self.config.publicSSHKeyPath) }
+    public var privateSSHKey: String? { return self.getContentsOfKeyAtPath(self._config.privateSSHKeyPath) }
+    public var publicSSHKey: String? { return self.getContentsOfKeyAtPath(self._config.publicSSHKeyPath) }
     
     public var availabilityState: AvailabilityCheckState = .Unchecked
     
@@ -32,15 +33,22 @@ public class Project {
     
     public init(config: ProjectConfig) throws {
         
-        self.config = config
+        self.config = MutableProperty<ProjectConfig>(config)
+        self.setupBindings()
         try self.refreshMetadata()
     }
     
     private init(original: Project, forkOriginURL: String) throws {
         
-        self.config = original.config
-        self.availabilityState = .Unchecked
+        self.config = MutableProperty<ProjectConfig>(original.config.value)
         self.workspaceMetadata = try original.workspaceMetadata?.duplicateWithForkURL(forkOriginURL)
+    }
+    
+    private func setupBindings() {
+        
+        self.config.producer.startWithNext { [weak self] _ in
+            _ = try? self?.refreshMetadata()
+        }
     }
     
     public func duplicateForForkAtOriginURL(forkURL: String) throws -> Project {

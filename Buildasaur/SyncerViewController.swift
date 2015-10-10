@@ -13,103 +13,251 @@ import XcodeServerSDK
 import BuildaKit
 import ReactiveCocoa
 
-class SyncerViewController: ConfigEditViewController, SyncerStateChangeDelegate {
-        
-    var syncerConfig = MutableProperty<SyncerConfig>(SyncerConfig())
+protocol SyncerViewControllerDelegate: class {
     
-    //-----
-    
-    let project = MutableProperty<Project?>(nil)
-    let server = MutableProperty<XcodeServer?>(nil)
-    
-    var syncer: HDGitHubXCBotSyncer! {
-        didSet {
-            if syncer.stateChangeDelegate == nil {
-                syncer.stateChangeDelegate = self
-                if syncer.active {
-                    self.syncerBecameActive(syncer)
-                } else {
-                    self.syncerStopped(syncer)
-                }
-            }
-        }
-    }
+    func didCancelEditingOfSyncerConfig(config: SyncerConfig)
+    func didSaveSyncerConfig(config: SyncerConfig)
+}
 
+class SyncerViewController: ConfigEditViewController {
+
+    let syncerConfig = MutableProperty<SyncerConfig!>(nil)
+    weak var delegate: SyncerViewControllerDelegate?
+    
+    private let syncer = MutableProperty<HDGitHubXCBotSyncer?>(nil)
+    
+    @IBOutlet weak var editButton: NSButton!
     @IBOutlet weak var statusTextField: NSTextField!
     @IBOutlet weak var startStopButton: NSButton!
     @IBOutlet weak var statusActivityIndicator: NSProgressIndicator!
+
     @IBOutlet weak var syncIntervalStepper: NSStepper!
     @IBOutlet weak var syncIntervalTextField: NSTextField!
     @IBOutlet weak var lttmToggle: NSButton!
     @IBOutlet weak var postStatusCommentsToggle: NSButton!
     
-    //build templates
+    @IBOutlet weak var manualBotManagementButton: NSButton!
+    @IBOutlet weak var branchWatchingButton: NSButton!
     
-    @IBOutlet weak var buildTemplatePopup: NSPopUpButton!
-    @IBOutlet weak var newBuildTemplateButton: NSButton!
+    private let isSyncing = MutableProperty<Bool>(false)
     
-    let buildTemplates = MutableProperty<[BuildTemplate]>([])
+    private let syncInterval = MutableProperty<Double>(15)
+    private let watchedBranches = MutableProperty<[String]>([])
+    
+    private let generatedConfig = MutableProperty<SyncerConfig!>(nil)
     
     //----
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.setupBindings()
+    }
+    
+    func setupBindings() {
+        
+        let isSyncing = self.isSyncing.producer
+        let editing = self.editing.producer
+
+        self.editing <~ isSyncing.map { !$0 }
+        
+        //when a new syncer comes in, rebind the isSyncing property
+        self.syncer.producer.startWithNext { [weak self] in
+            guard let sself = self else { return }
+            if let syncer = $0 {
+                sself.isSyncing <~ syncer.activeSignalProducer
+            } else {
+                sself.isSyncing <~ ConstantProperty(false)
+            }
+        }
+        
+        self.startStopButton.rac_title <~ isSyncing.map { $0 ? "Stop" : "Start" }
+        self.statusActivityIndicator.rac_animating <~ isSyncing
+        self.manualBotManagementButton.rac_enabled <~ isSyncing
+        self.branchWatchingButton.rac_enabled <~ isSyncing
+
+        self.editButton.rac_enabled <~ editing
+        self.syncIntervalStepper.rac_enabled <~ editing
+        self.lttmToggle.rac_enabled <~ editing
+        self.postStatusCommentsToggle.rac_enabled <~ editing
+        
+        //initial dump
+        self.syncerConfig.producer.startWithNext { [weak self] config in
+            guard let sself = self else { return }
+            sself.syncIntervalStepper.doubleValue = config.syncInterval
+            sself.syncInterval.value = config.syncInterval
+            sself.lttmToggle.on = config.waitForLttm
+            sself.postStatusCommentsToggle.on = config.postStatusComments
+            sself.watchedBranches.value = config.watchedBranchNames
+        }
+        
+        self.setupSyncInterval()
+        self.setupDataSource()
+        self.setupGeneratedConfig()
+        self.setupSyncerReporting()
+    }
     
     func setupDataSource() {
         
         precondition(self.syncerManager != nil)
         
-        let allProjects = self.syncerManager.projectsProducer
-        let allServers = self.syncerManager.serversProducer
-        let syncerConfig = self.syncerConfig.producer
-        
-        let combinedWithProjects = combineLatest(syncerConfig, allProjects)
-        self.project <~ combinedWithProjects.map { syncerConfig, allProjects in
-            allProjects
-                .filter { $0.config.id == syncerConfig.projectRef }
-                .first
-        }
-        
-        let combinedWithServers = combineLatest(syncerConfig, allServers)
-        self.server <~ combinedWithServers.map { syncerConfig, allServers in
-            allServers
-                .filter { $0.config.id == syncerConfig.projectRef }
-                .first
+        self.syncerConfig.producer.startWithNext { [weak self] in
+            guard let sself = self else { return }
+            sself.syncer <~ sself.syncerManager.syncerWithRef($0.id)
         }
     }
     
-    var isSyncing: Bool {
-        set {
-            if let syncer = self.syncer {
-                syncer.active = newValue
+    func setupGeneratedConfig() {
+
+        let original = self.syncerConfig.producer
+        let waitForLttm = self.lttmToggle.rac_on
+        let postStatusComments = self.postStatusCommentsToggle.rac_on
+        let syncInterval = self.syncInterval.producer
+        let watchedBranches = self.watchedBranches.producer
+        
+        let combined = combineLatest(
+            original,
+            waitForLttm,
+            postStatusComments,
+            syncInterval,
+            watchedBranches
+        )
+        
+        let generated = combined.map {
+            (original, waitForLttm, postStatusComments, syncInterval, watchedBranches) -> SyncerConfig in
+            
+            var newConfig = original
+            newConfig.waitForLttm = waitForLttm
+            newConfig.postStatusComments = postStatusComments
+            newConfig.syncInterval = syncInterval
+            newConfig.watchedBranchNames = watchedBranches
+            return newConfig
+        }
+        self.generatedConfig <~ generated.map { Optional($0) }
+        
+        self.generatedConfig.producer.startWithNext { [weak self] in
+            
+            //hmm... we technically aren't saving do disk yet
+            //but at least if you edit sth else and come back you'll see
+            //your latest setup.
+            self?.delegate?.didSaveSyncerConfig($0)
+        }
+    }
+    
+    func setupSyncInterval() {
+        
+        self.syncIntervalTextField.rac_doubleValue <~ self.syncInterval
+        
+        //action
+        let handler = SignalProducer<AnyObject, NoError> { [weak self] sink, _ in
+            if let sself = self {
+                let value = sself.syncIntervalStepper.doubleValue
+                
+                if value < 1 {
+                    UIUtils.showAlertWithText("Sync interval cannot be less than 1 second.")
+                    sself.syncIntervalStepper.doubleValue = 1
+                } else {
+                    sself.syncInterval.value = value
+                }
             }
-            //TODO: validate we can start syncing
-//            self.delegate.getProjectStatusViewController().editingAllowed = !newValue
-//            self.delegate.getServerStatusViewController().editingAllowed = !newValue
+            sendCompleted(sink)
         }
-        get {
-            if let syncer = self.syncer {
-                return syncer.active
-            }
-            return false
+        let action = Action { (_: AnyObject?) in handler }
+        self.syncIntervalStepper.rac_command = toRACCommand(action)
+    }
+    
+    @IBAction func startStopButtonTapped(sender: AnyObject) {
+        self.toggleActive()
+    }
+    
+    @IBAction func editButtonClicked(sender: AnyObject) {
+    }
+    
+    private func toggleActive() {
+        
+        let isSyncing = self.isSyncing.value
+        
+        if isSyncing {
+            
+            let syncer = self.syncer.value!
+            syncer.active = false
+            
+        } else {
+            
+            //not syncing
+            
+            //save config to disk, which will result in us having a proper
+            //syncer coming from the SyncerManager
+            let newConfig = self.generatedConfig.value
+            self.storageManager.addSyncerConfig(newConfig)
+            
+            //TODO: verify syncer before starting
+            
+            //start syncing (now there must be a syncer)
+            let syncer = self.syncer.value!
+            syncer.active = true
+        }
+    }
+}
+
+extension SyncerViewController {
+    
+    //MARK: handling branch watching, manual bot management and link opening
+    
+    @IBAction func branchWatchingTapped(sender: AnyObject) {
+        precondition(self.syncer.value != nil)
+        self.performSegueWithIdentifier("showBranchWatching", sender: self)
+    }
+    
+    @IBAction func manualBotManagementTapped(sender: AnyObject) {
+        precondition(self.syncer.value != nil)
+        self.performSegueWithIdentifier("showManual", sender: self)
+    }
+    
+    private func openLink(link: String) {
+        
+        if let url = NSURL(string: link) {
+            NSWorkspace.sharedWorkspace().openURL(url)
         }
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-//        self.setupBuildTemplatePopup()
-        
-        self.statusTextField.stringValue = "-"
+    @IBAction func helpLttmButtonTapped(sender: AnyObject) {
+        self.openLink("https://github.com/czechboy0/Buildasaur/blob/master/README.md#unlock-the-lttm-barrier")
     }
     
-    override func viewDidAppear() {
-        super.viewDidAppear()
+    @IBAction func helpPostStatusCommentsButtonTapped(sender: AnyObject) {
+        self.openLink("https://github.com/czechboy0/Buildasaur/blob/master/README.md#envelope-posting-status-comments")
+    }
+    
+    override func prepareForSegue(segue: NSStoryboardSegue, sender: AnyObject?) {
         
-        if let syncer = self.syncer {
-            Log.info("We have a syncer \(syncer)")
+        if let manual = segue.destinationController as? ManualBotManagementViewController {
+            manual.syncer = self.syncer.value
+        }
+        
+        if let branchWatching = segue.destinationController as? BranchWatchingViewController {
+            branchWatching.syncer = self.syncer.value
         }
     }
+}
+
+extension SyncerViewController {
     
-    private var syncerConfigs: [SyncerConfig] {
-        return self.storageManager.syncerConfigs.value
+    //MARK: status changes
+    
+    func setupSyncerReporting() {
+        
+        let producer = self.isSyncing
+            .producer
+            .map { (isSyncing: Bool) -> SignalProducer<String, NoError> in
+                guard isSyncing else { return SignalProducer(value: "") }
+                
+                return SignalProducer(value: "HELLO")
+        }
+        producer.startWithNext { [weak self] in
+            guard let sself = self else { return }
+            sself.statusTextField.rac_stringValue <~ $0
+        }
     }
     
     func syncerBecameActive(syncer: Syncer) {
@@ -125,8 +273,8 @@ class SyncerViewController: ConfigEditViewController, SyncerStateChangeDelegate 
         var messages = [
             "Syncing in progress..."
         ]
-
-        if let lastStartedSync = self.syncer?.lastSyncStartDate {
+        
+        if let lastStartedSync = self.syncer.value?.lastSyncStartDate {
             let lastSyncString = "Started sync at \(lastStartedSync)"
             messages.append(lastSyncString)
         }
@@ -168,213 +316,13 @@ class SyncerViewController: ConfigEditViewController, SyncerStateChangeDelegate 
         
         var itemsToReport = [String]()
         
-        if let lastFinishedSync = self.syncer?.lastSuccessfulSyncFinishedDate {
+        if let lastFinishedSync = self.syncer.value?.lastSuccessfulSyncFinishedDate {
             let lastSyncString = "Last successful sync at \(lastFinishedSync)"
             itemsToReport.append(lastSyncString)
         }
         
         strings.forEach { itemsToReport.append($0) }
         
-        //because it can be called before viewdidload (from syncer -> didSet) TODO: fix obviously
-        if self.statusTextField != nil {
-            self.statusTextField.stringValue = itemsToReport.joinWithSeparator("\n")
-        }
-    }
-    
-    func reloadStatus() {
-
-        self.startStopButton.title = self.isSyncing ? "Stop" : "Start"
-        self.syncIntervalStepper.enabled = !self.isSyncing
-        self.lttmToggle.enabled = !self.isSyncing
-        self.postStatusCommentsToggle.enabled = !self.isSyncing
-        
-        if self.isSyncing {
-            self.statusActivityIndicator.startAnimation(nil)
-        } else {
-            self.statusActivityIndicator.stopAnimation(nil)
-        }
-        
-        if let syncer = self.syncer {
-            
-            self.updateIntervalFromUIToValue(syncer.syncInterval)
-            self.lttmToggle.state = syncer.config.waitForLttm ? NSOnState : NSOffState
-            self.postStatusCommentsToggle.state = syncer.config.postStatusComments ? NSOnState : NSOffState
-        } else {
-            self.updateIntervalFromUIToValue(15) //default
-            self.lttmToggle.state = NSOffState //default is false
-            self.postStatusCommentsToggle.state = NSOnState //default is true
-        }
-    }
-    
-    func updateIntervalFromUIToValue(value: NSTimeInterval) {
-        
-        self.syncIntervalTextField.doubleValue = value
-        self.syncIntervalStepper.doubleValue = value
-    }
-    
-    @IBAction func newBuildTemplateButtonClicked(sender: AnyObject) {
-    }
-    
-    @IBAction func syncIntervalStepperValueChanged(sender: AnyObject) {
-        
-        if let stepper = sender as? NSStepper {
-            let value = stepper.doubleValue
-            self.updateIntervalFromUIToValue(value)
-        }
-    }
-    
-    @IBAction func startStopButtonTapped(sender: AnyObject) {
-        
-        self.toggleActiveWithCompletion { () -> () in
-            //
-        }
-    }
-    
-    @IBAction func branchWatchingTapped(sender: AnyObject) {
-        
-         if let _ = self.syncer {
-            self.performSegueWithIdentifier("showBranchWatching", sender: self)
-        } else {
-            UIUtils.showAlertWithText("Syncer must be created first. Click 'Start' and try again.")
-        }
-    }
-    
-    @IBAction func manualBotManagementTapped(sender: AnyObject) {
-        
-        if let _ = self.syncer {
-            self.performSegueWithIdentifier("showManual", sender: self)
-        } else {
-            UIUtils.showAlertWithText("Syncer must be created first. Click 'Start' and try again.")
-        }
-    }
-    
-    @IBAction func helpLttmButtonTapped(sender: AnyObject) {
-        
-        let urlString = "https://github.com/czechboy0/Buildasaur/blob/master/README.md#unlock-the-lttm-barrier"
-        if let url = NSURL(string: urlString) {
-            NSWorkspace.sharedWorkspace().openURL(url)
-        }
-    }
-    
-    @IBAction func helpPostStatusCommentsButtonTapped(sender: AnyObject) {
-        
-        let urlString = "https://github.com/czechboy0/Buildasaur/blob/master/README.md#envelope-posting-status-comments"
-        if let url = NSURL(string: urlString) {
-            NSWorkspace.sharedWorkspace().openURL(url)
-        }
-    }
-    
-    override func prepareForSegue(segue: NSStoryboardSegue, sender: AnyObject?) {
-        
-        if let manual = segue.destinationController as? ManualBotManagementViewController {
-            
-            manual.syncer = self.syncer
-        }
-        
-        if let branchWatching = segue.destinationController as? BranchWatchingViewController {
-            
-            branchWatching.syncer = self.syncer
-        }
-    }
-    
-    func startSyncing() {
-        
-        //TODO: reinstate
-        //create a syncer, delete the old one and kick it off
-//        let oldWatchedBranchNames: [String]
-//        if let syncer = self.syncer {
-//            self.storageManager.removeSyncer(syncer)
-//            oldWatchedBranchNames = syncer.config.watchedBranchNames.value
-//        } else {
-//            oldWatchedBranchNames = []
-//        }
-//        
-//        let waitForLttm = self.lttmToggle.state == NSOnState
-//        let postStatusComments = self.postStatusCommentsToggle.state == NSOnState
-//        let syncInterval = self.syncIntervalTextField.doubleValue
-//        let project = self.delegate.getProjectStatusViewController().project
-//        let serverConfig = self.delegate.getServerStatusViewController().serverConfig
-//        
-//        if let syncer = self.storageManager.addSyncer(
-//            syncInterval,
-//            waitForLttm: waitForLttm,
-//            postStatusComments: postStatusComments,
-//            project: project,
-//            serverConfig: serverConfig,
-//            watchedBranchNames: oldWatchedBranchNames) {
-//            
-//            syncer.active = true
-//            
-//            self.isSyncing = true
-//            self.reloadStatus()
-//        } else {
-//            UIUtils.showAlertWithText("Couldn't start syncer, please make sure the sync interval is > 0 seconds.")
-//        }
-//        
-//        self.storageManager.saveSyncers()
-    }
-    
-    func toggleActiveWithCompletion(completion: () -> ()) {
-        
-        if self.isSyncing {
-            
-            //stop syncing
-            self.isSyncing = false
-            self.reloadStatus()
-            
-//        } else if self.delegate.getProjectStatusViewController().editing.value ||
-//        self.delegate.getServerStatusViewController().editing.value {
-            
-//            UIUtils.showAlertWithText("Please save your configurations above by clicking Done")
-            
-        } else {
-            
-            let group = dispatch_group_create()
-            
-            //validate - check availability for both sources - github and xcodeserver - only kick off if both work
-            //gather data from the UI + storageManager and try to create a syncer with it
-            
-//            var projectReady: Bool = false
-//            dispatch_group_enter(group)
-//            self.delegate.getProjectStatusViewController().checkAvailability({ (status, done) -> () in
-//                if done {
-//                    switch status {
-//                    case .Succeeded:
-//                        projectReady = true
-//                    default:
-//                        projectReady = false
-//                    }
-//                    dispatch_group_leave(group)
-//                }
-//            })
-//            
-//            var serverReady: Bool = false
-//            dispatch_group_enter(group)
-//            self.delegate.getServerStatusViewController().checkAvailability({ (status, done) -> () in
-//                if done {
-//                    switch status {
-//                    case .Succeeded:
-//                        serverReady = true
-//                    default:
-//                        serverReady = false
-//                    }
-//                    dispatch_group_leave(group)
-//                }
-//            })
-//            
-//            dispatch_group_notify(group, dispatch_get_main_queue(), { () -> Void in
-//                
-//                let allReady = projectReady && serverReady
-//                if allReady {
-//                    
-//                    self.startSyncing()
-//                } else {
-//                    
-//                    let brokenPart = projectReady ? "Xcode Server" : "Xcode Project"
-//                    let message = "Couldn't start syncing, please fix your \(brokenPart) settings and try again."
-//                    UIUtils.showAlertWithText(message)
-//                }
-//            })
-        }
+        self.statusTextField.stringValue = itemsToReport.joinWithSeparator("\n")
     }
 }
