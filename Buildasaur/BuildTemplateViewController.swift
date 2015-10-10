@@ -17,7 +17,7 @@ protocol BuildTemplateViewControllerDelegate: class {
     func didCancelEditingOfBuildTemplate(template: BuildTemplate)
 }
 
-class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate, SetupViewControllerDelegate, NSComboBoxDataSource {
+class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSource, NSTableViewDelegate, SetupViewControllerDelegate {
     
     let buildTemplate = MutableProperty<BuildTemplate>(BuildTemplate())
     weak var cancelDelegate: BuildTemplateViewControllerDelegate?
@@ -40,6 +40,8 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
     @IBOutlet weak var triggersTableView: NSTableView!
     @IBOutlet weak var deviceFilterPopup: NSPopUpButton!
     @IBOutlet weak var devicesTableView: NSTableView!
+    @IBOutlet weak var deviceFilterStackItem: NSStackView!
+    @IBOutlet weak var testDevicesStackItem: NSStackView!
     
     private var triggerToEdit: TriggerConfig? //?
     
@@ -100,7 +102,7 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
             .on(next: { [weak self] _ in self?.isParsingPlatforms.value = true })
             .observeOn(QueueScheduler())
             .flatMap(.Latest) { [weak self] schemeName in
-                return self!.devicePlatformFromScheme(schemeName)
+                return self?.devicePlatformFromScheme(schemeName) ?? SignalProducer<DevicePlatform.PlatformType, NoError>.never
             }.observeOn(UIScheduler())
             .on(next: { [weak self] _ in self?.isParsingPlatforms.value = false })
 
@@ -141,6 +143,7 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
             
             sself.selectedScheme.value = buildTemplate.scheme
             sself.schemesPopup.selectItemWithTitle(buildTemplate.scheme)
+            
             sself.analyzeButton.on = buildTemplate.shouldAnalyze
             sself.testButton.on = buildTemplate.shouldTest
             sself.archiveButton.on = buildTemplate.shouldArchive
@@ -156,6 +159,19 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
             sself.selectedDeviceIds.value = buildTemplate.testingDeviceIds
         }
         
+        let notTesting = self.testButton.rac_on.map { !$0 }
+        self.deviceFilterStackItem.rac_hidden <~ notTesting
+        self.testDevicesStackItem.rac_hidden <~ notTesting
+        
+        //when we switch to not-testing, clean up the device filter and testing device ids
+        notTesting.startWithNext { [weak self] in
+            if $0 {
+                self?.selectedDeviceIds.value = []
+                self?.deviceFilter.value = .AllAvailableDevicesAndSimulators
+                self?.deviceFilterPopup.selectItemAtIndex(0)
+            }
+        }
+        
         //this must be ran AFTER the initial dump (runs synchronously), othwerise
         //the callback for name text field doesn't contain the right value.
         //the RAC text signal doesn't fire on code-trigger text changes :(
@@ -165,7 +181,6 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
     private func devicePlatformFromScheme(schemeName: String) -> SignalProducer<DevicePlatform.PlatformType, NoError> {
         return SignalProducer { sink, _ in
             guard let scheme = self.schemes.value.filter({ $0.name == schemeName }).first else {
-                UIUtils.showAlertWithError(Error.withInfo("No scheme named \(schemeName)"))
                 return
             }
             
@@ -328,24 +343,36 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         let original = self.buildTemplate.producer
         let combined = combineLatest(original, name, scheme, analyze, test, archive, schedule, cleaningPolicy, deviceFilter, deviceIds)
         
-        let validated = combined.map {
+        let validated = combined.map { [weak self]
             original, name, scheme, analyze, test, archive, schedule, cleaningPolicy, deviceFilter, deviceIds -> Bool in
             
+            guard let sself = self else { return false }
+            
+            //make sure the name isn't empty
             if name.isEmpty {
                 return false
             }
             
-            //TODO: add more things that need to be true
+            //make sure the selected scheme is valid
+            if sself.schemes.value.filter({ $0.name == scheme }).count == 0 {
+                return false
+            }
+            
+            //at least one of the three actions has to be selected
+            if !analyze && !test && !archive {
+                return false
+            }
             
             return true
         }
         
         self.isValid <~ validated
         
-        let generated = combined.forwardIf(validated).map {
+        let generated = combined.forwardIf(validated).map { [weak self]
             original, name, scheme, analyze, test, archive, schedule, cleaningPolicy, deviceFilter, deviceIds -> BuildTemplate in
             
             var mod = original
+            mod.projectName = self?.project.value.config.name
             mod.name = name
             mod.scheme = scheme
             mod.shouldAnalyze = analyze
@@ -486,23 +513,28 @@ class BuildTemplateViewController: EditableViewController, NSComboBoxDelegate, N
         }
     }
     
-    func willSave() {
-        
-//        self.storageManager.addBuildTemplate(self.buildTemplate)
-//        super.willSave()
-    }
-    
-    @IBAction func addTriggerButtonTapped(sender: AnyObject) {
+    @IBAction func addTriggerButtonClicked(sender: AnyObject) {
         self.editTrigger(nil)
     }
     
-    @IBAction func deleteButtonTapped(sender: AnyObject) {
+    override func shouldGoNext() -> Bool {
         
-        UIUtils.showAlertAskingForRemoval("Are you sure you want to delete this build template?", completion: { (remove) -> () in
+        guard self.isValid.value else { return false }
+        
+        let newBuildTemplate = self.generatedTemplate.value
+        self.buildTemplate.value = newBuildTemplate
+        self.storageManager.addBuildTemplate(newBuildTemplate)
+        
+        return true
+    }
+    
+    override func delete() {
+        
+        UIUtils.showAlertAskingForRemoval("Are you sure you want to delete this Build Template?", completion: { (remove) -> () in
             if remove {
-//                self.storageManager.removeBuildTemplate(self.buildTemplate)
-//                self.buildTemplate = nil
-//                self.cancel()
+                let template = self.buildTemplate.value
+                self.storageManager.removeBuildTemplate(template)
+                self.cancelDelegate?.didCancelEditingOfBuildTemplate(template)
             }
         })
     }

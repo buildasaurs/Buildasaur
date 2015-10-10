@@ -32,13 +32,15 @@ class ConfigEditViewController: EditableViewController {
     
     private func setupUI() {
         
-        //status image
-        let statusImage = self
-            .availabilityCheckState
-            .producer
-            .map { ConfigEditViewController.imageNameForStatus($0) }
-            .map { NSImage(named: $0) }
-        self.serverStatusImageView.rac_image <~ statusImage
+        if self.serverStatusImageView != nil {
+            //status image
+            let statusImage = self
+                .availabilityCheckState
+                .producer
+                .map { ConfigEditViewController.imageNameForStatus($0) }
+                .map { NSImage(named: $0) }
+            self.serverStatusImageView.rac_image <~ statusImage
+        }
     }
     
     //do not call directly! just override

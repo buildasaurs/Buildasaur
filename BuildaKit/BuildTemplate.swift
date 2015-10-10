@@ -51,13 +51,13 @@ public struct BuildTemplate: JSONSerializable {
     public init(projectName: String? = nil) {
         self.id = Ref.new()
         self.projectName = projectName
-        self.name = "New Build Template"
-        self.scheme = "Select scheme to build"
+        self.name = ""
+        self.scheme = ""
         self.schedule = BotSchedule.manualBotSchedule()
         self.cleaningPolicy = BotConfiguration.CleaningPolicy.Never
         self.triggers = []
-        self.shouldAnalyze = false
-        self.shouldTest = false
+        self.shouldAnalyze = true
+        self.shouldTest = true
         self.shouldArchive = false
         self.testingDeviceIds = []
         self.deviceFilter = .AllAvailableDevicesAndSimulators

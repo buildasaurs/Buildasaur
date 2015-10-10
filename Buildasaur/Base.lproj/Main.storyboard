@@ -1873,7 +1873,7 @@ Gw
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
                                                         <connections>
-                                                            <action selector="addTriggerButtonTapped:" target="gBo-v0-Miz" id="Eeo-fc-aFx"/>
+                                                            <action selector="addTriggerButtonClicked:" target="gBo-v0-Miz" id="3Xy-eT-eud"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -2173,7 +2173,7 @@ Gw
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="trashButtonClicked:" target="A7n-Q1-s2v" id="INP-bC-5oO"/>
+                                    <action selector="trashButtonClicked:" target="gBo-v0-Miz" id="DIf-EO-8sH"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -2190,12 +2190,14 @@ Gw
                         <outlet property="archiveButton" destination="Sy4-2B-PXP" id="eY9-kl-hLt"/>
                         <outlet property="cleaningPolicyPopup" destination="0ct-8g-TSC" id="uDV-mm-18w"/>
                         <outlet property="deviceFilterPopup" destination="bV7-h4-cgv" id="mQV-eF-1hr"/>
+                        <outlet property="deviceFilterStackItem" destination="8PN-Qf-rxT" id="jXb-8a-Gdo"/>
                         <outlet property="devicesTableView" destination="8jQ-1w-bC4" id="oRK-sT-CAv"/>
                         <outlet property="nameTextField" destination="WPc-CF-v7P" id="fxe-z2-vZl"/>
                         <outlet property="schedulePopup" destination="zZG-wO-VNy" id="NNR-qY-7gx"/>
                         <outlet property="schemesPopup" destination="NV9-PP-XzH" id="BFF-MT-lZ8"/>
                         <outlet property="testButton" destination="uhv-2l-5xn" id="wU2-bu-fTN"/>
                         <outlet property="testDevicesActivityIndicator" destination="VY0-39-fd9" id="omW-hD-iMO"/>
+                        <outlet property="testDevicesStackItem" destination="VmW-fk-we2" id="v5V-yw-cr0"/>
                         <outlet property="triggersTableView" destination="3LH-7K-zWF" id="mJs-5d-eR7"/>
                         <segue destination="761-zL-6B5" kind="sheet" identifier="showTrigger" id="lK8-ED-l22"/>
                     </connections>
@@ -2209,7 +2211,7 @@ Gw
             <objects>
                 <viewController id="761-zL-6B5" customClass="TriggerViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="Mm4-9X-Wd0">
-                        <rect key="frame" x="0.0" y="0.0" width="500" height="439"/>
+                        <rect key="frame" x="0.0" y="0.0" width="500" height="440"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wKA-Ma-yP6">
@@ -2636,15 +2638,20 @@ Gw
                         <outlet property="conditionInternalErrorCheckbox" destination="CFB-np-Va9" id="ZJg-bC-QS1"/>
                         <outlet property="conditionSuccessCheckbox" destination="Md6-Li-ZdH" id="VMi-hR-Wzg"/>
                         <outlet property="conditionWarningsCheckbox" destination="FXV-sG-ob2" id="rtY-5f-iUi"/>
+                        <outlet property="emailConfigStackItem" destination="ptX-I0-zrd" id="Tzw-DZ-XyT"/>
                         <outlet property="emailEmailCommittersCheckbox" destination="Peo-VN-FTf" id="yt8-7U-egy"/>
                         <outlet property="emailIncludeCommitsCheckbox" destination="Ncg-vr-Pxa" id="egd-7R-t5r"/>
                         <outlet property="emailIncludeIssueDetailsCheckbox" destination="qSw-kF-tzI" id="lng-3L-QZK"/>
+                        <outlet property="kindPopup" destination="ES6-3x-fTX" id="Am3-h3-t8x"/>
                         <outlet property="nameTextField" destination="7QV-li-7Ag" id="hPG-hW-C1e"/>
+                        <outlet property="phasePopup" destination="L2U-eb-cZL" id="QqC-Ie-z1u"/>
+                        <outlet property="postbuildConfigStackItem" destination="hBt-El-pVW" id="ukZ-pn-Yrj"/>
+                        <outlet property="saveButton" destination="IQl-Cn-uMh" id="KNO-QB-2Rp"/>
                     </connections>
                 </viewController>
                 <customObject id="fyY-Kc-dNd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1669" y="1504.5"/>
+            <point key="canvasLocation" x="1669" y="1504"/>
         </scene>
         <!--Syncer View Controller-->
         <scene sceneID="N2h-cU-h0l">
