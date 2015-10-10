@@ -25,7 +25,7 @@ public class SyncerManager {
     public let buildTemplatesProducer: SignalProducer<[BuildTemplate], NoError>
     public let triggerProducer: SignalProducer<[Trigger], NoError>
     
-    private var syncers: [HDGitHubXCBotSyncer]
+    public var syncers: [HDGitHubXCBotSyncer]
     private var configTriplets: SignalProducer<[ConfigTriplet], NoError>
     
     public init(storageManager: StorageManager, factory: SyncerFactoryType) {
@@ -36,7 +36,7 @@ public class SyncerManager {
         let configTriplets = SyncerProducerFactory.createTripletsProducer(storageManager)
         self.configTriplets = configTriplets
         let syncersProducer = SyncerProducerFactory.createSyncersProducer(factory, triplets: configTriplets)
-
+        
         self.syncersProducer = syncersProducer
         
         let justProjects = storageManager.projectConfigs.producer.map { $0.map { $0.1 } }
@@ -50,6 +50,12 @@ public class SyncerManager {
         self.triggerProducer = SyncerProducerFactory.createTriggersProducer(factory, configs: justTriggerConfigs)
         
         syncersProducer.startWithNext { [weak self] in self?.syncers = $0 }
+        self.checkForAutostart()
+    }
+    
+    private func checkForAutostart() {
+        guard let autostart = self.storageManager.config.value["autostart"] as? Bool where autostart else { return }
+        self.syncers.forEach { $0.active = true }
     }
     
     public func xcodeServerWithRef(ref: RefType) -> SignalProducer<XcodeServer?, NoError> {

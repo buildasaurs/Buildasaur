@@ -11,6 +11,8 @@ import BuildaKit
 
 class MenuItemManager : NSObject, NSMenuDelegate {
     
+    var syncerManager: SyncerManager!
+    
     private var statusItem: NSStatusItem?
     private var firstIndexLastSyncedMenuItem: Int!
     
@@ -37,10 +39,8 @@ class MenuItemManager : NSObject, NSMenuDelegate {
     func menuWillOpen(menu: NSMenu) {
         
         //update with last sync/statuses
-//        let syncers = SyncerManager.sharedInstance.syncers.value.....
-        //TODO: plug back in
-        let syncers: [HDGitHubXCBotSyncer] = []
-        
+        let syncers = self.syncerManager.syncers
+
         //remove items for existing syncers
         let itemsForSyncers = menu.numberOfItems - self.firstIndexLastSyncedMenuItem
         let diffItems = syncers.count - itemsForSyncers

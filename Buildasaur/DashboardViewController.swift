@@ -17,6 +17,9 @@ class DashboardViewController: PresentableViewController {
     @IBOutlet weak var syncersTableView: NSTableView!
     @IBOutlet weak var startAllButton: NSButton!
     @IBOutlet weak var stopAllButton: NSButton!
+    @IBOutlet weak var autostartButton: NSButton!
+    
+    let config = MutableProperty<[String: AnyObject]>([:])
     
     //injected before viewDidLoad
     var syncerManager: SyncerManager!
@@ -41,6 +44,19 @@ class DashboardViewController: PresentableViewController {
         
         //TODO: once the crashing of Xcode editor is fixed and we can use all of 
         //RAC, bring back the signals that update the Start/Stop All buttons
+        
+        //setup config
+        self.config.value = self.syncerManager.storageManager.config.value
+        self.autostartButton.on = self.config.value["autostart"] as? Bool ?? false
+        
+        self.config.producer.startWithNext { [weak self] config in
+            guard let sself = self else { return }
+            sself.syncerManager.storageManager.config.value = config
+        }
+        self.autostartButton.rac_on.startWithNext { [weak self] in
+            guard let sself = self else { return }
+            sself.config.value["autostart"] = $0
+        }
     }
     
     func configTableView() {
@@ -54,7 +70,7 @@ class DashboardViewController: PresentableViewController {
     func configDataSource() {
         
         let present: SyncerViewModel.PresentEditViewControllerType = {
-            self.showSyncerEditViewControllerWithTriplet($0.toEditable())
+            self.showSyncerEditViewControllerWithTriplet($0.toEditable(), state: .Syncer)
         }
         self.syncerManager.syncersProducer.startWithNext { newSyncers in
             self.syncerViewModels.value = newSyncers.map {
@@ -105,10 +121,10 @@ extension DashboardViewController {
         triplet.project = self.syncerManager.storageManager.projectConfigs.value["E94BAED5-7D91-426A-B6B6-5C39BF1F7032"]!
         triplet.buildTemplate = self.syncerManager.storageManager.buildTemplates.value["EB0C3E74-C303-4C33-AF0E-012B650D2E9F"]
         
-        self.showSyncerEditViewControllerWithTriplet(triplet)
+        self.showSyncerEditViewControllerWithTriplet(triplet, state: .NoServer)
     }
     
-    func showSyncerEditViewControllerWithTriplet(triplet: EditableConfigTriplet) {
+    func showSyncerEditViewControllerWithTriplet(triplet: EditableConfigTriplet, state: EditorState) {
         
         let uniqueIdentifier = triplet.syncer.id
         let viewController: MainEditorViewController = self.storyboardLoader.presentableViewControllerWithStoryboardIdentifier("editorViewController", uniqueIdentifier: uniqueIdentifier, delegate: self.presentingDelegate)
@@ -119,6 +135,8 @@ extension DashboardViewController {
         viewController.factory = EditorViewControllerFactory(storyboardLoader: self.storyboardLoader)
         context.editeeDelegate = viewController
         viewController.context.value = context
+        
+        viewController.loadInState(state)
 
         self.presentingDelegate?.presentViewControllerInUniqueWindow(viewController)
     }

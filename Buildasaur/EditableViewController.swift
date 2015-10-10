@@ -21,7 +21,10 @@ class EditableViewController: NSViewController {
     let editing = MutableProperty<Bool>(true)
     
     let nextAllowed = MutableProperty<Bool>(true)
+    let previousAllowed = MutableProperty<Bool>(true)
     let cancelAllowed = MutableProperty<Bool>(true)
+    
+    let nextTitle = MutableProperty<String>("Next")
     
     typealias ActionSignal = Signal<Void, NoError>
     typealias AnimatableSignal = Signal<Bool, NoError>

@@ -18,9 +18,11 @@ extension MainEditorViewController {
         let content = self._contentViewController!
         
         self.nextButton.rac_enabled <~ content.nextAllowed
+        self.previousButton.rac_enabled <~ content.previousAllowed
         self.cancelButton.rac_enabled <~ content.cancelAllowed
         content.wantsNext.observeNext { [weak self] in self?._next(animated: $0) }
         content.wantsPrevious.observeNext { [weak self] in self?._previous(animated: false) }
+        self.nextButton.rac_title <~ content.nextTitle
     }
     
     private func remove(viewController: NSViewController?) {

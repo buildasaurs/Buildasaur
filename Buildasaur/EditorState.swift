@@ -21,27 +21,16 @@ enum EditorState: Int {
     case NoBuildTemplate
     case EditingBuildTemplate
     
-    case EditingSyncer
-    case ReadonlySyncer
+    case Syncer
     
     case Final
     
     func next() -> EditorState? {
-        
-        switch self {
-        case .EditingSyncer:
-            return .Final
-        default: return self + 1
-        }
+        return self + 1
     }
     
     func previous() -> EditorState? {
-        
-        switch self {
-        case .ReadonlySyncer:
-            return .EditingBuildTemplate
-        default: return self + (-1)
-        }
+        return self + (-1)
     }
 }
 

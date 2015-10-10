@@ -63,7 +63,7 @@ extension MainEditorViewController: BuildTemplateViewControllerDelegate {
 extension MainEditorViewController: SyncerViewControllerDelegate {
     
     func didCancelEditingOfSyncerConfig(config: SyncerConfig) {
-        //no-op
+        self._cancel()
     }
     
     func didSaveSyncerConfig(config: SyncerConfig) {

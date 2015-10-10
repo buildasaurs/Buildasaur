@@ -28,7 +28,7 @@ class MainEditorViewController: PresentableViewController {
     @IBOutlet weak var cancelButton: NSButton!
     
     //state and animated?
-    var state = MutableProperty<(EditorState, Bool)>(.NoServer, false)
+    let state = MutableProperty<(EditorState, Bool)>(.NoServer, false)
 
     var _contentViewController: EditableViewController?
     
@@ -49,6 +49,10 @@ class MainEditorViewController: PresentableViewController {
         self.cancel()
     }
     
+    func loadInState(state: EditorState) {
+        self.state.value = (state, false)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -58,7 +62,7 @@ class MainEditorViewController: PresentableViewController {
         self.setupBindings()
         
         //HACK: hack for debugging - jump ahead
-        self.state.value = (.EditingSyncer, false)
+//        self.state.value = (.EditingSyncer, false)
     }
     
     // moving forward and back
@@ -135,7 +139,11 @@ class MainEditorViewController: PresentableViewController {
                 self?.stateChanged(fromState: $0.0, toState: $1.0, animated: $1.1)
         }
         
-        self.previousButton.rac_enabled <~ self.state.producer.map { $0.0 != .NoServer }
+        self.state.producer.map { $0.0 == .NoServer }.startWithNext { [weak self] in
+            if $0 {
+                self?.previousButton.enabled = false
+            }
+        }
         
         //create a title
         self.context.producer.map { context -> String in
@@ -174,7 +182,7 @@ class MainEditorViewController: PresentableViewController {
         }
     }
     
-    private func dismissWindow() {
+    internal func dismissWindow() {
         self.presentingDelegate?.closeWindowWithViewController(self)
     }
 }

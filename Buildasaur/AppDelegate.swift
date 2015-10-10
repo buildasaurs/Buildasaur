@@ -24,6 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var syncerManager: SyncerManager!
     
     let menuItemManager = MenuItemManager()
+
     var storyboardLoader: StoryboardLoader!
     
     var dashboardViewController: DashboardViewController?
@@ -42,7 +43,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         self.storyboardLoader = StoryboardLoader(storyboard: NSStoryboard.mainStoryboard)
         self.storyboardLoader.delegate = self
-        
+
+        self.menuItemManager.syncerManager = self.syncerManager
         self.menuItemManager.setupMenuBarItem()
         
         let dashboard = self.createInitialViewController()

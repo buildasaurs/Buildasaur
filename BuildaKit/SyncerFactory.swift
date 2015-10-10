@@ -31,7 +31,8 @@ public class SyncerFactory: SyncerFactoryType {
     public func createSyncer(syncerConfig: SyncerConfig, serverConfig: XcodeServerConfig, projectConfig: ProjectConfig, buildTemplate: BuildTemplate, triggerConfigs: [TriggerConfig]) -> HDGitHubXCBotSyncer {
         
         if let poolAttempt = self.syncerPool[syncerConfig.id] {
-           return poolAttempt
+            poolAttempt.config.value = syncerConfig
+            return poolAttempt
         }
         
         let xcodeServer = self.createXcodeServer(serverConfig)

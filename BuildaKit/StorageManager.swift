@@ -130,11 +130,11 @@ public class StorageManager {
         self.serverConfigs.value.removeValueForKey(serverConfig.id)
     }
     
-    public func removeSyncer(syncer: HDGitHubXCBotSyncer) {
+    public func removeSyncer(syncerConfig: SyncerConfig) {
         
         //TODO: make sure this syncer config is not owned by a syncer which
         //is running right now.
-        self.syncerConfigs.value.removeAll(keepCapacity: true)
+        self.syncerConfigs.value.removeValueForKey(syncerConfig.id)
     }
     
     //MARK: lookup

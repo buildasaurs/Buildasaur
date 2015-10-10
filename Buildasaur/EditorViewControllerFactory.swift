@@ -77,32 +77,26 @@ class EditorViewControllerFactory: EditorViewControllerFactoryType {
             vc.cancelDelegate = context.editeeDelegate
             return vc
             
-        case .EditingSyncer:
-            return self.createSyncerVC(context, editing: true)
+        case .Syncer:
+            let vc: SyncerViewController = self.storyboardLoader.typedViewControllerWithStoryboardIdentifier(EditorVCType.SyncerStatusVC.rawValue)
+            vc.syncerManager = context.syncerManager
             
-        case .ReadonlySyncer:
-            return self.createSyncerVC(context, editing: false)
+            //ensure the syncer config has the right ids linked up
+            let triplet = context.configTriplet
+            var syncerConfig = triplet.syncer
+            syncerConfig.xcodeServerRef = triplet.server!.id
+            syncerConfig.projectRef = triplet.project!.id
+            syncerConfig.preferredTemplateRef = triplet.buildTemplate!.id
+            vc.syncerConfig.value = syncerConfig
+            vc.delegate = context.editeeDelegate
+            vc.xcodeServerConfig.value = triplet.server!
+            vc.projectConfig.value = triplet.project!
+            vc.buildTemplate.value = triplet.buildTemplate!
+            return vc
             
         default:
             return nil
         }
 //        fatalError("No controller for state \(state)")
-    }
-    
-    func createSyncerVC(context: EditorContext, editing: Bool) -> SyncerViewController {
-        
-        let vc: SyncerViewController = self.storyboardLoader.typedViewControllerWithStoryboardIdentifier(EditorVCType.SyncerStatusVC.rawValue)
-        vc.syncerManager = context.syncerManager
-        
-        //ensure the syncer config has the right ids linked up
-        let triplet = context.configTriplet
-        var syncerConfig = triplet.syncer
-        syncerConfig.xcodeServerRef = triplet.server!.id
-        syncerConfig.projectRef = triplet.project!.id
-        syncerConfig.preferredTemplateRef = triplet.buildTemplate!.id
-        vc.syncerConfig.value = syncerConfig
-        vc.delegate = context.editeeDelegate
-        vc.editing.value = editing
-        return vc
     }
 }
