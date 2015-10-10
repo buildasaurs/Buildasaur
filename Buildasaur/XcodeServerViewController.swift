@@ -18,7 +18,7 @@ protocol XcodeServerViewControllerDelegate: class {
 
 class XcodeServerViewController: ConfigEditViewController {
     
-    let serverConfig = MutableProperty<XcodeServerConfig>(XcodeServerConfig())
+    let serverConfig = MutableProperty<XcodeServerConfig!>(nil)
     weak var cancelDelegate: XcodeServerViewControllerDelegate?
     
     @IBOutlet weak var serverHostTextField: NSTextField!

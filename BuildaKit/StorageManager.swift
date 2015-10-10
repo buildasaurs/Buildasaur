@@ -166,6 +166,12 @@ public class StorageManager {
     
     //MARK: lookup
     
+    public func triggerConfigsForIds(ids: [RefType]) -> [TriggerConfig] {
+        
+        let idsSet = Set(ids)
+        return self.triggerConfigs.value.map { $0.1 }.filter { idsSet.contains($0.id) }
+    }
+    
     public func buildTemplatesForProjectName(projectName: String) -> SignalProducer<[BuildTemplate], NoError> {
         
         //filter all build templates with the project name || with no project name (legacy reasons)

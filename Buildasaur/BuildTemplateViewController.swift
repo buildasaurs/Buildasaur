@@ -17,7 +17,7 @@ protocol BuildTemplateViewControllerDelegate: class {
     func didCancelEditingOfBuildTemplate(template: BuildTemplate)
 }
 
-class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSource, NSTableViewDelegate, SetupViewControllerDelegate {
+class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSource, NSTableViewDelegate {
     
     let buildTemplate = MutableProperty<BuildTemplate>(BuildTemplate())
     weak var cancelDelegate: BuildTemplateViewControllerDelegate?
@@ -43,8 +43,6 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
     @IBOutlet weak var deviceFilterStackItem: NSStackView!
     @IBOutlet weak var testDevicesStackItem: NSStackView!
     
-    private var triggerToEdit: TriggerConfig? //?
-    
     private let isFetchingDevices = MutableProperty<Bool>(false)
     private let isParsingPlatforms = MutableProperty<Bool>(false)
     
@@ -60,9 +58,12 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
     private let deviceFilter = MutableProperty<DeviceFilter.FilterType>(.AllAvailableDevicesAndSimulators)
     private let selectedSchedule = MutableProperty<BotSchedule>(BotSchedule.manualBotSchedule())
     private let selectedDeviceIds = MutableProperty<[String]>([])
+    private let triggers = MutableProperty<[TriggerConfig]>([])
     
     private let isValid = MutableProperty<Bool>(false)
     private var generatedTemplate: MutableProperty<BuildTemplate>!
+    
+    private var triggerToEdit: TriggerConfig?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,6 +87,10 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
         
         self.project.producer.startWithNext { [weak self] in
             self?.schemes.value = $0.schemes()
+        }
+        
+        self.triggers.producer.startWithNext { [weak self] _ in
+            self?.triggersTableView.reloadData()
         }
         
         //ui
@@ -157,6 +162,8 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
             sself.cleaningPolicyPopup.selectItemAtIndex(cleaningPolicyIndex ?? 0)
             sself.deviceFilter.value = buildTemplate.deviceFilter
             sself.selectedDeviceIds.value = buildTemplate.testingDeviceIds
+            
+            sself.triggers.value = sself.storageManager.triggerConfigsForIds(buildTemplate.triggers)
         }
         
         let notTesting = self.testButton.rac_on.map { !$0 }
@@ -336,15 +343,15 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
         let archive = self.archiveButton.rac_on
         let schedule = self.selectedSchedule.producer
         let cleaningPolicy = self.cleaningPolicy.producer
-        //triggers
+        let triggers = self.triggers.producer
         let deviceFilter = self.deviceFilter.producer
         let deviceIds = self.selectedDeviceIds.producer
         
         let original = self.buildTemplate.producer
-        let combined = combineLatest(original, name, scheme, analyze, test, archive, schedule, cleaningPolicy, deviceFilter, deviceIds)
+        let combined = combineLatest(original, name, scheme, analyze, test, archive, schedule, cleaningPolicy, triggers, deviceFilter, deviceIds)
         
         let validated = combined.map { [weak self]
-            original, name, scheme, analyze, test, archive, schedule, cleaningPolicy, deviceFilter, deviceIds -> Bool in
+            original, name, scheme, analyze, test, archive, schedule, cleaningPolicy, triggers, deviceFilter, deviceIds -> Bool in
             
             guard let sself = self else { return false }
             
@@ -369,7 +376,7 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
         self.isValid <~ validated
         
         let generated = combined.forwardIf(validated).map { [weak self]
-            original, name, scheme, analyze, test, archive, schedule, cleaningPolicy, deviceFilter, deviceIds -> BuildTemplate in
+            original, name, scheme, analyze, test, archive, schedule, cleaningPolicy, triggers, deviceFilter, deviceIds -> BuildTemplate in
             
             var mod = original
             mod.projectName = self?.project.value.config.name
@@ -380,6 +387,7 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
             mod.shouldArchive = archive
             mod.schedule = schedule
             mod.cleaningPolicy = cleaningPolicy
+            mod.triggers = triggers.map { $0.id }
             mod.deviceFilter = deviceFilter
             mod.testingDeviceIds = deviceIds
             
@@ -473,46 +481,16 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
         
         if let triggerViewController = destinationController as? TriggerViewController {
             
-            triggerViewController.inTrigger = self.triggerToEdit
-            
-            if let sender = sender as? SetupViewControllerDelegate {
-                triggerViewController.delegate = sender
-            }
+            let triggerToEdit = self.triggerToEdit ?? TriggerConfig()
+            triggerViewController.triggerConfig.value = triggerToEdit
+            triggerViewController.storageManager = self.storageManager
+            triggerViewController.delegate = self
+            self.triggerToEdit = nil
         }
         
         super.prepareForSegue(segue, sender: sender)
     }
 
-    func pullStagesFromUI(interactive: Bool) -> Bool {
-        
-        let analyze = (self.analyzeButton.state == NSOnState)
-        self.buildTemplate.value.shouldAnalyze = analyze
-        let test = (self.testButton.state == NSOnState)
-        self.buildTemplate.value.shouldTest = test
-        let archive = (self.archiveButton.state == NSOnState)
-        self.buildTemplate.value.shouldArchive = archive
-        
-        let passed = analyze || test || archive
-        
-        if !passed && interactive {
-            UIUtils.showAlertWithText("Please select at least one action (analyze/test/archive)")
-        }
-
-        //at least one action has to be enabled
-        return passed
-    }
-    
-    func pullNameFromUI() -> Bool {
-        
-        let name = self.nameTextField.stringValue
-        if !name.isEmpty {
-            self.buildTemplate.value.name = name
-            return true
-        } else {
-            return false
-        }
-    }
-    
     @IBAction func addTriggerButtonClicked(sender: AnyObject) {
         self.editTrigger(nil)
     }
@@ -532,7 +510,7 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
         
         UIUtils.showAlertAskingForRemoval("Are you sure you want to delete this Build Template?", completion: { (remove) -> () in
             if remove {
-                let template = self.buildTemplate.value
+                let template = self.generatedTemplate.value
                 self.storageManager.removeBuildTemplate(template)
                 self.cancelDelegate?.didCancelEditingOfBuildTemplate(template)
             }
@@ -543,7 +521,7 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
     func numberOfRowsInTableView(tableView: NSTableView) -> Int {
         
         if tableView == self.triggersTableView {
-            return self.buildTemplate.value.triggers.count
+            return self.triggers.value.count
         } else if tableView == self.devicesTableView {
             return self.testingDevices.value.count
         }
@@ -552,13 +530,12 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
     
     func tableView(tableView: NSTableView, objectValueForTableColumn tableColumn: NSTableColumn?, row: Int) -> AnyObject? {
         if tableView == self.triggersTableView {
-            return "NOT IMPLEMENTED ATM"
-            //                let triggers = self.buildTemplate.triggers
-            //                if tableColumn!.identifier == "names" {
-            //
-            //                    let trigger = triggers[row]
-            //                    return trigger.name
-            //                }
+            let triggers = self.triggers.value
+            if tableColumn!.identifier == "names" {
+                
+                let trigger = triggers[row]
+                return trigger.name
+            }
         } else if tableView == self.devicesTableView {
             
             let device = self.testingDevices.value[row]
@@ -581,48 +558,22 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
         return nil
     }
     
-    func setupViewControllerDidSave(viewController: SetupViewController) {
-        
-        //TODO: reinstate saving
-//        if let triggerViewController = viewController as? TriggerViewController {
-//            
-//            if let outTrigger = triggerViewController.outTrigger {
-//                
-//                if let inTrigger = triggerViewController.inTrigger {
-//                    //was an existing trigger, just replace in place
-//                    let index = self.buildTemplate.triggers.indexOfFirstObjectPassingTest { $0.id == inTrigger.id }!
-//                    self.buildTemplate.triggers[index] = outTrigger
-//                    
-//                } else {
-//                    //new trigger, just add
-//                    self.buildTemplate.triggers.append(outTrigger)
-//                }
-//            }
-//        }
-        
-//        self.reloadUI()
-    }
-    
-    func setupViewControllerDidCancel(viewController: SetupViewController) {
-        //
-    }
-    
     func editTrigger(trigger: TriggerConfig?) {
         self.triggerToEdit = trigger
-        self.performSegueWithIdentifier("showTrigger", sender: self)
+        self.performSegueWithIdentifier("showTrigger", sender: nil)
     }
     
     @IBAction func triggerTableViewEditTapped(sender: AnyObject) {
-//        let index = self.triggersTableView.selectedRow
-//        let trigger = self.buildTemplate.triggers[index]
-        //TODO: pull the right config
-//        self.editTrigger(trigger)
+        let index = self.triggersTableView.selectedRow
+        let trigger = self.triggers.value[index]
+        self.editTrigger(trigger)
     }
     
     @IBAction func triggerTableViewDeleteTapped(sender: AnyObject) {
         let index = self.triggersTableView.selectedRow
-        self.buildTemplate.value.triggers.removeAtIndex(index)
-//        self.reloadUI()
+        let trigger = self.triggers.value[index]
+        self.storageManager.removeTriggerConfig(trigger)
+        self.triggers.value.removeAtIndex(index)
     }
     
     @IBAction func testDevicesTableViewRowCheckboxTapped(sender: AnyObject) {
@@ -642,6 +593,19 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
             //not found, add it
             self.selectedDeviceIds.value.append(device.id)
         }
+    }
+}
+
+extension BuildTemplateViewController: TriggerViewControllerDelegate {
+    
+    func triggerViewControllerDidCancelEditingTrigger(trigger: TriggerConfig) {
+        //nothing to do
+    }
+    
+    func triggerViewControllerDidSaveTrigger(trigger: TriggerConfig) {
+        var mapped = self.triggers.value.dictionarifyWithKey { $0.id }
+        mapped[trigger.id] = trigger
+        self.triggers.value = Array(mapped.values)
     }
 }
 

@@ -19,7 +19,7 @@ protocol ProjectViewControllerDelegate: class {
 
 class ProjectViewController: ConfigEditViewController {
     
-    var projectConfig = MutableProperty<ProjectConfig>(ProjectConfig())
+    let projectConfig = MutableProperty<ProjectConfig!>(nil)
     weak var cancelDelegate: ProjectViewControllerDelegate?
     
     private var project: Project!

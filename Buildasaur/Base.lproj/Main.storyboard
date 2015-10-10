@@ -2215,7 +2215,7 @@ Gw
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wKA-Ma-yP6">
-                                <rect key="frame" x="237" y="281" width="4" height="17"/>
+                                <rect key="frame" x="-2" y="0.0" width="4" height="17"/>
                                 <animations/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="ijp-8k-LBP">
                                     <font key="font" metaFont="system"/>
@@ -2276,8 +2276,49 @@ Gw
                                             <real value="3.4028234663852886e+38"/>
                                         </customSpacing>
                                     </stackView>
-                                    <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NiC-j1-tJA">
+                                    <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GoD-zS-dAf">
                                         <rect key="frame" x="0.0" y="319" width="410" height="21"/>
+                                        <subviews>
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Q4m-H2-NG9">
+                                                <rect key="frame" x="-2" y="3" width="45" height="17"/>
+                                                <animations/>
+                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Phase:" id="sBr-99-Yah">
+                                                    <font key="font" metaFont="system"/>
+                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="L2U-eb-cZL">
+                                                <rect key="frame" x="47" y="-3" width="366" height="26"/>
+                                                <animations/>
+                                                <popUpButtonCell key="cell" type="push" title="Run Before or After?" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="fLB-ZP-4sf" id="VoL-VO-Wd9">
+                                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="menu"/>
+                                                    <menu key="menu" id="cQZ-nY-xPf">
+                                                        <items>
+                                                            <menuItem title="Run Before or After?" state="on" id="fLB-ZP-4sf"/>
+                                                            <menuItem title="Item 2" id="vgL-H3-mKf"/>
+                                                            <menuItem title="Item 3" id="U0O-QU-L3b"/>
+                                                        </items>
+                                                    </menu>
+                                                </popUpButtonCell>
+                                            </popUpButton>
+                                        </subviews>
+                                        <animations/>
+                                        <constraints>
+                                            <constraint firstItem="Q4m-H2-NG9" firstAttribute="baseline" secondItem="L2U-eb-cZL" secondAttribute="baseline" id="hCE-9z-8ZX"/>
+                                        </constraints>
+                                        <visibilityPriorities>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                        </visibilityPriorities>
+                                        <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                        </customSpacing>
+                                    </stackView>
+                                    <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NiC-j1-tJA">
+                                        <rect key="frame" x="0.0" y="290" width="410" height="21"/>
                                         <subviews>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4gw-Xx-mwV">
                                                 <rect key="frame" x="-2" y="3" width="45" height="17"/>
@@ -2310,47 +2351,6 @@ Gw
                                         <animations/>
                                         <constraints>
                                             <constraint firstItem="4gw-Xx-mwV" firstAttribute="baseline" secondItem="ES6-3x-fTX" secondAttribute="baseline" id="kBX-59-cf7"/>
-                                        </constraints>
-                                        <visibilityPriorities>
-                                            <integer value="1000"/>
-                                            <integer value="1000"/>
-                                        </visibilityPriorities>
-                                        <customSpacing>
-                                            <real value="3.4028234663852886e+38"/>
-                                            <real value="3.4028234663852886e+38"/>
-                                        </customSpacing>
-                                    </stackView>
-                                    <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GoD-zS-dAf">
-                                        <rect key="frame" x="0.0" y="290" width="410" height="21"/>
-                                        <subviews>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Q4m-H2-NG9">
-                                                <rect key="frame" x="-2" y="3" width="45" height="17"/>
-                                                <animations/>
-                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Phase:" id="sBr-99-Yah">
-                                                    <font key="font" metaFont="system"/>
-                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                </textFieldCell>
-                                            </textField>
-                                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="L2U-eb-cZL">
-                                                <rect key="frame" x="47" y="-3" width="366" height="26"/>
-                                                <animations/>
-                                                <popUpButtonCell key="cell" type="push" title="Run Before or After?" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="fLB-ZP-4sf" id="VoL-VO-Wd9">
-                                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="menu"/>
-                                                    <menu key="menu" id="cQZ-nY-xPf">
-                                                        <items>
-                                                            <menuItem title="Run Before or After?" state="on" id="fLB-ZP-4sf"/>
-                                                            <menuItem title="Item 2" id="vgL-H3-mKf"/>
-                                                            <menuItem title="Item 3" id="U0O-QU-L3b"/>
-                                                        </items>
-                                                    </menu>
-                                                </popUpButtonCell>
-                                            </popUpButton>
-                                        </subviews>
-                                        <animations/>
-                                        <constraints>
-                                            <constraint firstItem="Q4m-H2-NG9" firstAttribute="baseline" secondItem="L2U-eb-cZL" secondAttribute="baseline" id="hCE-9z-8ZX"/>
                                         </constraints>
                                         <visibilityPriorities>
                                             <integer value="1000"/>
@@ -2565,7 +2565,7 @@ Gw
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                                 <connections>
-                                                    <action selector="saveButtonTapped:" target="761-zL-6B5" id="Gk0-BU-Vqd"/>
+                                                    <action selector="saveButtonClicked:" target="761-zL-6B5" id="Rpb-R3-gnT"/>
                                                 </connections>
                                             </button>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OSY-UI-pFu">
@@ -2576,7 +2576,7 @@ Gw
                                                     <font key="font" metaFont="system"/>
                                                 </buttonCell>
                                                 <connections>
-                                                    <action selector="cancelButtonTapped:" target="761-zL-6B5" id="A6V-Jo-YAC"/>
+                                                    <action selector="cancelButtonClicked:" target="761-zL-6B5" id="YgH-fm-hbD"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -2630,7 +2630,7 @@ Gw
                         <animations/>
                     </view>
                     <connections>
-                        <outlet property="bodyDescriptionLabel" destination="wKA-Ma-yP6" id="VzV-oM-WvU"/>
+                        <outlet property="bodyDescriptionLabel" destination="BR5-sm-q4K" id="ZAK-1F-W16"/>
                         <outlet property="bodyTextField" destination="fZp-9N-XxC" id="ldo-z9-jhl"/>
                         <outlet property="conditionAnalyzerWarningsCheckbox" destination="Bh1-0A-Uao" id="81m-Js-RzA"/>
                         <outlet property="conditionBuildErrorsCheckbox" destination="pC0-Oh-4a3" id="WC7-jf-vJb"/>
