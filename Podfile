@@ -11,7 +11,7 @@ end
 
 def also_xcode_pods
     pods_for_errbody
-    pod 'XcodeServerSDK', '~> 0.3.5'
+    pod 'XcodeServerSDK', '~> 0.4.0'
     pod 'ekgclient', '~> 0.3.0', :inhibit_warnings => true
 end
 
