@@ -29,21 +29,8 @@ class BuildasaurUITests: XCTestCase {
     }
     
     func testCreateNewServer() {
-        
-        let app = XCUIApplication()
-        app.windows.elementBoundByIndex(0).buttons["New Syncer"].click()
-        
-        let buildasaurWindow = app.windows["Buildasaur"]
-        buildasaurWindow.buttons["New Xcode Server..."].click()
-        
-        let xcodeServerHostnameTextField = buildasaurWindow.textFields["Xcode Server Hostname"]
-        xcodeServerHostnameTextField.click()
-        xcodeServerHostnameTextField.typeText("newhost\t")
-        buildasaurWindow.textFields["Xcode Server User"].typeText("newuser\t")
-        buildasaurWindow.buttons["go right"].click()
-        buildasaurWindow.buttons["go left"].click()
-        buildasaurWindow.childrenMatchingType(.PopUpButton).element.click()
-        buildasaurWindow.click()
+        //TODO: add a couple UI tests (how do we solve the issue of 
+        //inputting passwords and tokens though?)
+        //probs: mock both github and xcode server
     }
-    
 }

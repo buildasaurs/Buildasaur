@@ -28,9 +28,18 @@ class MockGitHubServer: GitHubServer {
 
 class MockProject: Project {
     init() {
-        try! super.init(config: ProjectConfig())
+        var config = ProjectConfig()
+        config.url = "/Users/honzadvorsky/Documents/Buildasaur/BuildaKitTests/TestProjects/Buildasaur-TestProject-iOS/Buildasaur-TestProject-iOS.xcodeproj"
+        try! super.init(config: config)
     }
     required init?(json: NSDictionary) { fatalError("init(json:) has not been implemented") }
+}
+
+class MockTemplate {
+    
+    static func new() -> BuildTemplate {
+        return BuildTemplate()
+    }
 }
 
 class MockRepo: Repo {

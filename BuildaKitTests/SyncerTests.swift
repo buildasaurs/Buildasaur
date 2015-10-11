@@ -33,11 +33,14 @@ class SyncerTests: XCTestCase {
         let xcodeServer = MockXcodeServer()
         let githubServer = MockGitHubServer()
         let project = MockProject()
+        let template = MockTemplate.new()
         
         let syncer = HDGitHubXCBotSyncer(
             integrationServer: xcodeServer,
             sourceServer: githubServer,
             project: project,
+            buildTemplate: template,
+            triggers: [],
             config: config)
         return syncer
     }
