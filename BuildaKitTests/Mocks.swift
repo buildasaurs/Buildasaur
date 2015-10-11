@@ -30,7 +30,7 @@ class MockProject: Project {
     init() {
         let path: String = __FILE__
         let folder = (path as NSString).stringByDeletingLastPathComponent
-        let testProject = "\(folder)/TestProjects/Buildasaur-TestProject-iOS/Buildasaur-TestProject-iOS.xcodeproj"
+        let testProject = "\(folder)/TestProjects/Buildasaur-TestProject-iOS/Buildasaur-TestProject-iOS.xcworkspace"
         var config = ProjectConfig()
         config.url = testProject
         try! super.init(config: config)
