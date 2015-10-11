@@ -42,8 +42,27 @@ class DashboardViewController: PresentableViewController {
     
     func configHeaderView() {
         
-        //TODO: once the crashing of Xcode editor is fixed and we can use all of 
-        //RAC, bring back the signals that update the Start/Stop All buttons
+        //setup start/stop all buttons
+        let anySyncerStateChanged = self.syncerViewModels.producer.flatMap(.Merge) { newViewModels -> SignalProducer<SignalProducer<Bool, NoError>, NoError> in
+            
+            return SignalProducer { sink, _ in
+                newViewModels.forEach { sendNext(sink, $0.syncer.activeSignalProducer.producer) }
+                sendCompleted(sink)
+            }
+        }.flatten(.Merge)
+        
+        combineLatest(anySyncerStateChanged, self.syncerViewModels.producer)
+            .startWithNext { [weak self] (_, viewModels) -> () in
+                guard let sself = self else { return }
+                
+                //startAll is enabled if >0 is NOT ACTIVE
+                let startAllEnabled = viewModels.filter { !$0.syncer.active }.count > 0
+                sself.startAllButton.enabled = startAllEnabled
+                
+                //stopAll is enabled if >0 is ACTIVE
+                let stopAllEnabled = viewModels.filter { $0.syncer.active }.count > 0
+                sself.stopAllButton.enabled = stopAllEnabled
+        }
         
         //setup config
         self.config.value = self.syncerManager.storageManager.config.value
@@ -101,7 +120,7 @@ class DashboardViewController: PresentableViewController {
     }
     
     @IBAction func editButtonClicked(sender: BuildaNSButton) {
-        self.syncerViewModelFromSender(sender).editButtonClicked()
+        self.syncerViewModelFromSender(sender).viewButtonClicked()
     }
     
     @IBAction func controlButtonClicked(sender: BuildaNSButton) {
@@ -114,12 +133,12 @@ extension DashboardViewController {
     func showNewSyncerViewController() {
         
         //configure an editing window with a brand new syncer
-        var triplet = self.syncerManager.factory.newEditableTriplet()
+        let triplet = self.syncerManager.factory.newEditableTriplet()
         
-        //Debugging hack - insert the first server and project we have
-        triplet.server = self.syncerManager.storageManager.serverConfigs.value.first!.1
-        triplet.project = self.syncerManager.storageManager.projectConfigs.value["E94BAED5-7D91-426A-B6B6-5C39BF1F7032"]!
-        triplet.buildTemplate = self.syncerManager.storageManager.buildTemplates.value["EB0C3E74-C303-4C33-AF0E-012B650D2E9F"]
+//        //Debugging hack - insert the first server and project we have
+//        triplet.server = self.syncerManager.storageManager.serverConfigs.value.first!.1
+//        triplet.project = self.syncerManager.storageManager.projectConfigs.value["E94BAED5-7D91-426A-B6B6-5C39BF1F7032"]!
+//        triplet.buildTemplate = self.syncerManager.storageManager.buildTemplates.value["EB0C3E74-C303-4C33-AF0E-012B650D2E9F"]
         
         self.showSyncerEditViewControllerWithTriplet(triplet, state: .NoServer)
     }

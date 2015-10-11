@@ -339,6 +339,7 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
         //sources
         let name = self.nameTextField.rac_text
         let scheme = self.selectedScheme.producer
+        let platformType = self.platformType
         let analyze = self.analyzeButton.rac_on
         let test = self.testButton.rac_on
         let archive = self.archiveButton.rac_on
@@ -349,10 +350,10 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
         let deviceIds = self.selectedDeviceIds.producer
         
         let original = self.buildTemplate.producer
-        let combined = combineLatest(original, name, scheme, analyze, test, archive, schedule, cleaningPolicy, triggers, deviceFilter, deviceIds)
+        let combined = combineLatest(original, name, scheme, platformType, analyze, test, archive, schedule, cleaningPolicy, triggers, deviceFilter, deviceIds)
         
         let validated = combined.map { [weak self]
-            original, name, scheme, analyze, test, archive, schedule, cleaningPolicy, triggers, deviceFilter, deviceIds -> Bool in
+            original, name, scheme, platformType, analyze, test, archive, schedule, cleaningPolicy, triggers, deviceFilter, deviceIds -> Bool in
             
             guard let sself = self else { return false }
             
@@ -377,12 +378,13 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
         self.isValid <~ validated
         
         let generated = combined.forwardIf(validated).map { [weak self]
-            original, name, scheme, analyze, test, archive, schedule, cleaningPolicy, triggers, deviceFilter, deviceIds -> BuildTemplate in
+            original, name, scheme, platformType, analyze, test, archive, schedule, cleaningPolicy, triggers, deviceFilter, deviceIds -> BuildTemplate in
             
             var mod = original
             mod.projectName = self?.project.value.config.value.name
             mod.name = name
             mod.scheme = scheme
+            mod.platformType = platformType
             mod.shouldAnalyze = analyze
             mod.shouldTest = test
             mod.shouldArchive = archive

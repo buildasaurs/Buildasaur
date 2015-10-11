@@ -16,8 +16,8 @@ public class HDGitHubXCBotSyncer : Syncer {
     public let github: GitHubServer
     public let xcodeServer: XcodeServer
     public let project: Project
-    public let buildTemplate: BuildTemplate
-    public let triggers: [Trigger]
+    public var buildTemplate: BuildTemplate
+    public var triggers: [Trigger]
     
     public let config: MutableProperty<SyncerConfig>
     

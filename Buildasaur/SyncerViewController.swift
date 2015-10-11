@@ -214,6 +214,11 @@ class SyncerViewController: ConfigEditViewController {
         self.delegate?.didRequestEditing()
     }
     
+    override func shouldGoNext() -> Bool {
+        self.save()
+        return true
+    }
+    
     private func toggleActive() {
         
         let isSyncing = self.isSyncing.value
@@ -244,6 +249,7 @@ class SyncerViewController: ConfigEditViewController {
     private func save() {
         let newConfig = self.generatedConfig.value
         self.storageManager.addSyncerConfig(newConfig)
+        self.delegate?.didSaveSyncerConfig(newConfig)
     }
 }
 

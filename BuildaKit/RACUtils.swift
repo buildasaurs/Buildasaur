@@ -49,3 +49,16 @@ public func combineLatest<A, B, C, D, E, F, G, H, I, J, K, Error>(a: SignalProdu
         .map(repack)
 }
 
+internal func repack<A, B, C, D, E, F, G, H, I, J, K, L>(t: (A, B, C, D, E, F, G, H, I, J, K), value: L) -> (A, B, C, D, E, F, G, H, I, J, K, L) {
+    return (t.0, t.1, t.2, t.3, t.4, t.5, t.6, t.7, t.8, t.9, t.10, value)
+}
+
+/// Combines the values of all the given producers, in the manner described by
+/// `combineLatestWith`.
+@warn_unused_result(message="Did you forget to call `start` on the producer?")
+public func combineLatest<A, B, C, D, E, F, G, H, I, J, K, L, Error>(a: SignalProducer<A, Error>, _ b: SignalProducer<B, Error>, _ c: SignalProducer<C, Error>, _ d: SignalProducer<D, Error>, _ e: SignalProducer<E, Error>, _ f: SignalProducer<F, Error>, _ g: SignalProducer<G, Error>, _ h: SignalProducer<H, Error>, _ i: SignalProducer<I, Error>, _ j: SignalProducer<J, Error>, _ k: SignalProducer<K, Error>, _ l: SignalProducer<L, Error>) -> SignalProducer<(A, B, C, D, E, F, G, H, I, J, K, L), Error> {
+    return combineLatest(a, b, c, d, e, f, g, h, i, j, k)
+        .combineLatestWith(l)
+        .map(repack)
+}
+

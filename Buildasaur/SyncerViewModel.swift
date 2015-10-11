@@ -45,15 +45,11 @@ struct SyncerViewModel {
         self.controlButtonTitle = active.map { $0 ? "Stop" : "Start" }
     }
     
-    func editButtonClicked() {
+    func viewButtonClicked() {
         
         //present the edit window
         let triplet = self.syncer.configTriplet
         self.presentEditViewController(triplet)
-    }
-    
-    func showDetailButtonClicked(startEditing: Bool) {
-        
     }
     
     func startButtonClicked() {
