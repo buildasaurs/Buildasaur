@@ -39,7 +39,7 @@ public struct WorkspaceMetadata {
             throw error
         }
         
-        //we have to prefix SSH urls with "git@" (for a reason I don't remember)
+        //we have to prefix SSH urls with "git@" (for a reason I don't remember anymore, probs because the user "git" is treated as a standard part of the url itself)
         var correctedProjectUrlString = projectURLString
         if case .SSH = checkoutType where !projectURLString.hasPrefix("git@") {
             correctedProjectUrlString = "git@" + projectURLString
@@ -64,8 +64,16 @@ extension WorkspaceMetadata {
     
     internal static func parseCheckoutType(projectURLString: String) -> CheckoutType? {
         
-        let urlString = projectURLString
-        let scheme = NSURL(string: projectURLString)!.scheme
+        var urlString = projectURLString
+        
+        //for SSH URLs we need to remove the git@ prefix to be properly parsable
+        if urlString.hasPrefix("git@") {
+            let s = urlString.startIndex
+            let range = Range<String.Index>(start: s, end: s.advancedBy(4))
+            urlString = urlString.stringByReplacingCharactersInRange(range, withString: "")
+        }
+        
+        let scheme = NSURL(string: urlString)!.scheme
         switch scheme {
         case "github.com":
             return CheckoutType.SSH
