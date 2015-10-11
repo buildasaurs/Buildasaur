@@ -218,7 +218,8 @@ extension DashboardViewController: NSTableViewDataSource {
     
     func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
         
-        guard let columnIdentifier = tableColumn?.identifier else { return nil }
+        guard let tcolumn = tableColumn else { return nil }
+        let columnIdentifier = tcolumn.identifier
         guard let column = Column(rawValue: columnIdentifier) else { return nil }
         let syncerViewModel = self.syncerViewModels.value[row]
 
@@ -228,6 +229,7 @@ extension DashboardViewController: NSTableViewDataSource {
             //basic text view
             let view: NSTableCellView = self.getTypeOfReusableView(column)
             self.bindTextView(view, column: column, viewModel: syncerViewModel)
+            
             return view
             
         case .Control, .Edit:
