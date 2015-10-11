@@ -81,14 +81,9 @@ class SyncerViewController: ConfigEditViewController {
             }
         }
         
-        //Y U NO WORK?
-        let syncerNotNil = self.syncer.producer.map { $0 != nil }.on(next: {
-            print($0)
-        })
-        self.nextAllowed <~ syncerNotNil
+        self.nextAllowed <~ self.syncer.producer.map { $0 != nil }
         self.nextTitle <~ ConstantProperty("Done")
-        
-        //TODO: save on Done as well!
+        self.previousAllowed <~ self.isSyncing.producer.map { !$0 }
         
         self.startStopButton.rac_title <~ isSyncing.map { $0 ? "Stop" : "Start" }
         self.statusActivityIndicator.rac_animating <~ isSyncing
