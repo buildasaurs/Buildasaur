@@ -69,5 +69,9 @@ extension MainEditorViewController: SyncerViewControllerDelegate {
     func didSaveSyncerConfig(config: SyncerConfig) {
         self.context.value.configTriplet.syncer = config
     }
+    
+    func didRequestEditing() {
+        self.state.value = (.NoServer, true)
+    }
 }
 

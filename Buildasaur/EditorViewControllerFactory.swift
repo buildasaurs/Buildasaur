@@ -49,6 +49,9 @@ class EditorViewControllerFactory: EditorViewControllerFactoryType {
             
         case .NoProject:
             let vc: EmptyProjectViewController = self.storyboardLoader.typedViewControllerWithStoryboardIdentifier(EditorVCType.EmptyProjectVC.rawValue)
+            if let projectConfig = context.configTriplet.project {
+                vc.existingConfigId = projectConfig.id
+            }
             vc.syncerManager = context.syncerManager
             vc.emptyProjectDelegate = context.editeeDelegate
             return vc
@@ -62,6 +65,9 @@ class EditorViewControllerFactory: EditorViewControllerFactoryType {
         
         case .NoBuildTemplate:
             let vc: EmptyBuildTemplateViewController = self.storyboardLoader.typedViewControllerWithStoryboardIdentifier(EditorVCType.EmptyBuildTemplateVC.rawValue)
+            if let buildTemplate = context.configTriplet.buildTemplate {
+                vc.existingTemplateId = buildTemplate.id
+            }
             vc.projectName = context.configTriplet.project!.name
             vc.existingTemplateId = context.configTriplet.buildTemplate?.id
             vc.syncerManager = context.syncerManager

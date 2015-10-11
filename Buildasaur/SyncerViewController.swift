@@ -17,6 +17,7 @@ protocol SyncerViewControllerDelegate: class {
     
     func didCancelEditingOfSyncerConfig(config: SyncerConfig)
     func didSaveSyncerConfig(config: SyncerConfig)
+    func didRequestEditing()
 }
 
 class SyncerViewController: ConfigEditViewController {
@@ -86,6 +87,8 @@ class SyncerViewController: ConfigEditViewController {
         })
         self.nextAllowed <~ syncerNotNil
         self.nextTitle <~ ConstantProperty("Done")
+        
+        //TODO: save on Done as well!
         
         self.startStopButton.rac_title <~ isSyncing.map { $0 ? "Stop" : "Start" }
         self.statusActivityIndicator.rac_animating <~ isSyncing
@@ -204,7 +207,11 @@ class SyncerViewController: ConfigEditViewController {
     }
     
     @IBAction func editButtonClicked(sender: AnyObject) {
-        //TODO:
+        self.editClicked()
+    }
+    
+    private func editClicked() {
+        self.delegate?.didRequestEditing()
     }
     
     private func toggleActive() {

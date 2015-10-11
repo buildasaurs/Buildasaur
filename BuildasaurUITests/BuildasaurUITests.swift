@@ -28,9 +28,9 @@ class BuildasaurUITests: XCTestCase {
         super.tearDown()
     }
     
-    func testCreateNewServer() {
-        //TODO: add a couple UI tests (how do we solve the issue of 
+//    func testCreateNewServer() {
+        //TODO: add a couple UI tests (how do we solve the issue of
         //inputting passwords and tokens though?)
         //probs: mock both github and xcode server
-    }
+//    }
 }

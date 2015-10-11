@@ -125,13 +125,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		3A2EEE731BCA5FB2005E6424 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3A2EEE6F1BCA5FB2005E6424 /* Buildasaur-TestProject-iOS.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 3A2EEE581BCA5F1F005E6424;
-			remoteInfo = "Buildasaur-TestProject-iOS";
-		};
 		3A756DC21BAB425E00508B69 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3A5687681A3B93BD0066DB2B /* Project object */;
@@ -223,7 +216,6 @@
 		3A0FF5A31BBFF9FA00FB8051 /* ProjectConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectConfig.swift; sourceTree = "<group>"; };
 		3A0FF5AD1BC0067700FB8051 /* SyncerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerManager.swift; sourceTree = "<group>"; };
 		3A28AF521BC984850011756E /* ConfigTriplet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigTriplet.swift; sourceTree = "<group>"; };
-		3A2EEE6F1BCA5FB2005E6424 /* Buildasaur-TestProject-iOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Buildasaur-TestProject-iOS.xcodeproj"; path = "TestProjects/Buildasaur-TestProject-iOS/Buildasaur-TestProject-iOS.xcodeproj"; sourceTree = "<group>"; };
 		3A3231B01B5AEF7900B53E3F /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		3A32CD131A3D00F800861A34 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		3A32CD171A3D01E300861A34 /* Issue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Issue.swift; sourceTree = "<group>"; };
@@ -443,14 +435,6 @@
 			name = Utils;
 			sourceTree = "<group>";
 		};
-		3A2EEE701BCA5FB2005E6424 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				3A2EEE741BCA5FB2005E6424 /* Buildasaur-TestProject-iOS.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		3A5687671A3B93BD0066DB2B = {
 			isa = PBXGroup;
 			children = (
@@ -572,7 +556,6 @@
 		3A81BB251B5A77E9004732CD /* BuildaKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				3A2EEE6F1BCA5FB2005E6424 /* Buildasaur-TestProject-iOS.xcodeproj */,
 				3ACBADD91B5ADE1400204457 /* sampleFinishedIntegration.json */,
 				3A81BB281B5A77E9004732CD /* Info.plist */,
 				3ACBADD61B5ADE0E00204457 /* MockHelpers.swift */,
@@ -1040,12 +1023,6 @@
 			mainGroup = 3A5687671A3B93BD0066DB2B;
 			productRefGroup = 3A5687711A3B93BD0066DB2B /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 3A2EEE701BCA5FB2005E6424 /* Products */;
-					ProjectRef = 3A2EEE6F1BCA5FB2005E6424 /* Buildasaur-TestProject-iOS.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				3A56876F1A3B93BD0066DB2B /* Buildasaur */,
@@ -1058,16 +1035,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		3A2EEE741BCA5FB2005E6424 /* Buildasaur-TestProject-iOS.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = "Buildasaur-TestProject-iOS.app";
-			remoteRef = 3A2EEE731BCA5FB2005E6424 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		3A56876E1A3B93BD0066DB2B /* Resources */ = {
