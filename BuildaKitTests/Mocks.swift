@@ -28,8 +28,11 @@ class MockGitHubServer: GitHubServer {
 
 class MockProject: Project {
     init() {
+        let path: String = __FILE__
+        let folder = (path as NSString).stringByDeletingLastPathComponent
+        let testProject = "\(folder)/TestProjects/Buildasaur-TestProject-iOS/Buildasaur-TestProject-iOS.xcodeproj"
         var config = ProjectConfig()
-        config.url = "/Users/honzadvorsky/Documents/Buildasaur/BuildaKitTests/TestProjects/Buildasaur-TestProject-iOS/Buildasaur-TestProject-iOS.xcodeproj"
+        config.url = testProject
         try! super.init(config: config)
     }
     required init?(json: NSDictionary) { fatalError("init(json:) has not been implemented") }
