@@ -15,12 +15,13 @@ import ReactiveCocoa
 
 protocol ProjectViewControllerDelegate: class {
     func didCancelEditingOfProjectConfig(config: ProjectConfig)
+    func didSaveProjectConfig(config: ProjectConfig)
 }
 
 class ProjectViewController: ConfigEditViewController {
     
     let projectConfig = MutableProperty<ProjectConfig!>(nil)
-    weak var cancelDelegate: ProjectViewControllerDelegate?
+    weak var delegate: ProjectViewControllerDelegate?
     
     private var project: Project!
     
@@ -123,6 +124,7 @@ class ProjectViewController: ConfigEditViewController {
         //pull data from UI, create config, save it and try to validate
         guard let newConfig = self.pullConfigFromUI() else { return false }
         self.projectConfig.value = newConfig
+        self.delegate?.didSaveProjectConfig(newConfig)
         
         //check availability of these credentials
         self.recheckForAvailability { [weak self] (state) -> () in
@@ -146,7 +148,7 @@ class ProjectViewController: ConfigEditViewController {
     
     private func goBack() {
         let config = self.projectConfig.value
-        self.cancelDelegate?.didCancelEditingOfProjectConfig(config)
+        self.delegate?.didCancelEditingOfProjectConfig(config)
     }
     
     override func delete() {

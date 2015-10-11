@@ -14,12 +14,13 @@ import ReactiveCocoa
 
 protocol XcodeServerViewControllerDelegate: class {
     func didCancelEditingOfXcodeServerConfig(config: XcodeServerConfig)
+    func didSaveXcodeServerConfig(config: XcodeServerConfig)
 }
 
 class XcodeServerViewController: ConfigEditViewController {
     
     let serverConfig = MutableProperty<XcodeServerConfig!>(nil)
-    weak var cancelDelegate: XcodeServerViewControllerDelegate?
+    weak var delegate: XcodeServerViewControllerDelegate?
     
     @IBOutlet weak var serverHostTextField: NSTextField!
     @IBOutlet weak var serverUserTextField: NSTextField!
@@ -73,6 +74,7 @@ class XcodeServerViewController: ConfigEditViewController {
         //pull the current credentials
         guard let newConfig = self.pullConfigFromUI() else { return false }
         self.serverConfig.value = newConfig
+        self.delegate?.didSaveXcodeServerConfig(newConfig)
         
         //check availability of these credentials
         self.recheckForAvailability { [weak self] (state) -> () in
@@ -92,7 +94,7 @@ class XcodeServerViewController: ConfigEditViewController {
     
     private func cancel() {
         //throw away this setup, don't save anything (but don't delete either)
-        self.cancelDelegate?.didCancelEditingOfXcodeServerConfig(self.serverConfig.value)
+        self.delegate?.didCancelEditingOfXcodeServerConfig(self.serverConfig.value)
     }
     
     override func delete() {

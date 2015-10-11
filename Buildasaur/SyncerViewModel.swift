@@ -40,8 +40,8 @@ struct SyncerViewModel {
             .map { $0.workspaceMetadata?.projectName ?? "[No Project]" }
         
         self.buildTemplateName = SignalProducer(value: syncer.buildTemplate.name)
-        self.editButtonTitle = SignalProducer(value: "Edit")
-        self.editButtonEnabled = active.map { !$0 }
+        self.editButtonTitle = SignalProducer(value: "View")
+        self.editButtonEnabled = SignalProducer(value: true)
         self.controlButtonTitle = active.map { $0 ? "Stop" : "Start" }
     }
     

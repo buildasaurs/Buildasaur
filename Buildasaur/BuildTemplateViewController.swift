@@ -15,12 +15,13 @@ import ReactiveCocoa
 
 protocol BuildTemplateViewControllerDelegate: class {
     func didCancelEditingOfBuildTemplate(template: BuildTemplate)
+    func didSaveBuildTemplate(template: BuildTemplate)
 }
 
 class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSource, NSTableViewDelegate {
     
     let buildTemplate = MutableProperty<BuildTemplate>(BuildTemplate())
-    weak var cancelDelegate: BuildTemplateViewControllerDelegate?
+    weak var delegate: BuildTemplateViewControllerDelegate?
     var projectRef: RefType!
     var xcodeServerRef: RefType!
     
@@ -502,6 +503,7 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
         let newBuildTemplate = self.generatedTemplate.value
         self.buildTemplate.value = newBuildTemplate
         self.storageManager.addBuildTemplate(newBuildTemplate)
+        self.delegate?.didSaveBuildTemplate(newBuildTemplate)
         
         return true
     }
@@ -512,7 +514,7 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
             if remove {
                 let template = self.generatedTemplate.value
                 self.storageManager.removeBuildTemplate(template)
-                self.cancelDelegate?.didCancelEditingOfBuildTemplate(template)
+                self.delegate?.didCancelEditingOfBuildTemplate(template)
             }
         })
     }

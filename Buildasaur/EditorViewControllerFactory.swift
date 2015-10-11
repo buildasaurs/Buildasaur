@@ -44,7 +44,7 @@ class EditorViewControllerFactory: EditorViewControllerFactoryType {
             let vc: XcodeServerViewController = self.storyboardLoader.typedViewControllerWithStoryboardIdentifier(EditorVCType.XcodeServerVC.rawValue)
             vc.serverConfig.value = context.configTriplet.server!
             vc.syncerManager = context.syncerManager
-            vc.cancelDelegate = context.editeeDelegate
+            vc.delegate = context.editeeDelegate
             return vc
             
         case .NoProject:
@@ -60,7 +60,7 @@ class EditorViewControllerFactory: EditorViewControllerFactoryType {
             let vc: ProjectViewController = self.storyboardLoader.typedViewControllerWithStoryboardIdentifier(EditorVCType.ProjectVC.rawValue)
             vc.projectConfig.value = context.configTriplet.project!
             vc.syncerManager = context.syncerManager
-            vc.cancelDelegate = context.editeeDelegate
+            vc.delegate = context.editeeDelegate
             return vc
         
         case .NoBuildTemplate:
@@ -80,7 +80,7 @@ class EditorViewControllerFactory: EditorViewControllerFactoryType {
             vc.projectRef = context.configTriplet.project!.id
             vc.xcodeServerRef = context.configTriplet.server!.id
             vc.syncerManager = context.syncerManager
-            vc.cancelDelegate = context.editeeDelegate
+            vc.delegate = context.editeeDelegate
             return vc
             
         case .Syncer:
