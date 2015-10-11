@@ -2738,7 +2738,7 @@ Gw
                                         <rect key="frame" x="0.0" y="91" width="220" height="32"/>
                                         <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Fkq-gK-hvs" userLabel="Edit Button">
-                                                <rect key="frame" x="-6" y="-1" width="168" height="32"/>
+                                                <rect key="frame" x="-6" y="-1.5" width="168" height="32"/>
                                                 <animations/>
                                                 <buttonCell key="cell" type="push" title="Start" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="I1g-GG-Xh1">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2785,7 +2785,7 @@ Gw
                                                 </connections>
                                             </button>
                                             <button translatesAutoresizingMaskIntoConstraints="NO" id="SL5-bS-Lf1">
-                                                <rect key="frame" x="27" y="2" width="195" height="18"/>
+                                                <rect key="frame" x="27" y="1.5" width="195" height="18"/>
                                                 <animations/>
                                                 <buttonCell key="cell" type="check" title="Wait for &quot;lttm&quot;" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="Qky-j0-ffo">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2818,7 +2818,7 @@ Gw
                                                 </connections>
                                             </button>
                                             <button translatesAutoresizingMaskIntoConstraints="NO" id="I34-eZ-a6k">
-                                                <rect key="frame" x="27" y="2" width="195" height="18"/>
+                                                <rect key="frame" x="27" y="1.5" width="195" height="18"/>
                                                 <animations/>
                                                 <buttonCell key="cell" type="check" title="Post Status Comments" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="iGN-fv-G4G">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2839,8 +2839,8 @@ Gw
                                     <stackView distribution="equalSpacing" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aKM-fv-A09">
                                         <rect key="frame" x="0.0" y="0.0" width="220" height="22"/>
                                         <subviews>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5mg-80-kNh">
-                                                <rect key="frame" x="-2" y="0.0" width="106" height="22"/>
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5mg-80-kNh">
+                                                <rect key="frame" x="-2" y="2.5" width="106" height="17"/>
                                                 <animations/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Sync interval [s]:" id="Iye-7H-92P">
                                                     <font key="font" metaFont="system"/>
@@ -2848,12 +2848,15 @@ Gw
                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <customView horizontalCompressionResistancePriority="250" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VbR-v2-u7g">
-                                                <rect key="frame" x="110" y="0.0" width="31" height="22"/>
+                                            <customView horizontalCompressionResistancePriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="VbR-v2-u7g">
+                                                <rect key="frame" x="110" y="2.5" width="41" height="17"/>
                                                 <animations/>
                                             </customView>
-                                            <textField verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A9h-Jh-CP9">
-                                                <rect key="frame" x="149" y="0.0" width="50" height="22"/>
+                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="A9h-Jh-CP9">
+                                                <rect key="frame" x="159" y="0.0" width="40" height="22"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="40" id="mv9-YA-C4D"/>
+                                                </constraints>
                                                 <animations/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="SzD-0T-qlW">
                                                     <font key="font" metaFont="system"/>
@@ -2916,7 +2919,7 @@ Gw
                                 <rect key="frame" x="20" y="257" width="540" height="70"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="vertical" alignment="trailing" horizontalStackHuggingPriority="250.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cd8-A7-08H">
-                                        <rect key="frame" x="0.0" y="2" width="104" height="67"/>
+                                        <rect key="frame" x="0.0" y="1.5" width="104" height="67"/>
                                         <subviews>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bXH-Mp-58j">
                                                 <rect key="frame" x="16" y="50" width="90" height="17"/>
@@ -2959,7 +2962,7 @@ Gw
                                         </customSpacing>
                                     </stackView>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5W8-CL-buP">
-                                        <rect key="frame" x="112" y="2" width="350" height="67"/>
+                                        <rect key="frame" x="112" y="1.5" width="350" height="67"/>
                                         <subviews>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nkQ-bA-3DP">
                                                 <rect key="frame" x="-2" y="50" width="129" height="17"/>
@@ -3005,7 +3008,7 @@ Gw
                                         </customSpacing>
                                     </stackView>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WVe-pQ-Rdt">
-                                        <rect key="frame" x="464" y="18" width="82" height="32"/>
+                                        <rect key="frame" x="464" y="17.5" width="82" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="70" id="aX4-H0-wyG"/>
                                         </constraints>

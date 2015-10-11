@@ -81,6 +81,11 @@ class SyncerViewController: ConfigEditViewController {
             }
         }
         
+        //TODO: actually look into whether we've errored on the last sync
+        //etc. to be more informative with this status (green should
+        //only mean "Everything is OK, AFAIK", not "We're syncing")
+        self.availabilityCheckState <~ self.isSyncing.producer.map { $0 ? .Succeeded : .Unchecked }
+        
         self.nextAllowed <~ self.syncer.producer.map { $0 != nil }
         self.nextTitle <~ ConstantProperty("Done")
         self.previousAllowed <~ self.isSyncing.producer.map { !$0 }
