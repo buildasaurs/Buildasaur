@@ -11,7 +11,7 @@ import XcodeServerSDK
 import BuildaGitServer
 
 public protocol SyncerFactoryType {
-    func createSyncer(syncerConfig: SyncerConfig, serverConfig: XcodeServerConfig, projectConfig: ProjectConfig, buildTemplate: BuildTemplate, triggerConfigs: [TriggerConfig]) -> HDGitHubXCBotSyncer
+    func createSyncers(configs: [ConfigTriplet]) -> [HDGitHubXCBotSyncer]
     func defaultConfigTriplet() -> ConfigTriplet
     func newEditableTriplet() -> EditableConfigTriplet
     func createXcodeServer(config: XcodeServerConfig) -> XcodeServer
@@ -28,18 +28,18 @@ public class SyncerFactory: SyncerFactoryType {
     
     public init() { }
     
-    public func createSyncer(syncerConfig: SyncerConfig, serverConfig: XcodeServerConfig, projectConfig: ProjectConfig, buildTemplate: BuildTemplate, triggerConfigs: [TriggerConfig]) -> HDGitHubXCBotSyncer {
-
-        let xcodeServer = self.createXcodeServer(serverConfig)
-        let githubServer = self.createSourceServer(projectConfig.githubToken)
-        let project = self.createProject(projectConfig)
-        let triggers = triggerConfigs.map { self.createTrigger($0) }
-
-        if let poolAttempt = self.syncerPool[syncerConfig.id] {
-            poolAttempt.config.value = syncerConfig
-            poolAttempt.xcodeServer.config = serverConfig
-            poolAttempt.project.config.value = projectConfig
-            poolAttempt.buildTemplate = buildTemplate
+    private func createSyncer(triplet: ConfigTriplet) -> HDGitHubXCBotSyncer {
+        
+        let xcodeServer = self.createXcodeServer(triplet.server)
+        let githubServer = self.createSourceServer(triplet.project.githubToken)
+        let project = self.createProject(triplet.project)
+        let triggers = triplet.triggers.map { self.createTrigger($0) }
+        
+        if let poolAttempt = self.syncerPool[triplet.syncer.id] {
+            poolAttempt.config.value = triplet.syncer
+            poolAttempt.xcodeServer.config = triplet.server
+            poolAttempt.project.config.value = triplet.project
+            poolAttempt.buildTemplate = triplet.buildTemplate
             poolAttempt.triggers = triggers
             return poolAttempt
         }
@@ -48,14 +48,28 @@ public class SyncerFactory: SyncerFactoryType {
             integrationServer: xcodeServer,
             sourceServer: githubServer,
             project: project,
-            buildTemplate: buildTemplate,
+            buildTemplate: triplet.buildTemplate,
             triggers: triggers,
-            config: syncerConfig)
+            config: triplet.syncer)
         
-        self.syncerPool[syncerConfig.id] = syncer
+        self.syncerPool[triplet.syncer.id] = syncer
         
         //TADAAA
         return syncer
+    }
+    
+    public func createSyncers(configs: [ConfigTriplet]) -> [HDGitHubXCBotSyncer] {
+        
+        //create syncers
+        let created = configs.map { self.createSyncer($0) }
+        
+        let createdIds = Set(created.map { $0.config.value.id })
+        
+        //remove the syncers that haven't been created (deleted)
+        let deleted = Set(self.syncerPool.keys).subtract(createdIds)
+        deleted.forEach { self.projectPool.removeValueForKey($0) }
+        
+        return created
     }
     
     public func defaultConfigTriplet() -> ConfigTriplet {

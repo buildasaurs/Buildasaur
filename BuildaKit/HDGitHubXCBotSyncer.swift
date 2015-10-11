@@ -38,6 +38,10 @@ public class HDGitHubXCBotSyncer : Syncer {
         super.init(syncInterval: config.syncInterval)
     }
     
+    deinit {
+        self.active = false
+    }
+    
     public override func sync(completion: () -> ()) {
         
         if let repoName = self.repoName() {

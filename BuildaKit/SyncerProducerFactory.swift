@@ -71,15 +71,7 @@ class SyncerProducerFactory {
     static func createSyncersProducer(factory: SyncerFactoryType, triplets: SignalProducer<[ConfigTriplet], NoError>) -> SignalProducer<[HDGitHubXCBotSyncer], NoError> {
         
         let syncers = triplets.map { (tripletArray: [ConfigTriplet]) -> [HDGitHubXCBotSyncer] in
-            return tripletArray.map { (triplet: ConfigTriplet) -> HDGitHubXCBotSyncer in
-                factory.createSyncer(
-                    triplet.syncer,
-                    serverConfig: triplet.server,
-                    projectConfig: triplet.project,
-                    buildTemplate: triplet.buildTemplate,
-                    triggerConfigs: triplet.triggers
-                )
-            }
+            return factory.createSyncers(tripletArray)
         }
         return syncers
     }

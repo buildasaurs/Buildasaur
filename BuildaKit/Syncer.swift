@@ -25,6 +25,13 @@ public enum SyncerEventType {
     case DidEncounterError(ErrorType)
 }
 
+@objc private class Trampoline: NSObject {
+    
+    var block: (() -> ())? = nil
+    override init() { }
+    func jump() { self.block?() }
+}
+
 @objc public class Syncer: NSObject {
     
     public let state = MutableProperty<SyncerEventType>(.Initial)
@@ -56,8 +63,8 @@ public enum SyncerEventType {
     public var active: Bool {
         didSet {
             if active && !oldValue {
-                let s = Selector("_sync")
-                let timer = NSTimer(timeInterval: self.syncInterval, target: self, selector: s, userInfo: nil, repeats: true)
+                let s = Selector("jump")
+                let timer = NSTimer(timeInterval: self.syncInterval, target: self.trampoline, selector: s, userInfo: nil, repeats: true)
                 self.timer = timer
                 NSRunLoop.mainRunLoop().addTimer(timer, forMode: kCFRunLoopCommonModes as String)
                 self._sync() //call for the first time, next one will be called by the timer
@@ -78,6 +85,7 @@ public enum SyncerEventType {
 
     //private
     var timer: NSTimer?
+    private let trampoline: Trampoline
 
     //---------------------------------------------------------
     
@@ -85,6 +93,11 @@ public enum SyncerEventType {
         self.syncInterval = syncInterval
         self.active = false
         self.isSyncing = false
+        self.trampoline = Trampoline()
+        super.init()
+        self.trampoline.block = { [weak self] () -> () in
+            self?._sync()
+        }
     }
     
     func _sync() {
