@@ -1,0 +1,89 @@
+*
+*
+*
+ ____        _ _     _
+|  _ \      (_) |   | |
+| |_) |_   _ _| | __| | __ _ ___  __ _ _   _ _ __
+|  _ <| | | | | |/ _` |/ _` / __|/ _` | | | | '__|
+| |_) | |_| | | | (_| | (_| \__ \ (_| | |_| | |
+|____/ \__,_|_|_|\__,_|\__,_|___/\__,_|\__,_|_|
+
+Buildasaur 0.5.1 launched at 2015-10-12 13:57:46 +0000.
+*
+*
+*
+
+[INFO]: Will send anonymous heartbeat. To opt out add `"heartbeat_opt_out" = true` to ~/Library/Application Support/Buildasaur/Config.json
+[INFO]: Sending heartbeat event ["event_type": launch]
+[INFO]: Sending heartbeat event ["event_type": heartbeat, "uptime": 0.03319501876831055, "running_syncers": 0]
+[INFO]: Project: file:///Users/honzadvorsky/Documents/Buildasaur-Tester/Buildasaur-Tester.xcodeproj
+[VERBOSE]: Finished fetching devices
+[INFO]: Key: Optional(file:///Users/honzadvorsky/.ssh/id_rsa.pub)
+[INFO]: Key: Optional(file:///Users/honzadvorsky/.ssh/id_rsa)
+
+------------------------------------
+
+[INFO]: Sync starting at 2015-10-12 14:00:27 +0000
+[VERBOSE]: Resolving prs:
+    PR 9: test change [czechboy0-patch-6 -> master]
+    PR 8: Update README.md PR2 [czechboy0-patch-3 -> czechboy0-patch-2]
+    PR 6: Update ViewController.swift [czechboy0-patch-4 -> master]
+    PR 4: Update README.md [czechboy0-patch-2 -> master] 
+and branches:
+
+and bots:
+    Bot Buildasaur Bot
+    Bot BuildaBot [czechboy0/Buildasaur-Tester] PR #6
+    Bot BuildaBot [czechboy0/Buildasaur-Tester] PR #9
+    Bot BuildaBot [czechboy0/Buildasaur-Tester] PR #4
+    Bot BuildaBot [czechboy0/Buildasaur-Tester] PR #8
+    Bot BuildaBot [czechboy0/XcodeServerSDK] PR #117
+    Bot BuildaBot [czechboy0/XcodeServerSDK] PR #106
+    Bot BuildaBot [czechboy0/Buildasaur] PR #138
+    Bot BuildaBot [czechboy0/XcodeServerSDK] |-> master
+    Bot BuildaBot [czechboy0/Buildasaur] |-> master
+    Bot Buildasaur-TestProject-iOS Bot
+[VERBOSE]: SyncPair PR (9:czechboy0-patch-6) + Bot (BuildaBot [czechboy0/Buildasaur-Tester] PR #9) finished sync after 0.388 seconds.
+[VERBOSE]: SyncPair PR (6:czechboy0-patch-4) + Bot (BuildaBot [czechboy0/Buildasaur-Tester] PR #6) finished sync after 0.702 seconds.
+[VERBOSE]: SyncPair PR (4:czechboy0-patch-2) + Bot (BuildaBot [czechboy0/Buildasaur-Tester] PR #4) finished sync after 0.718 seconds.
+[VERBOSE]: SyncPair PR (8:czechboy0-patch-3) + Bot (BuildaBot [czechboy0/Buildasaur-Tester] PR #8) finished sync after 1.156 seconds.
+[INFO]: GitHub Rate Limit: count: 0/5000, renews in 3598 seconds, rate: 0.0/1.38, using 0.0% of the allowed request rate.
+[INFO]: Sync finished successfully at 2015-10-12 14:00:29 +0000, took 1.59 seconds.
+
+------------------------------------
+
+[INFO]: Sync starting at 2015-10-12 14:00:34 +0000
+[VERBOSE]: Resolving prs:
+    PR 9: test change [czechboy0-patch-6 -> master]
+    PR 8: Update README.md PR2 [czechboy0-patch-3 -> czechboy0-patch-2]
+    PR 6: Update ViewController.swift [czechboy0-patch-4 -> master]
+    PR 4: Update README.md [czechboy0-patch-2 -> master] 
+and branches:
+    Branch [almost-master:5b1d734f0170583b54fa749ff9bc47670abd66ad]
+    Branch [czechboy0-patch-1:ddb1e4840e35a611c2627168d8330ddf80c569d9]
+    Branch [czechboy0-patch-2:26cf7e9a027579f057aceaa9b09625317d31efde]
+    Branch [czechboy0-patch-3:ef2d5e2e0755bdff3945134e9a160d86a0698fe2]
+    Branch [czechboy0-patch-4:603e18851f66ee66a1223ea65e5f1e18e4353664]
+    Branch [czechboy0-patch-5:c1da8cd5cc61c62f8700766314ba26c7f03ea9ab]
+    Branch [czechboy0-patch-6:2ab73752fe7ed2d8f67187d7ba0552126a158de1]
+    Branch [master:510352edd9cdabd45f608e4327a8dd48ac517230]
+and bots:
+    Bot Buildasaur Bot
+    Bot BuildaBot [czechboy0/Buildasaur-Tester] PR #6
+    Bot BuildaBot [czechboy0/Buildasaur-Tester] PR #9
+    Bot BuildaBot [czechboy0/Buildasaur-Tester] PR #4
+    Bot BuildaBot [czechboy0/Buildasaur-Tester] PR #8
+    Bot BuildaBot [czechboy0/XcodeServerSDK] PR #117
+    Bot BuildaBot [czechboy0/XcodeServerSDK] PR #106
+    Bot BuildaBot [czechboy0/Buildasaur] PR #138
+    Bot BuildaBot [czechboy0/XcodeServerSDK] |-> master
+    Bot BuildaBot [czechboy0/Buildasaur] |-> master
+    Bot Buildasaur-TestProject-iOS Bot
+[VERBOSE]: SyncPair PR (4:czechboy0-patch-2) + Bot (BuildaBot [czechboy0/Buildasaur-Tester] PR #4) finished sync after 0.068 seconds.
+[VERBOSE]: SyncPair PR (6:czechboy0-patch-4) + Bot (BuildaBot [czechboy0/Buildasaur-Tester] PR #6) finished sync after 0.165 seconds.
+[VERBOSE]: SyncPair PR (8:czechboy0-patch-3) + Bot (BuildaBot [czechboy0/Buildasaur-Tester] PR #8) finished sync after 0.186 seconds.
+[VERBOSE]: SyncPair PR (9:czechboy0-patch-6) + Bot (BuildaBot [czechboy0/Buildasaur-Tester] PR #9) finished sync after 0.191 seconds.
+[INFO]: Successfully created bot BuildaBot [czechboy0/Buildasaur-Tester] |-> master
+[VERBOSE]: SyncPair Branch (master) + No Bot finished sync after 3.97 seconds.
+[INFO]: GitHub Rate Limit: count: 0/5000, renews in 3593 seconds, rate: 0.0/1.38, using 0.0% of the allowed request rate.
+[INFO]: Sync finished successfully at 2015-10-12 14:00:38 +0000, took 4.027 seconds.

@@ -28,22 +28,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var storyboardLoader: StoryboardLoader!
     
     var dashboardViewController: DashboardViewController?
-    var dashboardWindow: NSWindow!
+    var dashboardWindow: NSWindow?
     var windows: Set<NSWindow> = []
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         
-        Logging.setup(alsoIntoFile: true)
+        #if TESTING
+            print("Testing configuration, not launching the app")
+        #else
+            self.setup()
+        #endif
+    }
+    
+    func setup() {
         
-        let defs = NSUserDefaults.standardUserDefaults()
-        defs.setBool(true, forKey: "NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints")
-        defs.synchronize()
+        //uncomment when debugging autolayout
+        //        let defs = NSUserDefaults.standardUserDefaults()
+        //        defs.setBool(true, forKey: "NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints")
+        //        defs.synchronize()
         
         self.setupPersistence()
         
         self.storyboardLoader = StoryboardLoader(storyboard: NSStoryboard.mainStoryboard)
         self.storyboardLoader.delegate = self
-
+        
         self.menuItemManager.syncerManager = self.syncerManager
         self.menuItemManager.setupMenuBarItem()
         
@@ -54,7 +62,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func setupPersistence() {
-        let storageManager = StorageManager()
+        
+        let persistence = PersistenceFactory.createStandardPersistence()
+        
+        //setup logging
+        Logging.setup(persistence, alsoIntoFile: true)
+        
+        //before we create the storage manager, attempt migration first
+        let migrator = CompositeMigrator(persistence: persistence)
+        if migrator.isMigrationRequired() {
+            Log.info("Migration required, launching migrator")
+            do {
+                try migrator.attemptMigration()
+            } catch {
+                Log.error("Migration failed with error \(error)")
+                //TODO: wipe the persistence? start over if we failed to migrate?
+            }
+            Log.info("Migration finished")
+        }
+        
+        //create storage manager
+        let storageManager = StorageManager(persistence: persistence)
         let factory = SyncerFactory()
         let syncerManager = SyncerManager(storageManager: storageManager, factory: factory)
         self.syncerManager = syncerManager
@@ -110,7 +138,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         //first window. i wish there was a nicer way (please some tell me there is)
         if NSApp.windows.count < 3 {
-            self.dashboardWindow.makeKeyAndOrderFront(self)
+            self.dashboardWindow?.makeKeyAndOrderFront(self)
         }
     }
 }

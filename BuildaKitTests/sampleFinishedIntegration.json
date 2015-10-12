@@ -116,25 +116,6 @@
     "codeCoveragePercentage": 0
   },
   "result": "succeeded",
-  "testedDevices": [
-    {
-      "connected": true,
-      "ID": "17088d938eecc27142059b600c00dd06",
-      "simulator": true,
-      "revision": "15-6b1a361d68d375867a354fe9074fbf77",
-      "osVersion": "8.3",
-      "deviceType": "com.apple.iphone-simulator",
-      "supported": true,
-      "identifier": "1764A6B6-4A1F-4DAA-9E87-801717B1A744",
-      "enabledForDevelopment": true,
-      "architecture": "x86_64",
-      "isServer": false,
-      "doc_type": "device",
-      "platformIdentifier": "com.apple.platform.iphonesimulator",
-      "name": "iPhone 6",
-      "retina": false
-    }
-  ],
   "testHierarchy": {
     "Buildasaur-TesterTests": {
       "_xcsAggrDeviceStatus": {

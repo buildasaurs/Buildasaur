@@ -21,6 +21,10 @@ def buildasaur_app_pods
     pod 'Ji', '1.1.2'
 end
 
+def test_pods
+    pod 'Nimble', '~> 2.0.0-rc.3'
+end
+
 target 'Buildasaur' do
     buildasaur_app_pods
 end
@@ -31,6 +35,7 @@ end
 
 target 'BuildaKitTests' do
     also_xcode_pods
+    test_pods
 end
 
 target 'BuildaGitServer' do

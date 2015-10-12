@@ -13,8 +13,32 @@ public typealias RefType = String
 
 public struct Ref {
     static func new() -> RefType {
-        return NSUUID().UUIDString
+        #if TESTING
+            return testIds[(counter++) % testIds.count]
+        #else
+            return NSUUID().UUIDString
+        #endif
     }
+    
+    #if TESTING
+    static func reset() {
+        counter = 0
+    }
+    
+    static var counter: Int = 0
+    static let testIds: [RefType] = [
+        "D143B09C-CB1B-4831-8BA1-E2F8AB039B56",
+        "4E8E7708-01FB-448A-B929-A54887CC5857",
+        "564C267D-FF06-4008-9EF6-66B3AC1A3BDE",
+        "E8F5285A-A262-4630-AF7B-236772B75760",
+        "4E66D0D5-D5CC-417E-A40E-73B513CE4E10",
+        "EF4B87DC-5B08-4D3B-8DE8-EC7A6F25DDBC",
+        "91938FA7-16BB-416F-B270-8B4E11361FB6",
+        "130D38FC-2599-485D-9DD4-A1E3622728B4",
+        "D8E3766E-922A-4B9B-A3C9-71FE77A2CB0C",
+        "EADFC401-1164-4771-85E8-E473E95221FA"
+    ]
+    #endif
 }
 
 public struct SyncerConfig {

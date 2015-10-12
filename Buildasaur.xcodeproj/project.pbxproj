@@ -51,6 +51,11 @@
 		3A9109C51BC2B0B200C2AECA /* MainEditor_ViewManipulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9109C41BC2B0B200C2AECA /* MainEditor_ViewManipulation.swift */; settings = {ASSET_TAGS = (); }; };
 		3A9109C71BC2B67100C2AECA /* EditableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9109C61BC2B67100C2AECA /* EditableViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		3A9C95A51BBDAE9F00D37135 /* SyncerLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9C95A41BBDAE9F00D37135 /* SyncerLogic.swift */; settings = {ASSET_TAGS = (); }; };
+		3A9D741D1BCBDDA200DCA23C /* PersistenceMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9D741C1BCBDDA200DCA23C /* PersistenceMigrator.swift */; settings = {ASSET_TAGS = (); }; };
+		3A9D74201BCBF87900DCA23C /* MigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A9D741F1BCBF87900DCA23C /* MigrationTests.swift */; settings = {ASSET_TAGS = (); }; };
+		3A9D74221BCC041600DCA23C /* Buildasaur-format-0-example1 in Resources */ = {isa = PBXBuildFile; fileRef = 3A9D74211BCC041600DCA23C /* Buildasaur-format-0-example1 */; settings = {ASSET_TAGS = (); }; };
+		3A9D74241BCC103E00DCA23C /* Buildasaur-format-1-example1 in Resources */ = {isa = PBXBuildFile; fileRef = 3A9D74231BCC103E00DCA23C /* Buildasaur-format-1-example1 */; settings = {ASSET_TAGS = (); }; };
+		3A9D74261BCC19BB00DCA23C /* Buildasaur-format-2-example1 in Resources */ = {isa = PBXBuildFile; fileRef = 3A9D74251BCC19BB00DCA23C /* Buildasaur-format-2-example1 */; settings = {ASSET_TAGS = (); }; };
 		3AAA1B661AAB6E9800FA1598 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAA1B651AAB6E9800FA1598 /* SeparatorView.swift */; };
 		3AAA1B681AAB722600FA1598 /* ProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAA1B671AAB722600FA1598 /* ProjectViewController.swift */; };
 		3AAA1B761AAC504700FA1598 /* XcodeServerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAA1B751AAC504700FA1598 /* XcodeServerViewController.swift */; };
@@ -264,6 +269,11 @@
 		3A9109C41BC2B0B200C2AECA /* MainEditor_ViewManipulation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainEditor_ViewManipulation.swift; sourceTree = "<group>"; };
 		3A9109C61BC2B67100C2AECA /* EditableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditableViewController.swift; sourceTree = "<group>"; };
 		3A9C95A41BBDAE9F00D37135 /* SyncerLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerLogic.swift; sourceTree = "<group>"; };
+		3A9D741C1BCBDDA200DCA23C /* PersistenceMigrator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistenceMigrator.swift; sourceTree = "<group>"; };
+		3A9D741F1BCBF87900DCA23C /* MigrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MigrationTests.swift; sourceTree = "<group>"; };
+		3A9D74211BCC041600DCA23C /* Buildasaur-format-0-example1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Buildasaur-format-0-example1"; path = "Migration/Buildasaur-format-0-example1"; sourceTree = "<group>"; };
+		3A9D74231BCC103E00DCA23C /* Buildasaur-format-1-example1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Buildasaur-format-1-example1"; path = "Migration/Buildasaur-format-1-example1"; sourceTree = "<group>"; };
+		3A9D74251BCC19BB00DCA23C /* Buildasaur-format-2-example1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Buildasaur-format-2-example1"; path = "Migration/Buildasaur-format-2-example1"; sourceTree = "<group>"; };
 		3A9DEC7A1A3BDA6C008C8270 /* PullRequestBranch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PullRequestBranch.swift; path = BuildaGitServer/PullRequestBranch.swift; sourceTree = SOURCE_ROOT; };
 		3AAA1B651AAB6E9800FA1598 /* SeparatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
 		3AAA1B671AAB722600FA1598 /* ProjectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectViewController.swift; sourceTree = "<group>"; };
@@ -558,11 +568,12 @@
 			children = (
 				3ACBADD91B5ADE1400204457 /* sampleFinishedIntegration.json */,
 				3A81BB281B5A77E9004732CD /* Info.plist */,
+				3A7F0CC71BC1508C0079A511 /* GeneralTests.swift */,
 				3ACBADD61B5ADE0E00204457 /* MockHelpers.swift */,
 				3ACBADD81B5ADE1400204457 /* Mocks.swift */,
 				3ACBADDA1B5ADE1400204457 /* SyncerTests.swift */,
 				3ACBADDB1B5ADE1400204457 /* SyncPair_PR_Bot_Tests.swift */,
-				3A7F0CC71BC1508C0079A511 /* GeneralTests.swift */,
+				3A9D741E1BCBF86900DCA23C /* Migration */,
 			);
 			path = BuildaKitTests;
 			sourceTree = "<group>";
@@ -579,6 +590,17 @@
 				3A9109C61BC2B67100C2AECA /* EditableViewController.swift */,
 			);
 			name = Editor;
+			sourceTree = "<group>";
+		};
+		3A9D741E1BCBF86900DCA23C /* Migration */ = {
+			isa = PBXGroup;
+			children = (
+				3A9D74251BCC19BB00DCA23C /* Buildasaur-format-2-example1 */,
+				3A9D74231BCC103E00DCA23C /* Buildasaur-format-1-example1 */,
+				3A9D74211BCC041600DCA23C /* Buildasaur-format-0-example1 */,
+				3A9D741F1BCBF87900DCA23C /* MigrationTests.swift */,
+			);
+			name = Migration;
 			sourceTree = "<group>";
 		};
 		3AAA1B631AAB6E6800FA1598 /* ViewController */ = {
@@ -668,6 +690,7 @@
 			children = (
 				3ACBADE41B5ADE2A00204457 /* Persistence.swift */,
 				3ACBADE71B5ADE2A00204457 /* StorageManager.swift */,
+				3A9D741C1BCBDDA200DCA23C /* PersistenceMigrator.swift */,
 			);
 			name = Persistence;
 			sourceTree = "<group>";
@@ -1071,7 +1094,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A9D74221BCC041600DCA23C /* Buildasaur-format-0-example1 in Resources */,
 				3ACBADDD1B5ADE1400204457 /* sampleFinishedIntegration.json in Resources */,
+				3A9D74241BCC103E00DCA23C /* Buildasaur-format-1-example1 in Resources */,
+				3A9D74261BCC19BB00DCA23C /* Buildasaur-format-2-example1 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1412,6 +1438,7 @@
 				3ACBAE091B5ADE2A00204457 /* SyncerGitHubUtils.swift in Sources */,
 				3ACBAE001B5ADE2A00204457 /* Persistence.swift in Sources */,
 				3ACBAE0B1B5ADE2A00204457 /* SyncPair_Branch_NoBot.swift in Sources */,
+				3A9D741D1BCBDDA200DCA23C /* PersistenceMigrator.swift in Sources */,
 				3ACBAE011B5ADE2A00204457 /* Project.swift in Sources */,
 				3ACBAE0D1B5ADE2A00204457 /* SyncPair_PR_Bot.swift in Sources */,
 				3ACBAE031B5ADE2A00204457 /* StorageManager.swift in Sources */,
@@ -1427,6 +1454,7 @@
 				3ACBADDE1B5ADE1400204457 /* SyncerTests.swift in Sources */,
 				3ACBADDF1B5ADE1400204457 /* SyncPair_PR_Bot_Tests.swift in Sources */,
 				3ACBADDC1B5ADE1400204457 /* Mocks.swift in Sources */,
+				3A9D74201BCBF87900DCA23C /* MigrationTests.swift in Sources */,
 				3A7F0CC81BC1508C0079A511 /* GeneralTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1626,6 +1654,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_NS_ASSERTIONS = YES;
 				INFOPLIST_FILE = Buildasaur/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
@@ -1672,7 +1701,8 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_NS_ASSERTIONS = YES;
+				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_VERSION = A;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = BuildaHeartbeatKit/Info.plist;
@@ -1700,7 +1730,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_NS_ASSERTIONS = YES;
 				FRAMEWORK_VERSION = A;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = BuildaHeartbeatKit/Info.plist;
@@ -1767,6 +1797,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_NS_ASSERTIONS = YES;
+				ENABLE_TESTABILITY = YES;
 				INFOPLIST_FILE = Buildasaur/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
@@ -1785,6 +1817,8 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = YES;
+				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_VERSION = A;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1807,6 +1841,8 @@
 			baseConfigurationReference = 42C99CA1B98FD1D821B1AB64 /* Pods-BuildaGitServerTests.testing.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_NS_ASSERTIONS = YES;
+				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
@@ -1844,7 +1880,8 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_NS_ASSERTIONS = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = BuildasaurUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
@@ -1861,7 +1898,7 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_NS_ASSERTIONS = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = BuildasaurUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
@@ -1911,7 +1948,8 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_NS_ASSERTIONS = YES;
+				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_VERSION = A;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = BuildaKit/Info.plist;
@@ -1939,7 +1977,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_NS_ASSERTIONS = YES;
 				FRAMEWORK_VERSION = A;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = BuildaKit/Info.plist;
@@ -1979,7 +2017,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_NS_ASSERTIONS = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = BuildaKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
@@ -1998,7 +2037,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_NS_ASSERTIONS = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = BuildaKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
@@ -2048,6 +2087,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = YES;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = BuildaGitServer/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -2088,6 +2128,7 @@
 			baseConfigurationReference = 58731D4A5E192441F05B9F1F /* Pods-BuildaGitServerTests.release.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_NS_ASSERTIONS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",

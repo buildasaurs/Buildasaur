@@ -28,8 +28,10 @@ public class StorageManager {
     public let config = MutableProperty<[String: AnyObject]>([:])
     
     private var heartbeatManager: HeartbeatManager!
+    private let persistence: Persistence
     
-    public init() {
+    public init(persistence: Persistence) {
+        self.persistence = persistence
         self.loadAllFromPersistence()
         self.setupHeartbeatManager()
         self.setupSaving()
@@ -178,16 +180,16 @@ public class StorageManager {
     
     private func loadAllFromPersistence() {
         
-        self.config.value = Persistence.loadDictionaryFromFile("Config.json") ?? [:]
-        let allProjects: [ProjectConfig] = Persistence.loadArrayFromFile("Projects.json") ?? []
+        self.config.value = self.persistence.loadDictionaryFromFile("Config.json") ?? [:]
+        let allProjects: [ProjectConfig] = self.persistence.loadArrayFromFile("Projects.json") ?? []
         self.projectConfigs.value = allProjects.dictionarifyWithKey { $0.id }
-        let allServerConfigs: [XcodeServerConfig] = Persistence.loadArrayFromFile("ServerConfigs.json") ?? []
+        let allServerConfigs: [XcodeServerConfig] = self.persistence.loadArrayFromFile("ServerConfigs.json") ?? []
         self.serverConfigs.value = allServerConfigs.dictionarifyWithKey { $0.id }
-        let allTemplates: [BuildTemplate] = Persistence.loadArrayFromFolder("BuildTemplates") ?? []
+        let allTemplates: [BuildTemplate] = self.persistence.loadArrayFromFolder("BuildTemplates") ?? []
         self.buildTemplates.value = allTemplates.dictionarifyWithKey { $0.id }
-        let allTriggers: [TriggerConfig] = Persistence.loadArrayFromFolder("Triggers") ?? []
+        let allTriggers: [TriggerConfig] = self.persistence.loadArrayFromFolder("Triggers") ?? []
         self.triggerConfigs.value = allTriggers.dictionarifyWithKey { $0.id }
-        let allSyncers: [SyncerConfig] = Persistence.loadArrayFromFile("Syncers.json") { self.createSyncerConfigFromJSON($0) } ?? []
+        let allSyncers: [SyncerConfig] = self.persistence.loadArrayFromFile("Syncers.json") { self.createSyncerConfigFromJSON($0) } ?? []
         self.syncerConfigs.value = allSyncers.dictionarifyWithKey { $0.id }
     }
     
@@ -197,65 +199,65 @@ public class StorageManager {
         
         //simple - save on every change after the initial bunch has been loaded!
         
-        self.serverConfigs.producer.startWithNext {
-            StorageManager.saveServerConfigs($0)
+        self.serverConfigs.producer.startWithNext { [weak self] in
+            self?.saveServerConfigs($0)
         }
-        self.projectConfigs.producer.startWithNext {
-            StorageManager.saveProjectConfigs($0)
+        self.projectConfigs.producer.startWithNext { [weak self] in
+            self?.saveProjectConfigs($0)
         }
-        self.config.producer.startWithNext {
-            StorageManager.saveConfig($0)
+        self.config.producer.startWithNext { [weak self] in
+            self?.saveConfig($0)
         }
-        self.syncerConfigs.producer.startWithNext {
-            StorageManager.saveSyncerConfigs($0)
+        self.syncerConfigs.producer.startWithNext { [weak self] in
+            self?.saveSyncerConfigs($0)
         }
-        self.buildTemplates.producer.startWithNext {
-            StorageManager.saveBuildTemplates($0)
+        self.buildTemplates.producer.startWithNext { [weak self] in
+            self?.saveBuildTemplates($0)
         }
-        self.triggerConfigs.producer.startWithNext {
-            StorageManager.saveTriggerConfigs($0)
+        self.triggerConfigs.producer.startWithNext { [weak self] in
+            self?.saveTriggerConfigs($0)
         }
     }
     
-    private static func saveConfig(config: [String: AnyObject]) {
-        Persistence.saveDictionary("Config.json", item: config)
+    private func saveConfig(config: [String: AnyObject]) {
+        self.persistence.saveDictionary("Config.json", item: config)
     }
     
-    private static func saveProjectConfigs(configs: [String: ProjectConfig]) {
+    private func saveProjectConfigs(configs: [String: ProjectConfig]) {
         let projectConfigs: NSArray = Array(configs.values).map { $0.jsonify() }
-        Persistence.saveArray("Projects.json", items: projectConfigs)
+        self.persistence.saveArray("Projects.json", items: projectConfigs)
     }
     
-    private static func saveServerConfigs(configs: [String: XcodeServerConfig]) {
+    private func saveServerConfigs(configs: [String: XcodeServerConfig]) {
         let serverConfigs = Array(configs.values).map { $0.jsonify() }
-        Persistence.saveArray("ServerConfigs.json", items: serverConfigs)
+        self.persistence.saveArray("ServerConfigs.json", items: serverConfigs)
     }
     
-    private static func saveSyncerConfigs(configs: [String: SyncerConfig]) {
+    private func saveSyncerConfigs(configs: [String: SyncerConfig]) {
         let syncerConfigs = Array(configs.values).map { $0.jsonify() }
-        Persistence.saveArray("Syncers.json", items: syncerConfigs)
+        self.persistence.saveArray("Syncers.json", items: syncerConfigs)
     }
     
-    private static func saveBuildTemplates(templates: [String: BuildTemplate]) {
+    private func saveBuildTemplates(templates: [String: BuildTemplate]) {
         
         //but first we have to *delete* the directory first.
         //think of a nicer way to do this, but this at least will always
         //be consistent.
         let folderName = "BuildTemplates"
-        Persistence.deleteFolder(folderName)
+        self.persistence.deleteFolder(folderName)
         let items = Array(templates.values)
-        Persistence.saveArrayIntoFolder(folderName, items: items) { $0.id }
+        self.persistence.saveArrayIntoFolder(folderName, items: items) { $0.id }
     }
     
-    private static func saveTriggerConfigs(configs: [String: TriggerConfig]) {
+    private func saveTriggerConfigs(configs: [String: TriggerConfig]) {
         
         //but first we have to *delete* the directory first.
         //think of a nicer way to do this, but this at least will always
         //be consistent.
         let folderName = "Triggers"
-        Persistence.deleteFolder(folderName)
+        self.persistence.deleteFolder(folderName)
         let items = Array(configs.values)
-        Persistence.saveArrayIntoFolder(folderName, items: items) { $0.id }
+        self.persistence.saveArrayIntoFolder(folderName, items: items) { $0.id }
     }
 }
 

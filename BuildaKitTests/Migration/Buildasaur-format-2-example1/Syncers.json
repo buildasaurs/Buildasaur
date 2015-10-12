@@ -1,0 +1,12 @@
+[
+  {
+    "project_path" : "file:\/\/\/Users\/honzadvorsky\/Documents\/Buildasaur-Tester\/Buildasaur-Tester.xcodeproj",
+    "wait_for_lttm" : false,
+    "watched_branches" : [
+      "master"
+    ],
+    "post_status_comments" : false,
+    "server_host" : "https:\/\/127.0.0.1",
+    "sync_interval" : 19
+  }
+]

@@ -1,0 +1,9 @@
+[
+  {
+    "preferred_template_id" : "B31C6530-BB84-4A93-B08C-54074AAB5F37",
+    "ssh_public_key_url" : "file:\/\/\/Users\/honzadvorsky\/.ssh\/id_rsa.pub",
+    "url" : "file:\/\/\/Users\/honzadvorsky\/Documents\/Buildasaur-Tester\/Buildasaur-Tester.xcodeproj",
+    "github_token" : "example_token-123456786543456765432",
+    "ssh_private_key_url" : "file:\/\/\/Users\/honzadvorsky\/.ssh\/id_rsa"
+  }
+]

@@ -9,63 +9,102 @@
 import Foundation
 import BuildaUtils
 
+public class PersistenceFactory {
+    
+    public class func createStandardPersistence() -> Persistence {
+        
+        //            let folderName = "Buildasaur"
+        let folderName = "Buildasaur-Debug"
+        
+        let fileManager = NSFileManager.defaultManager()
+        guard let applicationSupport = fileManager
+            .URLsForDirectory(.ApplicationSupportDirectory, inDomains:.UserDomainMask)
+            .first else {
+                preconditionFailure("Couldn't access Builda's persistence folder, aborting")
+        }
+        let buildaRoot = applicationSupport
+            .URLByAppendingPathComponent(folderName, isDirectory: true)
+        
+        let persistence = Persistence(readingFolder: buildaRoot, writingFolder: buildaRoot, fileManager: fileManager)
+        return persistence
+    }
+}
+
 public class Persistence {
     
-    class func deleteFile(name: String) {
-        let itemUrl = Persistence.getFileInAppSupportWithName(name, isDirectory: false)
+    private let readingFolder: NSURL
+    private let writingFolder: NSURL
+    private let fileManager: NSFileManager
+    
+    public init(readingFolder: NSURL, writingFolder: NSURL, fileManager: NSFileManager) {
+        
+        self.readingFolder = readingFolder
+        self.writingFolder = writingFolder
+        self.fileManager = fileManager
+        self.ensureFoldersExist()
+    }
+    
+    private func ensureFoldersExist() {
+        
+        self.createFolderIfNotExists(self.readingFolder)
+        self.createFolderIfNotExists(self.writingFolder)
+    }
+    
+    func deleteFile(name: String) {
+        let itemUrl = self.fileURLWithName(name, intention: .Writing, isDirectory: false)
         self.delete(itemUrl)
     }
     
-    class func deleteFolder(name: String) {
-        let itemUrl = Persistence.getFileInAppSupportWithName(name, isDirectory: true)
+    func deleteFolder(name: String) {
+        let itemUrl = self.fileURLWithName(name, intention: .Writing, isDirectory: true)
         self.delete(itemUrl)
     }
     
-    private class func delete(url: NSURL) {
+    private func delete(url: NSURL) {
         do {
-            try NSFileManager.defaultManager().removeItemAtURL(url)
+            try self.fileManager.removeItemAtURL(url)
         } catch {
             Log.error(error)
         }
     }
     
-    class func saveData(name: String, item: AnyObject) {
+    func saveData(name: String, item: AnyObject) {
         
-        let itemUrl = Persistence.getFileInAppSupportWithName(name, isDirectory: false)
+        let itemUrl = self.fileURLWithName(name, intention: .Writing, isDirectory: false)
         let json = item
         do {
-            try Persistence.saveJSONToUrl(json, url: itemUrl)
+            try self.saveJSONToUrl(json, url: itemUrl)
         } catch {
             assert(false, "Failed to save \(name), \(error)")
         }
     }
     
-    class func saveDictionary(name: String, item: NSDictionary) {
+    func saveDictionary(name: String, item: NSDictionary) {
         self.saveData(name, item: item)
     }
     
     //crashes when I use [JSONWritable] instead of NSArray :(
-    class func saveArray(name: String, items: NSArray) {
+    func saveArray(name: String, items: NSArray) {
         self.saveData(name, item: items)
     }
     
-    class func saveArrayIntoFolder<T: JSONWritable>(folderName: String, items: [T], itemFileName: (item: T) -> String) {
+    func saveArrayIntoFolder<T: JSONWritable>(folderName: String, items: [T], itemFileName: (item: T) -> String) {
         
-        let folderUrl = Persistence.getFileInAppSupportWithName(folderName, isDirectory: true)
+        let folderUrl = self.fileURLWithName(folderName, intention: .Writing, isDirectory: true)
         items.forEach { (item: T) -> () in
             
             let json = item.jsonify()
             let name = itemFileName(item: item)
             let url = folderUrl.URLByAppendingPathComponent("\(name).json")
             do {
-                try Persistence.saveJSONToUrl(json, url: url)
+                try self.saveJSONToUrl(json, url: url)
             } catch {
                 assert(false, "Failed to save a \(folderName), \(error)")
             }
         }
     }
     
-    class func loadDictionaryFromFile<T>(name: String) -> T? {
+    func loadDictionaryFromFile<T>(name: String) -> T? {
         return self.loadDataFromFile(name, process: { (json) -> T? in
             
             guard let contents = json as? T else { return nil }
@@ -73,7 +112,7 @@ public class Persistence {
         })
     }
     
-    class func loadArrayFromFile<T>(name: String, convert: (json: NSDictionary) throws -> T?) -> [T]? {
+    func loadArrayFromFile<T>(name: String, convert: (json: NSDictionary) throws -> T?) -> [T]? {
         
         return self.loadDataFromFile(name, process: { (json) -> [T]? in
             
@@ -91,14 +130,17 @@ public class Persistence {
         })
     }
     
-    class func loadArrayFromFile<T: JSONReadable>(name: String) -> [T]? {
+    func loadArrayOfDictionariesFromFile(name: String) -> [NSDictionary]? {
+        return self.loadArrayFromFile(name, convert: { $0 })
+    }
+    
+    func loadArrayFromFile<T: JSONReadable>(name: String) -> [T]? {
         
         return self.loadArrayFromFile(name) { try T(json: $0) }
     }
     
-    class func loadArrayFromFolder<T: JSONReadable>(folderName: String) -> [T]? {
-        
-        let folderUrl = Persistence.getFileInAppSupportWithName(folderName, isDirectory: true)
+    func loadArrayFromFolder<T: JSONReadable>(folderName: String) -> [T]? {
+        let folderUrl = self.fileURLWithName(folderName, intention: .Reading, isDirectory: true)
         return self.filesInFolder(folderUrl)?.map { (url: NSURL) -> T? in
             
             do {
@@ -111,13 +153,13 @@ public class Persistence {
                 Log.error("Couldn't parse \(folderName) at url \(url), error \(error)")
             }
             return nil
-        }.filter { $0 != nil }.map { $0! }
+            }.filter { $0 != nil }.map { $0! }
     }
     
-    class func loadDataFromFile<T>(name: String, process: (json: AnyObject?) -> T?) -> T? {
-        let url = Persistence.getFileInAppSupportWithName(name, isDirectory: false)
+    func loadDataFromFile<T>(name: String, process: (json: AnyObject?) -> T?) -> T? {
+        let url = self.fileURLWithName(name, intention: .Reading, isDirectory: false)
         do {
-            let json = try Persistence.loadJSONFromUrl(url)
+            let json = try self.loadJSONFromUrl(url)
             guard let contents = process(json: json) else { return nil }
             return contents
         } catch {
@@ -129,32 +171,40 @@ public class Persistence {
         }
     }
     
-    public class func loadJSONFromUrl(url: NSURL) throws -> AnyObject? {
+    public func loadJSONFromUrl(url: NSURL) throws -> AnyObject? {
         
         let data = try NSData(contentsOfURL: url, options: NSDataReadingOptions())
         let json: AnyObject = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)
         return json
     }
     
-    public class func saveJSONToUrl(json: AnyObject, url: NSURL) throws {
+    public func saveJSONToUrl(json: AnyObject, url: NSURL) throws {
         
         let data = try NSJSONSerialization.dataWithJSONObject(json, options: NSJSONWritingOptions.PrettyPrinted)
         try data.writeToURL(url, options: NSDataWritingOptions.DataWritingAtomic)
     }
     
-    public class func getFileInAppSupportWithName(name: String, isDirectory: Bool) -> NSURL {
+    public func fileURLWithName(name: String, intention: PersistenceIntention, isDirectory: Bool) -> NSURL {
         
-        let root = self.buildaApplicationSupportFolderURL()
+        let root = self.folderForIntention(intention)
         let url = root.URLByAppendingPathComponent(name, isDirectory: isDirectory)
-        if isDirectory {
+        if isDirectory && intention == .Writing {
             self.createFolderIfNotExists(url)
         }
         return url
     }
     
-    public class func createFolderIfNotExists(url: NSURL) {
+    public func copyFileToWriteLocation(name: String, isDirectory: Bool) {
         
-        let fm = NSFileManager.defaultManager()
+        let url = self.fileURLWithName(name, intention: .Reading, isDirectory: isDirectory)
+        let writeUrl = self.fileURLWithName(name, intention: .WritingNoCreateFolder, isDirectory: isDirectory)
+        
+        try! self.fileManager.copyItemAtURL(url, toURL: writeUrl)
+    }
+    
+    public func createFolderIfNotExists(url: NSURL) {
+        
+        let fm = self.fileManager
         do {
             try fm.createDirectoryAtURL(url, withIntermediateDirectories: true, attributes: nil)
         } catch {
@@ -162,32 +212,25 @@ public class Persistence {
         }
     }
     
-    public class func buildaApplicationSupportFolderURL() -> NSURL {
-        
-        let fm = NSFileManager.defaultManager()
-        if let appSupport = fm.URLsForDirectory(NSSearchPathDirectory.ApplicationSupportDirectory, inDomains:NSSearchPathDomainMask.UserDomainMask).first {
-            
-//            let folderName = "Buildasaur"
-            let folderName = "Buildasaur-Debug"
-            let buildaAppSupport = appSupport.URLByAppendingPathComponent(folderName, isDirectory: true)
-            
-            //ensure it exists
-            do {
-                try fm.createDirectoryAtURL(buildaAppSupport, withIntermediateDirectories: true, attributes: nil)
-                return buildaAppSupport
-            } catch {
-                Log.error("Failed to create Builda's Application Support folder, error \(error)")
-            }
-        }
-        
-        assertionFailure("Couldn't access Builda's persistence folder, aborting")
-        return NSURL()
+    public enum PersistenceIntention {
+        case Reading
+        case Writing
+        case WritingNoCreateFolder
     }
     
-    public class func filesInFolder(folderUrl: NSURL) -> [NSURL]? {
-
+    private func folderForIntention(intention: PersistenceIntention) -> NSURL {
+        switch intention {
+        case .Reading:
+            return self.readingFolder
+        case .Writing, .WritingNoCreateFolder:
+            return self.writingFolder
+        }
+    }
+    
+    public func filesInFolder(folderUrl: NSURL) -> [NSURL]? {
+        
         do {
-            let contents = try NSFileManager.defaultManager().contentsOfDirectoryAtURL(folderUrl, includingPropertiesForKeys: nil, options: [.SkipsHiddenFiles, .SkipsSubdirectoryDescendants])
+            let contents = try self.fileManager.contentsOfDirectoryAtURL(folderUrl, includingPropertiesForKeys: nil, options: [.SkipsHiddenFiles, .SkipsSubdirectoryDescendants])
             return contents
         } catch {
             Log.error("Couldn't read folder \(folderUrl), error \(error)")
