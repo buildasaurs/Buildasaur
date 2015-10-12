@@ -25,10 +25,9 @@ public enum SyncerEventType {
     case DidEncounterError(ErrorType)
 }
 
-@objc private class Trampoline: NSObject {
+class Trampoline: NSObject {
     
     var block: (() -> ())? = nil
-    override init() { }
     func jump() { self.block?() }
 }
 
