@@ -35,6 +35,14 @@ class DashboardViewController: PresentableViewController {
         self.configHeaderView()
     }
     
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        
+        if let window = self.view.window {
+            window.minSize = CGSize(width: 700, height: 300)
+        }
+    }
+    
     func configTitle() {
         let version = NSBundle.mainBundle().infoDictionary!["CFBundleShortVersionString"] as! String
         self.title = "Buildasaur \(version), at your service!"
@@ -125,6 +133,14 @@ class DashboardViewController: PresentableViewController {
     
     @IBAction func controlButtonClicked(sender: BuildaNSButton) {
         self.syncerViewModelFromSender(sender).controlButtonClicked()
+    }
+    
+    @IBAction func doubleClickedRow(sender: AnyObject?) {
+        let clickedRow = self.syncersTableView.clickedRow
+        guard clickedRow >= 0 else { return }
+        
+        let syncerViewModel = self.syncerViewModels.value[clickedRow]
+        syncerViewModel.viewButtonClicked()
     }
 }
 

@@ -702,7 +702,6 @@
                                                                 <constraint firstItem="4MF-q6-tZQ" firstAttribute="width" secondItem="D9j-UM-3FK" secondAttribute="width" id="Ln6-xh-tW8"/>
                                                                 <constraint firstItem="4MF-q6-tZQ" firstAttribute="centerX" secondItem="D9j-UM-3FK" secondAttribute="centerX" id="WMf-UV-nOO"/>
                                                                 <constraint firstItem="4MF-q6-tZQ" firstAttribute="centerY" secondItem="D9j-UM-3FK" secondAttribute="centerY" id="bKH-gg-PJz"/>
-                                                                <constraint firstItem="4MF-q6-tZQ" firstAttribute="height" secondItem="D9j-UM-3FK" secondAttribute="height" id="zjn-Jl-e5W"/>
                                                             </constraints>
                                                             <animations/>
                                                             <connections>
@@ -739,7 +738,6 @@
                                                                 </textField>
                                                             </subviews>
                                                             <constraints>
-                                                                <constraint firstItem="chB-Jy-cxW" firstAttribute="height" secondItem="T5c-UH-Kcx" secondAttribute="height" id="7jK-tj-7tO"/>
                                                                 <constraint firstItem="chB-Jy-cxW" firstAttribute="centerX" secondItem="T5c-UH-Kcx" secondAttribute="centerX" id="FUP-xB-Ug0"/>
                                                                 <constraint firstItem="chB-Jy-cxW" firstAttribute="centerY" secondItem="T5c-UH-Kcx" secondAttribute="centerY" id="nWY-DY-3YR"/>
                                                                 <constraint firstItem="chB-Jy-cxW" firstAttribute="width" secondItem="T5c-UH-Kcx" secondAttribute="width" id="xHp-f3-lj8"/>
@@ -779,7 +777,6 @@
                                                                 </textField>
                                                             </subviews>
                                                             <constraints>
-                                                                <constraint firstItem="28J-1B-dEw" firstAttribute="height" secondItem="VxK-bY-IC3" secondAttribute="height" id="BMa-RZ-ZA5"/>
                                                                 <constraint firstItem="28J-1B-dEw" firstAttribute="centerX" secondItem="VxK-bY-IC3" secondAttribute="centerX" id="e1Y-J9-NtW"/>
                                                                 <constraint firstItem="28J-1B-dEw" firstAttribute="width" secondItem="VxK-bY-IC3" secondAttribute="width" id="kbT-05-Wf7"/>
                                                                 <constraint firstItem="28J-1B-dEw" firstAttribute="centerY" secondItem="VxK-bY-IC3" secondAttribute="centerY" id="uG0-DJ-Acd"/>
@@ -808,8 +805,8 @@
                                                             <rect key="frame" x="400" y="1" width="130" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kfd-Lh-L1f">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="100" height="17"/>
+                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Kfd-Lh-L1f">
+                                                                    <rect key="frame" x="-2" y="0.0" width="134" height="17"/>
                                                                     <animations/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="Acx-2w-caV">
                                                                         <font key="font" metaFont="system"/>
@@ -820,7 +817,6 @@
                                                             </subviews>
                                                             <constraints>
                                                                 <constraint firstItem="Kfd-Lh-L1f" firstAttribute="centerY" secondItem="JE6-3o-Px5" secondAttribute="centerY" id="AGP-Mw-D8K"/>
-                                                                <constraint firstItem="Kfd-Lh-L1f" firstAttribute="height" secondItem="JE6-3o-Px5" secondAttribute="height" id="agF-48-B36"/>
                                                                 <constraint firstItem="Kfd-Lh-L1f" firstAttribute="width" secondItem="JE6-3o-Px5" secondAttribute="width" id="lV4-7l-Roo"/>
                                                                 <constraint firstItem="Kfd-Lh-L1f" firstAttribute="centerX" secondItem="JE6-3o-Px5" secondAttribute="centerX" id="vc4-fN-GB7"/>
                                                             </constraints>
@@ -884,6 +880,9 @@
                                                     </prototypeCellViews>
                                                 </tableColumn>
                                             </tableColumns>
+                                            <connections>
+                                                <action trigger="doubleAction" selector="doubleClickedRow:" target="fGl-D9-6Tw" id="K1C-kn-Wb0"/>
+                                            </connections>
                                         </tableView>
                                     </subviews>
                                     <animations/>
