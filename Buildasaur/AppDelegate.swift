@@ -79,6 +79,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.showMainWindow()
     }
     
+    func applicationShouldTerminate(sender: NSApplication) -> NSApplicationTerminateReply {
+        
+        let runningCount = self.syncerManager.syncers.filter({ $0.active }).count
+        if runningCount > 0 {
+            
+            let confirm = "Are you sure you want to quit Buildasaur? This would stop \(runningCount) running syncers."
+            UIUtils.showAlertAskingConfirmation(confirm, dangerButton: "Quit") {
+                (quit) -> () in
+                NSApp.replyToApplicationShouldTerminate(quit)
+            }
+            
+            return NSApplicationTerminateReply.TerminateLater
+        } else {
+            return NSApplicationTerminateReply.TerminateNow
+        }
+    }
+    
     func applicationWillTerminate(aNotification: NSNotification) {
         
         //stop syncers properly

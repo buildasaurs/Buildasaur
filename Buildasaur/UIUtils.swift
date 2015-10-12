@@ -20,13 +20,17 @@ public class UIUtils {
         })
     }
     
-    public class func showAlertAskingForRemoval(text: String, completion: (remove: Bool) -> ()) {
+    public class func showAlertAskingConfirmation(text: String, dangerButton: String, completion: (confirmed: Bool) -> ()) {
         
-        let removeText = "Remove"
-        let buttons = ["Cancel", removeText]
+        let buttons = ["Cancel", dangerButton]
         self.showAlertWithButtons(text, buttons: buttons) { (tappedButton) -> () in
-            completion(remove: removeText == tappedButton)
+            completion(confirmed: dangerButton == tappedButton)
         }
+    }
+
+    
+    public class func showAlertAskingForRemoval(text: String, completion: (remove: Bool) -> ()) {
+        self.showAlertAskingConfirmation(text, dangerButton: "Remove", completion: completion)
     }
     
     public class func showAlertWithButtons(text: String, buttons: [String], completion: (tappedButton: String) -> ()) {
