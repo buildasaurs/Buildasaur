@@ -135,7 +135,7 @@ extension AppDelegate: PresentableViewControllerDelegate {
         
         if let window = self.windowForPresentableViewControllerWithIdentifier(viewController.uniqueIdentifier)?.0 {
             
-            if window.delegate?.windowShouldClose!(self) ?? true {
+            if window.delegate?.windowShouldClose!(window) ?? true {
                 window.close()
             }
         }

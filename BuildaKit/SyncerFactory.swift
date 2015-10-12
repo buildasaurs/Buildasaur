@@ -67,7 +67,10 @@ public class SyncerFactory: SyncerFactoryType {
         
         //remove the syncers that haven't been created (deleted)
         let deleted = Set(self.syncerPool.keys).subtract(createdIds)
-        deleted.forEach { self.projectPool.removeValueForKey($0) }
+        deleted.forEach {
+            self.syncerPool[$0]?.active = false
+            self.syncerPool.removeValueForKey($0)
+        }
         
         return created
     }

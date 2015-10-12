@@ -187,13 +187,14 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
     }
     
     private func devicePlatformFromScheme(schemeName: String) -> SignalProducer<DevicePlatform.PlatformType, NoError> {
-        return SignalProducer { sink, _ in
-            guard let scheme = self.schemes.value.filter({ $0.name == schemeName }).first else {
+        return SignalProducer { [weak self] sink, _ in
+            guard let sself = self else { return }
+            guard let scheme = sself.schemes.value.filter({ $0.name == schemeName }).first else {
                 return
             }
             
             do {
-                let platformType = try XcodeDeviceParser.parseDeviceTypeFromProjectUrlAndScheme(self.project.value.url, scheme: scheme).toPlatformType()
+                let platformType = try XcodeDeviceParser.parseDeviceTypeFromProjectUrlAndScheme(sself.project.value.url, scheme: scheme).toPlatformType()
                 sendNext(sink, platformType)
                 sendCompleted(sink)
             } catch {
