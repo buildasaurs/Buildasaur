@@ -36,6 +36,10 @@ public class HDGitHubXCBotSyncer : Syncer {
         self.triggers = triggers
         
         super.init(syncInterval: config.syncInterval)
+        
+        self.config.producer.startWithNext { [weak self] in
+            self?.syncInterval = $0.syncInterval
+        }
     }
     
     deinit {
