@@ -37,13 +37,13 @@ You have multiple options of getting started with Buildasaur, from source code t
 - get the `.app` of the [latest release](https://github.com/czechboy0/Buildasaur/releases/latest)
 - check out code and build and run in Xcode (Buildasaur is written in Swift 2)
 
-Requirements
+:hammer: Requirements
 ------------
 - Xcode Server (see [my tutorials](http://honzadvorsky.com/pages/xcode_server_tutorials/) if you're new to Xcode Server)
 - your projects on GitHub
 - starting with version 0.6.0, also OS X 10.11 (previous version required OS X 10.10)
 
-Xcode Versions
+:blue_book: Xcode Versions
 --------------
 Xcode Server ships in Xcode, so the server API is also dependent on the Xcode you have. See the table of latest Buildasaur versions supporting each Xcode version.
 
@@ -96,14 +96,14 @@ The default workflow is as follows:
 ## :pencil2: Manual Bot Management
 In addition to automatic bot management with syncers, you can create bots from an existing Build Template and a branch by clicking *Manual Bot Management* when your syncer is setup. This is useful for creating one-off bots based on e.g. release branches with a different Build Template than you use for PRs.
 
-## Branch Watching
+## :eyeglasses: Branch Watching
 All branches with open Pull Requests are automatically watched and tested. However, what if you wanted to watch a branch which does *not* have a Pull Request associated with it? Like `master`, or a release branch into which you're making final changes and want tested?
 
 Buildasaur supports that. You can select extra watched branches, which will automatically be tested and their statuses will be updated on GitHub. You can see the statuses of Buildasaur's branches [here](https://github.com/czechboy0/Buildasaur/branches), for instance. 
 
-Enabling watched branches is a prerequisite of getting [build badges](#Build-Badges) working with [satellite](https://github.com/czechboy0/satellite).
+Enabling watched branches is a prerequisite of getting [build badges](#build-badges) working with [satellite](https://github.com/czechboy0/satellite).
 
-## Build Badges
+## :vertical_traffic_light: Build Badges
 I built a tiny service called [satellite](https://github.com/czechboy0/satellite), which serves down badges based on GitHub status of a branch. And this status is automatically updated by Buildasaur when a build finishes (enable a *watched branch* in Buildasaur for whichever branch you'd like to base your badge on, usually `master`).
 
 TL;DR?
@@ -126,7 +126,7 @@ If, despite absolutely no identifiable data being sent, you still aren't comfort
 ---------------
 If Builda crashes, you can find crash logs at `~/Library/Logs/DiagnosticReports/Buildasaur-*`. Please let me know if that happens and I'll take a look. Also, Builda logs (pretty verbosely) to `~/Library/Application Support/Buildasaur/Builda.log`, so this is another place to watch in case of any problems. You can find all persisted files that Buildasaur keeps around at `~/Library/Application Support/Buildasaur/`.
 
-Looking for Xcode Server SDK?
+:arrow_right_hook: Looking for Xcode Server SDK?
 ----------------
 The code to communicate with Xcode Server lives in the project called [XcodeServerSDK](https://github.com/czechboy0/XcodeServerSDK). Buildasaur is just one app that uses this SDK, but now you can build your own as well!
 
