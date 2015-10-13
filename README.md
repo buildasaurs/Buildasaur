@@ -101,7 +101,7 @@ All branches with open Pull Requests are automatically watched and tested. Howev
 
 Buildasaur supports that. You can select extra watched branches, which will automatically be tested and their statuses will be updated on GitHub. You can see the statuses of Buildasaur's branches [here](https://github.com/czechboy0/Buildasaur/branches), for instance. 
 
-Enabling watched branches is a prerequisite of getting [build badges](#build-badges) working with [satellite](https://github.com/czechboy0/satellite).
+Enabling watched branches is a prerequisite of getting [build badges](#vertical_traffic_light-build-badges) working with [satellite](https://github.com/czechboy0/satellite).
 
 ## :vertical_traffic_light: Build Badges
 I built a tiny service called [satellite](https://github.com/czechboy0/satellite), which serves down badges based on GitHub status of a branch. And this status is automatically updated by Buildasaur when a build finishes (enable a *watched branch* in Buildasaur for whichever branch you'd like to base your badge on, usually `master`).
