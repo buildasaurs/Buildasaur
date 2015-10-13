@@ -1,0 +1,54 @@
+{
+  "id" : "B31C6530-BB84-4A93-B08C-54074AAB5F37",
+  "name" : "BuildaTest PR",
+  "project_name" : "Buildasaur-Tester",
+  "triggers" : [
+    {
+      "phase" : 1,
+      "scriptBody" : "echo \"hello\"\n",
+      "type" : 1,
+      "name" : "Prebuild Script"
+    },
+    {
+      "phase" : 2,
+      "scriptBody" : "",
+      "emailConfiguration" : {
+        "includeCommitMessages" : true,
+        "additionalRecipients" : [
+          "h@d.com",
+          "yo@ma.lo"
+        ],
+        "emailCommitters" : false,
+        "includeIssueDetails" : true
+      },
+      "type" : 2,
+      "name" : "Postbuild Email",
+      "conditions" : {
+        "status" : 2,
+        "onWarnings" : true,
+        "onBuildErrors" : true,
+        "onInternalErrors" : true,
+        "onAnalyzerWarnings" : true,
+        "onFailingTests" : true,
+        "onSuccess" : true
+      }
+    }
+  ],
+  "should_analyze" : true,
+  "platform_type" : "com.apple.platform.iphoneos",
+  "scheme" : "Buildasaur-Tester",
+  "device_filter" : 0,
+  "cleaning_policy" : 0,
+  "testing_devices" : [
+
+  ],
+  "should_archive" : false,
+  "should_test" : true,
+  "schedule" : {
+    "weeklyScheduleDay" : 0,
+    "periodicScheduleInterval" : 0,
+    "hourOfIntegration" : 0,
+    "minutesAfterHourToIntegrate" : 0,
+    "scheduleType" : 3
+  }
+}

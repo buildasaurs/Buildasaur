@@ -107,62 +107,12 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Testing"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       codeCoverageEnabled = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3A46A2D51B081EF400F0FA4B"
-               BuildableName = "BuildasaurTests.xctest"
-               BlueprintName = "BuildasaurTests"
-               ReferencedContainer = "container:Buildasaur.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3A58B1391A3B9604003E0266"
-               BuildableName = "GitSourceTests.xctest"
-               BlueprintName = "GitSourceTests"
-               ReferencedContainer = "container:Buildasaur.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3A15464A1B02A32C001EEB45"
-               BuildableName = "BuildaUtilsTests.xctest"
-               BlueprintName = "BuildaUtilsTests"
-               ReferencedContainer = "container:Buildasaur.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3AAF6EA31A3CE54900C657FB"
-               BuildableName = "CIServerTests.xctest"
-               BlueprintName = "CIServerTests"
-               ReferencedContainer = "container:Buildasaur.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3AAF6EC71A3CE57100C657FB"
-               BuildableName = "BuildaCIServerTests.xctest"
-               BlueprintName = "BuildaCIServerTests"
-               ReferencedContainer = "container:Buildasaur.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
          <TestableReference
             skipped = "NO">
             <BuildableReference
@@ -180,6 +130,16 @@
                BlueprintIdentifier = "3A81BB1E1B5A77E9004732CD"
                BuildableName = "BuildaKitTests.xctest"
                BlueprintName = "BuildaKitTests"
+               ReferencedContainer = "container:Buildasaur.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3A7F0CBB1BC14E640079A511"
+               BuildableName = "BuildasaurUITests.xctest"
+               BlueprintName = "BuildasaurUITests"
                ReferencedContainer = "container:Buildasaur.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -220,7 +180,7 @@
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"

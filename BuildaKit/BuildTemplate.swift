@@ -10,7 +10,7 @@ import Foundation
 import BuildaUtils
 import XcodeServerSDK
 
-private let kKeyUniqueId = "id"
+private let kKeyId = "id"
 private let kKeyProjectName = "project_name"
 private let kKeyName = "name"
 private let kKeyScheme = "scheme"
@@ -24,54 +24,52 @@ private let kKeyShouldAnalyze = "should_analyze"
 private let kKeyShouldTest = "should_test"
 private let kKeyShouldArchive = "should_archive"
 
-public class BuildTemplate: JSONSerializable {
+public struct BuildTemplate: JSONSerializable {
     
-    public let uniqueId: String //unique id of this build template, so that we can rename them easily
+    public let id: RefType
     
     public var projectName: String?
-    public var name: String?
-    public var scheme: String?
-    public var schedule: BotSchedule? //will be ignored for Synced bots, only useful for Manual creation. default: Manual
+    public var name: String
+    public var scheme: String
+    public var schedule: BotSchedule
     public var cleaningPolicy: BotConfiguration.CleaningPolicy
-    public var triggers: [Trigger]
-    public var shouldAnalyze: Bool?
-    public var shouldTest: Bool?
-    public var shouldArchive: Bool?
+    public var triggers: [RefType]
+    public var shouldAnalyze: Bool
+    public var shouldTest: Bool
+    public var shouldArchive: Bool
     public var testingDeviceIds: [String]
     public var deviceFilter: DeviceFilter.FilterType
     public var platformType: DevicePlatform.PlatformType?
     
     func validate() -> Bool {
         
-        if self.uniqueId.isEmpty { return false }
-        if self.name == nil { return false }
-        if self.scheme == nil { return false }
+        if self.id.isEmpty { return false }
         //TODO: add all the other required values! this will be called on saving from the UI to make sure we have all the required fields.
         return true
     }
     
-    public init(projectName: String) {
-        self.uniqueId = NSUUID().UUIDString
+    public init(projectName: String? = nil) {
+        self.id = Ref.new()
         self.projectName = projectName
-        self.name = "New Build Template"
-        self.scheme = nil
+        self.name = ""
+        self.scheme = ""
         self.schedule = BotSchedule.manualBotSchedule()
         self.cleaningPolicy = BotConfiguration.CleaningPolicy.Never
         self.triggers = []
-        self.shouldAnalyze = false
-        self.shouldTest = false
+        self.shouldAnalyze = true
+        self.shouldTest = true
         self.shouldArchive = false
         self.testingDeviceIds = []
         self.deviceFilter = .AllAvailableDevicesAndSimulators
         self.platformType = nil
     }
     
-    public required init?(json: NSDictionary) {
+    public init(json: NSDictionary) throws {
         
-        self.uniqueId = json.optionalStringForKey(kKeyUniqueId) ?? ""
+        self.id = json.optionalStringForKey(kKeyId) ?? Ref.new()
         self.projectName = json.optionalStringForKey(kKeyProjectName)
-        self.name = json.optionalStringForKey(kKeyName)
-        self.scheme = json.optionalStringForKey(kKeyScheme)
+        self.name = json.stringForKey(kKeyName)
+        self.scheme = json.stringForKey(kKeyScheme)
         if let scheduleDict = json.optionalDictionaryForKey(kKeySchedule) {
             self.schedule = BotSchedule(json: scheduleDict)
         } else {
@@ -84,15 +82,15 @@ public class BuildTemplate: JSONSerializable {
         } else {
             self.cleaningPolicy = BotConfiguration.CleaningPolicy.Never
         }
-        if let array = (json.optionalArrayForKey(kKeyTriggers) as? [NSDictionary]) {
-            self.triggers = array.map { Trigger(json: $0) }
+        if let array = (json.optionalArrayForKey(kKeyTriggers) as? [RefType]) {
+            self.triggers = array
         } else {
             self.triggers = []
         }
 
-        self.shouldAnalyze = json.optionalBoolForKey(kKeyShouldAnalyze)
-        self.shouldTest = json.optionalBoolForKey(kKeyShouldTest)
-        self.shouldArchive = json.optionalBoolForKey(kKeyShouldArchive)
+        self.shouldAnalyze = json.boolForKey(kKeyShouldAnalyze)
+        self.shouldTest = json.boolForKey(kKeyShouldTest)
+        self.shouldArchive = json.boolForKey(kKeyShouldArchive)
         
         self.testingDeviceIds = json.optionalArrayForKey(kKeyTestingDevices) as? [String] ?? []
         
@@ -114,25 +112,25 @@ public class BuildTemplate: JSONSerializable {
         }
         
         if !self.validate() {
-            return nil
+            throw Error.withInfo("Invalid input into Build Template")
         }
     }
     
     public func jsonify() -> NSDictionary {
         let dict = NSMutableDictionary()
         
-        dict[kKeyUniqueId] = self.uniqueId
-        dict[kKeyTriggers] = self.triggers.map({ $0.dictionarify() })
+        dict[kKeyId] = self.id
+        dict[kKeyTriggers] = self.triggers
         dict[kKeyDeviceFilter] = self.deviceFilter.rawValue
         dict[kKeyTestingDevices] = self.testingDeviceIds ?? []
         dict[kKeyCleaningPolicy] = self.cleaningPolicy.rawValue
+        dict[kKeyName] = self.name
+        dict[kKeyScheme] = self.scheme
+        dict[kKeyShouldAnalyze] = self.shouldAnalyze
+        dict[kKeyShouldTest] = self.shouldTest
+        dict[kKeyShouldArchive] = self.shouldArchive
+        dict[kKeySchedule] = self.schedule.dictionarify()
         dict.optionallyAddValueForKey(self.projectName, key: kKeyProjectName)
-        dict.optionallyAddValueForKey(self.name, key: kKeyName)
-        dict.optionallyAddValueForKey(self.scheme, key: kKeyScheme)
-        dict.optionallyAddValueForKey(self.schedule?.dictionarify(), key: kKeySchedule)
-        dict.optionallyAddValueForKey(self.shouldAnalyze, key: kKeyShouldAnalyze)
-        dict.optionallyAddValueForKey(self.shouldTest, key: kKeyShouldTest)
-        dict.optionallyAddValueForKey(self.shouldArchive, key: kKeyShouldArchive)
         dict.optionallyAddValueForKey(self.platformType?.rawValue, key: kKeyPlatformType)
         
         return dict

@@ -153,11 +153,11 @@ public class XcodeProjectParser {
     }
     
     private class func isProjectUrl(url: NSURL) -> Bool {
-        return url.absoluteString.hasSuffix(".xcodeproj")
+        return url.pathExtension == "xcodeproj"
     }
 
     private class func isWorkspaceUrl(url: NSURL) -> Bool {
-        return url.absoluteString.hasSuffix(".xcworkspace")
+        return url.pathExtension == "xcworkspace"
     }
 
     private class func projectUrlsFromWorkspace(url: NSURL) -> [NSURL]? {

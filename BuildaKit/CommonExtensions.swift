@@ -35,6 +35,15 @@ extension Array {
         }
         return nil
     }
+    
+    public func firstObjectPassingTest(test: (Element) -> Bool) -> Element? {
+        for item in self {
+            if test(item) {
+                return item
+            }
+        }
+        return nil
+    }
 }
 
 extension Array {
@@ -83,4 +92,64 @@ extension Array {
         return dict
     }
 }
+
+public enum NSDictionaryParseError: ErrorType {
+    case MissingValueForKey(key: String)
+    case WrongTypeOfValueForKey(key: String, value: AnyObject)
+}
+
+extension NSDictionary {
+    
+    public func get<T>(key: String) throws -> T {
+        
+        guard let value = self[key] else {
+            throw NSDictionaryParseError.MissingValueForKey(key: key)
+        }
+        
+        guard let typedValue = value as? T else {
+            throw NSDictionaryParseError.WrongTypeOfValueForKey(key: key, value: value)
+        }
+        return typedValue
+    }
+    
+    public func getOptionally<T>(key: String) throws -> T? {
+        
+        guard let value = self[key] else {
+            return nil
+        }
+        
+        guard let typedValue = value as? T else {
+            throw NSDictionaryParseError.WrongTypeOfValueForKey(key: key, value: value)
+        }
+        return typedValue
+    }
+}
+
+extension Array {
+    
+    public func dictionarifyWithKey(key: (item: Element) -> String) -> [String: Element] {
+        var dict = [String: Element]()
+        self.forEach { dict[key(item: $0)] = $0 }
+        return dict
+    }
+}
+
+extension String {
+    
+    //returns nil if string is empty
+    public func nonEmpty() -> String? {
+        return self.isEmpty ? nil : self
+    }
+}
+
+public func delayClosure(delay: Double, closure: () -> ()) {
+    dispatch_after(
+        dispatch_time(
+            DISPATCH_TIME_NOW,
+            Int64(delay * Double(NSEC_PER_SEC))
+        ),
+        dispatch_get_main_queue(),
+        closure)
+}
+
 

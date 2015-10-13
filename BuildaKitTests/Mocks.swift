@@ -15,7 +15,7 @@ import BuildaKit
 
 class MockXcodeServer: XcodeServer {
     init() {
-        let config = try! XcodeServerConfig(host: "", user: "", password: "")
+        let config = XcodeServerConfig()
         super.init(config: config, endpoints: XcodeServerEndpoints(serverConfig: config))
     }
 }
@@ -27,10 +27,22 @@ class MockGitHubServer: GitHubServer {
 }
 
 class MockProject: Project {
-    override init() {
-        super.init()
+    init() {
+        let path: String = __FILE__
+        let folder = (path as NSString).stringByDeletingLastPathComponent
+        let testProject = "\(folder)/TestProjects/Buildasaur-TestProject-iOS/Buildasaur-TestProject-iOS.xcworkspace"
+        var config = ProjectConfig()
+        config.url = testProject
+        try! super.init(config: config)
     }
     required init?(json: NSDictionary) { fatalError("init(json:) has not been implemented") }
+}
+
+class MockTemplate {
+    
+    static func new() -> BuildTemplate {
+        return BuildTemplate()
+    }
 }
 
 class MockRepo: Repo {

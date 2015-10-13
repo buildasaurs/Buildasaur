@@ -88,7 +88,7 @@ public class SyncPair_PR_Bot: SyncPair {
         //a) manually start an integration through Xcode, API call or in Builda's GUI (TBB)
         //b) (optional) comment an agreed keyword in the Pull Request, e.g. "lttm" - 'looks testable to me' is a frequent one
         
-        if integrations.count > 0 || !self.syncer.waitForLttm {
+        if integrations.count > 0 || !self.syncer._waitForLttm {
             completion(isEnabled: true, error: nil)
             return
         }
@@ -97,7 +97,7 @@ public class SyncPair_PR_Bot: SyncPair {
         
         if let repoName = syncer.repoName() {
             
-            self.syncer.github.findMatchingCommentInIssue(keyword, issue: self.pr.number, repo: repoName) {
+            self.syncer._github.findMatchingCommentInIssue(keyword, issue: self.pr.number, repo: repoName) {
                 (foundComments, error) -> () in
                 
                 if error != nil {

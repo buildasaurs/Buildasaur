@@ -11,9 +11,9 @@ import BuildaUtils
 
 public class Logging {
     
-    public class func setup(alsoIntoFile alsoIntoFile: Bool) {
+    public class func setup(persistence: Persistence, alsoIntoFile: Bool) {
         
-        let path = Persistence.buildaApplicationSupportFolderURL().URLByAppendingPathComponent("Builda.log", isDirectory: false)
+        let path = persistence.fileURLWithName("Builda.log", intention: .Writing, isDirectory: false)
         
         var loggers = [Logger]()
         

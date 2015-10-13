@@ -9,54 +9,46 @@
 import Foundation
 import BuildaUtils
 import XcodeServerSDK
+import ReactiveCocoa
 
-public class Project : JSONSerializable {
+public class Project {
     
     public var url: NSURL {
-        didSet {
-            do { try self.refreshMetadata() } catch {}
-        }
+        return NSURL(fileURLWithPath: self._config.url, isDirectory: true)
     }
     
-    public var preferredTemplateId: String?
-    public var githubToken: String?
-    public var privateSSHKeyUrl: NSURL?
-    public var publicSSHKeyUrl: NSURL?
-    public var sshPassphrase: String?
-    public var privateSSHKey: String? { return self.getContentsOfKeyAtUrl(self.privateSSHKeyUrl) }
-    public var publicSSHKey: String? { return self.getContentsOfKeyAtUrl(self.publicSSHKeyUrl) }
+    public let config: MutableProperty<ProjectConfig>
     
-    public var availabilityState: AvailabilityCheckState
+    private var _config: ProjectConfig {
+        return self.config.value
+    }
+    
+    public var urlString: String { return self.url.absoluteString }
+    public var privateSSHKey: String? { return self.getContentsOfKeyAtPath(self._config.privateSSHKeyPath) }
+    public var publicSSHKey: String? { return self.getContentsOfKeyAtPath(self._config.publicSSHKeyPath) }
+    
+    public var availabilityState: AvailabilityCheckState = .Unchecked
     
     private(set) public var workspaceMetadata: WorkspaceMetadata?
     
-    public init?(url: NSURL) {
+    public init(config: ProjectConfig) throws {
         
-        self.url = url
-        self.preferredTemplateId = nil
-        self.githubToken = nil
-        self.availabilityState = .Unchecked
-        self.publicSSHKeyUrl = nil
-        self.privateSSHKeyUrl = nil
-        self.sshPassphrase = nil
-        do {
-            try self.refreshMetadata()
-        } catch {
-            Log.error(error)
-            return nil
-        }
+        self.config = MutableProperty<ProjectConfig>(config)
+        self.setupBindings()
+        try self.refreshMetadata()
     }
     
     private init(original: Project, forkOriginURL: String) throws {
         
-        self.url = original.url
-        self.preferredTemplateId = original.preferredTemplateId
-        self.githubToken = original.githubToken
-        self.availabilityState = original.availabilityState
-        self.publicSSHKeyUrl = original.publicSSHKeyUrl
-        self.privateSSHKeyUrl = original.privateSSHKeyUrl
-        self.sshPassphrase = original.sshPassphrase
+        self.config = MutableProperty<ProjectConfig>(original.config.value)
         self.workspaceMetadata = try original.workspaceMetadata?.duplicateWithForkURL(forkOriginURL)
+    }
+    
+    private func setupBindings() {
+        
+        self.config.producer.startWithNext { [weak self] _ in
+            _ = try? self?.refreshMetadata()
+        }
     }
     
     public func duplicateForForkAtOriginURL(forkURL: String) throws -> Project {
@@ -70,75 +62,6 @@ public class Project : JSONSerializable {
     private func refreshMetadata() throws {
         let meta = try Project.attemptToParseFromUrl(self.url)
         self.workspaceMetadata = meta
-    }
-    
-    public required init?(json: NSDictionary) {
-        
-        self.availabilityState = .Unchecked
-        
-        if
-            let urlString = json.optionalStringForKey("url"),
-            let url = NSURL(string: urlString)
-        {
-            
-            self.url = url
-            self.preferredTemplateId = json.optionalStringForKey("preferred_template_id")
-            self.githubToken = json.optionalStringForKey("github_token")
-            if let publicKeyUrl = json.optionalStringForKey("ssh_public_key_url") {
-                self.publicSSHKeyUrl = NSURL(string: publicKeyUrl)
-            } else {
-                self.publicSSHKeyUrl = nil
-            }
-            if let privateKeyUrl = json.optionalStringForKey("ssh_private_key_url") {
-                self.privateSSHKeyUrl = NSURL(string: privateKeyUrl)
-            } else {
-                self.privateSSHKeyUrl = nil
-            }
-            self.sshPassphrase = json.optionalStringForKey("ssh_passphrase")
-            
-            do {
-                try self.refreshMetadata()
-            } catch {
-                Log.error("Error parsing: \(error)")
-                return nil
-            }
-            
-        } else {
-            
-            self.url = NSURL()
-            self.preferredTemplateId = nil
-            self.githubToken = nil
-            self.publicSSHKeyUrl = nil
-            self.privateSSHKeyUrl = nil
-            self.sshPassphrase = nil
-            self.workspaceMetadata = nil
-            return nil
-        }
-    }
-    
-    public init() {
-        self.availabilityState = .Unchecked
-        self.url = NSURL()
-        self.preferredTemplateId = nil
-        self.githubToken = nil
-        self.publicSSHKeyUrl = nil
-        self.privateSSHKeyUrl = nil
-        self.sshPassphrase = nil
-        self.workspaceMetadata = nil
-    }
-    
-    public func jsonify() -> NSDictionary {
-        
-        let json = NSMutableDictionary()
-        
-        json["url"] = self.url.absoluteString
-        json.optionallyAddValueForKey(self.preferredTemplateId, key: "preferred_template_id")
-        json.optionallyAddValueForKey(self.githubToken, key: "github_token")
-        json.optionallyAddValueForKey(self.publicSSHKeyUrl?.absoluteString, key: "ssh_public_key_url")
-        json.optionallyAddValueForKey(self.privateSSHKeyUrl?.absoluteString, key: "ssh_private_key_url")
-        json.optionallyAddValueForKey(self.sshPassphrase, key: "ssh_passphrase")
-        
-        return json
     }
     
     public func schemes() -> [XcodeScheme] {
@@ -178,18 +101,15 @@ public class Project : JSONSerializable {
         return nil
     }
     
-    private func getContentsOfKeyAtUrl(url: NSURL?) -> String? {
+    private func getContentsOfKeyAtPath(path: String) -> String? {
         
-        if let url = url {
-            do {
-                let key = try NSString(contentsOfURL: url, encoding: NSASCIIStringEncoding)
-                return key as String
-            } catch {
-                Log.error("Couldn't load key at url \(url) with error \(error)")
-            }
-            return nil
+        let url = NSURL(fileURLWithPath: path)
+        do {
+            let key = try NSString(contentsOfURL: url, encoding: NSASCIIStringEncoding)
+            return key as String
+        } catch {
+            Log.error("Couldn't load key at url \(url) with error \(error)")
         }
-        Log.error("Couldn't load key at nil url")
         return nil
     }
 

@@ -12,7 +12,7 @@ import BuildaUtils
 
 public class UIUtils {
     
-    public class func showAlertWithError(error: NSError) {
+    public class func showAlertWithError(error: ErrorType) {
         
         let alert = self.createErrorAlert(error)
         self.presentAlert(alert, completion: { (resp) -> () in
@@ -20,13 +20,17 @@ public class UIUtils {
         })
     }
     
-    public class func showAlertAskingForRemoval(text: String, completion: (remove: Bool) -> ()) {
+    public class func showAlertAskingConfirmation(text: String, dangerButton: String, completion: (confirmed: Bool) -> ()) {
         
-        let removeText = "Remove"
-        let buttons = ["Cancel", removeText]
+        let buttons = ["Cancel", dangerButton]
         self.showAlertWithButtons(text, buttons: buttons) { (tappedButton) -> () in
-            completion(remove: removeText == tappedButton)
+            completion(confirmed: dangerButton == tappedButton)
         }
+    }
+
+    
+    public class func showAlertAskingForRemoval(text: String, completion: (remove: Bool) -> ()) {
+        self.showAlertAskingConfirmation(text, dangerButton: "Remove", completion: completion)
     }
     
     public class func showAlertWithButtons(text: String, buttons: [String], completion: (tappedButton: String) -> ()) {
@@ -50,8 +54,8 @@ public class UIUtils {
         self.presentAlert(alert, completion: completion)
     }
     
-    private class func createErrorAlert(error: NSError) -> NSAlert {
-        return NSAlert(error: error)
+    private class func createErrorAlert(error: ErrorType) -> NSAlert {
+        return NSAlert(error: error as NSError)
     }
     
     private class func createAlert(text: String, style: NSAlertStyle?) -> NSAlert {
@@ -74,5 +78,21 @@ public class UIUtils {
             //no window to present in, at least print
             Log.info("Alert: \(alert.messageText)")
         }
+    }
+}
+
+extension NSPopUpButton {
+    
+    public func replaceItems(newItems: [String]) {
+        self.removeAllItems()
+        self.addItemsWithTitles(newItems)
+    }
+}
+
+extension NSButton {
+    
+    public var on: Bool {
+        get { return self.state == NSOnState }
+        set { self.state = newValue ? NSOnState : NSOffState }
     }
 }

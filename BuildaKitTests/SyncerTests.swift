@@ -28,24 +28,20 @@ class SyncerTests: XCTestCase {
         super.tearDown()
     }
     
-    func mockedSyncer() -> HDGitHubXCBotSyncer {
+    func mockedSyncer(config: SyncerConfig = SyncerConfig()) -> HDGitHubXCBotSyncer {
         
         let xcodeServer = MockXcodeServer()
         let githubServer = MockGitHubServer()
         let project = MockProject()
-        let syncInterval = 15.0
-        let waitForLttm = false
-        let postStatusComments = true
-        let watchedBranchNames: [String] = []
+        let template = MockTemplate.new()
         
         let syncer = HDGitHubXCBotSyncer(
             integrationServer: xcodeServer,
             sourceServer: githubServer,
             project: project,
-            syncInterval: syncInterval,
-            waitForLttm: waitForLttm,
-            postStatusComments: postStatusComments,
-            watchedBranchNames: watchedBranchNames)
+            buildTemplate: template,
+            triggers: [],
+            config: config)
         return syncer
     }
     
@@ -115,12 +111,14 @@ class SyncerTests: XCTestCase {
             MockBranch(name: "ef/migrating_from_php_to_mongo_db")
         ]
         
-        self.syncer.watchedBranchNames = [
+        var config = SyncerConfig()
+        config.watchedBranchNames = [
             "cd/broke_something",
             "ef/migrating_from_php_to_mongo_db"
         ]
+        let syncer = self.mockedSyncer(config)
         
-        let botActions = self.syncer.resolvePRsAndBranchesAndBots(repoName: "me/Repo", prs: prs, branches: branches, bots: bots)
+        let botActions = syncer.resolvePRsAndBranchesAndBots(repoName: "me/Repo", prs: prs, branches: branches, bots: bots)
 
         XCTAssertEqual(botActions.prsToSync.count, 1)
         XCTAssertEqual(botActions.prsToSync.first!.bot.name, "BuildaBot [me/Repo] PR #4")

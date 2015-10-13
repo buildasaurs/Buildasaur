@@ -13,15 +13,15 @@ import BuildaUtils
 
 public class XcodeServerSyncerUtils {
     
-    public class func createBotFromBuildTemplate(botName: String, template: BuildTemplate, project: Project, branch: String, scheduleOverride: BotSchedule?, xcodeServer: XcodeServer, completion: (bot: Bot?, error: NSError?) -> ()) {
+    public class func createBotFromBuildTemplate(botName: String, syncer: HDGitHubXCBotSyncer, template: BuildTemplate, project: Project, branch: String, scheduleOverride: BotSchedule?, xcodeServer: XcodeServer, completion: (bot: Bot?, error: NSError?) -> ()) {
         
         //pull info from template
-        let schemeName = template.scheme!
+        let schemeName = template.scheme
         
         //optionally override the schedule, if nil, takes it from the template
-        let schedule = scheduleOverride ?? template.schedule!
+        let schedule = scheduleOverride ?? template.schedule
         let cleaningPolicy = template.cleaningPolicy
-        let triggers = template.triggers
+        let triggers = syncer.triggers
         let analyze = template.shouldAnalyze ?? false
         let test = template.shouldTest ?? false
         let archive = template.shouldArchive ?? false

@@ -12,11 +12,17 @@ import BuildaGitServer
 import BuildaUtils
 import BuildaKit
 
+protocol BranchWatchingViewControllerDelegate: class {
+    
+    func didUpdateWatchedBranches(branches: [String])
+}
+
 class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
     
     //these two must be set before viewDidLoad by its presenting view controller
     var syncer: HDGitHubXCBotSyncer!
     var watchedBranchNames: Set<String>!
+    weak var delegate: BranchWatchingViewControllerDelegate?
     
     private var branches: [Branch] = []
     
@@ -27,7 +33,7 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
         super.viewDidLoad()
         
         assert(self.syncer != nil, "Syncer has not been set")
-        self.watchedBranchNames = Set(self.syncer.watchedBranchNames)
+        self.watchedBranchNames = Set(self.syncer.config.value.watchedBranchNames)
     }
     
     override func viewWillAppear() {
@@ -66,9 +72,8 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
     }
     
     @IBAction func doneTapped(sender: AnyObject) {
-        //save the now-selected watched branches to the syncer
-        self.syncer.watchedBranchNames = Array(self.watchedBranchNames)
-        StorageManager.sharedInstance.saveSyncers() //think of a better way to force saving
+        let updated = Array(self.watchedBranchNames)
+        self.delegate?.didUpdateWatchedBranches(updated)
         self.dismissController(nil)
     }
     

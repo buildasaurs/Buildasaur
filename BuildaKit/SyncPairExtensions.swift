@@ -52,7 +52,7 @@ extension SyncPair {
             let bot = startNewIntegrationBot
             
             dispatch_group_enter(group)
-            self.syncer.xcodeServer.postIntegration(bot.id, completion: { (integration, error) -> () in
+            self.syncer._xcodeServer.postIntegration(bot.id, completion: { (integration, error) -> () in
                 
                 if let integration = integration where error == nil {
                     Log.info("Bot \(bot.name) successfully enqueued Integration #\(integration.number)")
@@ -84,7 +84,7 @@ extension SyncPair {
         let query = [
             "last": "20"
         ]
-        syncer.xcodeServer.getBotIntegrations(bot.id, query: query, completion: { (integrations, error) -> () in
+        syncer._xcodeServer.getBotIntegrations(bot.id, query: query, completion: { (integrations, error) -> () in
             
             if let error = error {
                 let e = Error.withInfo("Bot \(bot.name) failed return integrations", internalError: error)
