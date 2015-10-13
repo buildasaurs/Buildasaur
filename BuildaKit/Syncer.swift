@@ -45,7 +45,7 @@ class Trampoline: NSObject {
     private var currentSyncError: NSError?
     
     /// How often, in seconds, the syncer should pull data from both sources and resolve pending actions
-    public let syncInterval: NSTimeInterval
+    public var syncInterval: NSTimeInterval
     
     private var isSyncing: Bool {
         didSet {
