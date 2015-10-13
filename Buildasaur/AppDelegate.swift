@@ -180,6 +180,20 @@ extension AppDelegate: PresentableViewControllerDelegate {
         } else {
             newWindow = NSWindow(contentViewController: viewController)
             newWindow?.autorecalculatesKeyViewLoop = true
+            
+            //if we already are showing some windows, let's cascade the new one
+            if self.windows.count > 0 {
+                //find the right-most window and cascade from it
+                let rightMost = self.windows.reduce(CGPoint(x: 0.0, y: 0.0), combine: { (right: CGPoint, window: NSWindow) -> CGPoint in
+                    let origin = window.frame.origin
+                    if origin.x > right.x {
+                        return origin
+                    }
+                    return right
+                })
+                let newOrigin = newWindow!.cascadeTopLeftFromPoint(rightMost)
+                newWindow?.setFrameTopLeftPoint(newOrigin)
+            }
         }
         
         guard let window = newWindow else { fatalError("Unable to create window") }

@@ -906,7 +906,7 @@
                                 </tableHeaderView>
                             </scrollView>
                             <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l5l-vU-g4x">
-                                <rect key="frame" x="262" y="259" width="418" height="21"/>
+                                <rect key="frame" x="222" y="259" width="458" height="21"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="E55-J5-dz5">
                                         <rect key="frame" x="-6" y="-7" width="115" height="32"/>
@@ -937,7 +937,7 @@
                                         </connections>
                                     </button>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="Z79-7V-Vm9">
-                                        <rect key="frame" x="194" y="1" width="141" height="18"/>
+                                        <rect key="frame" x="194" y="1.5" width="141" height="18"/>
                                         <animations/>
                                         <buttonCell key="cell" type="check" title="Autostart on launch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Ckv-ih-HFt">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -959,6 +959,17 @@
                                             <action selector="stopAllButtonClicked:" target="fGl-D9-6Tw" id="pHR-m2-BVt"/>
                                         </connections>
                                     </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="x6z-V9-yJw">
+                                        <rect key="frame" x="426" y="0.0" width="32" height="21"/>
+                                        <animations/>
+                                        <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="NSInfo" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="yzS-7U-OPv">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="infoButtonClicked:" target="fGl-D9-6Tw" id="gLi-hz-y9i"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <animations/>
                                 <visibilityPriorities>
@@ -966,8 +977,10 @@
                                     <integer value="1000"/>
                                     <integer value="1000"/>
                                     <integer value="1000"/>
+                                    <integer value="1000"/>
                                 </visibilityPriorities>
                                 <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
@@ -3545,6 +3558,7 @@ Gw
         </scene>
     </scenes>
     <resources>
+        <image name="NSInfo" width="32" height="32"/>
         <image name="NSStatusNone" width="16" height="16"/>
         <image name="NSTrashEmpty" width="32" height="32"/>
     </resources>

@@ -142,6 +142,10 @@ class DashboardViewController: PresentableViewController {
         let syncerViewModel = self.syncerViewModels.value[clickedRow]
         syncerViewModel.viewButtonClicked()
     }
+    
+    @IBAction func infoButtonClicked(sender: AnyObject) {
+        openLink("https://github.com/czechboy0/Buildasaur#buildasaur")
+    }
 }
 
 extension DashboardViewController {

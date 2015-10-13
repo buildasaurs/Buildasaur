@@ -266,19 +266,12 @@ extension SyncerViewController {
         self.performSegueWithIdentifier("showManual", sender: self)
     }
     
-    private func openLink(link: String) {
-        
-        if let url = NSURL(string: link) {
-            NSWorkspace.sharedWorkspace().openURL(url)
-        }
-    }
-    
     @IBAction func helpLttmButtonTapped(sender: AnyObject) {
-        self.openLink("https://github.com/czechboy0/Buildasaur/blob/master/README.md#unlock-the-lttm-barrier")
+        openLink("https://github.com/czechboy0/Buildasaur/blob/master/README.md#unlock-the-lttm-barrier")
     }
     
     @IBAction func helpPostStatusCommentsButtonTapped(sender: AnyObject) {
-        self.openLink("https://github.com/czechboy0/Buildasaur/blob/master/README.md#envelope-posting-status-comments")
+        openLink("https://github.com/czechboy0/Buildasaur/blob/master/README.md#envelope-posting-status-comments")
     }
     
     override func prepareForSegue(segue: NSStoryboardSegue, sender: AnyObject?) {

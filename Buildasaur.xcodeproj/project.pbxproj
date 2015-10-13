@@ -56,6 +56,7 @@
 		3A9D74221BCC041600DCA23C /* Buildasaur-format-0-example1 in Resources */ = {isa = PBXBuildFile; fileRef = 3A9D74211BCC041600DCA23C /* Buildasaur-format-0-example1 */; settings = {ASSET_TAGS = (); }; };
 		3A9D74241BCC103E00DCA23C /* Buildasaur-format-1-example1 in Resources */ = {isa = PBXBuildFile; fileRef = 3A9D74231BCC103E00DCA23C /* Buildasaur-format-1-example1 */; settings = {ASSET_TAGS = (); }; };
 		3A9D74261BCC19BB00DCA23C /* Buildasaur-format-2-example1 in Resources */ = {isa = PBXBuildFile; fileRef = 3A9D74251BCC19BB00DCA23C /* Buildasaur-format-2-example1 */; settings = {ASSET_TAGS = (); }; };
+		3AA573061BCD70FC00172D3E /* URLUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA573051BCD70FC00172D3E /* URLUtils.swift */; settings = {ASSET_TAGS = (); }; };
 		3AAA1B661AAB6E9800FA1598 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAA1B651AAB6E9800FA1598 /* SeparatorView.swift */; };
 		3AAA1B681AAB722600FA1598 /* ProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAA1B671AAB722600FA1598 /* ProjectViewController.swift */; };
 		3AAA1B761AAC504700FA1598 /* XcodeServerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAA1B751AAC504700FA1598 /* XcodeServerViewController.swift */; };
@@ -275,6 +276,7 @@
 		3A9D74231BCC103E00DCA23C /* Buildasaur-format-1-example1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Buildasaur-format-1-example1"; path = "Migration/Buildasaur-format-1-example1"; sourceTree = "<group>"; };
 		3A9D74251BCC19BB00DCA23C /* Buildasaur-format-2-example1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Buildasaur-format-2-example1"; path = "Migration/Buildasaur-format-2-example1"; sourceTree = "<group>"; };
 		3A9DEC7A1A3BDA6C008C8270 /* PullRequestBranch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PullRequestBranch.swift; path = BuildaGitServer/PullRequestBranch.swift; sourceTree = SOURCE_ROOT; };
+		3AA573051BCD70FC00172D3E /* URLUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLUtils.swift; sourceTree = "<group>"; };
 		3AAA1B651AAB6E9800FA1598 /* SeparatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
 		3AAA1B671AAB722600FA1598 /* ProjectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectViewController.swift; sourceTree = "<group>"; };
 		3AAA1B751AAC504700FA1598 /* XcodeServerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeServerViewController.swift; sourceTree = "<group>"; };
@@ -441,6 +443,7 @@
 			children = (
 				3AC7D5E01BBC231400786198 /* StoryboardLoadingUtils.swift */,
 				3A0FF59F1BBFDA7E00FB8051 /* RACUIExtensions.swift */,
+				3AA573051BCD70FC00172D3E /* URLUtils.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -1371,6 +1374,7 @@
 				3A9109C51BC2B0B200C2AECA /* MainEditor_ViewManipulation.swift in Sources */,
 				3AC7D5E11BBC231400786198 /* StoryboardLoadingUtils.swift in Sources */,
 				3AAA1B661AAB6E9800FA1598 /* SeparatorView.swift in Sources */,
+				3AA573061BCD70FC00172D3E /* URLUtils.swift in Sources */,
 				3A9109C71BC2B67100C2AECA /* EditableViewController.swift in Sources */,
 				3AD338B01AAE31D500ECD0F2 /* BuildTemplateViewController.swift in Sources */,
 				3A9109C31BC2B05C00C2AECA /* MainEditor_EditeeDelegate.swift in Sources */,
