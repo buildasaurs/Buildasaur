@@ -58,11 +58,21 @@ class MainEditorViewController: PresentableViewController {
         
         self.containerView.wantsLayer = true
         self.containerView.layer!.backgroundColor = NSColor.lightGrayColor().CGColor
-
+        
         self.setupBindings()
         
         //HACK: hack for debugging - jump ahead
 //        self.state.value = (.EditingSyncer, false)
+    }
+    
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        
+        if let window = self.view.window {
+            let size = CGSize(width: 600, height: 422)
+            window.minSize = size
+            window.maxSize = size
+        }
     }
     
     // moving forward and back
