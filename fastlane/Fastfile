@@ -28,15 +28,19 @@ private_lane :run_tests do
 end
 
 lane :release do
-
   run_tests
-  version = get_info_plist_value(
-      key: "CFBundleShortVersionString",
-      path: "Buildasaur/Info.plist"
-    )
   build
+  release_no_build
+end
+
+lane :release_no_build do
+  raise "No built app found" unless File.exist?("../build/Buildasaur.app")
+  version = get_info_plist_value(
+    key: "CFBundleShortVersionString",
+    path: "Buildasaur/Info.plist"
+  )
   github(
-    assets: ["./build/#{file_name}.app"],
+    assets: ["./build/Buildasaur.app"],
     version: version
     )
 end
