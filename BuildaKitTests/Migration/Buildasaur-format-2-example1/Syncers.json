@@ -1,12 +1,14 @@
 [
   {
-    "project_path" : "file:\/\/\/Users\/honzadvorsky\/Documents\/Buildasaur-Tester\/Buildasaur-Tester.xcodeproj",
+    "preferred_template_ref" : "B31C6530-BB84-4A93-B08C-54074AAB5F37",
+    "id" : "564C267D-FF06-4008-9EF6-66B3AC1A3BDE",
+    "sync_interval" : 19,
+    "server_ref" : "D143B09C-CB1B-4831-8BA1-E2F8AB039B56",
     "wait_for_lttm" : false,
     "watched_branches" : [
       "master"
     ],
-    "post_status_comments" : false,
-    "server_host" : "https:\/\/127.0.0.1",
-    "sync_interval" : 19
+    "project_ref" : "4E8E7708-01FB-448A-B929-A54887CC5857",
+    "post_status_comments" : false
   }
 ]

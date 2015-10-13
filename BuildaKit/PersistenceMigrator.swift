@@ -121,12 +121,47 @@ class Migrator_v1_v2: MigratorType {
         let serverRef = self.migrateServers()
         let (templateRef, projectRef) = self.migrateProjects()
         self.migrateSyncers(serverRef, project: projectRef, template: templateRef)
-        
+        self.migrateBuildTemplates()
         self.migrateConfigAndLog()
     }
     
     func migrateBuildTemplates() {
-        //TODO: (also triggers inside!)
+        
+        //first pull all triggers from all build templates and save them
+        //as separate files, keeping the ids around.
+        
+        let templates = self.persistence.loadArrayOfDictionariesFromFolder("BuildTemplates") ?? []
+        guard templates.count > 0 else { return }
+        let mutableTemplates = templates.map { $0.mutableCopy() as! NSMutableDictionary }
+        
+        //go through templates and replace full triggers with just ids
+        var triggers = [NSDictionary]()
+        for template in mutableTemplates {
+            
+            guard let tempTriggers = template["triggers"] as? [NSDictionary] else { continue }
+            let mutableTempTriggers = tempTriggers.map { $0.mutableCopy() as! NSMutableDictionary }
+            
+            //go through each trigger and each one an id
+            let trigWithIds = mutableTempTriggers.map { trigger -> NSDictionary in
+                trigger["id"] = Ref.new()
+                return trigger.copy() as! NSDictionary
+            }
+            
+            //add them to the big list of triggers that we'll save later
+            triggers.appendContentsOf(trigWithIds)
+            
+            //now gather those ids
+            let triggerIds = trigWithIds.map { $0.stringForKey("id") }
+            
+            //and replace the "triggers" array in the build template with these ids
+            template["triggers"] = triggerIds
+        }
+        
+        //now save all triggers into their own folder
+        self.persistence.saveArrayIntoFolder("Triggers", items: triggers, itemFileName: { $0.stringForKey("id") }, serialize: { $0 })
+
+        //and save the build templates
+        self.persistence.saveArrayIntoFolder("BuildTemplates", items: mutableTemplates, itemFileName: { $0.stringForKey("id") }, serialize: { $0 })
     }
     
     func migrateSyncers(server: RefType?, project: RefType?, template: RefType?) {

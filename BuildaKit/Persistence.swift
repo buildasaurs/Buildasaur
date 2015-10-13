@@ -88,12 +88,12 @@ public class Persistence {
         self.saveData(name, item: items)
     }
     
-    func saveArrayIntoFolder<T: JSONWritable>(folderName: String, items: [T], itemFileName: (item: T) -> String) {
+    func saveArrayIntoFolder<T>(folderName: String, items: [T], itemFileName: (item: T) -> String, serialize: (item: T) -> NSDictionary) {
         
         let folderUrl = self.fileURLWithName(folderName, intention: .Writing, isDirectory: true)
         items.forEach { (item: T) -> () in
             
-            let json = item.jsonify()
+            let json = serialize(item: item)
             let name = itemFileName(item: item)
             let url = folderUrl.URLByAppendingPathComponent("\(name).json")
             do {
@@ -101,6 +101,13 @@ public class Persistence {
             } catch {
                 assert(false, "Failed to save a \(folderName), \(error)")
             }
+        }
+    }
+    
+    func saveArrayIntoFolder<T: JSONWritable>(folderName: String, items: [T], itemFileName: (item: T) -> String) {
+        
+        self.saveArrayIntoFolder(folderName, items: items, itemFileName: itemFileName) {
+            $0.jsonify()
         }
     }
     
@@ -139,14 +146,24 @@ public class Persistence {
         return self.loadArrayFromFile(name) { try T(json: $0) }
     }
     
+    func loadArrayOfDictionariesFromFolder(folderName: String) -> [NSDictionary]? {
+        return self.loadArrayFromFolder(folderName) { $0 }
+    }
+    
     func loadArrayFromFolder<T: JSONReadable>(folderName: String) -> [T]? {
+        return self.loadArrayFromFolder(folderName) {
+            try T(json: $0)
+        }
+    }
+    
+    func loadArrayFromFolder<T>(folderName: String, parse: (NSDictionary) throws -> T) -> [T]? {
         let folderUrl = self.fileURLWithName(folderName, intention: .Reading, isDirectory: true)
         return self.filesInFolder(folderUrl)?.map { (url: NSURL) -> T? in
             
             do {
                 let json = try self.loadJSONFromUrl(url)
                 if let json = json as? NSDictionary {
-                    let template = try T(json: json)
+                    let template = try parse(json)
                     return template
                 }
             } catch {
