@@ -937,7 +937,7 @@
                                         </connections>
                                     </button>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="Z79-7V-Vm9">
-                                        <rect key="frame" x="194" y="1.5" width="141" height="18"/>
+                                        <rect key="frame" x="194" y="1" width="141" height="18"/>
                                         <animations/>
                                         <buttonCell key="cell" type="check" title="Autostart on launch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Ckv-ih-HFt">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1345,10 +1345,10 @@ Gw
                                 </connections>
                             </button>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RAY-Bl-Paq">
-                                <rect key="frame" x="90" y="53" width="400" height="235"/>
+                                <rect key="frame" x="90" y="51" width="400" height="238"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3vn-P2-DQx">
-                                        <rect key="frame" x="0.0" y="203" width="400" height="32"/>
+                                        <rect key="frame" x="0.0" y="206" width="400" height="32"/>
                                         <subviews>
                                             <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="dGX-5y-5nj">
                                                 <rect key="frame" x="0.0" y="8" width="16" height="16"/>
@@ -1393,7 +1393,7 @@ Gw
                                         </customSpacing>
                                     </stackView>
                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uyj-4j-hit">
-                                        <rect key="frame" x="-2" y="181" width="404" height="14"/>
+                                        <rect key="frame" x="-2" y="184" width="404" height="14"/>
                                         <animations/>
                                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" title="Project Hosted URL" id="2v8-oF-soD">
                                             <font key="font" metaFont="smallSystem"/>
@@ -1402,7 +1402,7 @@ Gw
                                         </textFieldCell>
                                     </textField>
                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lPW-lM-p5z">
-                                        <rect key="frame" x="-2" y="159" width="404" height="14"/>
+                                        <rect key="frame" x="-2" y="162" width="404" height="14"/>
                                         <animations/>
                                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" title="Project Path" id="0YP-6V-mAj">
                                             <font key="font" metaFont="smallSystem"/>
@@ -1411,10 +1411,21 @@ Gw
                                         </textFieldCell>
                                     </textField>
                                     <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kfO-WN-BZC">
-                                        <rect key="frame" x="0.0" y="133" width="400" height="18"/>
+                                        <rect key="frame" x="0.0" y="133" width="400" height="21"/>
                                         <subviews>
+                                            <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ik9-lZ-jlr">
+                                                <rect key="frame" x="-2" y="-3" width="25" height="25"/>
+                                                <animations/>
+                                                <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="blH-Wf-SMC">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="tokenQuestionClicked:" target="A7n-Q1-s2v" id="sod-mQ-R0f"/>
+                                                </connections>
+                                            </button>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ezj-OJ-07d">
-                                                <rect key="frame" x="-2" y="1" width="106" height="17"/>
+                                                <rect key="frame" x="27" y="4" width="91" height="17"/>
                                                 <animations/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="GitHub Token:" id="Ysh-td-1J7">
                                                     <font key="font" metaFont="system"/>
@@ -1423,7 +1434,7 @@ Gw
                                                 </textFieldCell>
                                             </textField>
                                             <secureTextField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LgA-f0-McB">
-                                                <rect key="frame" x="110" y="0.0" width="290" height="18"/>
+                                                <rect key="frame" x="124" y="2" width="276" height="18"/>
                                                 <animations/>
                                                 <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Your GitHub Token" drawsBackground="YES" usesSingleLineMode="YES" id="bYg-Te-bAa">
                                                     <font key="font" metaFont="system" size="10"/>
@@ -1442,8 +1453,10 @@ Gw
                                         <visibilityPriorities>
                                             <integer value="1000"/>
                                             <integer value="1000"/>
+                                            <integer value="1000"/>
                                         </visibilityPriorities>
                                         <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
                                             <real value="3.4028234663852886e+38"/>
                                             <real value="3.4028234663852886e+38"/>
                                         </customSpacing>
@@ -1452,7 +1465,7 @@ Gw
                                         <rect key="frame" x="0.0" y="104" width="400" height="21"/>
                                         <subviews>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RRZ-tO-5Cf">
-                                                <rect key="frame" x="-2" y="4" width="106" height="17"/>
+                                                <rect key="frame" x="-2" y="4" width="120" height="17"/>
                                                 <animations/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Public SSH Key:" id="0VA-y5-epm">
                                                     <font key="font" metaFont="system"/>
@@ -1461,7 +1474,7 @@ Gw
                                                 </textFieldCell>
                                             </textField>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hm1-sB-msi" userLabel="Edit Button">
-                                                <rect key="frame" x="104" y="-7" width="302" height="32"/>
+                                                <rect key="frame" x="118" y="-7" width="288" height="32"/>
                                                 <animations/>
                                                 <buttonCell key="cell" type="push" title="Select SSH Public Key" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="59P-uj-2qD">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1486,7 +1499,7 @@ Gw
                                         <rect key="frame" x="0.0" y="75" width="400" height="21"/>
                                         <subviews>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mdt-E1-SsO">
-                                                <rect key="frame" x="-2" y="4" width="106" height="17"/>
+                                                <rect key="frame" x="-2" y="4" width="120" height="17"/>
                                                 <animations/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Private SSH Key:" id="V3M-AN-3yh">
                                                     <font key="font" metaFont="system"/>
@@ -1495,7 +1508,7 @@ Gw
                                                 </textFieldCell>
                                             </textField>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="91h-XU-pQB" userLabel="Edit Button">
-                                                <rect key="frame" x="104" y="-7" width="302" height="32"/>
+                                                <rect key="frame" x="118" y="-7" width="288" height="32"/>
                                                 <animations/>
                                                 <buttonCell key="cell" type="push" title="Select SSH Private Key" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wWL-q6-LpY">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1520,7 +1533,7 @@ Gw
                                         <rect key="frame" x="0.0" y="45" width="400" height="22"/>
                                         <subviews>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="r8S-Yu-mwi">
-                                                <rect key="frame" x="-2" y="3" width="106" height="17"/>
+                                                <rect key="frame" x="-2" y="3" width="120" height="17"/>
                                                 <animations/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="SSH Keyphrase:" id="gYA-6V-uyz">
                                                     <font key="font" metaFont="system"/>
@@ -1529,7 +1542,7 @@ Gw
                                                 </textFieldCell>
                                             </textField>
                                             <secureTextField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gjV-E2-9oC">
-                                                <rect key="frame" x="110" y="0.0" width="290" height="22"/>
+                                                <rect key="frame" x="124" y="0.0" width="276" height="22"/>
                                                 <animations/>
                                                 <secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Your SSH key passphrase (if you have one)" drawsBackground="YES" usesSingleLineMode="YES" id="Yo3-xf-J7S">
                                                     <font key="font" metaFont="system"/>
@@ -1618,10 +1631,8 @@ Gw
                         </subviews>
                         <constraints>
                             <constraint firstItem="UCK-2Y-1rJ" firstAttribute="leading" secondItem="SSU-3D-Rud" secondAttribute="leading" constant="32" id="Hy4-ew-RSZ"/>
-                            <constraint firstAttribute="trailing" secondItem="RAY-Bl-Paq" secondAttribute="trailing" constant="90" id="Q0W-jc-rLy"/>
                             <constraint firstItem="RAY-Bl-Paq" firstAttribute="centerY" secondItem="SSU-3D-Rud" secondAttribute="centerY" id="SEp-bb-ChR"/>
                             <constraint firstItem="RAY-Bl-Paq" firstAttribute="centerX" secondItem="SSU-3D-Rud" secondAttribute="centerX" id="TVv-JS-jGO"/>
-                            <constraint firstItem="RAY-Bl-Paq" firstAttribute="leading" secondItem="SSU-3D-Rud" secondAttribute="leading" constant="90" id="Zmy-z0-Ko1"/>
                             <constraint firstAttribute="bottom" secondItem="UCK-2Y-1rJ" secondAttribute="bottom" constant="20" id="jHQ-jC-lIB"/>
                         </constraints>
                         <animations/>

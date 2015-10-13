@@ -230,4 +230,8 @@ class ProjectViewController: ConfigEditViewController {
     @IBAction func selectPrivateKeyTapped(sender: AnyObject) {
         self.selectKey("private")
     }
+    
+    @IBAction func tokenQuestionClicked(sender: AnyObject) {
+        openLink("https://github.com/settings/tokens")
+    }
 }
