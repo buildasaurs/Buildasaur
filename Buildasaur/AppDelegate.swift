@@ -61,6 +61,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.dashboardWindow = self.windowForPresentableViewControllerWithIdentifier("dashboard")!.0
     }
     
+    func migratePersistence(persistence: Persistence) {
+        
+        let fileManager = NSFileManager.defaultManager()
+        //before we create the storage manager, attempt migration first
+        let migrator = CompositeMigrator(persistence: persistence)
+        if migrator.isMigrationRequired() {
+            
+            Log.info("Migration required, launching migrator")
+
+            do {
+                try migrator.attemptMigration()
+            } catch {
+                Log.error("Migration failed with error \(error), wiping folder...")
+                
+                //wipe the persistence. start over if we failed to migrate
+                _ = try? fileManager.removeItemAtURL(persistence.readingFolder)
+            }
+            Log.info("Migration finished")
+        } else {
+            Log.verbose("No migration necessary, skipping...")
+        }
+    }
+    
     func setupPersistence() {
         
         let persistence = PersistenceFactory.createStandardPersistence()
@@ -68,20 +91,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         //setup logging
         Logging.setup(persistence, alsoIntoFile: true)
         
-        //before we create the storage manager, attempt migration first
-        let migrator = CompositeMigrator(persistence: persistence)
-        if migrator.isMigrationRequired() {
-            Log.info("Migration required, launching migrator")
-            do {
-                try migrator.attemptMigration()
-            } catch {
-                Log.error("Migration failed with error \(error)")
-                //TODO: wipe the persistence? start over if we failed to migrate?
-            }
-            Log.info("Migration finished")
-        } else {
-            Log.verbose("No migration necessary, skipping...")
-        }
+        //migration
+        self.migratePersistence(persistence)
         
         //create storage manager
         let storageManager = StorageManager(persistence: persistence)

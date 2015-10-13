@@ -118,6 +118,22 @@ class MigrationTests: XCTestCase {
             fail("\(error)")
         }
     }
-
     
+    func testPersistenceSetter() {
+        
+        let tmp = NSURL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+        let persistence1 = Persistence(readingFolder: tmp, writingFolder: tmp, fileManager: NSFileManager.defaultManager())
+        
+        let migrator = CompositeMigrator(persistence: persistence1)
+        for i in migrator.childMigrators {
+            expect(i.persistence) === persistence1
+        }
+        
+        let persistence2 = Persistence(readingFolder: tmp, writingFolder: tmp, fileManager: NSFileManager.defaultManager())
+        migrator.persistence = persistence2
+        
+        for i in migrator.childMigrators {
+            expect(i.persistence) === persistence2
+        }
+    }
 }

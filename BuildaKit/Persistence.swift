@@ -11,10 +11,19 @@ import BuildaUtils
 
 public class PersistenceFactory {
     
+    public class func migrationPersistenceWithReadingFolder(read: NSURL) -> Persistence {
+        
+        let name = read.lastPathComponent!
+        let path = (NSTemporaryDirectory() as NSString).stringByAppendingPathComponent(name)
+        let tmp = NSURL(fileURLWithPath: path, isDirectory: true)
+        let fileManager = NSFileManager.defaultManager()
+        return Persistence(readingFolder: read, writingFolder: tmp, fileManager: fileManager)
+    }
+    
     public class func createStandardPersistence() -> Persistence {
         
-        //            let folderName = "Buildasaur"
-        let folderName = "Buildasaur-Debug"
+        let folderName = "Buildasaur"
+//        let folderName = "Buildasaur-Debug"
         
         let fileManager = NSFileManager.defaultManager()
         guard let applicationSupport = fileManager
@@ -32,9 +41,9 @@ public class PersistenceFactory {
 
 public class Persistence {
     
-    private let readingFolder: NSURL
-    private let writingFolder: NSURL
-    private let fileManager: NSFileManager
+    public let readingFolder: NSURL
+    public let writingFolder: NSURL
+    public let fileManager: NSFileManager
     
     public init(readingFolder: NSURL, writingFolder: NSURL, fileManager: NSFileManager) {
         
@@ -50,12 +59,12 @@ public class Persistence {
         self.createFolderIfNotExists(self.writingFolder)
     }
     
-    func deleteFile(name: String) {
+    public func deleteFile(name: String) {
         let itemUrl = self.fileURLWithName(name, intention: .Writing, isDirectory: false)
         self.delete(itemUrl)
     }
     
-    func deleteFolder(name: String) {
+    public func deleteFolder(name: String) {
         let itemUrl = self.fileURLWithName(name, intention: .Writing, isDirectory: true)
         self.delete(itemUrl)
     }
@@ -216,7 +225,7 @@ public class Persistence {
         let url = self.fileURLWithName(name, intention: .Reading, isDirectory: isDirectory)
         let writeUrl = self.fileURLWithName(name, intention: .WritingNoCreateFolder, isDirectory: isDirectory)
         
-        try! self.fileManager.copyItemAtURL(url, toURL: writeUrl)
+        _ = try? self.fileManager.copyItemAtURL(url, toURL: writeUrl)
     }
     
     public func createFolderIfNotExists(url: NSURL) {
