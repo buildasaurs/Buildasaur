@@ -1,5 +1,27 @@
 # Change Log
 
+## [v0.6.0](https://github.com/czechboy0/buildasaur/tree/v0.6.0) (2015-10-13)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.5.1...v0.6.0)
+
+**Fixed bugs:**
+
+- GitHub API request rate seems wrong [\#156](https://github.com/czechboy0/Buildasaur/issues/156)
+
+**Closed issues:**
+
+- nothing happens when clicking save button on Build Template Settings sheet [\#157](https://github.com/czechboy0/Buildasaur/issues/157)
+- Add autostart option \(starts syncers on launch\) [\#155](https://github.com/czechboy0/Buildasaur/issues/155)
+- Improve position of new windows on screen [\#153](https://github.com/czechboy0/Buildasaur/issues/153)
+- Write a migrator to the new data structure in multi-repo changes [\#152](https://github.com/czechboy0/Buildasaur/issues/152)
+- Xcode 7: Investigate how xcscmblueprint relates to xccheckout [\#89](https://github.com/czechboy0/Buildasaur/issues/89)
+- Support multiple repositories [\#12](https://github.com/czechboy0/Buildasaur/issues/12)
+- Save triggers independently of build templates \(for easy reuse\) [\#1](https://github.com/czechboy0/Buildasaur/issues/1)
+
+**Merged pull requests:**
+
+- fixed new window positioning [\#164](https://github.com/czechboy0/Buildasaur/pull/164) ([czechboy0](https://github.com/czechboy0))
+- Multi-repo support [\#138](https://github.com/czechboy0/Buildasaur/pull/138) ([czechboy0](https://github.com/czechboy0))
+
 ## [v0.5.1](https://github.com/czechboy0/buildasaur/tree/v0.5.1) (2015-10-06)
 [Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.5.0...v0.5.1)
 
