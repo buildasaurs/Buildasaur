@@ -10,7 +10,6 @@ import Foundation
 import BuildaGitServer
 import BuildaUtils
 import XcodeServerSDK
-import BuildaHeartbeatKit
 import ReactiveCocoa
 
 public enum StorageManagerError: ErrorType {
@@ -27,29 +26,16 @@ public class StorageManager {
     public let triggerConfigs = MutableProperty<[String: TriggerConfig]>([:])
     public let config = MutableProperty<[String: AnyObject]>([:])
     
-    private var heartbeatManager: HeartbeatManager!
     private let persistence: Persistence
     
     public init(persistence: Persistence) {
         self.persistence = persistence
         self.loadAllFromPersistence()
-        self.setupHeartbeatManager()
         self.setupSaving()
     }
     
     deinit {
         //
-    }
-    
-    private func setupHeartbeatManager() {
-        if let heartbeatOptOut = self.config.value["heartbeat_opt_out"] as? Bool where heartbeatOptOut {
-            Log.info("User opted out of anonymous heartbeat")
-        } else {
-            Log.info("Will send anonymous heartbeat. To opt out add `\"heartbeat_opt_out\" = true` to ~/Library/Application Support/Buildasaur/Config.json")
-            self.heartbeatManager = HeartbeatManager(server: "https://builda-ekg.herokuapp.com")
-            self.heartbeatManager.delegate = self
-            self.heartbeatManager.start()
-        }
     }
     
     public func checkForProjectOrWorkspace(url: NSURL) throws {
@@ -279,13 +265,5 @@ extension StorageManager {
             Log.error(error)
         }
         return nil
-    }
-}
-
-extension StorageManager: HeartbeatManagerDelegate {
-    public func numberOfRunningSyncers() -> Int {
-        //TODO: move this so the SyncerManager
-        return -1
-//        return self.syncerConfigs.value.filter { $0.active }.count
     }
 }

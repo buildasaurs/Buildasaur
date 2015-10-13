@@ -9,6 +9,8 @@
 import Foundation
 import ReactiveCocoa
 import XcodeServerSDK
+import BuildaHeartbeatKit
+import BuildaUtils
 
 //owns running syncers and their children, manages starting/stopping them,
 //creating them from configurations
@@ -27,10 +29,12 @@ public class SyncerManager {
     
     public var syncers: [HDGitHubXCBotSyncer]
     private var configTriplets: SignalProducer<[ConfigTriplet], NoError>
-    
+    private var heartbeatManager: HeartbeatManager!
+
     public init(storageManager: StorageManager, factory: SyncerFactoryType) {
         
         self.storageManager = storageManager
+        
         self.factory = factory
         self.syncers = []
         let configTriplets = SyncerProducerFactory.createTripletsProducer(storageManager)
@@ -51,6 +55,18 @@ public class SyncerManager {
         
         syncersProducer.startWithNext { [weak self] in self?.syncers = $0 }
         self.checkForAutostart()
+        self.setupHeartbeatManager()
+    }
+    
+    private func setupHeartbeatManager() {
+        if let heartbeatOptOut = self.storageManager.config.value["heartbeat_opt_out"] as? Bool where heartbeatOptOut {
+            Log.info("User opted out of anonymous heartbeat")
+        } else {
+            Log.info("Will send anonymous heartbeat. To opt out add `\"heartbeat_opt_out\" = true` to ~/Library/Application Support/Buildasaur/Config.json")
+            self.heartbeatManager = HeartbeatManager(server: "https://builda-ekg.herokuapp.com")
+            self.heartbeatManager.delegate = self
+            self.heartbeatManager.start()
+        }
     }
     
     private func checkForAutostart() {
@@ -89,5 +105,11 @@ public class SyncerManager {
 
     public func stopSyncers() {
         self.syncers.forEach { $0.active = false }
+    }
+}
+
+extension SyncerManager: HeartbeatManagerDelegate {
+    public func numberOfRunningSyncers() -> Int {
+        return self.syncers.filter { $0.active }.count
     }
 }
