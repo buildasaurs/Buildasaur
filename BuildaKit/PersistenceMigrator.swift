@@ -125,6 +125,12 @@ class Migrator_v1_v2: MigratorType {
         self.migrateConfigAndLog()
     }
     
+    func fixPath(path: String) -> String {
+        let oldUrl = NSURL(string: path)
+        let newPath = oldUrl!.path!
+        return newPath
+    }
+    
     func migrateBuildTemplates() {
         
         //first pull all triggers from all build templates and save them
@@ -199,8 +205,16 @@ class Migrator_v1_v2: MigratorType {
             return project
         }
         
+        //fix internal urls to be normal paths instead of the file:/// paths
+        let withFixedUrls = withIds.map { project -> NSMutableDictionary in
+            project["url"] = self.fixPath(project.stringForKey("url"))
+            project["ssh_public_key_url"] = self.fixPath(project.stringForKey("ssh_public_key_url"))
+            project["ssh_private_key_url"] = self.fixPath(project.stringForKey("ssh_private_key_url"))
+            return project
+        }
+        
         //remove preferred_template_id, will be moved to syncer
-        let removedTemplate = withIds.map { project -> (RefType?, NSMutableDictionary) in
+        let removedTemplate = withFixedUrls.map { project -> (RefType?, NSMutableDictionary) in
             let template = project["preferred_template_id"] as? RefType
             project.removeObjectForKey("preferred_template_id")
             return (template, project)

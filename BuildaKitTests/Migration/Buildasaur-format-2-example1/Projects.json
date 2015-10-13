@@ -1,9 +1,9 @@
 [
   {
-    "ssh_public_key_url" : "file:\/\/\/Users\/honzadvorsky\/.ssh\/id_rsa.pub",
+    "ssh_public_key_url" : "\/Users\/honzadvorsky\/.ssh\/id_rsa.pub",
     "id" : "4E8E7708-01FB-448A-B929-A54887CC5857",
-    "url" : "file:\/\/\/Users\/honzadvorsky\/Documents\/Buildasaur-Tester\/Buildasaur-Tester.xcodeproj",
+    "url" : "\/Users\/honzadvorsky\/Documents\/Buildasaur-Tester\/Buildasaur-Tester.xcodeproj",
     "github_token" : "example_token-123456786543456765432",
-    "ssh_private_key_url" : "file:\/\/\/Users\/honzadvorsky\/.ssh\/id_rsa"
+    "ssh_private_key_url" : "\/Users\/honzadvorsky\/.ssh\/id_rsa"
   }
 ]

@@ -79,6 +79,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 //TODO: wipe the persistence? start over if we failed to migrate?
             }
             Log.info("Migration finished")
+        } else {
+            Log.verbose("No migration necessary, skipping...")
         }
         
         //create storage manager

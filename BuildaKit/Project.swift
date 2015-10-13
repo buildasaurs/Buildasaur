@@ -14,7 +14,7 @@ import ReactiveCocoa
 public class Project {
     
     public var url: NSURL {
-        return NSURL(fileURLWithPath: self._config.url)
+        return NSURL(fileURLWithPath: self._config.url, isDirectory: true)
     }
     
     public let config: MutableProperty<ProjectConfig>
