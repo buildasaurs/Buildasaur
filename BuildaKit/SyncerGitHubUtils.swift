@@ -58,12 +58,40 @@ extension HDGitHubXCBotSyncer {
             }
             
             //have a chance to NOT post a status comment...
-            let postStatusComments = self._postStatusComments
+            let shouldPostStatusComments = self._postStatusComments
             
             //optional there can be a comment to be posted and there's an issue to be posted on
-            if
+            guard
                 let issue = issue,
-                let comment = statusWithComment.comment where postStatusComments {
+                let comment = statusWithComment.comment where shouldPostStatusComments else {
+                    completion(error: nil)
+                    return
+            }
+            
+            //actually, in an attempt to fix https://github.com/czechboy0/Buildasaur/issues/163,
+            //we're going to once more fetch comments to make sure we wouldn't
+            //be reposting the same thing again (sigh, delayed GitHub servers are ruining
+            //the party)
+            
+            self._github.getCommentsOfIssue(issue.number, repo: repo, completion: { (comments, error) -> () in
+                
+                if error != nil {
+                    let e = Error.withInfo("Failed to get comments \"\(comment)\" of Issue \(issue.number) of repo \(repo)", internalError: error)
+                    completion(error: e)
+                    return
+                }
+                
+                //just look at the last one and compare with what we want to post
+                var shouldPost = true
+                if let lastComment: Comment = comments?.last where lastComment.body == comment {
+                    shouldPost = false
+                }
+                
+                guard shouldPost else {
+                    Log.verbose("Skipping posting of a comment on Issue \(issue.number) in repo \(repo), because we already found exactly the same comment in the conversation. Avoiding reposting.")
+                    completion(error: nil)
+                    return
+                }
                 
                 //we have a comment, post it
                 self._github.postCommentOnIssue(comment, issueNumber: issue.number, repo: repo, completion: { (comment, error) -> () in
@@ -75,10 +103,8 @@ extension HDGitHubXCBotSyncer {
                         completion(error: nil)
                     }
                 })
-                
-            } else {
-                completion(error: nil)
-            }
+            })
         }
     }
 }
+
