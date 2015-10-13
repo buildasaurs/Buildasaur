@@ -11,7 +11,7 @@ import BuildaUtils
 
 public protocol MigratorType {
     init(persistence: Persistence)
-    var persistence: Persistence { get }
+    var persistence: Persistence { get set }
     func isMigrationRequired() -> Bool
     func attemptMigration() throws
 }
@@ -33,10 +33,17 @@ extension MigratorType {
 public class CompositeMigrator: MigratorType {
     
     public var persistence: Persistence {
-        preconditionFailure("No persistence here")
+        get {
+            preconditionFailure("No persistence here")
+        }
+        set {
+            for var i in self.childMigrators {
+                i.persistence = newValue
+            }
+        }
     }
     
-    private let childMigrators: [MigratorType]
+    internal let childMigrators: [MigratorType]
     public required init(persistence: Persistence) {
         self.childMigrators = [
             Migrator_v0_v1(persistence: persistence),
@@ -60,7 +67,7 @@ let kPersistenceVersion = "persistence_version"
 */
 class Migrator_v0_v1: MigratorType {
     
-    internal let persistence: Persistence
+    internal var persistence: Persistence
     required init(persistence: Persistence) {
         self.persistence = persistence
     }
@@ -106,7 +113,7 @@ class Migrator_v0_v1: MigratorType {
 */
 class Migrator_v1_v2: MigratorType {
     
-    internal let persistence: Persistence
+    internal var persistence: Persistence
     required init(persistence: Persistence) {
         self.persistence = persistence
     }
