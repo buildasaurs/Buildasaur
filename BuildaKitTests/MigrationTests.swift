@@ -29,7 +29,10 @@ class MigrationTests: XCTestCase {
     }
     
     func writingURL(name: String) -> NSURL {
-        let writingURL = NSURL(fileURLWithPath: "/Users/honzadvorsky/Desktop/TestLocation/\(name)", isDirectory: true)
+        let dir = NSTemporaryDirectory()
+//        let dir = "/Users/honzadvorsky/Desktop/TestLocation/"
+        let path = (dir as NSString).stringByAppendingPathComponent(name)
+        let writingURL = NSURL(fileURLWithPath: path, isDirectory: true)
         
         //delete the folder first
         _ = try? NSFileManager.defaultManager().removeItemAtURL(writingURL)
