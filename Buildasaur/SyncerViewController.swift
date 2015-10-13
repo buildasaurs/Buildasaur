@@ -320,7 +320,7 @@ extension SyncerViewController {
         }
         producer.startWithNext { [weak self] in
             guard let sself = self else { return }
-            sself.statusTextField.rac_stringValue <~ $0
+            sself.statusTextField.rac_stringValue <~ $0.observeOn(UIScheduler())
         }
     }
     

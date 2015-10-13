@@ -37,8 +37,9 @@ public class SyncerFactory: SyncerFactoryType {
         
         if let poolAttempt = self.syncerPool[triplet.syncer.id] {
             poolAttempt.config.value = triplet.syncer
-            poolAttempt.xcodeServer.config = triplet.server
-            poolAttempt.project.config.value = triplet.project
+            poolAttempt.xcodeServer = xcodeServer
+            poolAttempt.github = githubServer
+            poolAttempt.project = project
             poolAttempt.buildTemplate = triplet.buildTemplate
             poolAttempt.triggers = triggers
             return poolAttempt

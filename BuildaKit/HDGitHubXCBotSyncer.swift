@@ -13,9 +13,9 @@ import ReactiveCocoa
 
 public class HDGitHubXCBotSyncer : Syncer {
     
-    public let github: GitHubServer
-    public let xcodeServer: XcodeServer
-    public let project: Project
+    public var github: GitHubServer
+    public var xcodeServer: XcodeServer
+    public var project: Project
     public var buildTemplate: BuildTemplate
     public var triggers: [Trigger]
     
