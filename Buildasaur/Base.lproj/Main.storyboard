@@ -3280,11 +3280,11 @@ Gw
             <objects>
                 <viewController id="H0w-7S-xXi" customClass="BranchWatchingViewController" customModule="Buildasaur" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="Wgg-Ri-IDL">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="340"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="340"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JGX-Vl-8cd">
-                                <rect key="frame" x="145" y="298" width="161" height="22"/>
+                                <rect key="frame" x="220" y="298" width="161" height="22"/>
                                 <animations/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Watched Branches" id="11g-YC-AK3">
                                     <font key="font" metaFont="system" size="18"/>
@@ -3293,7 +3293,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="SAg-Zh-mDU">
-                                <rect key="frame" x="123" y="301" width="16" height="16"/>
+                                <rect key="frame" x="198" y="301" width="16" height="16"/>
                                 <animations/>
                             </progressIndicator>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YkO-Wz-Ncg">
@@ -3324,21 +3324,21 @@ Gw
                                     <action selector="cancelTapped:" target="H0w-7S-xXi" id="B8h-qe-Q3f"/>
                                 </connections>
                             </button>
-                            <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vg9-HZ-Xv0">
-                                <rect key="frame" x="50" y="60" width="351" height="230"/>
+                            <scrollView autohidesScrollers="YES" horizontalLineScroll="20" horizontalPageScroll="10" verticalLineScroll="20" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vg9-HZ-Xv0">
+                                <rect key="frame" x="50" y="60" width="501" height="230"/>
                                 <clipView key="contentView" id="3Xt-4Y-pgX">
-                                    <rect key="frame" x="1" y="0.0" width="238" height="134"/>
+                                    <rect key="frame" x="1" y="1" width="499" height="228"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" id="jDu-Ec-web">
-                                            <rect key="frame" x="0.0" y="0.0" width="349" height="19"/>
+                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="18" rowSizeStyle="automatic" viewBased="YES" id="jDu-Ec-web">
+                                            <rect key="frame" x="0.0" y="0.0" width="499" height="228"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <animations/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
-                                                <tableColumn identifier="name" width="220" minWidth="40" maxWidth="228" id="Yfx-5F-5Pp">
+                                                <tableColumn identifier="name" width="360" minWidth="40" maxWidth="800" id="Yfx-5F-5Pp">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -3350,6 +3350,18 @@ Gw
                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                                    <prototypeCellViews>
+                                                        <textField identifier="name" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="Dmq-wJ-Hbs">
+                                                            <rect key="frame" x="1" y="1" width="360" height="17"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <animations/>
+                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="1D3-xz-LoW">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                    </prototypeCellViews>
                                                 </tableColumn>
                                                 <tableColumn identifier="enabled" width="123" minWidth="50" maxWidth="123" id="GG0-jU-xdT">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
@@ -3365,6 +3377,20 @@ Gw
                                                         </connections>
                                                     </buttonCell>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                                    <prototypeCellViews>
+                                                        <button identifier="enabled" id="HZ7-n2-CKf" customClass="BuildaNSButton" customModule="Buildasaur" customModuleProvider="target">
+                                                            <rect key="frame" x="364" y="1" width="123" height="18"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <animations/>
+                                                            <buttonCell key="cell" type="check" title="Watch and Test" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="5ce-ic-8eY">
+                                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                <font key="font" metaFont="system"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <action selector="branchesTableViewRowCheckboxTapped:" target="H0w-7S-xXi" id="JFb-qI-VYY"/>
+                                                            </connections>
+                                                        </button>
+                                                    </prototypeCellViews>
                                                 </tableColumn>
                                             </tableColumns>
                                             <connections>
@@ -3378,7 +3404,7 @@ Gw
                                 </clipView>
                                 <animations/>
                                 <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="zLT-KA-AWK">
-                                    <rect key="frame" x="1" y="213" width="349" height="16"/>
+                                    <rect key="frame" x="1" y="213" width="499" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <animations/>
                                 </scroller>
@@ -3412,7 +3438,7 @@ Gw
                 </viewController>
                 <customObject id="JCM-p0-AyE" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="343" y="1522"/>
+            <point key="canvasLocation" x="249" y="1522"/>
         </scene>
         <!--Empty Xcode Server View Controller-->
         <scene sceneID="RGd-g9-qqS">
