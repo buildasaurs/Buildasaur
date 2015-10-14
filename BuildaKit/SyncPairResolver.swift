@@ -194,7 +194,13 @@ public class SyncPairResolver {
     
     class func linkToServer(hostname: String, bot: Bot, integration: Integration) -> String {
         
-        let link = "xcbot://\(hostname)/botID/\(bot.id)/integrationID/\(integration.id)"
+        //unfortunately, since github doesn't allow non-https links anywhere, we
+        //must proxy through Satellite (https://github.com/czechboy0/satellite)
+        //all it does is it redirects to the desired xcbot://... url, which in
+        //turn opens Xcode on the integration page. all good!
+        
+//        let link = "xcbot://\(hostname)/botID/\(bot.id)/integrationID/\(integration.id)"
+        let link = "https://stlt.herokuapp.com/v1/xcs_deeplink/\(hostname)/\(bot.id)/\(integration.id)"
         return link
     }
     
