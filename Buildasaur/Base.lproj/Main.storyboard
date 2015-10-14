@@ -906,10 +906,10 @@
                                 </tableHeaderView>
                             </scrollView>
                             <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l5l-vU-g4x">
-                                <rect key="frame" x="222" y="259" width="458" height="21"/>
+                                <rect key="frame" x="178" y="249" width="502" height="41"/>
                                 <subviews>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="E55-J5-dz5">
-                                        <rect key="frame" x="-6" y="-7" width="115" height="32"/>
+                                        <rect key="frame" x="-6" y="3" width="115" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="103" id="8g1-rS-Nen"/>
                                         </constraints>
@@ -923,7 +923,7 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oQI-eo-8zz">
-                                        <rect key="frame" x="105" y="-7" width="89" height="32"/>
+                                        <rect key="frame" x="105" y="3" width="89" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="77" id="6A5-PT-zZb"/>
                                         </constraints>
@@ -936,16 +936,41 @@
                                             <action selector="startAllButtonClicked:" target="fGl-D9-6Tw" id="75u-gC-5hy"/>
                                         </connections>
                                     </button>
-                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="Z79-7V-Vm9">
-                                        <rect key="frame" x="194" y="1" width="141" height="18"/>
+                                    <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tKA-DU-Jvj">
+                                        <rect key="frame" x="196" y="2.5" width="181" height="36"/>
+                                        <subviews>
+                                            <button translatesAutoresizingMaskIntoConstraints="NO" id="Z79-7V-Vm9">
+                                                <rect key="frame" x="-2" y="20" width="165" height="18"/>
+                                                <animations/>
+                                                <buttonCell key="cell" type="check" title="Start syncing on launch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Ckv-ih-HFt">
+                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
+                                            <button translatesAutoresizingMaskIntoConstraints="NO" id="9MG-Rp-sKt">
+                                                <rect key="frame" x="-2" y="-2" width="185" height="18"/>
+                                                <animations/>
+                                                <buttonCell key="cell" type="check" title="Launch Buildasaur on login" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="hLy-bv-sbQ">
+                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="launchOnLoginClicked:" target="fGl-D9-6Tw" id="bBB-kd-eId"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
                                         <animations/>
-                                        <buttonCell key="cell" type="check" title="Autostart on launch" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Ckv-ih-HFt">
-                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                            <font key="font" metaFont="system"/>
-                                        </buttonCell>
-                                    </button>
+                                        <visibilityPriorities>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                        </visibilityPriorities>
+                                        <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                        </customSpacing>
+                                    </stackView>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="f7Q-ra-uiy">
-                                        <rect key="frame" x="335" y="-7" width="89" height="32"/>
+                                        <rect key="frame" x="379" y="3" width="89" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="77" id="bQU-rX-9Zu"/>
                                             <constraint firstAttribute="height" constant="21" id="zvj-lh-RjQ"/>
@@ -960,11 +985,11 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="x6z-V9-yJw">
-                                        <rect key="frame" x="426" y="0.0" width="32" height="21"/>
+                                        <rect key="frame" x="470" y="12.5" width="32" height="16"/>
                                         <animations/>
-                                        <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="NSInfo" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="yzS-7U-OPv">
+                                        <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="NSInfo" imagePosition="only" alignment="center" controlSize="mini" imageScaling="proportionallyDown" inset="2" id="yzS-7U-OPv">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                            <font key="font" metaFont="miniSystem"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="infoButtonClicked:" target="fGl-D9-6Tw" id="gLi-hz-y9i"/>
@@ -991,9 +1016,9 @@
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="wph-xW-ouc" secondAttribute="trailing" id="5q7-eJ-LKk"/>
                             <constraint firstAttribute="trailing" secondItem="l5l-vU-g4x" secondAttribute="trailing" constant="20" id="8Q9-vH-IFk"/>
-                            <constraint firstItem="wph-xW-ouc" firstAttribute="top" secondItem="l5l-vU-g4x" secondAttribute="bottom" constant="20" id="Tp8-af-6nn"/>
+                            <constraint firstItem="wph-xW-ouc" firstAttribute="top" secondItem="l5l-vU-g4x" secondAttribute="bottom" constant="10" id="Tp8-af-6nn"/>
                             <constraint firstItem="wph-xW-ouc" firstAttribute="top" secondItem="B7s-MS-Jnq" secondAttribute="top" constant="61" id="XLd-Jf-psf"/>
-                            <constraint firstItem="l5l-vU-g4x" firstAttribute="top" secondItem="B7s-MS-Jnq" secondAttribute="top" constant="20" id="Zxd-hV-M88"/>
+                            <constraint firstItem="l5l-vU-g4x" firstAttribute="top" secondItem="B7s-MS-Jnq" secondAttribute="top" constant="10" id="Zxd-hV-M88"/>
                             <constraint firstItem="wph-xW-ouc" firstAttribute="leading" secondItem="B7s-MS-Jnq" secondAttribute="leading" id="dB3-9p-ifh"/>
                             <constraint firstAttribute="bottom" secondItem="wph-xW-ouc" secondAttribute="bottom" id="xe6-q0-TJh"/>
                         </constraints>
@@ -1001,6 +1026,7 @@
                     </view>
                     <connections>
                         <outlet property="autostartButton" destination="Z79-7V-Vm9" id="6kv-Ce-nwi"/>
+                        <outlet property="launchOnLoginButton" destination="9MG-Rp-sKt" id="Sgh-qM-WfR"/>
                         <outlet property="startAllButton" destination="oQI-eo-8zz" id="hn5-aV-N88"/>
                         <outlet property="stopAllButton" destination="f7Q-ra-uiy" id="O6F-H8-VoB"/>
                         <outlet property="syncersTableView" destination="D3C-wr-ynD" id="kMa-jK-0v8"/>
@@ -3331,7 +3357,7 @@ Gw
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="18" rowSizeStyle="automatic" viewBased="YES" id="jDu-Ec-web">
-                                            <rect key="frame" x="0.0" y="0.0" width="499" height="228"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="489" height="0.0"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <animations/>
                                             <size key="intercellSpacing" width="3" height="2"/>

@@ -97,7 +97,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         //create storage manager
         let storageManager = StorageManager(persistence: persistence)
         let factory = SyncerFactory()
-        let syncerManager = SyncerManager(storageManager: storageManager, factory: factory)
+        let loginItem = LoginItem()
+        let syncerManager = SyncerManager(storageManager: storageManager, factory: factory, loginItem: loginItem)
         self.syncerManager = syncerManager
     }
 
