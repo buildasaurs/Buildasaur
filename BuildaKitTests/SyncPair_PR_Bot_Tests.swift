@@ -41,7 +41,7 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
         let (pr, bot, commit) = self.mockedPRAndBotAndCommit()
         let integrations = [Integration]()
         
-        let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, integrations: integrations)
+        let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, hostname: "localhost", integrations: integrations)
         XCTAssertEqual(actions.integrationsToCancel?.count ?? 0, 0)
         XCTBAssertNil(actions.githubStatusToSet)
         XCTAssertNotNil(actions.startNewIntegrationBot)
@@ -54,7 +54,7 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
             MockIntegration(number: 1, step: Integration.Step.Pending)
         ]
         
-        let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, integrations: integrations)
+        let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, hostname: "localhost", integrations: integrations)
         XCTAssertEqual(actions.integrationsToCancel?.count ?? 0, 0)
         XCTAssertNil(actions.startNewIntegrationBot)
         XCTBAssertNotNil(actions.githubStatusToSet)
@@ -70,7 +70,7 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
             MockIntegration(number: 3, step: Integration.Step.Pending)
         ]
         
-        let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, integrations: integrations)
+        let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, hostname: "localhost", integrations: integrations)
         
         //should cancel all except for the last one
         let toCancel = Set(actions.integrationsToCancel!)
@@ -89,7 +89,7 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
             MockIntegration(number: 1, step: Integration.Step.Building),
         ]
         
-        let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, integrations: integrations)
+        let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, hostname: "localhost", integrations: integrations)
         
         XCTAssertEqual(actions.integrationsToCancel!.count, 0)
         XCTAssertNil(actions.startNewIntegrationBot)
@@ -104,7 +104,7 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
             MockIntegration(number: 1, step: Integration.Step.Completed, sha: "head_sha", result: Integration.Result.TestFailures)
         ]
         
-        let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, integrations: integrations)
+        let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, hostname: "localhost", integrations: integrations)
         
         XCTAssertEqual(actions.integrationsToCancel!.count, 0)
         XCTAssertNil(actions.startNewIntegrationBot)
@@ -119,7 +119,7 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
             MockIntegration(number: 1, step: Integration.Step.Completed, sha: "head_sha", result: Integration.Result.Succeeded)
         ]
         
-        let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, integrations: integrations)
+        let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, hostname: "localhost", integrations: integrations)
         
         XCTAssertEqual(actions.integrationsToCancel!.count, 0)
         XCTAssertNil(actions.startNewIntegrationBot)
@@ -135,7 +135,7 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
             MockIntegration(number: 2, step: Integration.Step.Pending, sha: "head_sha")
         ]
         
-        let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, integrations: integrations)
+        let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, hostname: "localhost", integrations: integrations)
         
         XCTAssertEqual(actions.integrationsToCancel!.count, 1)
         XCTAssertNil(actions.startNewIntegrationBot)
@@ -150,7 +150,7 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
             MockIntegration(number: 1, step: Integration.Step.Building, sha: "head_sha_old"),
         ]
         
-        let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, integrations: integrations)
+        let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, hostname: "localhost", integrations: integrations)
         
         XCTAssertEqual(actions.integrationsToCancel!.count, 1)
         XCTAssertNotNil(actions.startNewIntegrationBot)
