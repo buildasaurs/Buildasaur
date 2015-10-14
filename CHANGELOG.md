@@ -1,5 +1,25 @@
 # Change Log
 
+## [Unreleased](https://github.com/czechboy0/buildasaur/tree/HEAD)
+
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.6.1...HEAD)
+
+**Fixed bugs:**
+
+- Blueprint file fails to validate [\#172](https://github.com/czechboy0/Buildasaur/issues/172)
+
+## [v0.6.1](https://github.com/czechboy0/buildasaur/tree/v0.6.1) (2015-10-14)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.6.0...v0.6.1)
+
+**Closed issues:**
+
+- GIT Warning [\#136](https://github.com/czechboy0/Buildasaur/issues/136)
+
+**Merged pull requests:**
+
+- Fixed URL caching [\#174](https://github.com/czechboy0/Buildasaur/pull/174) ([czechboy0](https://github.com/czechboy0))
+- Fixed sync interval not being changed live [\#171](https://github.com/czechboy0/Buildasaur/pull/171) ([czechboy0](https://github.com/czechboy0))
+
 ## [v0.6.0](https://github.com/czechboy0/buildasaur/tree/v0.6.0) (2015-10-13)
 [Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.5.1...v0.6.0)
 
