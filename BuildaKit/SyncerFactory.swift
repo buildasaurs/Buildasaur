@@ -15,7 +15,7 @@ public protocol SyncerFactoryType {
     func defaultConfigTriplet() -> ConfigTriplet
     func newEditableTriplet() -> EditableConfigTriplet
     func createXcodeServer(config: XcodeServerConfig) -> XcodeServer
-    func createProject(config: ProjectConfig) -> Project
+    func createProject(config: ProjectConfig) -> Project?
     func createSourceServer(token: String) -> GitHubServer
     func createTrigger(config: TriggerConfig) -> Trigger
 }
@@ -28,14 +28,17 @@ public class SyncerFactory: SyncerFactoryType {
     
     public init() { }
     
-    private func createSyncer(triplet: ConfigTriplet) -> HDGitHubXCBotSyncer {
+    private func createSyncer(triplet: ConfigTriplet) -> HDGitHubXCBotSyncer? {
         
         let xcodeServer = self.createXcodeServer(triplet.server)
         let githubServer = self.createSourceServer(triplet.project.githubToken)
-        let project = self.createProject(triplet.project)
+        let maybeProject = self.createProject(triplet.project)
         let triggers = triplet.triggers.map { self.createTrigger($0) }
         
-        if let poolAttempt = self.syncerPool[triplet.syncer.id] {
+        guard let project = maybeProject else { return nil }
+        
+        if let poolAttempt = self.syncerPool[triplet.syncer.id]
+        {
             poolAttempt.config.value = triplet.syncer
             poolAttempt.xcodeServer = xcodeServer
             poolAttempt.github = githubServer
@@ -62,7 +65,7 @@ public class SyncerFactory: SyncerFactoryType {
     public func createSyncers(configs: [ConfigTriplet]) -> [HDGitHubXCBotSyncer] {
         
         //create syncers
-        let created = configs.map { self.createSyncer($0) }
+        let created = configs.map { self.createSyncer($0) }.filter { $0 != nil }.map { $0! }
         
         let createdIds = Set(created.map { $0.config.value.id })
         
@@ -98,7 +101,7 @@ public class SyncerFactory: SyncerFactoryType {
         return server
     }
     
-    public func createProject(config: ProjectConfig) -> Project {
+    public func createProject(config: ProjectConfig) -> Project? {
         
         if let poolAttempt = self.projectPool[config.id] {
             poolAttempt.config.value = config
@@ -106,8 +109,10 @@ public class SyncerFactory: SyncerFactoryType {
         }
         
         //TODO: maybe this producer SHOULD throw errors, when parsing fails?
-        let project = try! Project(config: config)
-        self.projectPool[config.id] = project
+        let project = try? Project(config: config)
+        if let project = project {
+            self.projectPool[config.id] = project
+        }
         
         return project
     }
