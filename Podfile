@@ -2,7 +2,7 @@ platform :osx, '10.10'
 use_frameworks!
 
 def pods_for_errbody
-    pod 'BuildaUtils', '~> 0.1.5'
+    pod 'BuildaUtils', '~> 0.2.2'
 end
 
 def rac
@@ -11,7 +11,7 @@ end
 
 def also_xcode_pods
     pods_for_errbody
-    pod 'XcodeServerSDK', '~> 0.4.0'
+    pod 'XcodeServerSDK', '~> 0.5.1'
     pod 'ekgclient', '~> 0.3.0', :inhibit_warnings => true
 end
 
