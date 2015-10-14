@@ -42,24 +42,33 @@ public class SyncPair_Branch_Bot: SyncPair {
         let headCommit = self.branch.commit.sha
         let issue: Issue? = nil //TODO: only pull/create if we're failing
         
-        self.getIntegrations(bot, completion: { (integrations, error) -> () in
+        self.syncer.xcodeServer.getHostname { (hostname, error) -> () in
             
             if let error = error {
                 completion(error: error)
                 return
             }
             
-            let actions = self.resolver.resolveActionsForCommitAndIssueWithBotIntegrations(
-                headCommit,
-                issue: issue,
-                bot: bot,
-                integrations: integrations)
-            
-            //in case of branches, we also (optionally) want to add functionality for creating an issue if the branch starts failing and updating with comments the same way we do with PRs.
-            //also, when the build is finally successful on the branch, the issue will be automatically closed.
-            //TODO: add this functionality here and add it as another action available from a sync pair
-            
-            self.performActions(actions, completion: completion)
-        })
+            self.getIntegrations(bot, completion: { (integrations, error) -> () in
+                
+                if let error = error {
+                    completion(error: error)
+                    return
+                }
+                
+                let actions = self.resolver.resolveActionsForCommitAndIssueWithBotIntegrations(
+                    headCommit,
+                    issue: issue,
+                    bot: bot,
+                    hostname: hostname!,
+                    integrations: integrations)
+                
+                //in case of branches, we also (optionally) want to add functionality for creating an issue if the branch starts failing and updating with comments the same way we do with PRs.
+                //also, when the build is finally successful on the branch, the issue will be automatically closed.
+                //TODO: add this functionality here and add it as another action available from a sync pair
+                
+                self.performActions(actions, completion: completion)
+            })
+        }
     }
 }

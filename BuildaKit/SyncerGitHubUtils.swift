@@ -12,10 +12,12 @@ import BuildaUtils
 
 extension HDGitHubXCBotSyncer {
     
-    class func createStatusFromState(state: Status.State, description: String?) -> Status {
+    class func createStatusFromState(state: Status.State, description: String?, targetUrl: String?) -> Status {
         
         //TODO: add useful targetUrl and potentially have multiple contexts to show multiple stats on the PR
         let context = "Buildasaur"
+        
+        //targetURL must be https :( use satellite to forward xcbot:// deep links?
         return Status(state: state, description: description, targetUrl: nil, context: context)
     }
     

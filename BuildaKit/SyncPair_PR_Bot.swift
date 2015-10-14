@@ -43,7 +43,7 @@ public class SyncPair_PR_Bot: SyncPair {
         let pr = self.pr
         let headCommit = pr.head.sha
         let issue = pr
-
+        
         self.getIntegrations(bot, completion: { (integrations, error) -> () in
             
             if let error = error {
@@ -61,19 +61,28 @@ public class SyncPair_PR_Bot: SyncPair {
                 
                 if isEnabled {
                     
-                    let actions = self.resolver.resolveActionsForCommitAndIssueWithBotIntegrations(
-                        headCommit,
-                        issue: issue,
-                        bot: bot,
-                        integrations: integrations)
-                    self.performActions(actions, completion: completion)
+                    self.syncer.xcodeServer.getHostname { (hostname, error) -> () in
+                        
+                        if let error = error {
+                            completion(error: error)
+                            return
+                        }
+                        
+                        let actions = self.resolver.resolveActionsForCommitAndIssueWithBotIntegrations(
+                            headCommit,
+                            issue: issue,
+                            bot: bot,
+                            hostname: hostname!,
+                            integrations: integrations)
+                        self.performActions(actions, completion: completion)
+                    }
                     
                 } else {
                     
                     //not enabled, make sure the PR reflects that and the instructions are clear
                     Log.verbose("Bot \(bot.name) is not yet enabled, ignoring...")
                     
-                    let status = HDGitHubXCBotSyncer.createStatusFromState(.Pending, description: "Waiting for \"lttm\" to start testing")
+                    let status = HDGitHubXCBotSyncer.createStatusFromState(.Pending, description: "Waiting for \"lttm\" to start testing", targetUrl: nil)
                     let notYetEnabled: HDGitHubXCBotSyncer.GitHubStatusAndComment = (status: status, comment: nil)
                     syncer.updateCommitStatusIfNecessary(notYetEnabled, commit: headCommit, issue: pr, completion: completion)
                 }
