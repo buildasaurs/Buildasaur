@@ -11,10 +11,16 @@ import AppKit
 import BuildaGitServer
 import BuildaUtils
 import BuildaKit
+import ReactiveCocoa
 
 protocol BranchWatchingViewControllerDelegate: class {
     
     func didUpdateWatchedBranches(branches: [String])
+}
+
+private struct ShowableBranch {
+    let name: String
+    let pr: Int?
 }
 
 class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
@@ -24,7 +30,7 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
     var watchedBranchNames: Set<String>!
     weak var delegate: BranchWatchingViewControllerDelegate?
     
-    private var branches: [Branch] = []
+    private var branches: [ShowableBranch] = []
     
     @IBOutlet weak var branchActivityIndicator: NSProgressIndicator!
     @IBOutlet weak var branchesTableView: NSTableView!
@@ -34,37 +40,76 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
         
         assert(self.syncer != nil, "Syncer has not been set")
         self.watchedBranchNames = Set(self.syncer.config.value.watchedBranchNames)
+        
+        self.branchesTableView.columnAutoresizingStyle = .UniformColumnAutoresizingStyle
     }
     
     override func viewWillAppear() {
         super.viewWillAppear()
         
-        self.fetchBranches { (branches, error) -> () in
+        let branches = self.fetchBranchesProducer()
+        let prs = self.fetchPRsProducer()
+        
+        let combined = combineLatest(branches, prs)
+        let showables = combined.on(next: { [weak self] _ in
             
-            if let error = error {
-                UIUtils.showAlertWithError(error)
+            self?.branchActivityIndicator.startAnimation(nil)
+            
+        }).map { branches, prs -> [ShowableBranch] in
+            
+            //map branches to PR numbers
+            let mappedPRs = prs.dictionarifyWithKey { $0.head.ref }
+            
+            return branches.map {
+                let pr = mappedPRs[$0.name]?.number
+                return ShowableBranch(name: $0.name, pr: pr)
             }
-            
-            self.branchesTableView.reloadData()
         }
+        
+        showables.start(Event.sink(error: { (error) -> () in
+            UIUtils.showAlertWithError(error)
+            }, completed: { [weak self] () -> () in
+                self?.branchActivityIndicator.stopAnimation(nil)
+            }, next: { [weak self] (branches) -> () in
+                self?.branches = branches
+                self?.branchesTableView.reloadData()
+        }))
     }
     
-    func fetchBranches(completion: ([Branch]?, NSError?) -> ()) {
+    func fetchBranchesProducer() -> SignalProducer<[Branch], NSError> {
         
-        self.branchActivityIndicator.startAnimation(nil)
         let repoName = self.syncer.project.githubRepoName()!
-        self.syncer.github.getBranchesOfRepo(repoName, completion: { (branches, error) -> () in
+        
+        return SignalProducer { [weak self] sink, _ in
+            guard let sself = self else { return }
             
-            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-                
-                if let branches = branches {
-                    self.branches = branches
+            sself.syncer.github.getBranchesOfRepo(repoName) { (branches, error) -> () in
+                if let error = error {
+                    sendError(sink, error)
+                } else {
+                    sendNext(sink, branches!)
+                    sendCompleted(sink)
                 }
-                
-                completion(branches, error)
-                self.branchActivityIndicator.stopAnimation(nil)
-            })
-        })
+            }
+        }.observeOn(UIScheduler())
+    }
+    
+    func fetchPRsProducer() -> SignalProducer<[PullRequest], NSError> {
+        
+        let repoName = self.syncer.project.githubRepoName()!
+        
+        return SignalProducer { [weak self] sink, _ in
+            guard let sself = self else { return }
+            
+            sself.syncer.github.getOpenPullRequests(repoName) { (prs, error) -> () in
+                if let error = error {
+                    sendError(sink, error)
+                } else {
+                    sendNext(sink, prs!)
+                    sendCompleted(sink)
+                }
+            }
+        }.observeOn(UIScheduler())
     }
     
     @IBAction func cancelTapped(sender: AnyObject) {
@@ -87,30 +132,53 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
         return 0
     }
     
-    func tableView(tableView: NSTableView, objectValueForTableColumn tableColumn: NSTableColumn?, row: Int) -> AnyObject? {
-        
-        if tableView == self.branchesTableView {
-            
-            switch tableColumn!.identifier {
-            case "name":
-                
-                let branch = self.branches[row]
-                return branch.name
-            case "enabled":
-                
-                let branch = self.branches[row]
-                return self.watchedBranchNames.contains(branch.name)
-            default:
-                return nil
-            }
+    func getTypeOfReusableView<T: NSView>(column: String) -> T {
+        guard let view = self.branchesTableView.makeViewWithIdentifier(column, owner: self) else {
+            fatalError("Couldn't get a reusable view for column \(column)")
         }
-        return nil
+        guard let typedView = view as? T else {
+            fatalError("Couldn't type view \(view) into type \(T.className())")
+        }
+        return typedView
     }
     
-    @IBAction func branchesTableViewRowCheckboxTapped(sender: AnyObject) {
+    func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        
+        guard let tcolumn = tableColumn else { return nil }
+        let columnIdentifier = tcolumn.identifier
+        
+        let branch = self.branches[row]
+        
+        switch columnIdentifier {
+            
+        case "name":
+            let view: NSTextField = self.getTypeOfReusableView(columnIdentifier)
+            var name = branch.name
+            if let pr = branch.pr {
+                name += " (watched as PR #\(pr))"
+            }
+            view.stringValue = name
+            return view
+        case "enabled":
+            let checkbox: BuildaNSButton = self.getTypeOfReusableView(columnIdentifier)
+            if let _ = branch.pr {
+                checkbox.on = true
+                checkbox.enabled = false
+            } else {
+                checkbox.on = self.watchedBranchNames.contains(branch.name)
+                checkbox.enabled = true
+            }
+            checkbox.row = row
+            return checkbox
+        default:
+            return nil
+        }
+    }
+    
+    @IBAction func branchesTableViewRowCheckboxTapped(sender: BuildaNSButton) {
         
         //toggle selection in model
-        let branch = self.branches[self.branchesTableView.selectedRow]
+        let branch = self.branches[sender.row!]
         let branchName = branch.name
         
         //see if we are checking or unchecking
