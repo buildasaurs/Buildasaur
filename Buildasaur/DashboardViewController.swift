@@ -18,6 +18,7 @@ class DashboardViewController: PresentableViewController {
     @IBOutlet weak var startAllButton: NSButton!
     @IBOutlet weak var stopAllButton: NSButton!
     @IBOutlet weak var autostartButton: NSButton!
+    @IBOutlet weak var launchOnLoginButton: NSButton!
     
     let config = MutableProperty<[String: AnyObject]>([:])
     
@@ -84,6 +85,9 @@ class DashboardViewController: PresentableViewController {
             guard let sself = self else { return }
             sself.config.value["autostart"] = $0
         }
+        
+        //setup login item
+        self.launchOnLoginButton.on = self.syncerManager.loginItem.isLaunchItem
     }
     
     func configTableView() {
@@ -145,6 +149,15 @@ class DashboardViewController: PresentableViewController {
     
     @IBAction func infoButtonClicked(sender: AnyObject) {
         openLink("https://github.com/czechboy0/Buildasaur#buildasaur")
+    }
+    
+    @IBAction func launchOnLoginClicked(sender: NSButton) {
+        let newValue = sender.on
+        let loginItem = self.syncerManager.loginItem
+        loginItem.isLaunchItem = newValue
+        
+        //to be in sync in the UI, in case setting fails
+        self.launchOnLoginButton.on = loginItem.isLaunchItem
     }
 }
 

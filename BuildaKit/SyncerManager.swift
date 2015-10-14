@@ -19,6 +19,7 @@ public class SyncerManager {
     
     public let storageManager: StorageManager
     public let factory: SyncerFactoryType
+    public let loginItem: LoginItem
     
     public let syncersProducer: SignalProducer<[HDGitHubXCBotSyncer], NoError>
     public let projectsProducer: SignalProducer<[Project], NoError>
@@ -31,9 +32,10 @@ public class SyncerManager {
     private var configTriplets: SignalProducer<[ConfigTriplet], NoError>
     private var heartbeatManager: HeartbeatManager!
 
-    public init(storageManager: StorageManager, factory: SyncerFactoryType) {
+    public init(storageManager: StorageManager, factory: SyncerFactoryType, loginItem: LoginItem) {
         
         self.storageManager = storageManager
+        self.loginItem = loginItem
         
         self.factory = factory
         self.syncers = []
