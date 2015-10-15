@@ -1,12 +1,27 @@
 # Change Log
 
-## [Unreleased](https://github.com/czechboy0/buildasaur/tree/HEAD)
-
-[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.6.1...HEAD)
+## [v0.6.2](https://github.com/czechboy0/buildasaur/tree/v0.6.2) (2015-10-15)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.6.1...v0.6.2)
 
 **Fixed bugs:**
 
 - Blueprint file fails to validate [\#172](https://github.com/czechboy0/Buildasaur/issues/172)
+- SSH error occurs when pushing a commit to a branch with an active PR while first build is running [\#112](https://github.com/czechboy0/Buildasaur/issues/112)
+
+**Closed issues:**
+
+- Option to add Buildasaur to login items [\#177](https://github.com/czechboy0/Buildasaur/issues/177)
+- Ensure we're not re-posting the same comment [\#163](https://github.com/czechboy0/Buildasaur/issues/163)
+- Gray out PR branches in "watched branches" [\#161](https://github.com/czechboy0/Buildasaur/issues/161)
+- Add deep links to Xcode in posted GitHub comments [\#160](https://github.com/czechboy0/Buildasaur/issues/160)
+- Allow Builda to be ran as a CLI tool \(no UI\) [\#100](https://github.com/czechboy0/Buildasaur/issues/100)
+
+**Merged pull requests:**
+
+- Handling of missing Xcode project/workspaces [\#179](https://github.com/czechboy0/Buildasaur/pull/179) ([czechboy0](https://github.com/czechboy0))
+- Add Buildasaur to Login Items \(option\) [\#178](https://github.com/czechboy0/Buildasaur/pull/178) ([czechboy0](https://github.com/czechboy0))
+- Deep links into Xcode from GitHub comments [\#176](https://github.com/czechboy0/Buildasaur/pull/176) ([czechboy0](https://github.com/czechboy0))
+- Watched Branches: show PR numbers next to branches [\#175](https://github.com/czechboy0/Buildasaur/pull/175) ([czechboy0](https://github.com/czechboy0))
 
 ## [v0.6.1](https://github.com/czechboy0/buildasaur/tree/v0.6.1) (2015-10-14)
 [Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.6.0...v0.6.1)
