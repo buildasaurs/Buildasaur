@@ -35,7 +35,7 @@ class SummaryBuilder {
             self.appendTestsPassed(buildResultSummary)
         } else if integration.result == .Warnings {
             self.appendWarnings(buildResultSummary)
-        } else {
+        } else if integration.result == .AnalyzerWarnings {
             self.appendAnalyzerWarnings(buildResultSummary)
         }
         
@@ -107,7 +107,8 @@ class SummaryBuilder {
     func appendTestsPassed(buildResultSummary: BuildResultSummary) {
         
         let testsCount = buildResultSummary.testsCount
-        self.lines.append(self.resultString + "**Perfect build!** All \(testsCount) " + "test".pluralizeStringIfNecessary(testsCount) + " passed. :+1:")
+        let testSection = testsCount > 0 ? "All \(testsCount) " + "test".pluralizeStringIfNecessary(testsCount) + " passed. " : ""
+        self.lines.append(self.resultString + "**Perfect build!** \(testSection):+1:")
     }
     
     func appendWarnings(buildResultSummary: BuildResultSummary) {
@@ -128,7 +129,7 @@ class SummaryBuilder {
         
         let codeCoveragePercentage = buildResultSummary.codeCoveragePercentage
         if codeCoveragePercentage > 0 {
-            self.lines.append("*Test Coverage*: \(codeCoveragePercentage)%.")
+            self.lines.append("*Test Coverage*: \(codeCoveragePercentage)%")
         }
     }
     

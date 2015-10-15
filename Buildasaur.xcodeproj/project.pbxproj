@@ -103,7 +103,6 @@
 		3ACBAE051B5ADE2A00204457 /* Syncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADE91B5ADE2A00204457 /* Syncer.swift */; };
 		3ACBAE061B5ADE2A00204457 /* SyncerBotManipulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADEA1B5ADE2A00204457 /* SyncerBotManipulation.swift */; };
 		3ACBAE071B5ADE2A00204457 /* SyncerBotNaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADEB1B5ADE2A00204457 /* SyncerBotNaming.swift */; };
-		3ACBAE081B5ADE2A00204457 /* SyncerBotUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADEC1B5ADE2A00204457 /* SyncerBotUtils.swift */; };
 		3ACBAE091B5ADE2A00204457 /* SyncerGitHubUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADED1B5ADE2A00204457 /* SyncerGitHubUtils.swift */; };
 		3ACBAE0A1B5ADE2A00204457 /* SyncPair_Branch_Bot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADEE1B5ADE2A00204457 /* SyncPair_Branch_Bot.swift */; };
 		3ACBAE0B1B5ADE2A00204457 /* SyncPair_Branch_NoBot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADEF1B5ADE2A00204457 /* SyncPair_Branch_NoBot.swift */; };
@@ -319,7 +318,6 @@
 		3ACBADE91B5ADE2A00204457 /* Syncer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Syncer.swift; sourceTree = "<group>"; };
 		3ACBADEA1B5ADE2A00204457 /* SyncerBotManipulation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerBotManipulation.swift; sourceTree = "<group>"; };
 		3ACBADEB1B5ADE2A00204457 /* SyncerBotNaming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerBotNaming.swift; sourceTree = "<group>"; };
-		3ACBADEC1B5ADE2A00204457 /* SyncerBotUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerBotUtils.swift; sourceTree = "<group>"; };
 		3ACBADED1B5ADE2A00204457 /* SyncerGitHubUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerGitHubUtils.swift; sourceTree = "<group>"; };
 		3ACBADEE1B5ADE2A00204457 /* SyncPair_Branch_Bot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncPair_Branch_Bot.swift; sourceTree = "<group>"; };
 		3ACBADEF1B5ADE2A00204457 /* SyncPair_Branch_NoBot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncPair_Branch_NoBot.swift; sourceTree = "<group>"; };
@@ -740,7 +738,6 @@
 				3ACBADE91B5ADE2A00204457 /* Syncer.swift */,
 				3ACBADEA1B5ADE2A00204457 /* SyncerBotManipulation.swift */,
 				3ACBADEB1B5ADE2A00204457 /* SyncerBotNaming.swift */,
-				3ACBADEC1B5ADE2A00204457 /* SyncerBotUtils.swift */,
 				3ACBADED1B5ADE2A00204457 /* SyncerGitHubUtils.swift */,
 				3A9C95A41BBDAE9F00D37135 /* SyncerLogic.swift */,
 				3ACBADEE1B5ADE2A00204457 /* SyncPair_Branch_Bot.swift */,
@@ -1422,7 +1419,6 @@
 				3A0FF5A41BBFF9FA00FB8051 /* ProjectConfig.swift in Sources */,
 				3ACBAE0E1B5ADE2A00204457 /* SyncPair_PR_NoBot.swift in Sources */,
 				3ACF93AA1BBEC7AB00CD888C /* XcodeScheme.swift in Sources */,
-				3ACBAE081B5ADE2A00204457 /* SyncerBotUtils.swift in Sources */,
 				3A28AF531BC984850011756E /* ConfigTriplet.swift in Sources */,
 				3ACBADFD1B5ADE2A00204457 /* CommonExtensions.swift in Sources */,
 				3ACBAE131B5ADE2A00204457 /* SyncPairResolver.swift in Sources */,
