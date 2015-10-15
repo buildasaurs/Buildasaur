@@ -80,7 +80,7 @@ class SyncerProducerFactory {
         
         let projects = configs.map { configsArray in
             return configsArray.map { factory.createProject($0) }
-        }
+        }.map { $0.filter { $0 != nil } }.map { $0.map { $0! } }
         return projects
     }
     

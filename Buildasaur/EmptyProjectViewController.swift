@@ -109,6 +109,7 @@ class EmptyProjectViewController: EditableViewController {
         let configsProducer = self.storageManager.projectConfigs.producer
         let allConfigsProducer = configsProducer
             .map { Array($0.values) }
+            .map { configs in configs.filter { (try? Project(config: $0)) != nil } }
             .map { configs in configs.sort { $0.name < $1.name } }
         allConfigsProducer.startWithNext { [weak self] newConfigs in
             guard let sself = self else { return }
@@ -138,8 +139,13 @@ class EmptyProjectViewController: EditableViewController {
                 return config
             } catch {
                 //local source is malformed, something terrible must have happened, inform the user this can't be used (log should tell why exactly)
-                UIUtils.showAlertWithText("Couldn't add Xcode project at path \(url.absoluteString), error: \((error as NSError).localizedDescription).", style: NSAlertStyle.CriticalAlertStyle, completion: { (resp) -> () in
-                    //
+                let buttons = ["See workaround", "OK"]
+
+                UIUtils.showAlertWithButtons("Couldn't add Xcode project at path \(url.absoluteString), error: \((error as NSError).localizedDescription).", buttons: buttons, style: NSAlertStyle.CriticalAlertStyle, completion: { (tappedButton) -> () in
+                    
+                    if tappedButton == "See workaround" {
+                        openLink("https://github.com/czechboy0/Buildasaur/issues/165#issuecomment-148220340")
+                    }
                 })
             }
         } else {

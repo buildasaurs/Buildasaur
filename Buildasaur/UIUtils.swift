@@ -33,9 +33,9 @@ public class UIUtils {
         self.showAlertAskingConfirmation(text, dangerButton: "Remove", completion: completion)
     }
     
-    public class func showAlertWithButtons(text: String, buttons: [String], completion: (tappedButton: String) -> ()) {
+    public class func showAlertWithButtons(text: String, buttons: [String], style: NSAlertStyle? = nil, completion: (tappedButton: String) -> ()) {
         
-        let alert = self.createAlert(text, style: nil)
+        let alert = self.createAlert(text, style: style)
         
         buttons.forEach { alert.addButtonWithTitle($0) }
         
