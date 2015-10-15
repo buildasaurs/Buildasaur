@@ -192,17 +192,53 @@ class MockBot: Bot {
 
 class MockIntegration: Integration {
     
-    init(number: Int = 1, step: Step = Step.Completed, sha: String = "head_sha", result: Result = Result.Succeeded) {
+    init(number: Int = 1, step: Step = Step.Completed, sha: String = "head_sha", result: Result = Result.Succeeded, buildResultSummary: BuildResultSummary? = nil) {
         
         let dict = MockHelpers.loadSampleIntegration()
         dict["currentStep"] = step.rawValue
         dict["number"] = number
         dict["result"] = result.rawValue
+        dict.optionallyAddValueForKey(buildResultSummary?.originalJSON, key: "buildResultSummary")
         let d1 = dict["revisionBlueprint"] as! NSMutableDictionary
         let d2 = d1["DVTSourceControlWorkspaceBlueprintLocationsKey"] as! NSMutableDictionary
         let d3 = d2["CEE8472CC4AB69CD27173B930EB93B6B4AA4BAFC"] as! NSMutableDictionary
         d3["DVTSourceControlLocationRevisionKey"] = sha
         super.init(json: dict)
+    }
+
+    required init(json: NSDictionary) {
+        super.init(json: json)
+    }
+}
+
+class MockBuildResultSummary: BuildResultSummary {
+    
+    convenience init(
+        analyzerWarningCount: Int = 0,
+        testFailureCount: Int = 0,
+        errorCount: Int = 0,
+        testsCount: Int = 0,
+        warningCount: Int = 0,
+        codeCoveragePercentage: Int = 0
+        ) {
+        
+            let json: NSDictionary = [
+                "analyzerWarningCount": analyzerWarningCount,
+                "testFailureCount": testFailureCount,
+                "testsChange": 0,
+                "errorCount": errorCount,
+                "testsCount": testsCount,
+                "testFailureChange": 0,
+                "warningChange": 0,
+                "regressedPerfTestCount": 0,
+                "warningCount": warningCount,
+                "errorChange": 0,
+                "improvedPerfTestCount": 0,
+                "analyzerWarningChange": 0,
+                "codeCoveragePercentage": codeCoveragePercentage,
+                "codeCoveragePercentageDelta": 0
+            ]
+            self.init(json: json)
     }
 
     required init(json: NSDictionary) {

@@ -115,7 +115,7 @@ public class SyncPairResolver {
                 $0.currentStep == .Completed
             }
             
-            let link = { (integration: Integration) -> String in
+            let link = { (integration: Integration) -> String? in
                 SyncPairResolver.linkToServer(hostname, bot: bot, integration: integration)
             }
             
@@ -209,7 +209,7 @@ public class SyncPairResolver {
         issue: Issue?,
         pending: Integration?,
         running: Integration?,
-        link: (Integration) -> String,
+        link: (Integration) -> String?,
         completed: Set<Integration>) -> SyncPair.Actions {
             
             let statusWithComment: HDGitHubXCBotSyncer.GitHubStatusAndComment
@@ -262,106 +262,56 @@ public class SyncPairResolver {
             )
     }
     
-    private func statusAndCommentFromLines(lines: [String], status: Status) -> HDGitHubXCBotSyncer.GitHubStatusAndComment {
-        
-        let comment: String?
-        if lines.count == 0 {
-            comment = nil
-        } else {
-            comment = lines.joinWithSeparator("\n")
-        }
-        return (status: status, comment: comment)
-    }
-    
     func resolveStatusFromCompletedIntegrations(
         integrations: Set<Integration>,
-        link: (Integration) -> String
+        link: (Integration) -> String?
         ) -> HDGitHubXCBotSyncer.GitHubStatusAndComment {
             
             //get integrations sorted by number
             let sortedDesc = Array(integrations).sort { $0.number > $1.number }
-            let resultString = "*Result*: "
-
+            let summary = SummaryBuilder()
+            summary.linkBuilder = link
+            
             //if there are any succeeded, it wins - iterating from the end
             if let passingIntegration = sortedDesc.filter({
                 (integration: Integration) -> Bool in
                 switch integration.result! {
-                case Integration.Result.Succeeded, Integration.Result.Warnings, Integration.Result.AnalyzerWarnings:
+                    
+                case .Succeeded, .Warnings, .AnalyzerWarnings:
                     return true
                 default:
                     return false
                 }
             }).first {
                 
-                let linkToIntegration = link(passingIntegration)
-                var lines = HDGitHubXCBotSyncer.baseCommentLinesFromIntegration(passingIntegration, link: linkToIntegration)
-                
-                let status = HDGitHubXCBotSyncer.createStatusFromState(.Success, description: "Build passed!", targetUrl: linkToIntegration)
-                
-                let summary = passingIntegration.buildResultSummary!
-                if passingIntegration.result == .Succeeded {
-                    let testsCount = summary.testsCount
-                    lines.append(resultString + "**Perfect build!** All \(testsCount) " + "test".pluralizeStringIfNecessary(testsCount) + " passed. :+1:")
-                } else if passingIntegration.result == .Warnings {
-                    let warningCount = summary.warningCount
-                    lines.append(resultString + "All \(summary.testsCount) tests passed, but please **fix \(warningCount) " + "warning".pluralizeStringIfNecessary(warningCount) + "**.")
-                } else {
-                    let analyzerWarningCount = summary.analyzerWarningCount
-                    lines.append(resultString + "All \(summary.testsCount) tests passed, but please **fix \(analyzerWarningCount) " + "analyzer warning".pluralizeStringIfNecessary(analyzerWarningCount) + "**.")
-                }
-                
-                //and code coverage
-                let codeCoveragePercentage = summary.codeCoveragePercentage
-                if codeCoveragePercentage > 0 {
-                    lines.append("*Test Coverage*: \(codeCoveragePercentage)%.")
-                }
-                
-                return self.statusAndCommentFromLines(lines, status: status)
+                return summary.buildPassing(passingIntegration)
             }
             
             //ok, no succeeded, warnings or analyzer warnings, get down to test failures
             if let testFailingIntegration = sortedDesc.filter({
-                $0.result! == Integration.Result.TestFailures
+                $0.result! == .TestFailures
             }).first {
                 
-                let linkToIntegration = link(testFailingIntegration)
-                var lines = HDGitHubXCBotSyncer.baseCommentLinesFromIntegration(testFailingIntegration, link: linkToIntegration)
-                let status = HDGitHubXCBotSyncer.createStatusFromState(.Failure, description: "Build failed tests!", targetUrl: linkToIntegration)
-                let summary = testFailingIntegration.buildResultSummary!
-                let testFailureCount = summary.testFailureCount
-                lines.append(resultString + "**Build failed \(testFailureCount) " + "test".pluralizeStringIfNecessary(testFailureCount) + "** out of \(summary.testsCount)")
-                return self.statusAndCommentFromLines(lines, status: status)
+                return summary.buildFailingTests(testFailingIntegration)
             }
             
             //ok, the build didn't even run then. it either got cancelled or failed
-            if let erroredIntegration = sortedDesc.filter({
-                $0.result! != Integration.Result.Canceled
+            if let errorredIntegration = sortedDesc.filter({
+                $0.result! != .Canceled
             }).first {
                 
-                let linkToIntegration = link(erroredIntegration)
-                var lines = HDGitHubXCBotSyncer.baseCommentLinesFromIntegration(erroredIntegration, link: linkToIntegration)
-                let errorCount: Int = erroredIntegration.buildResultSummary?.errorCount ?? -1
-                let status = HDGitHubXCBotSyncer.createStatusFromState(.Error, description: "Build error!", targetUrl: linkToIntegration)
-                lines.append(resultString + "**\(errorCount) " + "error".pluralizeStringIfNecessary(errorCount) + ", failing state: \(erroredIntegration.result!.rawValue)**")
-                return self.statusAndCommentFromLines(lines, status: status)
+                return summary.buildErrorredIntegration(errorredIntegration)
             }
             
             //cool, not even build error. it must be just canceled ones then.
             if let canceledIntegration = sortedDesc.filter({
-                $0.result! == Integration.Result.Canceled
+                $0.result! == .Canceled
             }).first {
                 
-                let linkToIntegration = link(canceledIntegration)
-                var lines = HDGitHubXCBotSyncer.baseCommentLinesFromIntegration(canceledIntegration, link: linkToIntegration)
-                let status = HDGitHubXCBotSyncer.createStatusFromState(.Error, description: "Build canceled!", targetUrl: linkToIntegration)
-                
-                //TODO: find out who canceled it and add it to the comment?
-                lines.append("Build was **manually canceled**.")
-                return self.statusAndCommentFromLines(lines, status: status)
+                return summary.buildCanceledIntegration(canceledIntegration)
             }
             
             //hmm no idea, if we got all the way here. just leave it with no state.
-            let status = HDGitHubXCBotSyncer.createStatusFromState(.NoState, description: nil, targetUrl: nil)
-            return (status: status, comment: nil)
+            return summary.buildEmptyIntegration()
     }
 }
