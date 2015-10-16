@@ -8,13 +8,13 @@
 
 import Foundation
 
-public class Issue : GitHubEntity {
+class Issue : GitHubEntity {
     
-    public let number: Int
-    public let body: String
-    public let title: String
+    let number: Int
+    let body: String
+    let title: String
     
-    public required init(json: NSDictionary) {
+    required init(json: NSDictionary) {
         
         self.number = json.intForKey("number")
         self.body = json.stringForKey("body")

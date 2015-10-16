@@ -8,14 +8,14 @@
 
 import Foundation
 
-public struct GitHubRateLimit {
+struct GitHubRateLimit {
     
-    public let resetTime: Double
-    public let limit: Int
-    public let remaining: Int
-    public let now: Double = NSDate().timeIntervalSince1970
+    let resetTime: Double
+    let limit: Int
+    let remaining: Int
+    let now: Double = NSDate().timeIntervalSince1970
     
-    public func getReport() -> String {
+    func getReport() -> String {
         
         let resetInterval = 3600.0 //reset interval is 1 hour
         let startTime = self.resetTime - resetInterval

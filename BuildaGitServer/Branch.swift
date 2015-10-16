@@ -8,12 +8,12 @@
 
 import Foundation
 
-public class Branch : GitHubEntity {
+class Branch : GitHubEntity {
     
-    public let name: String
-    public let commit: Commit
+    let name: String
+    let commit: Commit
     
-    public required init(json: NSDictionary) {
+    required init(json: NSDictionary) {
         
         self.name = json.stringForKey("name")
         self.commit = Commit(json: json.dictionaryForKey("commit"))

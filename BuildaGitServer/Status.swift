@@ -9,9 +9,9 @@
 import Foundation
 import BuildaUtils
 
-public class Status : GitHubEntity, Equatable {
+class Status : GitHubEntity, Equatable {
     
-    public enum State : String {
+    enum State : String {
         case NoState = ""
         case Pending = "pending"
         case Success = "success"
@@ -19,14 +19,14 @@ public class Status : GitHubEntity, Equatable {
         case Failure = "failure"
     }
     
-    public let state: State
-    public let description: String?
-    public let targetUrl: String?
-    public let context: String?
-    public let created: String?
-    public let creator: User?
+    let state: State
+    let description: String?
+    let targetUrl: String?
+    let context: String?
+    let created: String?
+    let creator: User?
 
-    public required init(json: NSDictionary) {
+    required init(json: NSDictionary) {
         
         self.state = State(rawValue: json.stringForKey("state"))!
         self.description = json.optionalStringForKey("description")
@@ -42,7 +42,7 @@ public class Status : GitHubEntity, Equatable {
         super.init(json: json)
     }
     
-    public init(state: State, description: String?, targetUrl: String?, context: String?) {
+    init(state: State, description: String?, targetUrl: String?, context: String?) {
         
         self.state = state
         self.description = description
@@ -54,7 +54,7 @@ public class Status : GitHubEntity, Equatable {
         super.init()
     }
     
-    public override func dictionarify() -> NSDictionary {
+    override func dictionarify() -> NSDictionary {
         
         let dictionary = NSMutableDictionary()
         
@@ -67,14 +67,14 @@ public class Status : GitHubEntity, Equatable {
     }
 }
 
-public func ==(lhs: Status, rhs: Status) -> Bool {
+func ==(lhs: Status, rhs: Status) -> Bool {
     return lhs.state == rhs.state && lhs.description == rhs.description
 }
 
 //for sending statuses upstream
 extension Status {
         
-    public class func toDict(state: State, description: String? = nil, targetUrl: String? = nil, context: String? = nil) -> [String: String] {
+    class func toDict(state: State, description: String? = nil, targetUrl: String? = nil, context: String? = nil) -> [String: String] {
         return [
             "state" : state.rawValue,
             "target_url" : targetUrl ?? "",

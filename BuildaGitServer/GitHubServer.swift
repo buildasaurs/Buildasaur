@@ -9,12 +9,12 @@
 import Foundation
 import BuildaUtils
 
-public class GitHubServer : GitServer {
+class GitHubServer : GitServer {
     
-    public let endpoints: GitHubEndpoints
-    public var latestRateLimitInfo: GitHubRateLimit?
+    let endpoints: GitHubEndpoints
+    var latestRateLimitInfo: GitHubRateLimit?
 
-    public init(endpoints: GitHubEndpoints, http: HTTP? = nil) {
+    init(endpoints: GitHubEndpoints, http: HTTP? = nil) {
         
         self.endpoints = endpoints
         super.init(http: http)
@@ -196,7 +196,7 @@ extension GitHubServer {
     /**
     *   GET all open pull requests of a repo (full name).
     */
-    public func getOpenPullRequests(repo: String, completion: (prs: [PullRequest]?, error: NSError?) -> ()) {
+    func getOpenPullRequests(repo: String, completion: (prs: [PullRequest]?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo
@@ -220,7 +220,7 @@ extension GitHubServer {
     /**
     *   GET a pull requests of a repo (full name) by its number.
     */
-    public func getPullRequest(pullRequestNumber: Int, repo: String, completion: (pr: PullRequest?, error: NSError?) -> ()) {
+    func getPullRequest(pullRequestNumber: Int, repo: String, completion: (pr: PullRequest?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -246,7 +246,7 @@ extension GitHubServer {
     /**
     *   GET all open issues of a repo (full name).
     */
-    public func getOpenIssues(repo: String, completion: (issues: [Issue]?, error: NSError?) -> ()) {
+    func getOpenIssues(repo: String, completion: (issues: [Issue]?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo
@@ -270,7 +270,7 @@ extension GitHubServer {
     /**
     *   GET an issue of a repo (full name) by its number.
     */
-    public func getIssue(issueNumber: Int, repo: String, completion: (issue: Issue?, error: NSError?) -> ()) {
+    func getIssue(issueNumber: Int, repo: String, completion: (issue: Issue?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -296,7 +296,7 @@ extension GitHubServer {
     /**
     *   POST a new Issue
     */
-    public func postNewIssue(issueTitle: String, issueBody: String?, repo: String, completion: (issue: Issue?, error: NSError?) -> ()) {
+    func postNewIssue(issueTitle: String, issueBody: String?, repo: String, completion: (issue: Issue?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -326,7 +326,7 @@ extension GitHubServer {
     /**
     *   Close an Issue by its number and repo (full name).
     */
-    public func closeIssue(issueNumber: Int, repo: String, completion: (issue: Issue?, error: NSError?) -> ()) {
+    func closeIssue(issueNumber: Int, repo: String, completion: (issue: Issue?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -356,7 +356,7 @@ extension GitHubServer {
     /**
     *   GET the status of a commit (sha) from a repo.
     */
-    public func getStatusOfCommit(sha: String, repo: String, completion: (status: Status?, error: NSError?) -> ()) {
+    func getStatusOfCommit(sha: String, repo: String, completion: (status: Status?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -384,7 +384,7 @@ extension GitHubServer {
     /**
     *   POST a new status on a commit.
     */
-    public func postStatusOfCommit(status: Status, sha: String, repo: String, completion: (status: Status?, error: NSError?) -> ()) {
+    func postStatusOfCommit(status: Status, sha: String, repo: String, completion: (status: Status?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -413,7 +413,7 @@ extension GitHubServer {
     *   and general issue comments - which appear in both Issues and Pull Requests (bc a PR is an Issue + code)
     *   This API only fetches the general issue comments, NOT comments on code.
     */
-    public func getCommentsOfIssue(issueNumber: Int, repo: String, completion: (comments: [Comment]?, error: NSError?) -> ()) {
+    func getCommentsOfIssue(issueNumber: Int, repo: String, completion: (comments: [Comment]?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -439,7 +439,7 @@ extension GitHubServer {
     /**
     *   POST a comment on an issue.
     */
-    public func postCommentOnIssue(commentBody: String, issueNumber: Int, repo: String, completion: (comment: Comment?, error: NSError?) -> ()) {
+    func postCommentOnIssue(commentBody: String, issueNumber: Int, repo: String, completion: (comment: Comment?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -469,7 +469,7 @@ extension GitHubServer {
     /**
     *   PATCH edit a comment with id
     */
-    public func editCommentOnIssue(commentId: Int, newCommentBody: String, repo: String, completion: (comment: Comment?, error: NSError?) -> ()) {
+    func editCommentOnIssue(commentId: Int, newCommentBody: String, repo: String, completion: (comment: Comment?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -500,7 +500,7 @@ extension GitHubServer {
     *   POST merge a head branch/commit into a base branch.
     *   has a couple of different responses, a bit tricky
     */
-    public func mergeHeadIntoBase(head head: String, base: String, commitMessage: String, repo: String, completion: (result: GitHubEndpoints.MergeResult?, error: NSError?) -> ()) {
+    func mergeHeadIntoBase(head head: String, base: String, commitMessage: String, repo: String, completion: (result: GitHubEndpoints.MergeResult?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo
@@ -551,7 +551,7 @@ extension GitHubServer {
     /**
     *   GET branches of a repo
     */
-    public func getBranchesOfRepo(repo: String, completion: (branches: [Branch]?, error: NSError?) -> ()) {
+    func getBranchesOfRepo(repo: String, completion: (branches: [Branch]?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo
@@ -577,7 +577,7 @@ extension GitHubServer {
     /**
     *   GET repo metadata
     */
-    public func getRepo(repo: String, completion: (repo: Repo?, error: NSError?) -> ()) {
+    func getRepo(repo: String, completion: (repo: Repo?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo

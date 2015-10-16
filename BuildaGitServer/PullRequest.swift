@@ -8,12 +8,12 @@
 
 import Foundation
 
-public class PullRequest : Issue {
+class PullRequest : Issue {
     
-    public let head: PullRequestBranch
-    public let base: PullRequestBranch
+    let head: PullRequestBranch
+    let base: PullRequestBranch
     
-    public required init(json: NSDictionary) {
+    required init(json: NSDictionary) {
         
         self.head = PullRequestBranch(json: json.dictionaryForKey("head"))
         self.base = PullRequestBranch(json: json.dictionaryForKey("base"))

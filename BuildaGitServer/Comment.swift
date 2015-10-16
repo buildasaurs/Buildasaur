@@ -8,12 +8,12 @@
 
 import Foundation
 
-public class Comment : GitHubEntity {
+class Comment : GitHubEntity {
     
-    public let body: String
-    public let author: User
+    let body: String
+    let author: User
     
-    public required init(json: NSDictionary) {
+    required init(json: NSDictionary) {
         
         self.body = json.stringForKey("body")
         self.author = User(json: json.dictionaryForKey("user"))

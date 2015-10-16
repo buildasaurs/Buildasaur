@@ -8,13 +8,13 @@
 
 import Foundation
 
-public class User : GitHubEntity {
+class User : GitHubEntity {
 
-    public let userName: String
-    public let realName: String?
-    public let avatarUrl: String?
+    let userName: String
+    let realName: String?
+    let avatarUrl: String?
 
-    public required init(json: NSDictionary) {
+    required init(json: NSDictionary) {
         
         self.userName = json.stringForKey("login")
         self.realName = json.optionalStringForKey("name")

@@ -10,12 +10,12 @@ import Foundation
 import BuildaUtils
 
 //functions to make working with github easier - utility functions
-public extension GitHubServer {
+extension GitHubServer {
     
     /**
     *   Get the latest status of a pull request.
     */
-    public func getStatusOfPullRequest(pullRequestNumber: Int, repo: String, completion: (status: Status?, error: NSError?) -> ()) {
+    func getStatusOfPullRequest(pullRequestNumber: Int, repo: String, completion: (status: Status?, error: NSError?) -> ()) {
         
         self.getPullRequest(pullRequestNumber, repo: repo) { (pr, error) -> () in
             
@@ -35,7 +35,7 @@ public extension GitHubServer {
     }
 
     //TODO: support paging through all the comments. currently we only fetch the last ~30 comments.
-    public func findMatchingCommentInIssue(commentsToMatch: [String], issue: Int, repo: String, completion: (foundComments: [Comment]?, error: NSError?) -> ()) {
+    func findMatchingCommentInIssue(commentsToMatch: [String], issue: Int, repo: String, completion: (foundComments: [Comment]?, error: NSError?) -> ()) {
         
         self.getCommentsOfIssue(issue, repo: repo) { (comments, error) -> () in
             

@@ -8,15 +8,15 @@
 
 import Foundation
 
-public class Repo : GitHubEntity {
+class Repo : GitHubEntity {
     
-    public let name: String
-    public let fullName: String
-    public let repoUrlHTTPS: String
-    public let repoUrlSSH: String
-    public let permissions: NSDictionary
+    let name: String
+    let fullName: String
+    let repoUrlHTTPS: String
+    let repoUrlSSH: String
+    let permissions: NSDictionary
     
-    public required init(json: NSDictionary) {
+    required init(json: NSDictionary) {
 
         self.name = json.stringForKey("name")
         self.fullName = json.stringForKey("full_name")
