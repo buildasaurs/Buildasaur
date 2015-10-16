@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import BuildaGitServer
 import BuildaUtils
 import XcodeServerSDK
 import ReactiveCocoa

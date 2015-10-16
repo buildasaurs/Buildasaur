@@ -14,6 +14,7 @@
 		3A0FF5A21BBFE8BA00FB8051 /* SyncerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0FF5A11BBFE8BA00FB8051 /* SyncerConfig.swift */; settings = {ASSET_TAGS = (); }; };
 		3A0FF5A41BBFF9FA00FB8051 /* ProjectConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0FF5A31BBFF9FA00FB8051 /* ProjectConfig.swift */; settings = {ASSET_TAGS = (); }; };
 		3A0FF5AE1BC0067700FB8051 /* SyncerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0FF5AD1BC0067700FB8051 /* SyncerManager.swift */; settings = {ASSET_TAGS = (); }; };
+		3A1023741BD13DE80068FAB9 /* BaseTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1023731BD13DE80068FAB9 /* BaseTypes.swift */; settings = {ASSET_TAGS = (); }; };
 		3A28AF531BC984850011756E /* ConfigTriplet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A28AF521BC984850011756E /* ConfigTriplet.swift */; settings = {ASSET_TAGS = (); }; };
 		3A3231B11B5AEF7900B53E3F /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3231B01B5AEF7900B53E3F /* Logging.swift */; };
 		3A32CD141A3D00F800861A34 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A32CD131A3D00F800861A34 /* Comment.swift */; };
@@ -224,6 +225,7 @@
 		3A0FF5A11BBFE8BA00FB8051 /* SyncerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerConfig.swift; sourceTree = "<group>"; };
 		3A0FF5A31BBFF9FA00FB8051 /* ProjectConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectConfig.swift; sourceTree = "<group>"; };
 		3A0FF5AD1BC0067700FB8051 /* SyncerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerManager.swift; sourceTree = "<group>"; };
+		3A1023731BD13DE80068FAB9 /* BaseTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTypes.swift; sourceTree = "<group>"; };
 		3A28AF521BC984850011756E /* ConfigTriplet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigTriplet.swift; sourceTree = "<group>"; };
 		3A3231B01B5AEF7900B53E3F /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		3A32CD131A3D00F800861A34 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
@@ -454,6 +456,14 @@
 			name = Utils;
 			sourceTree = "<group>";
 		};
+		3A1023721BD12FBD0068FAB9 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				3A1023731BD13DE80068FAB9 /* BaseTypes.swift */,
+			);
+			name = Base;
+			sourceTree = "<group>";
+		};
 		3A5687671A3B93BD0066DB2B = {
 			isa = PBXGroup;
 			children = (
@@ -639,6 +649,7 @@
 			children = (
 				3AAF6F031A3CE66A00C657FB /* GitServerPublic.swift */,
 				3AAF6EE81A3CE5BA00C657FB /* BuildaGitServer.h */,
+				3A1023721BD12FBD0068FAB9 /* Base */,
 				3A6355DB1A3BBDB000545BF9 /* GitHub */,
 				3AAF6EE61A3CE5BA00C657FB /* Supporting Files */,
 			);
@@ -1480,6 +1491,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3AB3F0E21A3CEBAC005F717F /* GitHubEntity.swift in Sources */,
+				3A1023741BD13DE80068FAB9 /* BaseTypes.swift in Sources */,
 				3A32CD181A3D01E300861A34 /* Issue.swift in Sources */,
 				3AB3F0E11A3CEBAC005F717F /* Commit.swift in Sources */,
 				3AB3F0E31A3CEBAC005F717F /* PullRequest.swift in Sources */,
