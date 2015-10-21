@@ -17,6 +17,36 @@ class Status : GitHubEntity, Equatable {
         case Success = "success"
         case Error = "error"
         case Failure = "failure"
+        
+        static func fromBuildState(buildState: BuildState) -> State {
+            switch buildState {
+            case .NoState:
+                return .NoState
+            case .Pending:
+                return .Pending
+            case .Success:
+                return .Success
+            case .Error:
+                return .Error
+            case .Failure:
+                return .Failure
+            }
+        }
+        
+        func toBuildState() -> BuildState {
+            switch self {
+            case .NoState:
+                return .NoState
+            case .Pending:
+                return .Pending
+            case .Success:
+                return .Success
+            case .Error:
+                return .Error
+            case .Failure:
+                return .Failure
+            }
+        }
     }
     
     let state: State
@@ -82,5 +112,8 @@ extension Status {
             "context" : context ?? ""
         ]
     }
+}
+
+extension Status: StatusType {
     
 }

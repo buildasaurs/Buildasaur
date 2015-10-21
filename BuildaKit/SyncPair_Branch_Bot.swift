@@ -13,11 +13,11 @@ import BuildaUtils
 
 public class SyncPair_Branch_Bot: SyncPair {
     
-    let branch: Branch
+    let branch: BranchType
     let bot: Bot
     let resolver: SyncPairBranchResolver
     
-    public init(branch: Branch, bot: Bot, resolver: SyncPairBranchResolver) {
+    public init(branch: BranchType, bot: Bot, resolver: SyncPairBranchResolver) {
         self.branch = branch
         self.bot = bot
         self.resolver = resolver
@@ -39,8 +39,8 @@ public class SyncPair_Branch_Bot: SyncPair {
     private func syncBranchWithBot(completion: Completion) {
         
         let bot = self.bot
-        let headCommit = self.branch.commit.sha
-        let issue: Issue? = nil //TODO: only pull/create if we're failing
+        let headCommit = self.branch.commitSHA
+        let issue: IssueType? = nil //TODO: only pull/create if we're failing
         
         self.syncer.xcodeServer.getHostname { (hostname, error) -> () in
             

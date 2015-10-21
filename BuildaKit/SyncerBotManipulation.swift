@@ -44,7 +44,7 @@ extension HDGitHubXCBotSyncer {
         })
     }
     
-    private func createBotFromName(botName: String, branch: String, repo: Repo, completion: () -> ()) {
+    private func createBotFromName(botName: String, branch: String, repo: RepoType, completion: () -> ()) {
         
         /*
         synced bots must have a manual schedule, Builda tells the bot to reintegrate in case of a new commit.
@@ -90,15 +90,15 @@ extension HDGitHubXCBotSyncer {
         }
     }
     
-    func createBotFromPR(pr: PullRequest, completion: () -> ()) {
+    func createBotFromPR(pr: PullRequestType, completion: () -> ()) {
         
-        let branchName = pr.head.ref
+        let branchName = pr.headName
         let botName = BotNaming.nameForBotWithPR(pr, repoName: self.repoName()!)
         
         self.createBotFromName(botName, branch: branchName, repo: pr.head.repo, completion: completion)
     }
     
-    func createBotFromBranch(branch: Branch, repo: Repo, completion: () -> ()) {
+    func createBotFromBranch(branch: BranchType, repo: RepoType, completion: () -> ()) {
         
         let branchName = branch.name
         let botName = BotNaming.nameForBotWithBranch(branch, repoName: self.repoName()!)

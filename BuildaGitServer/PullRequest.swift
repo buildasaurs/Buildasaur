@@ -22,4 +22,9 @@ class PullRequest : Issue {
     }
 }
 
-
+extension PullRequest: PullRequestType {
+    
+    var headName: String {
+        return self.head.ref
+    }
+}

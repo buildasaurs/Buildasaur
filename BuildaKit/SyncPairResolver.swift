@@ -19,7 +19,7 @@ public class SyncPairResolver {
     
     public func resolveActionsForCommitAndIssueWithBotIntegrations(
         commit: String,
-        issue: Issue?,
+        issue: IssueType?,
         bot: Bot,
         hostname: String,
         integrations: [Integration]) -> SyncPair.Actions {
@@ -76,7 +76,7 @@ public class SyncPairResolver {
                 //A1. - it's empty, kick off an integration for the latest commit
                 return SyncPair.Actions(
                     integrationsToCancel: integrationsToCancel,
-                    githubStatusToSet: nil,
+                    statusToSet: nil,
                     startNewIntegrationBot: bot
                 )
             }
@@ -131,7 +131,7 @@ public class SyncPairResolver {
             //merge in nested actions
             return SyncPair.Actions(
                 integrationsToCancel: integrationsToCancel + (actions.integrationsToCancel ?? []),
-                githubStatusToSet: actions.githubStatusToSet,
+                statusToSet: actions.statusToSet,
                 startNewIntegrationBot: actions.startNewIntegrationBot ?? (startNewIntegration ? bot : nil)
             )
     }
@@ -206,13 +206,13 @@ public class SyncPairResolver {
     
     func resolveCommitStatusFromLatestIntegrations(
         commit: String,
-        issue: Issue?,
+        issue: IssueType?,
         pending: Integration?,
         running: Integration?,
         link: (Integration) -> String?,
         completed: Set<Integration>) -> SyncPair.Actions {
             
-            let statusWithComment: HDGitHubXCBotSyncer.GitHubStatusAndComment
+            let statusWithComment: StatusAndComment
             var integrationsToCancel: [Integration] = []
             
             //if there's any pending integration, we're ["Pending" - Waiting in the queue]
@@ -257,7 +257,7 @@ public class SyncPairResolver {
             
             return SyncPair.Actions(
                 integrationsToCancel: integrationsToCancel,
-                githubStatusToSet: (status: statusWithComment, commit: commit, issue: issue),
+                statusToSet: (status: statusWithComment, commit: commit, issue: issue),
                 startNewIntegrationBot: nil
             )
     }
@@ -265,7 +265,7 @@ public class SyncPairResolver {
     func resolveStatusFromCompletedIntegrations(
         integrations: Set<Integration>,
         link: (Integration) -> String?
-        ) -> HDGitHubXCBotSyncer.GitHubStatusAndComment {
+        ) -> StatusAndComment {
             
             //get integrations sorted by number
             let sortedDesc = Array(integrations).sort { $0.number > $1.number }

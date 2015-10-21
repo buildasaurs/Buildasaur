@@ -1,5 +1,5 @@
 //
-//  GitHubServerExtensions.swift
+//  SourceServerExtensions.swift
 //  Buildasaur
 //
 //  Created by Honza Dvorsky on 14/12/2014.
@@ -10,12 +10,12 @@ import Foundation
 import BuildaUtils
 
 //functions to make working with github easier - utility functions
-extension GitHubServer {
+extension SourceServerType {
     
     /**
     *   Get the latest status of a pull request.
     */
-    func getStatusOfPullRequest(pullRequestNumber: Int, repo: String, completion: (status: Status?, error: NSError?) -> ()) {
+    func getStatusOfPullRequest(pullRequestNumber: Int, repo: String, completion: (status: StatusType?, error: ErrorType?) -> ()) {
         
         self.getPullRequest(pullRequestNumber, repo: repo) { (pr, error) -> () in
             
@@ -26,7 +26,7 @@ extension GitHubServer {
             
             if let pr = pr {
                 //fetched PR, now take its head's sha - that's the commit we care about.
-                let sha = pr.head.sha
+                let sha = pr.headName
                 self.getStatusOfCommit(sha, repo: repo, completion: completion)
             } else {
                 completion(status: nil, error: Error.withInfo("PR is nil and error is nil"))
@@ -35,7 +35,7 @@ extension GitHubServer {
     }
 
     //TODO: support paging through all the comments. currently we only fetch the last ~30 comments.
-    func findMatchingCommentInIssue(commentsToMatch: [String], issue: Int, repo: String, completion: (foundComments: [Comment]?, error: NSError?) -> ()) {
+    func findMatchingCommentInIssue(commentsToMatch: [String], issue: Int, repo: String, completion: (foundComments: [CommentType]?, error: ErrorType?) -> ()) {
         
         self.getCommentsOfIssue(issue, repo: repo) { (comments, error) -> () in
             
@@ -45,7 +45,7 @@ extension GitHubServer {
             }
             
             if let comments = comments {
-                let filtered = comments.filter { (comment: Comment) -> Bool in
+                let filtered = comments.filter { (comment: CommentType) -> Bool in
                     
                     let filteredSearch = commentsToMatch.filter {
                         (searchString: String) -> Bool in

@@ -14,7 +14,7 @@ class Repo : GitHubEntity {
     let fullName: String
     let repoUrlHTTPS: String
     let repoUrlSSH: String
-    let permissions: NSDictionary
+    let permissionsDict: NSDictionary
     
     required init(json: NSDictionary) {
 
@@ -24,11 +24,21 @@ class Repo : GitHubEntity {
         self.repoUrlSSH = json.stringForKey("ssh_url")
         
         if let permissions = json.optionalDictionaryForKey("permissions") {
-            self.permissions = permissions
+            self.permissionsDict = permissions
         } else {
-            self.permissions = NSDictionary()
+            self.permissionsDict = NSDictionary()
         }
         
         super.init(json: json)
+    }
+}
+
+extension Repo: RepoType {
+    
+    var permissions: RepoPermissions {
+        
+        let read = self.permissionsDict["pull"] as? Bool ?? false
+        let write = self.permissionsDict["push"] as? Bool ?? false
+        return RepoPermissions(read: read, write: write)
     }
 }

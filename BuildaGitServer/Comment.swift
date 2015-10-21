@@ -22,3 +22,6 @@ class Comment : GitHubEntity {
     }
 }
 
+extension Comment: CommentType {
+    
+}

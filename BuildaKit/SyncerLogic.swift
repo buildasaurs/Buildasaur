@@ -11,32 +11,40 @@ import BuildaGitServer
 import XcodeServerSDK
 import BuildaUtils
 
+public struct StatusAndComment {
+    public let status: StatusType
+    public let comment: String?
+    
+    public init(status: StatusType, comment: String? = nil) {
+        self.status = status
+        self.comment = comment
+    }
+}
+
 extension HDGitHubXCBotSyncer {
     
     var _project: Project { return self.project }
     var _xcodeServer: XcodeServer { return self.xcodeServer }
-    var _github: GitHubServer { return self.github }
+    var _sourceServer: SourceServerType { return self.github }
     var _buildTemplate: BuildTemplate { return self.buildTemplate }
     var _waitForLttm: Bool { return self.config.value.waitForLttm }
     var _postStatusComments: Bool { return self.config.value.postStatusComments }
     var _watchedBranchNames: [String] { return self.config.value.watchedBranchNames }
     
     public typealias BotActions = (
-        prsToSync: [(pr: PullRequest, bot: Bot)],
-        prBotsToCreate: [PullRequest],
-        branchesToSync: [(branch: Branch, bot: Bot)],
-        branchBotsToCreate: [Branch],
+        prsToSync: [(pr: PullRequestType, bot: Bot)],
+        prBotsToCreate: [PullRequestType],
+        branchesToSync: [(branch: BranchType, bot: Bot)],
+        branchBotsToCreate: [BranchType],
         botsToDelete: [Bot])
-    
-    public typealias GitHubStatusAndComment = (status: Status, comment: String?)
-        
+            
     public func repoName() -> String? {
         return self._project.githubRepoName()
     }
         
     internal func syncRepoWithName(repoName: String, completion: () -> ()) {
         
-        self._github.getRepo(repoName, completion: { (repo, error) -> () in
+        self._sourceServer.getRepo(repoName, completion: { (repo, error) -> () in
             
             if error != nil {
                 //whoops, no more syncing for now
@@ -55,10 +63,10 @@ extension HDGitHubXCBotSyncer {
         })
     }
     
-    private func syncRepoWithNameAndMetadata(repoName: String, repo: Repo, completion: () -> ()) {
+    private func syncRepoWithNameAndMetadata(repoName: String, repo: RepoType, completion: () -> ()) {
         
-        //pull PRs from github
-        self._github.getOpenPullRequests(repoName, completion: { (prs, error) -> () in
+        //pull PRs from source server
+        self._sourceServer.getOpenPullRequests(repoName, completion: { (prs, error) -> () in
             
             if error != nil {
                 //whoops, no more syncing for now

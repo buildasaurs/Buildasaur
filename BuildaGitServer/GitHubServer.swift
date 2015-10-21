@@ -23,13 +23,78 @@ class GitHubServer : GitServer {
 
 //TODO: from each of these calls, return a "cancellable" object which can be used for cancelling
 
+extension GitHubServer: SourceServerType {
+    
+    func getBranchesOfRepo(repo: String, completion: (branches: [BranchType]?, error: ErrorType?) -> ()) {
+        
+        self._getBranchesOfRepo(repo) { (branches, error) -> () in
+            completion(branches: branches, error: error)
+        }
+    }
+    
+    func getOpenPullRequests(repo: String, completion: (prs: [PullRequestType]?, error: ErrorType?) -> ()) {
+        
+        self._getOpenPullRequests(repo) { (prs, error) -> () in
+            completion(prs: prs, error: error)
+        }
+    }
+    
+    func getPullRequest(pullRequestNumber: Int, repo: String, completion: (pr: PullRequestType?, error: ErrorType?) -> ()) {
+        
+        self._getPullRequest(pullRequestNumber, repo: repo) { (pr, error) -> () in
+            completion(pr: pr, error: error)
+        }
+    }
+    
+    func getRepo(repo: String, completion: (repo: RepoType?, error: ErrorType?) -> ()) {
+        
+        self._getRepo(repo) { (repo, error) -> () in
+            completion(repo: repo, error: error)
+        }
+    }
+    
+    func getStatusOfCommit(commit: String, repo: String, completion: (status: StatusType?, error: ErrorType?) -> ()) {
+        
+        self._getStatusOfCommit(commit, repo: repo) { (status, error) -> () in
+            completion(status: status, error: error)
+        }
+    }
+    
+    func postStatusOfCommit(commit: String, status: StatusType, repo: String, completion: (status: StatusType?, error: ErrorType?) -> ()) {
+        
+        self._postStatusOfCommit(status as! Status, sha: commit, repo: repo) { (status, error) -> () in
+            completion(status: status, error: error)
+        }
+    }
+    
+    func postCommentOnIssue(comment: String, issueNumber: Int, repo: String, completion: (comment: CommentType?, error: ErrorType?) -> ()) {
+        
+        self._postCommentOnIssue(comment, issueNumber: issueNumber, repo: repo) { (comment, error) -> () in
+            completion(comment: comment, error: error)
+        }
+    }
+    
+    func getCommentsOfIssue(issueNumber: Int, repo: String, completion: (comments: [CommentType]?, error: ErrorType?) -> ()) {
+        
+        self._getCommentsOfIssue(issueNumber, repo: repo) { (comments, error) -> () in
+            completion(comments: comments, error: error)
+        }
+    }
+    
+    func createStatusFromState(buildState: BuildState, description: String?, targetUrl: String?, context: String?) -> StatusType {
+        
+        let state = Status.State.fromBuildState(buildState)
+        return Status(state: state, description: description, targetUrl: targetUrl, context: context)
+    }
+}
+
 //FYI - GitHub API has a rate limit of 5,000 requests per hour. should be more than enough, but keep it in mind
 //when calling the API frequently.
 extension GitHubServer {
     
-    private func sendRequestWithPossiblePagination(request: NSURLRequest, accumulatedResponseBody: NSArray, completion: HTTP.Completion) {
+    private func _sendRequestWithPossiblePagination(request: NSURLRequest, accumulatedResponseBody: NSArray, completion: HTTP.Completion) {
         
-        self.sendRequest(request) {
+        self._sendRequest(request) {
             (response, body, error) -> () in
             
             if error != nil {
@@ -44,7 +109,7 @@ extension GitHubServer {
                 if let links = response?.allHeaderFields["Link"] as? String {
                     
                     //now parse page links
-                    if let pageInfo = self.parsePageLinks(links) {
+                    if let pageInfo = self._parsePageLinks(links) {
                         
                         //here look at the links and go to the next page, accumulate the body from this response
                         //and pass it through
@@ -53,7 +118,7 @@ extension GitHubServer {
                             
                             let newRequest = request.mutableCopy() as! NSMutableURLRequest
                             newRequest.URL = nextUrl
-                            self.sendRequestWithPossiblePagination(newRequest, accumulatedResponseBody: newBody, completion: completion)
+                            self._sendRequestWithPossiblePagination(newRequest, accumulatedResponseBody: newBody, completion: completion)
                             return
                         }
                     }
@@ -73,7 +138,7 @@ extension GitHubServer {
         case Last = "last"
     }
     
-    private func parsePageLinks(links: String) -> [RelPage: NSURL]? {
+    private func _parsePageLinks(links: String) -> [RelPage: NSURL]? {
         
         var linkDict = [RelPage: NSURL]()
         
@@ -115,7 +180,7 @@ extension GitHubServer {
         return linkDict
     }
     
-    private func sendRequest(request: NSURLRequest, completion: HTTP.Completion) {
+    private func _sendRequest(request: NSURLRequest, completion: HTTP.Completion) {
         
         self.http.sendRequest(request, completion: { (response, body, error) -> () in
             
@@ -172,7 +237,7 @@ extension GitHubServer {
         })
     }
     
-    private func sendRequestWithMethod(method: HTTP.Method, endpoint: GitHubEndpoints.Endpoint, params: [String: String]?, query: [String: String]?, body: NSDictionary?, completion: HTTP.Completion) {
+    private func _sendRequestWithMethod(method: HTTP.Method, endpoint: GitHubEndpoints.Endpoint, params: [String: String]?, query: [String: String]?, body: NSDictionary?, completion: HTTP.Completion) {
         
         var allParams = [
             "method": method.rawValue
@@ -187,7 +252,7 @@ extension GitHubServer {
         
         do {
             let request = try self.endpoints.createRequest(method, endpoint: endpoint, params: allParams, query: query, body: body)
-            self.sendRequestWithPossiblePagination(request, accumulatedResponseBody: NSArray(), completion: completion)
+            self._sendRequestWithPossiblePagination(request, accumulatedResponseBody: NSArray(), completion: completion)
         } catch {
             completion(response: nil, body: nil, error: Error.withInfo("Couldn't create Request, error \(error)"))
         }
@@ -196,12 +261,12 @@ extension GitHubServer {
     /**
     *   GET all open pull requests of a repo (full name).
     */
-    func getOpenPullRequests(repo: String, completion: (prs: [PullRequest]?, error: NSError?) -> ()) {
+    private func _getOpenPullRequests(repo: String, completion: (prs: [PullRequest]?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo
         ]
-        self.sendRequestWithMethod(.GET, endpoint: .PullRequests, params: params, query: nil, body: nil) { (response, body, error) -> () in
+        self._sendRequestWithMethod(.GET, endpoint: .PullRequests, params: params, query: nil, body: nil) { (response, body, error) -> () in
             
             if error != nil {
                 completion(prs: nil, error: error)
@@ -220,14 +285,14 @@ extension GitHubServer {
     /**
     *   GET a pull requests of a repo (full name) by its number.
     */
-    func getPullRequest(pullRequestNumber: Int, repo: String, completion: (pr: PullRequest?, error: NSError?) -> ()) {
+    private func _getPullRequest(pullRequestNumber: Int, repo: String, completion: (pr: PullRequest?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
             "pr": pullRequestNumber.description
         ]
         
-        self.sendRequestWithMethod(.GET, endpoint: .PullRequests, params: params, query: nil, body: nil) { (response, body, error) -> () in
+        self._sendRequestWithMethod(.GET, endpoint: .PullRequests, params: params, query: nil, body: nil) { (response, body, error) -> () in
             
             if error != nil {
                 completion(pr: nil, error: error)
@@ -246,12 +311,12 @@ extension GitHubServer {
     /**
     *   GET all open issues of a repo (full name).
     */
-    func getOpenIssues(repo: String, completion: (issues: [Issue]?, error: NSError?) -> ()) {
+    private func _getOpenIssues(repo: String, completion: (issues: [Issue]?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo
         ]
-        self.sendRequestWithMethod(.GET, endpoint: .Issues, params: params, query: nil, body: nil) { (response, body, error) -> () in
+        self._sendRequestWithMethod(.GET, endpoint: .Issues, params: params, query: nil, body: nil) { (response, body, error) -> () in
             
             if error != nil {
                 completion(issues: nil, error: error)
@@ -270,14 +335,14 @@ extension GitHubServer {
     /**
     *   GET an issue of a repo (full name) by its number.
     */
-    func getIssue(issueNumber: Int, repo: String, completion: (issue: Issue?, error: NSError?) -> ()) {
+    private func _getIssue(issueNumber: Int, repo: String, completion: (issue: Issue?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
             "issue": issueNumber.description
         ]
         
-        self.sendRequestWithMethod(.GET, endpoint: .Issues, params: params, query: nil, body: nil) { (response, body, error) -> () in
+        self._sendRequestWithMethod(.GET, endpoint: .Issues, params: params, query: nil, body: nil) { (response, body, error) -> () in
             
             if error != nil {
                 completion(issue: nil, error: error)
@@ -296,7 +361,7 @@ extension GitHubServer {
     /**
     *   POST a new Issue
     */
-    func postNewIssue(issueTitle: String, issueBody: String?, repo: String, completion: (issue: Issue?, error: NSError?) -> ()) {
+    private func _postNewIssue(issueTitle: String, issueBody: String?, repo: String, completion: (issue: Issue?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -307,7 +372,7 @@ extension GitHubServer {
             "body": issueBody ?? ""
         ]
         
-        self.sendRequestWithMethod(.POST, endpoint: .Issues, params: params, query: nil, body: body) { (response, body, error) -> () in
+        self._sendRequestWithMethod(.POST, endpoint: .Issues, params: params, query: nil, body: body) { (response, body, error) -> () in
             
             if error != nil {
                 completion(issue: nil, error: error)
@@ -326,7 +391,7 @@ extension GitHubServer {
     /**
     *   Close an Issue by its number and repo (full name).
     */
-    func closeIssue(issueNumber: Int, repo: String, completion: (issue: Issue?, error: NSError?) -> ()) {
+    private func _closeIssue(issueNumber: Int, repo: String, completion: (issue: Issue?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -337,7 +402,7 @@ extension GitHubServer {
             "state": "closed"
         ]
         
-        self.sendRequestWithMethod(.PATCH, endpoint: .Issues, params: params, query: nil, body: body) { (response, body, error) -> () in
+        self._sendRequestWithMethod(.PATCH, endpoint: .Issues, params: params, query: nil, body: body) { (response, body, error) -> () in
             
             if error != nil {
                 completion(issue: nil, error: error)
@@ -356,14 +421,14 @@ extension GitHubServer {
     /**
     *   GET the status of a commit (sha) from a repo.
     */
-    func getStatusOfCommit(sha: String, repo: String, completion: (status: Status?, error: NSError?) -> ()) {
+    private func _getStatusOfCommit(sha: String, repo: String, completion: (status: Status?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
             "sha": sha
         ]
         
-        self.sendRequestWithMethod(.GET, endpoint: .Statuses, params: params, query: nil, body: nil) { (response, body, error) -> () in
+        self._sendRequestWithMethod(.GET, endpoint: .Statuses, params: params, query: nil, body: nil) { (response, body, error) -> () in
             
             if error != nil {
                 completion(status: nil, error: error)
@@ -384,7 +449,7 @@ extension GitHubServer {
     /**
     *   POST a new status on a commit.
     */
-    func postStatusOfCommit(status: Status, sha: String, repo: String, completion: (status: Status?, error: NSError?) -> ()) {
+    private func _postStatusOfCommit(status: Status, sha: String, repo: String, completion: (status: Status?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -392,7 +457,7 @@ extension GitHubServer {
         ]
         
         let body = status.dictionarify()
-        self.sendRequestWithMethod(.POST, endpoint: .Statuses, params: params, query: nil, body: body) { (response, body, error) -> () in
+        self._sendRequestWithMethod(.POST, endpoint: .Statuses, params: params, query: nil, body: body) { (response, body, error) -> () in
             
             if error != nil {
                 completion(status: nil, error: error)
@@ -413,14 +478,14 @@ extension GitHubServer {
     *   and general issue comments - which appear in both Issues and Pull Requests (bc a PR is an Issue + code)
     *   This API only fetches the general issue comments, NOT comments on code.
     */
-    func getCommentsOfIssue(issueNumber: Int, repo: String, completion: (comments: [Comment]?, error: NSError?) -> ()) {
+    private func _getCommentsOfIssue(issueNumber: Int, repo: String, completion: (comments: [Comment]?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
             "issue": issueNumber.description
         ]
         
-        self.sendRequestWithMethod(.GET, endpoint: .IssueComments, params: params, query: nil, body: nil) { (response, body, error) -> () in
+        self._sendRequestWithMethod(.GET, endpoint: .IssueComments, params: params, query: nil, body: nil) { (response, body, error) -> () in
             
             if error != nil {
                 completion(comments: nil, error: error)
@@ -439,7 +504,7 @@ extension GitHubServer {
     /**
     *   POST a comment on an issue.
     */
-    func postCommentOnIssue(commentBody: String, issueNumber: Int, repo: String, completion: (comment: Comment?, error: NSError?) -> ()) {
+    private func _postCommentOnIssue(commentBody: String, issueNumber: Int, repo: String, completion: (comment: Comment?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -450,7 +515,7 @@ extension GitHubServer {
             "body": commentBody
         ]
         
-        self.sendRequestWithMethod(.POST, endpoint: .IssueComments, params: params, query: nil, body: body) { (response, body, error) -> () in
+        self._sendRequestWithMethod(.POST, endpoint: .IssueComments, params: params, query: nil, body: body) { (response, body, error) -> () in
             
             if error != nil {
                 completion(comment: nil, error: error)
@@ -469,7 +534,7 @@ extension GitHubServer {
     /**
     *   PATCH edit a comment with id
     */
-    func editCommentOnIssue(commentId: Int, newCommentBody: String, repo: String, completion: (comment: Comment?, error: NSError?) -> ()) {
+    private func _editCommentOnIssue(commentId: Int, newCommentBody: String, repo: String, completion: (comment: Comment?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -480,7 +545,7 @@ extension GitHubServer {
             "body": newCommentBody
         ]
         
-        self.sendRequestWithMethod(.PATCH, endpoint: .IssueComments, params: params, query: nil, body: body) { (response, body, error) -> () in
+        self._sendRequestWithMethod(.PATCH, endpoint: .IssueComments, params: params, query: nil, body: body) { (response, body, error) -> () in
             
             if error != nil {
                 completion(comment: nil, error: error)
@@ -500,7 +565,7 @@ extension GitHubServer {
     *   POST merge a head branch/commit into a base branch.
     *   has a couple of different responses, a bit tricky
     */
-    func mergeHeadIntoBase(head head: String, base: String, commitMessage: String, repo: String, completion: (result: GitHubEndpoints.MergeResult?, error: NSError?) -> ()) {
+    private func _mergeHeadIntoBase(head head: String, base: String, commitMessage: String, repo: String, completion: (result: GitHubEndpoints.MergeResult?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo
@@ -512,7 +577,7 @@ extension GitHubServer {
             "commit_message": commitMessage
         ]
         
-        self.sendRequestWithMethod(.POST, endpoint: .Merges, params: params, query: nil, body: body) { (response, body, error) -> () in
+        self._sendRequestWithMethod(.POST, endpoint: .Merges, params: params, query: nil, body: body) { (response, body, error) -> () in
             
             if error != nil {
                 completion(result: nil, error: error)
@@ -551,13 +616,13 @@ extension GitHubServer {
     /**
     *   GET branches of a repo
     */
-    func getBranchesOfRepo(repo: String, completion: (branches: [Branch]?, error: NSError?) -> ()) {
+    private func _getBranchesOfRepo(repo: String, completion: (branches: [Branch]?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo
         ]
         
-        self.sendRequestWithMethod(.GET, endpoint: .Branches, params: params, query: nil, body: nil) {
+        self._sendRequestWithMethod(.GET, endpoint: .Branches, params: params, query: nil, body: nil) {
             (response, body, error) -> () in
             
             if error != nil {
@@ -577,13 +642,13 @@ extension GitHubServer {
     /**
     *   GET repo metadata
     */
-    func getRepo(repo: String, completion: (repo: Repo?, error: NSError?) -> ()) {
+    private func _getRepo(repo: String, completion: (repo: Repo?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo
         ]
         
-        self.sendRequestWithMethod(.GET, endpoint: .Repos, params: params, query: nil, body: nil) {
+        self._sendRequestWithMethod(.GET, endpoint: .Repos, params: params, query: nil, body: nil) {
             (response, body, error) -> () in
             
             if error != nil {

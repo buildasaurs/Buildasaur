@@ -13,7 +13,7 @@ import ReactiveCocoa
 
 public class HDGitHubXCBotSyncer : Syncer {
     
-    public var github: GitHubServer
+    public var sourceServer: SourceServerType
     public var xcodeServer: XcodeServer
     public var project: Project
     public var buildTemplate: BuildTemplate
@@ -25,11 +25,11 @@ public class HDGitHubXCBotSyncer : Syncer {
         return ConfigTriplet(syncer: self.config.value, server: self.xcodeServer.config, project: self.project.config.value, buildTemplate: self.buildTemplate, triggers: self.triggers.map { $0.config })
     }
     
-    public init(integrationServer: XcodeServer, sourceServer: GitHubServer, project: Project, buildTemplate: BuildTemplate, triggers: [Trigger], config: SyncerConfig) {
+    public init(integrationServer: XcodeServer, sourceServer: SourceServerType, project: Project, buildTemplate: BuildTemplate, triggers: [Trigger], config: SyncerConfig) {
 
         self.config = MutableProperty<SyncerConfig>(config)
 
-        self.github = sourceServer
+        self.sourceServer = sourceServer
         self.xcodeServer = integrationServer
         self.project = project
         self.buildTemplate = buildTemplate

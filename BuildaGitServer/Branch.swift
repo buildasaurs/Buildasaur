@@ -20,3 +20,13 @@ class Branch : GitHubEntity {
         super.init(json: json)
     }
 }
+
+extension Branch: BranchType {
+    
+    //name (see above)
+    
+    var commitSHA: String {
+        return self.commit.sha
+    }
+    
+}

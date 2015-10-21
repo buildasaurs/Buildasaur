@@ -23,7 +23,7 @@ class SummaryBuilder {
     
     //MARK: high level
     
-    func buildPassing(integration: Integration) -> HDGitHubXCBotSyncer.GitHubStatusAndComment {
+    func buildPassing(integration: Integration) -> StatusAndComment {
         
         let linkToIntegration = self.linkBuilder(integration)
         self.addBaseCommentFromIntegration(integration)
@@ -45,7 +45,7 @@ class SummaryBuilder {
         return self.buildWithStatus(status)
     }
     
-    func buildFailingTests(integration: Integration) -> HDGitHubXCBotSyncer.GitHubStatusAndComment {
+    func buildFailingTests(integration: Integration) -> StatusAndComment {
         
         let linkToIntegration = self.linkBuilder(integration)
         
@@ -57,7 +57,7 @@ class SummaryBuilder {
         return self.buildWithStatus(status)
     }
     
-    func buildErrorredIntegration(integration: Integration) -> HDGitHubXCBotSyncer.GitHubStatusAndComment {
+    func buildErrorredIntegration(integration: Integration) -> StatusAndComment {
         
         let linkToIntegration = self.linkBuilder(integration)
         self.addBaseCommentFromIntegration(integration)
@@ -68,7 +68,7 @@ class SummaryBuilder {
         return self.buildWithStatus(status)
     }
     
-    func buildCanceledIntegration(integration: Integration) -> HDGitHubXCBotSyncer.GitHubStatusAndComment {
+    func buildCanceledIntegration(integration: Integration) -> StatusAndComment {
         
         let linkToIntegration = self.linkBuilder(integration)
         
@@ -80,7 +80,7 @@ class SummaryBuilder {
         return self.buildWithStatus(status)
     }
     
-    func buildEmptyIntegration() -> HDGitHubXCBotSyncer.GitHubStatusAndComment {
+    func buildEmptyIntegration() -> StatusAndComment {
         
         let status = HDGitHubXCBotSyncer.createStatusFromState(.NoState, description: nil, targetUrl: nil)
         return (status: status, comment: nil)
@@ -152,7 +152,7 @@ class SummaryBuilder {
         self.lines.append("Build was **manually canceled**.")
     }
     
-    func buildWithStatus(status: Status) -> HDGitHubXCBotSyncer.GitHubStatusAndComment {
+    func buildWithStatus(status: StatusType) -> StatusAndComment {
         
         let comment: String?
         if lines.count == 0 {
@@ -160,7 +160,7 @@ class SummaryBuilder {
         } else {
             comment = lines.joinWithSeparator("\n")
         }
-        return (status: status, comment: comment)
+        return StatusAndComment(status: status, comment: comment)
     }
 }
 
