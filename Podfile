@@ -19,6 +19,7 @@ def buildasaur_app_pods
     also_xcode_pods
     rac
     pod 'Ji', '1.1.2'
+    pod 'CryptoSwift'
 end
 
 def test_pods
