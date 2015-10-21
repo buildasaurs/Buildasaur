@@ -73,9 +73,16 @@ public struct RepoPermissions {
     }
 }
 
+public protocol RateLimitType {
+    
+    var report: String { get }
+}
+
 public protocol RepoType {
     
     var permissions: RepoPermissions { get }
+    var originUrlSSH: String { get }
+    var latestRateLimitInfo: RateLimitType? { get }
     
     //TODO: add required properties
 }
@@ -96,6 +103,8 @@ public protocol IssueType {
 public protocol PullRequestType: IssueType {
     
     var headName: String { get }
+    var headCommitSHA: String { get }
+    var headRepo: RepoType { get }
     
     //TODO: add required properties
 }
@@ -111,8 +120,17 @@ public enum BuildState {
 public protocol StatusType {
     
     var state: BuildState { get }
+    var description: String? { get }
     
     //TODO: add required properties
+}
+
+extension StatusType {
+    
+    func isEqual(rhs: StatusType) -> Bool {
+        let lhs = self
+        return lhs.state == rhs.state && lhs.description == rhs.description
+    }
 }
 
 public protocol CommentType {

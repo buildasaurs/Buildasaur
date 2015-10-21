@@ -13,11 +13,11 @@ import BuildaUtils
 
 public class SyncPair_PR_Bot: SyncPair {
     
-    let pr: PullRequest
+    let pr: PullRequestType
     let bot: Bot
     public let resolver: SyncPairPRResolver
     
-    public init(pr: PullRequest, bot: Bot, resolver: SyncPairPRResolver) {
+    public init(pr: PullRequestType, bot: Bot, resolver: SyncPairPRResolver) {
         self.pr = pr
         self.bot = bot
         self.resolver = resolver
@@ -31,7 +31,7 @@ public class SyncPair_PR_Bot: SyncPair {
     }
     
     override func syncPairName() -> String {
-        return "PR (\(self.pr.number):\(self.pr.head.ref)) + Bot (\(self.bot.name))"
+        return "PR (\(self.pr.number):\(self.pr.headName)) + Bot (\(self.bot.name))"
     }
     
     //MARK: Internal
@@ -41,7 +41,7 @@ public class SyncPair_PR_Bot: SyncPair {
         let syncer = self.syncer
         let bot = self.bot
         let pr = self.pr
-        let headCommit = pr.head.sha
+        let headCommit = pr.headCommitSHA
         let issue = pr
         
         self.getIntegrations(bot, completion: { (integrations, error) -> () in
@@ -73,6 +73,7 @@ public class SyncPair_PR_Bot: SyncPair {
                             issue: issue,
                             bot: bot,
                             hostname: hostname!,
+                            syncer: self.syncer,
                             integrations: integrations)
                         self.performActions(actions, completion: completion)
                     }
@@ -82,8 +83,8 @@ public class SyncPair_PR_Bot: SyncPair {
                     //not enabled, make sure the PR reflects that and the instructions are clear
                     Log.verbose("Bot \(bot.name) is not yet enabled, ignoring...")
                     
-                    let status = HDGitHubXCBotSyncer.createStatusFromState(.Pending, description: "Waiting for \"lttm\" to start testing", targetUrl: nil)
-                    let notYetEnabled: HDGitHubXCBotSyncer.GitHubStatusAndComment = (status: status, comment: nil)
+                    let status = self.syncer.createStatusFromState(BuildState.Pending, description: "Waiting for \"lttm\" to start testing", targetUrl: nil)
+                    let notYetEnabled = StatusAndComment(status: status, comment: nil)
                     syncer.updateCommitStatusIfNecessary(notYetEnabled, commit: headCommit, issue: pr, completion: completion)
                 }
             })
@@ -106,7 +107,7 @@ public class SyncPair_PR_Bot: SyncPair {
         
         if let repoName = syncer.repoName() {
             
-            self.syncer._github.findMatchingCommentInIssue(keyword, issue: self.pr.number, repo: repoName) {
+            self.syncer.sourceServer.findMatchingCommentInIssue(keyword, issue: self.pr.number, repo: repoName) {
                 (foundComments, error) -> () in
                 
                 if error != nil {

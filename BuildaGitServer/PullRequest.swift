@@ -27,4 +27,12 @@ extension PullRequest: PullRequestType {
     var headName: String {
         return self.head.ref
     }
+    
+    var headCommitSHA: String {
+        return self.head.sha
+    }
+    
+    var headRepo: RepoType {
+        return self.head.repo
+    }
 }

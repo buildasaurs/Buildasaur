@@ -62,7 +62,7 @@ extension GitHubServer: SourceServerType {
     
     func postStatusOfCommit(commit: String, status: StatusType, repo: String, completion: (status: StatusType?, error: ErrorType?) -> ()) {
         
-        self._postStatusOfCommit(status as! Status, sha: commit, repo: repo) { (status, error) -> () in
+        self._postStatusOfCommit(status as! GitHubStatus, sha: commit, repo: repo) { (status, error) -> () in
             completion(status: status, error: error)
         }
     }
@@ -83,8 +83,8 @@ extension GitHubServer: SourceServerType {
     
     func createStatusFromState(buildState: BuildState, description: String?, targetUrl: String?, context: String?) -> StatusType {
         
-        let state = Status.State.fromBuildState(buildState)
-        return Status(state: state, description: description, targetUrl: targetUrl, context: context)
+        let state = GitHubStatus.GitHubState.fromBuildState(buildState)
+        return GitHubStatus(state: state, description: description, targetUrl: targetUrl, context: context)
     }
 }
 
@@ -421,7 +421,7 @@ extension GitHubServer {
     /**
     *   GET the status of a commit (sha) from a repo.
     */
-    private func _getStatusOfCommit(sha: String, repo: String, completion: (status: Status?, error: NSError?) -> ()) {
+    private func _getStatusOfCommit(sha: String, repo: String, completion: (status: GitHubStatus?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -436,7 +436,7 @@ extension GitHubServer {
             }
             
             if let body = body as? NSArray {
-                let statuses: [Status] = GitHubArray(body)
+                let statuses: [GitHubStatus] = GitHubArray(body)
                 //sort them by creation date
                 let mostRecentStatus = statuses.sort({ return $0.created! > $1.created! }).first
                 completion(status: mostRecentStatus, error: nil)
@@ -449,7 +449,7 @@ extension GitHubServer {
     /**
     *   POST a new status on a commit.
     */
-    private func _postStatusOfCommit(status: Status, sha: String, repo: String, completion: (status: Status?, error: NSError?) -> ()) {
+    private func _postStatusOfCommit(status: GitHubStatus, sha: String, repo: String, completion: (status: GitHubStatus?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -465,7 +465,7 @@ extension GitHubServer {
             }
             
             if let body = body as? NSDictionary {
-                let status = Status(json: body)
+                let status = GitHubStatus(json: body)
                 completion(status: status, error: nil)
             } else {
                 completion(status: nil, error: Error.withInfo("Wrong body \(body)"))

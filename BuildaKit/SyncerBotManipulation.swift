@@ -59,7 +59,7 @@ extension HDGitHubXCBotSyncer {
         let template = self.buildTemplate
         
         //to handle forks
-        let headOriginUrl = repo.repoUrlSSH
+        let headOriginUrl = repo.originUrlSSH
         let localProjectOriginUrl = self._project.workspaceMetadata!.projectURL.absoluteString
         
         let project: Project
@@ -95,7 +95,7 @@ extension HDGitHubXCBotSyncer {
         let branchName = pr.headName
         let botName = BotNaming.nameForBotWithPR(pr, repoName: self.repoName()!)
         
-        self.createBotFromName(botName, branch: branchName, repo: pr.head.repo, completion: completion)
+        self.createBotFromName(botName, branch: branchName, repo: pr.headRepo, completion: completion)
     }
     
     func createBotFromBranch(branch: BranchType, repo: RepoType, completion: () -> ()) {

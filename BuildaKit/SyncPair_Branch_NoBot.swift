@@ -12,10 +12,10 @@ import BuildaGitServer
 
 class SyncPair_Branch_NoBot: SyncPair {
     
-    let branch: Branch
-    let repo: Repo
+    let branch: BranchType
+    let repo: RepoType
     
-    init(branch: Branch, repo: Repo) {
+    init(branch: BranchType, repo: RepoType) {
         self.branch = branch
         self.repo = repo
         super.init()
@@ -37,7 +37,7 @@ class SyncPair_Branch_NoBot: SyncPair {
     
     //MARK: Internal
     
-    private class func createBotForBranch(syncer syncer: HDGitHubXCBotSyncer, branch: Branch, repo: Repo, completion: Completion) {
+    private class func createBotForBranch(syncer syncer: HDGitHubXCBotSyncer, branch: BranchType, repo: RepoType, completion: Completion) {
         
         syncer.createBotFromBranch(branch, repo: repo, completion: { () -> () in
             completion(error: nil)

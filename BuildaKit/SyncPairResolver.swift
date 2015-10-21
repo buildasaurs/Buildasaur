@@ -22,6 +22,7 @@ public class SyncPairResolver {
         issue: IssueType?,
         bot: Bot,
         hostname: String,
+        syncer: HDGitHubXCBotSyncer,
         integrations: [Integration]) -> SyncPair.Actions {
             
             var integrationsToCancel: [Integration] = []
@@ -126,6 +127,7 @@ public class SyncPairResolver {
                 pending: latestPendingIntegration,
                 running: runningIntegration,
                 link: link,
+                syncer: syncer,
                 completed: completedIntegrations)
             
             //merge in nested actions
@@ -210,6 +212,7 @@ public class SyncPairResolver {
         pending: Integration?,
         running: Integration?,
         link: (Integration) -> String?,
+        syncer: HDGitHubXCBotSyncer,
         completed: Set<Integration>) -> SyncPair.Actions {
             
             let statusWithComment: StatusAndComment
@@ -220,8 +223,8 @@ public class SyncPairResolver {
                 
                 //TODO: show how many builds are ahead in the queue and estimate when it will be
                 //started and when finished? (there is an average running time on each bot, it should be easy)
-                let status = HDGitHubXCBotSyncer.createStatusFromState(.Pending, description: "Build waiting in the queue...", targetUrl: link(pending))
-                statusWithComment = (status: status, comment: nil)
+                let status = syncer.createStatusFromState(.Pending, description: "Build waiting in the queue...", targetUrl: link(pending))
+                statusWithComment = StatusAndComment(status: status, comment: nil)
                 
                 //also, cancel the running integration, if it's there any
                 if let running = running {
@@ -235,8 +238,8 @@ public class SyncPairResolver {
                     //there is a running integration.
                     //TODO: estimate, based on the average running time of this bot and on the started timestamp, when it will finish. add that to the description.
                     let currentStepString = running.currentStep.rawValue
-                    let status = HDGitHubXCBotSyncer.createStatusFromState(.Pending, description: "Integration step: \(currentStepString)...", targetUrl: link(running))
-                    statusWithComment = (status: status, comment: nil)
+                    let status = syncer.createStatusFromState(.Pending, description: "Integration step: \(currentStepString)...", targetUrl: link(running))
+                    statusWithComment = StatusAndComment(status: status, comment: nil)
                     
                 } else {
                     
@@ -249,8 +252,8 @@ public class SyncPairResolver {
                     } else {
                         //this shouldn't happen.
                         Log.error("LOGIC ERROR! This shouldn't happen, there are no completed integrations!")
-                        let status = HDGitHubXCBotSyncer.createStatusFromState(.Error, description: "* UNKNOWN STATE, Builda ERROR *", targetUrl: nil)
-                        statusWithComment = (status: status, "Builda error, unknown state!")
+                        let status = syncer.createStatusFromState(.Error, description: "* UNKNOWN STATE, Builda ERROR *", targetUrl: nil)
+                        statusWithComment = StatusAndComment(status: status, comment: "Builda error, unknown state!")
                     }
                 }
             }

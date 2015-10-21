@@ -41,4 +41,14 @@ extension Repo: RepoType {
         let write = self.permissionsDict["push"] as? Bool ?? false
         return RepoPermissions(read: read, write: write)
     }
+    
+    var originUrlSSH: String {
+        
+        return self.repoUrlSSH
+    }
+    
+    var latestRateLimitInfo: RateLimitType? {
+        
+        return self.latestRateLimitInfo
+    }
 }

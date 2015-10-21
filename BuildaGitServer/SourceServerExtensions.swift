@@ -35,7 +35,7 @@ extension SourceServerType {
     }
 
     //TODO: support paging through all the comments. currently we only fetch the last ~30 comments.
-    func findMatchingCommentInIssue(commentsToMatch: [String], issue: Int, repo: String, completion: (foundComments: [CommentType]?, error: ErrorType?) -> ()) {
+    public func findMatchingCommentInIssue(commentsToMatch: [String], issue: Int, repo: String, completion: (foundComments: [CommentType]?, error: ErrorType?) -> ()) {
         
         self.getCommentsOfIssue(issue, repo: repo) { (comments, error) -> () in
             

@@ -9,16 +9,16 @@
 import Foundation
 import BuildaUtils
 
-class Status : GitHubEntity, Equatable {
+class GitHubStatus : GitHubEntity {
     
-    enum State : String {
+    enum GitHubState : String {
         case NoState = ""
         case Pending = "pending"
         case Success = "success"
         case Error = "error"
         case Failure = "failure"
         
-        static func fromBuildState(buildState: BuildState) -> State {
+        static func fromBuildState(buildState: BuildState) -> GitHubState {
             switch buildState {
             case .NoState:
                 return .NoState
@@ -49,7 +49,7 @@ class Status : GitHubEntity, Equatable {
         }
     }
     
-    let state: State
+    let githubState: GitHubState
     let description: String?
     let targetUrl: String?
     let context: String?
@@ -58,7 +58,7 @@ class Status : GitHubEntity, Equatable {
 
     required init(json: NSDictionary) {
         
-        self.state = State(rawValue: json.stringForKey("state"))!
+        self.githubState = GitHubState(rawValue: json.stringForKey("state"))!
         self.description = json.optionalStringForKey("description")
         self.targetUrl = json.optionalStringForKey("target_url")
         self.context = json.optionalStringForKey("context")
@@ -72,9 +72,9 @@ class Status : GitHubEntity, Equatable {
         super.init(json: json)
     }
     
-    init(state: State, description: String?, targetUrl: String?, context: String?) {
+    init(state: GitHubState, description: String?, targetUrl: String?, context: String?) {
         
-        self.state = state
+        self.githubState = state
         self.description = description
         self.targetUrl = targetUrl
         self.context = context
@@ -88,7 +88,7 @@ class Status : GitHubEntity, Equatable {
         
         let dictionary = NSMutableDictionary()
         
-        dictionary["state"] = self.state.rawValue
+        dictionary["state"] = self.githubState.rawValue
         dictionary.optionallyAddValueForKey(self.description, key: "description")
         dictionary.optionallyAddValueForKey(self.targetUrl, key: "target_url")
         dictionary.optionallyAddValueForKey(self.context, key: "context")
@@ -97,14 +97,10 @@ class Status : GitHubEntity, Equatable {
     }
 }
 
-func ==(lhs: Status, rhs: Status) -> Bool {
-    return lhs.state == rhs.state && lhs.description == rhs.description
-}
-
 //for sending statuses upstream
-extension Status {
+extension GitHubStatus {
         
-    class func toDict(state: State, description: String? = nil, targetUrl: String? = nil, context: String? = nil) -> [String: String] {
+    class func toDict(state: GitHubState, description: String? = nil, targetUrl: String? = nil, context: String? = nil) -> [String: String] {
         return [
             "state" : state.rawValue,
             "target_url" : targetUrl ?? "",
@@ -114,6 +110,9 @@ extension Status {
     }
 }
 
-extension Status: StatusType {
+extension GitHubStatus: StatusType {
     
+    var state: BuildState {
+        return self.githubState.toBuildState()
+    }
 }

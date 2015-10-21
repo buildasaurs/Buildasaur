@@ -143,6 +143,10 @@ class Trampoline: NSObject {
         self.notifyError(Error.withInfo(errorString), context: context)
     }
     
+    func notifyError(error: ErrorType?, context: String?) {
+        self.notifyError(error as? NSError, context: context)
+    }
+    
     func notifyError(error: NSError?, context: String?) {
         
         var message = "Syncing encountered a problem. "

@@ -33,5 +33,11 @@ struct GitHubRateLimit {
         let report = "count: \(consumed)/\(self.limit), renews in \(Int(remainingTime)) seconds, rate: \(rateOfConsumptionPretty)/\(maxRateOfConsumptionPretty), using \(usedRatePercent)% of the allowed request rate."
         return report
     }
+}
+
+extension GitHubRateLimit: RateLimitType {
     
+    var report: String {
+        return self.getReport()
+    }
 }

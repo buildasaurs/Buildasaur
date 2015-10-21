@@ -12,23 +12,22 @@ import BuildaUtils
 
 extension HDGitHubXCBotSyncer {
     
-    class func createStatusFromState(state: BuildState, description: String?, targetUrl: String?) -> StatusType {
+    func createStatusFromState(state: BuildState, description: String?, targetUrl: String?) -> StatusType {
         
         //TODO: potentially have multiple contexts to show multiple stats on the PR
         let context = "Buildasaur"
         
-        self.sourceServer
-        
+        return self._sourceServer.createStatusFromState(state, description: description, targetUrl: targetUrl, context: context)
     }
     
     func updateCommitStatusIfNecessary(
-        newStatus: GitHubStatusAndComment,
+        newStatus: StatusAndComment,
         commit: String,
-        issue: Issue?,
+        issue: IssueType?,
         completion: SyncPair.Completion) {
         
         let repoName = self.repoName()!
-        self._github.getStatusOfCommit(commit, repo: repoName, completion: { (status, error) -> () in
+        self._sourceServer.getStatusOfCommit(commit, repo: repoName, completion: { (status, error) -> () in
             
             if error != nil {
                 let e = Error.withInfo("Commit \(commit) failed to return status", internalError: error)
@@ -36,7 +35,7 @@ extension HDGitHubXCBotSyncer {
                 return
             }
             
-            if status == nil || newStatus.status != status! {
+            if status == nil || !newStatus.status.isEqual(status!) {
                 
                 //TODO: add logic for handling the creation of a new Issue for branch tracking
                 //and the deletion of it when build succeeds etc.
@@ -49,9 +48,9 @@ extension HDGitHubXCBotSyncer {
         })
     }
 
-    func postStatusWithComment(statusWithComment: GitHubStatusAndComment, commit: String, repo: String, issue: Issue?, completion: SyncPair.Completion) {
+    func postStatusWithComment(statusWithComment: StatusAndComment, commit: String, repo: String, issue: IssueType?, completion: SyncPair.Completion) {
         
-        self._github.postStatusOfCommit(statusWithComment.status, sha: commit, repo: repo) { (status, error) -> () in
+        self._sourceServer.postStatusOfCommit(commit, status: statusWithComment.status, repo: repo) { (status, error) -> () in
             
             if error != nil {
                 let e = Error.withInfo("Failed to post a status on commit \(commit) of repo \(repo)", internalError: error)
@@ -68,7 +67,7 @@ extension HDGitHubXCBotSyncer {
                 let comment = statusWithComment.comment where postStatusComments {
                 
                 //we have a comment, post it
-                self._github.postCommentOnIssue(comment, issueNumber: issue.number, repo: repo, completion: { (comment, error) -> () in
+                self._sourceServer.postCommentOnIssue(comment, issueNumber: issue.number, repo: repo, completion: { (comment, error) -> () in
                     
                     if error != nil {
                         let e = Error.withInfo("Failed to post a comment \"\(comment)\" on Issue \(issue.number) of repo \(repo)", internalError: error)
