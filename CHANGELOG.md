@@ -1,5 +1,22 @@
 # Change Log
 
+## [v0.6.3](https://github.com/czechboy0/buildasaur/tree/v0.6.3) (2015-10-21)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.6.2...v0.6.3)
+
+**Closed issues:**
+
+- Add PR Title to Bot Name [\#187](https://github.com/czechboy0/Buildasaur/issues/187)
+- Migrate away from needing checkout/blueprint files [\#186](https://github.com/czechboy0/Buildasaur/issues/186)
+- Create xcscmblueprint file from an existing bot [\#173](https://github.com/czechboy0/Buildasaur/issues/173)
+- Find a way to force Xcode to generate xcscmblueprint file when not present [\#165](https://github.com/czechboy0/Buildasaur/issues/165)
+- The importance of keeping source control files  [\#154](https://github.com/czechboy0/Buildasaur/issues/154)
+- Stash Support [\#105](https://github.com/czechboy0/Buildasaur/issues/105)
+
+**Merged pull requests:**
+
+- Parsing metadata information directly from git repo \(in the absence of checkout files\) [\#188](https://github.com/czechboy0/Buildasaur/pull/188) ([czechboy0](https://github.com/czechboy0))
+- Refactored comment creation \(+ added tests\) [\#184](https://github.com/czechboy0/Buildasaur/pull/184) ([czechboy0](https://github.com/czechboy0))
+
 ## [v0.6.2](https://github.com/czechboy0/buildasaur/tree/v0.6.2) (2015-10-15)
 [Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.6.1...v0.6.2)
 

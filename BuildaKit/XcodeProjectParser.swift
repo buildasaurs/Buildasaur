@@ -13,7 +13,7 @@ public class XcodeProjectParser {
     
     static private var sourceControlFileParsers: [SourceControlFileParser] = [
         CheckoutFileParser(),
-        BlueprintFileParser()
+        BlueprintFileParser(),
     ]
     
     private class func firstItemMatchingTestRecursive(url: NSURL, test: (itemUrl: NSURL) -> Bool) throws -> NSURL? {
@@ -91,7 +91,16 @@ public class XcodeProjectParser {
             let parsed = try self.parseCheckoutOrBlueprintFile(checkoutUrl)
             return parsed
         } catch {
-            throw Error.withInfo("Cannot find the Checkout/Blueprint file, please make sure to open this project in Xcode at least once (it will generate the required Checkout/Blueprint file) and create at least one Bot from Xcode. Then please try again. Create an issue on GitHub is this issue persists. (Error \((error as NSError).localizedDescription))")
+            
+            //failed to find a checkout/blueprint file, attempt to parse from repo manually
+            let parser = GitRepoMetadataParser()
+            
+            do {
+                return try parser.parseFileAtUrl(url)
+            } catch {
+                //no we're definitely unable to parse workspace metadata
+                throw Error.withInfo("Cannot find the Checkout/Blueprint file and failed to parse repository metadata directly. Please create an issue on GitHub with anonymized information about your repository. (Error \((error as NSError).localizedDescription))")
+            }
         }
     }
     
