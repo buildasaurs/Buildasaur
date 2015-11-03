@@ -466,16 +466,25 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
             return (equal: false, shouldGoBefore: !a.simulator)
         }
         
-        let sortConnected = {
+        let sortByName = {
             (a: Device, b: Device) -> (equal: Bool, shouldGoBefore: Bool) in
             
-            if a.connected == b.connected {
+            if a.name == b.name {
                 return (equal: true, shouldGoBefore: false)
             }
-            return (equal: false, shouldGoBefore: a.connected)
+            return (equal: false, shouldGoBefore: a.name < b.name)
+        }
+
+        let sortByOSVersion = {
+            (a: Device, b: Device) -> (equal: Bool, shouldGoBefore: Bool) in
+            
+            if a.osVersion == b.osVersion {
+                return (equal: true, shouldGoBefore: false)
+            }
+            return (equal: false, shouldGoBefore: a.osVersion < b.osVersion)
         }
         
-        //then sort, devices first and if match, connected first
+        //then sort, devices first and if match, then by name & os version
         let sortedDevices = filtered.sort { (a, b) -> Bool in
             
             let (equalDevices, goBeforeDevices) = sortDevices(a, b)
@@ -483,9 +492,14 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
                 return goBeforeDevices
             }
             
-            let (equalConnected, goBeforeConnected) = sortConnected(a, b)
-            if !equalConnected {
-                return goBeforeConnected
+            let (equalName, goBeforeName) = sortByName(a, b)
+            if !equalName {
+                return goBeforeName
+            }
+            
+            let (equalOSVersion, goBeforeOSVersion) = sortByOSVersion(a, b)
+            if !equalOSVersion {
+                return goBeforeOSVersion
             }
             return true
         }
