@@ -1,48 +1,48 @@
 PODS:
   - Alamofire (2.0.0-beta.3)
-  - BuildaUtils (0.2.2)
+  - BuildaUtils (0.2.3)
   - CryptoSwift (0.1.1)
   - ekgclient (0.3.0):
     - Alamofire (= 2.0.0-beta.3)
-  - Ji (1.1.2):
-    - Ji/Ji (= 1.1.2)
-  - Ji/Ji (1.1.2):
+  - Ji (1.2.0):
+    - Ji/Ji (= 1.2.0)
+  - Ji/Ji (1.2.0):
     - Ji/Ji-libxml
-  - Ji/Ji-libxml (1.1.2)
-  - Nimble (2.0.0)
-  - ReactiveCocoa (4.0.2-alpha-1):
-    - ReactiveCocoa/UI (= 4.0.2-alpha-1)
+  - Ji/Ji-libxml (1.2.0)
+  - Nimble (3.0.0)
+  - ReactiveCocoa (4.0.4-alpha-1):
+    - ReactiveCocoa/UI (= 4.0.4-alpha-1)
     - Result (~> 0.6-beta.1)
-  - ReactiveCocoa/Core (4.0.2-alpha-1):
+  - ReactiveCocoa/Core (4.0.4-alpha-1):
     - ReactiveCocoa/no-arc
     - Result (~> 0.6-beta.1)
-  - ReactiveCocoa/no-arc (4.0.2-alpha-1):
+  - ReactiveCocoa/no-arc (4.0.4-alpha-1):
     - Result (~> 0.6-beta.1)
-  - ReactiveCocoa/UI (4.0.2-alpha-1):
+  - ReactiveCocoa/UI (4.0.4-alpha-1):
     - ReactiveCocoa/Core
     - Result (~> 0.6-beta.1)
-  - Result (0.6.0-beta.4)
-  - XcodeServerSDK (0.5.1):
-    - BuildaUtils (~> 0.2.1)
+  - Result (0.6.0-beta.6)
+  - XcodeServerSDK (0.5.2):
+    - BuildaUtils (~> 0.2.3)
 
 DEPENDENCIES:
   - BuildaUtils (~> 0.2.2)
   - CryptoSwift
   - ekgclient (~> 0.3.0)
-  - Ji (= 1.1.2)
-  - Nimble (~> 2.0.0-rc.3)
-  - ReactiveCocoa (= 4.0.2-alpha-1)
+  - Ji (~> 1.2.0)
+  - Nimble (~> 3.0.0)
+  - ReactiveCocoa (~> 4.0.4-alpha-1)
   - XcodeServerSDK (~> 0.5.1)
 
 SPEC CHECKSUMS:
   Alamofire: 39dddb7d3725d1771b1d2f7099c8bd45bd83ffbb
-  BuildaUtils: 64b8f7ee64d7d10bfb858d041f7cba41c2a5434f
+  BuildaUtils: ea53e9781ddd764d525b1c3bb98f68e22cc58170
   CryptoSwift: c11640d3d66107efc8333e4131a5173f072b1d61
   ekgclient: 40f5d347e2ede450b3e50ac7c6bd84d96e7b84ad
-  Ji: 477ec17f9abe9d7f016d714f7b5da8c3c67a2e15
-  Nimble: 472e75466819eb8c06299233e87c694a9b51328a
-  ReactiveCocoa: 652cf90e5de65708e7e2111f77405756da21aabe
-  Result: f7927152cbaec0c043abb06ba0bc432678818418
-  XcodeServerSDK: e1e1006d8406e84b059ba61a56a030d09b477da0
+  Ji: ddebb22f9ac445db6e884b66f78ea74fb135fdb7
+  Nimble: 4c353d43735b38b545cbb4cb91504588eb5de926
+  ReactiveCocoa: 618a2fc13d4ed80e380aa6fa56547cef43c7341d
+  Result: dc390d0b58f9ec43fcd536f1ebdd130803cc6cbc
+  XcodeServerSDK: af33ec632aef355307489f9633aea78b59be0504
 
 COCOAPODS: 0.39.0
