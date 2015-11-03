@@ -44,8 +44,9 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
     @IBOutlet weak var deviceFilterStackItem: NSStackView!
     @IBOutlet weak var testDevicesStackItem: NSStackView!
     
-    private let isFetchingDevices = MutableProperty<Bool>(false)
-    private let isParsingPlatforms = MutableProperty<Bool>(false)
+    private let isDevicesUpToDate = MutableProperty<Bool>(true)
+    private let isPlatformsUpToDate = MutableProperty<Bool>(true)
+    private let isDeviceFiltersUpToDate = MutableProperty<Bool>(true)
     
     private let testingDevices = MutableProperty<[Device]>([])
     private let schemes = MutableProperty<[XcodeScheme]>([])
@@ -87,7 +88,7 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
         }
         
         self.project.producer.startWithNext { [weak self] in
-            self?.schemes.value = $0.schemes()
+            self?.schemes.value = $0.schemes().sort { $0.name < $1.name }
         }
         
         self.triggers.producer.startWithNext { [weak self] _ in
@@ -95,7 +96,7 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
         }
         
         //ui
-        self.testDevicesActivityIndicator.rac_animating <~ self.isFetchingDevices
+        self.testDevicesActivityIndicator.rac_animating <~ self.isDevicesUpToDate.producer.map { !$0 }
         let devicesTableViewChangeSources = combineLatest(self.testingDevices.producer, self.selectedDeviceIds.producer)
         devicesTableViewChangeSources.startWithNext { [weak self] _ -> () in
             self?.devicesTableView.reloadData()
@@ -103,19 +104,29 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
         
         let buildTemplate = self.buildTemplate.value
         self.selectedScheme = MutableProperty<String>(buildTemplate.scheme)
+
+        self.selectedScheme.producer
+            .startWithNext { [weak self] _ in
+                self?.isDeviceFiltersUpToDate.value = false
+                self?.isDevicesUpToDate.value = false
+                self?.isPlatformsUpToDate.value = false
+        }
+        
         self.platformType = self.selectedScheme
             .producer
-            .on(next: { [weak self] _ in self?.isParsingPlatforms.value = true })
             .observeOn(QueueScheduler())
             .flatMap(.Latest) { [weak self] schemeName in
                 return self?.devicePlatformFromScheme(schemeName) ?? SignalProducer<DevicePlatform.PlatformType, NoError>.never
             }.observeOn(UIScheduler())
-            .on(next: { [weak self] _ in self?.isParsingPlatforms.value = false })
+            .on(next: { [weak self] _ in self?.isPlatformsUpToDate.value = true })
 
         self.platformType.startWithNext { [weak self] platform in
             //refetch/refilter devices
+            
+            self?.isDevicesUpToDate.value = false
             self?.fetchDevices(platform) { () -> () in
                 Log.verbose("Finished fetching devices")
+                self?.isDevicesUpToDate.value = true
             }
         }
         
@@ -126,10 +137,11 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
         
         let nextAllowed = combineLatest(
             self.isValid.producer,
-            self.isFetchingDevices.producer,
-            self.isParsingPlatforms.producer
+            self.isDevicesUpToDate.producer,
+            self.isPlatformsUpToDate.producer,
+            self.isDeviceFiltersUpToDate.producer
         ).map {
-            $0 && !$1 && !$2
+            $0 && $1 && $2 && $3
         }
         self.nextAllowed <~ nextAllowed
         
@@ -207,7 +219,6 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
         
         //data source
         let schemeNames = self.schemes.producer
-            .map { templates in templates.sort { $0.name < $1.name } }
             .map { $0.map { $0.name } }
         schemeNames.startWithNext { [weak self] in
             self?.schemesPopup.replaceItems($0)
@@ -301,9 +312,13 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
         }
         
         self.deviceFilters.producer.startWithNext { [weak self] in
+            
             //ensure that when the device filters change that we
             //make sure our selected one is still valid
             guard let sself = self else { return }
+            
+            sself.isDeviceFiltersUpToDate.value = false
+
             if $0.indexOf(sself.deviceFilter.value) == nil {
                 sself.deviceFilter.value = .AllAvailableDevicesAndSimulators
             }
@@ -311,6 +326,8 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
             //also ensure that the selected filter is in fact visually selected
             let deviceFilterIndex = $0.indexOf(sself.deviceFilter.value)
             sself.deviceFilterPopup.selectItemAtIndex(deviceFilterIndex ?? 0)
+            
+            sself.isDeviceFiltersUpToDate.value = true
         }
         
         self.deviceFilter.producer.startWithNext { [weak self] in
@@ -407,7 +424,6 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
         SignalProducer<[Device], NSError> { [weak self] sink, _ in
             guard let sself = self else { return }
             
-            sself.isFetchingDevices.value = true
             sself.xcodeServer.value.getDevices { (devices, error) -> () in
                 if let error = error {
                     sendError(sink, error)
@@ -420,10 +436,7 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
             .observeOn(UIScheduler())
             .start(Event.sink(
                 error: { UIUtils.showAlertWithError($0) },
-                completed: { [weak self] in
-                    self?.isFetchingDevices.value = false
-                    completion()
-                },
+                completed: completion,
                 next: { [weak self] (devices) -> () in
                     let processed = BuildTemplateViewController
                         .processReceivedDevices(devices, platform: platform)
