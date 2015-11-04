@@ -1,5 +1,24 @@
 # Change Log
 
+## [v0.6.4](https://github.com/czechboy0/buildasaur/tree/v0.6.4) (2015-11-04)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.6.3...v0.6.4)
+
+**Fixed bugs:**
+
+- Selecting scheme from popup selects incorrect scheme [\#193](https://github.com/czechboy0/Buildasaur/issues/193)
+- Device missing on OS X Project [\#192](https://github.com/czechboy0/Buildasaur/issues/192)
+
+**Closed issues:**
+
+- Sort devices by name and OS version [\#195](https://github.com/czechboy0/Buildasaur/issues/195)
+- Add UI To Update Existing Build Templates [\#190](https://github.com/czechboy0/Buildasaur/issues/190)
+- Add Buildasaur to homebrew cask [\#189](https://github.com/czechboy0/Buildasaur/issues/189)
+
+**Merged pull requests:**
+
+- Change the device sort to incorporate name and OS version. [\#196](https://github.com/czechboy0/Buildasaur/pull/196) ([hallc](https://github.com/hallc))
+- Fixed incorrect scheme in build template editing screen [\#194](https://github.com/czechboy0/Buildasaur/pull/194) ([czechboy0](https://github.com/czechboy0))
+
 ## [v0.6.3](https://github.com/czechboy0/buildasaur/tree/v0.6.3) (2015-10-21)
 [Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.6.2...v0.6.3)
 
