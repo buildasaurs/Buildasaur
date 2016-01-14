@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.6.5](https://github.com/czechboy0/buildasaur/tree/v0.6.5) (2016-01-14)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.6.4...v0.6.5)
+
+**Merged pull requests:**
+
+- Xcode 7.3b1 API compatibility \(9\) [\#199](https://github.com/czechboy0/Buildasaur/pull/199) ([czechboy0](https://github.com/czechboy0))
+
 ## [v0.6.4](https://github.com/czechboy0/buildasaur/tree/v0.6.4) (2015-11-04)
 [Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.6.3...v0.6.4)
 
