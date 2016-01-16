@@ -54,11 +54,11 @@ class EditableViewController: NSViewController {
     //and force user to fix the problem.
     
     final func goNext(animated animated: Bool = false) {
-        sendNext(self.sinkNext, animated)
+        self.sinkNext.sendNext(animated)
     }
     
     final func goPrevious() {
-        sendNext(self.sinkPrevious, ())
+        self.sinkPrevious.sendNext(())
     }
 
     //for overriding

@@ -55,8 +55,8 @@ class DashboardViewController: PresentableViewController {
         let anySyncerStateChanged = self.syncerViewModels.producer.flatMap(.Merge) { newViewModels -> SignalProducer<SignalProducer<Bool, NoError>, NoError> in
             
             return SignalProducer { sink, _ in
-                newViewModels.forEach { sendNext(sink, $0.syncer.activeSignalProducer.producer) }
-                sendCompleted(sink)
+                newViewModels.forEach { sink.sendNext($0.syncer.activeSignalProducer.producer) }
+                sink.sendCompleted()
             }
         }.flatten(.Merge)
         

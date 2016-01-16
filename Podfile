@@ -7,7 +7,7 @@ def pods_for_errbody
 end
 
 def rac
-    pod 'ReactiveCocoa', '~> 4.0.4-alpha-1'
+    pod 'ReactiveCocoa', '=4.0.0-RC.1'
 end
 
 def also_xcode_pods

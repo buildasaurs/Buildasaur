@@ -1,7 +1,7 @@
 PODS:
   - Alamofire (2.0.0-beta.3)
   - BuildaUtils (0.2.4)
-  - CryptoSwift (0.1.1)
+  - CryptoSwift (0.2.2)
   - ekgclient (0.3.0):
     - Alamofire (= 2.0.0-beta.3)
   - Ji (1.2.0):
@@ -10,18 +10,18 @@ PODS:
     - Ji/Ji-libxml
   - Ji/Ji-libxml (1.2.0)
   - Nimble (3.0.0)
-  - ReactiveCocoa (4.0.4-alpha-1):
-    - ReactiveCocoa/UI (= 4.0.4-alpha-1)
-    - Result (~> 0.6-beta.1)
-  - ReactiveCocoa/Core (4.0.4-alpha-1):
+  - ReactiveCocoa (4.0.0-RC.1):
+    - ReactiveCocoa/UI (= 4.0.0-RC.1)
+    - Result (~> 1.0)
+  - ReactiveCocoa/Core (4.0.0-RC.1):
     - ReactiveCocoa/no-arc
-    - Result (~> 0.6-beta.1)
-  - ReactiveCocoa/no-arc (4.0.4-alpha-1):
-    - Result (~> 0.6-beta.1)
-  - ReactiveCocoa/UI (4.0.4-alpha-1):
+    - Result (~> 1.0)
+  - ReactiveCocoa/no-arc (4.0.0-RC.1):
+    - Result (~> 1.0)
+  - ReactiveCocoa/UI (4.0.0-RC.1):
     - ReactiveCocoa/Core
-    - Result (~> 0.6-beta.1)
-  - Result (0.6.0-beta.6)
+    - Result (~> 1.0)
+  - Result (1.0.1)
   - XcodeServerSDK (0.5.4):
     - BuildaUtils (~> 0.2.3)
 
@@ -31,18 +31,18 @@ DEPENDENCIES:
   - ekgclient (~> 0.3.0)
   - Ji (~> 1.2.0)
   - Nimble (~> 3.0.0)
-  - ReactiveCocoa (~> 4.0.4-alpha-1)
+  - ReactiveCocoa (= 4.0.0-RC.1)
   - XcodeServerSDK (~> 0.5.4)
 
 SPEC CHECKSUMS:
   Alamofire: 39dddb7d3725d1771b1d2f7099c8bd45bd83ffbb
   BuildaUtils: c509ce20402656700006eb5ab80c735fbf2b3864
-  CryptoSwift: c11640d3d66107efc8333e4131a5173f072b1d61
+  CryptoSwift: d382228d6301c09474132417878a741c2a2e68cd
   ekgclient: 40f5d347e2ede450b3e50ac7c6bd84d96e7b84ad
   Ji: ddebb22f9ac445db6e884b66f78ea74fb135fdb7
   Nimble: 4c353d43735b38b545cbb4cb91504588eb5de926
-  ReactiveCocoa: 618a2fc13d4ed80e380aa6fa56547cef43c7341d
-  Result: dc390d0b58f9ec43fcd536f1ebdd130803cc6cbc
+  ReactiveCocoa: 2b0f654beb7642b82cfd3fdb845205ae9889422c
+  Result: caef80340451e1f07492fa1e89117f83613bce24
   XcodeServerSDK: 38c2bbdbc8e1387480adde299c0dc4455f0af11b
 
 COCOAPODS: 0.39.0
