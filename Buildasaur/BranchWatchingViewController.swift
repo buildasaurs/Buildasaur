@@ -66,8 +66,9 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
             }
         }
         
-        showables.start(Event.sink(error: { (error) -> () in
-            UIUtils.showAlertWithError(error)
+        showables.start(Observer(
+            failed: { (error) -> () in
+                UIUtils.showAlertWithError(error)
             }, completed: { [weak self] () -> () in
                 self?.branchActivityIndicator.stopAnimation(nil)
             }, next: { [weak self] (branches) -> () in
@@ -85,10 +86,10 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
             
             sself.syncer.github.getBranchesOfRepo(repoName) { (branches, error) -> () in
                 if let error = error {
-                    sendError(sink, error)
+                    sink.sendFailed(error)
                 } else {
-                    sendNext(sink, branches!)
-                    sendCompleted(sink)
+                    sink.sendNext(branches!)
+                    sink.sendCompleted()
                 }
             }
         }.observeOn(UIScheduler())
@@ -103,10 +104,10 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
             
             sself.syncer.github.getOpenPullRequests(repoName) { (prs, error) -> () in
                 if let error = error {
-                    sendError(sink, error)
+                    sink.sendFailed(error)
                 } else {
-                    sendNext(sink, prs!)
-                    sendCompleted(sink)
+                    sink.sendNext(prs!)
+                    sink.sendCompleted()
                 }
             }
         }.observeOn(UIScheduler())

@@ -98,7 +98,7 @@ class EmptyProjectViewController: EditableViewController {
                 let index = sself.existingProjectsPopup.indexOfSelectedItem
                 sself.selectItemAtIndex(index)
             }
-            sendCompleted(sink)
+            sink.sendCompleted()
         }
         let action = Action { (_: AnyObject?) in handler }
         self.existingProjectsPopup.rac_command = toRACCommand(action)
