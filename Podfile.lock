@@ -1,6 +1,6 @@
 PODS:
   - Alamofire (2.0.0-beta.3)
-  - BuildaUtils (0.2.4)
+  - BuildaUtils (0.2.6)
   - CryptoSwift (0.2.2)
   - ekgclient (0.3.0):
     - Alamofire (= 2.0.0-beta.3)
@@ -26,7 +26,7 @@ PODS:
     - BuildaUtils (~> 0.2.3)
 
 DEPENDENCIES:
-  - BuildaUtils (~> 0.2.4)
+  - BuildaUtils (~> 0.2.6)
   - CryptoSwift
   - ekgclient (~> 0.3.0)
   - Ji (~> 1.2.0)
@@ -36,7 +36,7 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   Alamofire: 39dddb7d3725d1771b1d2f7099c8bd45bd83ffbb
-  BuildaUtils: c509ce20402656700006eb5ab80c735fbf2b3864
+  BuildaUtils: 9fbc3dfa77e778cb937292572eccef47dc97e102
   CryptoSwift: d382228d6301c09474132417878a741c2a2e68cd
   ekgclient: 40f5d347e2ede450b3e50ac7c6bd84d96e7b84ad
   Ji: ddebb22f9ac445db6e884b66f78ea74fb135fdb7
