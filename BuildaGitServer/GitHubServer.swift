@@ -13,6 +13,8 @@ public class GitHubServer : GitServer {
     
     public let endpoints: GitHubEndpoints
     public var latestRateLimitInfo: GitHubRateLimit?
+    
+    let cache = InMemoryURLCache()
 
     public init(endpoints: GitHubEndpoints, http: HTTP? = nil) {
         
@@ -27,7 +29,7 @@ public class GitHubServer : GitServer {
 //when calling the API frequently.
 extension GitHubServer {
     
-    private func sendRequestWithPossiblePagination(request: NSURLRequest, accumulatedResponseBody: NSArray, completion: HTTP.Completion) {
+    private func sendRequestWithPossiblePagination(request: NSMutableURLRequest, accumulatedResponseBody: NSArray, completion: HTTP.Completion) {
         
         self.sendRequest(request) {
             (response, body, error) -> () in
@@ -115,7 +117,12 @@ extension GitHubServer {
         return linkDict
     }
     
-    private func sendRequest(request: NSURLRequest, completion: HTTP.Completion) {
+    private func sendRequest(request: NSMutableURLRequest, completion: HTTP.Completion) {
+        
+        let cachedInfo = self.cache.getCachedInfoForRequest(request)
+        if let etag = cachedInfo.etag {
+            request.addValue(etag, forHTTPHeaderField: "If-None-Match")
+        }
         
         self.http.sendRequest(request, completion: { (response, body, error) -> () in
             
@@ -158,7 +165,13 @@ extension GitHubServer {
             //error out on special HTTP status codes
             let statusCode = response!.statusCode
             switch statusCode {
-                
+            case 200...299: //good response, cache the returned data
+                let responseInfo = ResponseInfo(response: response!, body: body)
+                cachedInfo.update(responseInfo)
+            case 304: //not modified, return the cached response
+                let responseInfo = cachedInfo.responseInfo!
+                completion(response: responseInfo.response, body: responseInfo.body, error: nil)
+                return
             case 400 ... 500:
                 let message = (body as? NSDictionary)?["message"] as? String ?? "Unknown error"
                 let resultString = "\(statusCode): \(message)"

@@ -22,6 +22,7 @@ PODS:
     - ReactiveCocoa/Core
     - Result (~> 1.0)
   - Result (1.0.1)
+  - SwiftSafe (0.1)
   - XcodeServerSDK (0.5.4):
     - BuildaUtils (~> 0.2.3)
 
@@ -32,6 +33,7 @@ DEPENDENCIES:
   - Ji (~> 1.2.0)
   - Nimble (~> 3.0.0)
   - ReactiveCocoa (= 4.0.0-RC.1)
+  - SwiftSafe
   - XcodeServerSDK (~> 0.5.4)
 
 SPEC CHECKSUMS:
@@ -43,6 +45,7 @@ SPEC CHECKSUMS:
   Nimble: 4c353d43735b38b545cbb4cb91504588eb5de926
   ReactiveCocoa: 2b0f654beb7642b82cfd3fdb845205ae9889422c
   Result: caef80340451e1f07492fa1e89117f83613bce24
+  SwiftSafe: 77ffd12b02678790bec1ef56a2d14ec5036f1fd6
   XcodeServerSDK: 38c2bbdbc8e1387480adde299c0dc4455f0af11b
 
 COCOAPODS: 0.39.0

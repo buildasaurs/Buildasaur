@@ -129,6 +129,7 @@
 		3AE0AB2B1BB991AB00A52D20 /* SyncerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE0AB2A1BB991AB00A52D20 /* SyncerViewModel.swift */; };
 		3AE4F6CE1BBC88450006CA1C /* RACUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE4F6CD1BBC88450006CA1C /* RACUtils.swift */; };
 		3AE4F6D01BBC8D250006CA1C /* EmptyProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE4F6CF1BBC8D250006CA1C /* EmptyProjectViewController.swift */; };
+		3AE6C5A31C4E484400616C19 /* SimpleURLCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE6C5A21C4E484400616C19 /* SimpleURLCache.swift */; };
 		3AF090B81B1134AA0058567F /* BranchWatchingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF090B71B1134AA0058567F /* BranchWatchingViewController.swift */; };
 		3AF1B1241AAC7CA500917EF3 /* SyncerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF1B1231AAC7CA500917EF3 /* SyncerViewController.swift */; };
 		723E971AA98B199C70B7C3AA /* Pods_BuildaHeartbeatKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 406E01BAFEA2D2588BFD2D5A /* Pods_BuildaHeartbeatKit.framework */; };
@@ -352,6 +353,7 @@
 		3AE0AB2A1BB991AB00A52D20 /* SyncerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerViewModel.swift; sourceTree = "<group>"; };
 		3AE4F6CD1BBC88450006CA1C /* RACUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RACUtils.swift; sourceTree = "<group>"; };
 		3AE4F6CF1BBC8D250006CA1C /* EmptyProjectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyProjectViewController.swift; sourceTree = "<group>"; };
+		3AE6C5A21C4E484400616C19 /* SimpleURLCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleURLCache.swift; sourceTree = "<group>"; };
 		3AF090B71B1134AA0058567F /* BranchWatchingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BranchWatchingViewController.swift; sourceTree = "<group>"; };
 		3AF1B1231AAC7CA500917EF3 /* SyncerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerViewController.swift; sourceTree = "<group>"; };
 		406E01BAFEA2D2588BFD2D5A /* Pods_BuildaHeartbeatKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BuildaHeartbeatKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -659,6 +661,7 @@
 				3AAF6EE81A3CE5BA00C657FB /* BuildaGitServer.h */,
 				3A6355DB1A3BBDB000545BF9 /* GitHub */,
 				3AAF6EE61A3CE5BA00C657FB /* Supporting Files */,
+				3AE6C5A21C4E484400616C19 /* SimpleURLCache.swift */,
 			);
 			path = BuildaGitServer;
 			sourceTree = "<group>";
@@ -1499,6 +1502,7 @@
 				3AB3F0E51A3CEBAC005F717F /* Repo.swift in Sources */,
 				3AB3F0E01A3CEBAC005F717F /* Branch.swift in Sources */,
 				3AB3F0EB1A3CEBE9005F717F /* GitServerPublic.swift in Sources */,
+				3AE6C5A31C4E484400616C19 /* SimpleURLCache.swift in Sources */,
 				3AB3F0E81A3CEBAC005F717F /* GitHubEndpoints.swift in Sources */,
 				3A32CD141A3D00F800861A34 /* Comment.swift in Sources */,
 				3AB3F0EA1A3CEBAC005F717F /* GitHubServer.swift in Sources */,

@@ -42,6 +42,7 @@ end
 
 target 'BuildaGitServer' do
     pods_for_errbody
+    pod 'SwiftSafe'
 end
 
 target 'BuildaGitServerTests' do
