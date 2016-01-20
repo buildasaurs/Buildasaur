@@ -25,8 +25,6 @@ public class GitHubServer : GitServer {
 
 //TODO: from each of these calls, return a "cancellable" object which can be used for cancelling
 
-//FYI - GitHub API has a rate limit of 5,000 requests per hour. should be more than enough, but keep it in mind
-//when calling the API frequently.
 extension GitHubServer {
     
     private func sendRequestWithPossiblePagination(request: NSMutableURLRequest, accumulatedResponseBody: NSArray, completion: HTTP.Completion) {
@@ -121,16 +119,16 @@ extension GitHubServer {
         
         let cachedInfo = self.cache.getCachedInfoForRequest(request)
         if let etag = cachedInfo.etag {
-            request.addValue(etag, forHTTPHeaderField: "If-None-Match")
+            request.setValue(etag, forHTTPHeaderField: "If-None-Match")
         }
-        
+
         self.http.sendRequest(request, completion: { (response, body, error) -> () in
             
             if let error = error {
                 completion(response: response, body: body, error: error)
                 return
             }
-            
+            
             if response == nil {
                 completion(response: nil, body: body, error: Error.withInfo("Nil response"))
                 return

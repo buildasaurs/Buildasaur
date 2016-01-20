@@ -1,6 +1,7 @@
 PODS:
   - Alamofire (2.0.0-beta.3)
-  - BuildaUtils (0.2.6)
+  - BuildaUtils (0.2.7):
+    - SwiftSafe (~> 0.1)
   - CryptoSwift (0.2.2)
   - ekgclient (0.3.0):
     - Alamofire (= 2.0.0-beta.3)
@@ -27,18 +28,17 @@ PODS:
     - BuildaUtils (~> 0.2.3)
 
 DEPENDENCIES:
-  - BuildaUtils (~> 0.2.6)
+  - BuildaUtils (~> 0.2.7)
   - CryptoSwift
   - ekgclient (~> 0.3.0)
   - Ji (~> 1.2.0)
   - Nimble (~> 3.0.0)
   - ReactiveCocoa (= 4.0.0-RC.1)
-  - SwiftSafe
   - XcodeServerSDK (~> 0.5.4)
 
 SPEC CHECKSUMS:
   Alamofire: 39dddb7d3725d1771b1d2f7099c8bd45bd83ffbb
-  BuildaUtils: 9fbc3dfa77e778cb937292572eccef47dc97e102
+  BuildaUtils: dacc580246b52c7b5029c993ff4732e025c633a8
   CryptoSwift: d382228d6301c09474132417878a741c2a2e68cd
   ekgclient: 40f5d347e2ede450b3e50ac7c6bd84d96e7b84ad
   Ji: ddebb22f9ac445db6e884b66f78ea74fb135fdb7
