@@ -126,6 +126,8 @@ If, despite absolutely no identifiable data being sent, you still aren't comfort
 ---------------
 If Builda crashes, you can find crash logs at `~/Library/Logs/DiagnosticReports/Buildasaur-*`. Please let me know if that happens and I'll take a look. Also, Builda logs (pretty verbosely) to `~/Library/Application Support/Buildasaur/Builda.log`, so this is another place to watch in case of any problems. You can find all persisted files that Buildasaur keeps around at `~/Library/Application Support/Buildasaur/`.
 
+Version 0.6.6 adds Crashlytics, so I'll get crash reports in such cases. If you'd prefer to opt-out of crash reporting, you can do so by adding `{ "crash_reporting_opt_out" = true }` to `~/Library/Application Support/Buildasaur/Config.json`.
+
 :arrow_right_hook: Looking for Xcode Server SDK?
 ----------------
 The code to communicate with Xcode Server lives in the project called [XcodeServerSDK](https://github.com/czechboy0/XcodeServerSDK). Buildasaur is just one app that uses this SDK, but now you can build your own as well!

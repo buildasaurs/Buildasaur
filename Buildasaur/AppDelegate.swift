@@ -17,6 +17,8 @@ Also, you can find the log at ~/Library/Application Support/Buildasaur/Builda.lo
 import BuildaUtils
 import XcodeServerSDK
 import BuildaKit
+import Fabric
+import Crashlytics
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -100,6 +102,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let loginItem = LoginItem()
         let syncerManager = SyncerManager(storageManager: storageManager, factory: factory, loginItem: loginItem)
         self.syncerManager = syncerManager
+        
+        if let heartbeatOptOut = storageManager.config.value["crash_reporting_opt_out"] as? Bool where heartbeatOptOut {
+            Log.info("User opted out of crash reporting")
+        } else {
+            #if Release
+                Log.info("Will send crashlogs to Crashlytics. To opt out add `\"crash_reporting_opt_out\" = true` to ~/Library/Application Support/Buildasaur/Config.json")
+                Fabric.with([Crashlytics.self])
+            #endif
+        }
     }
 
     func createInitialViewController() -> DashboardViewController {

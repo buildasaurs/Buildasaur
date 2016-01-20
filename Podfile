@@ -12,7 +12,7 @@ end
 
 def also_xcode_pods
     pods_for_errbody
-    pod 'XcodeServerSDK', '~> 0.5.4'
+    pod 'XcodeServerSDK', '~> 0.5.5'
     pod 'ekgclient', '~> 0.3.0'
 end
 
@@ -29,6 +29,7 @@ end
 
 target 'Buildasaur' do
     buildasaur_app_pods
+    pod 'Crashlytics'
 end
 
 target 'BuildaKit' do
