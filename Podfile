@@ -3,7 +3,7 @@ use_frameworks!
 inhibit_all_warnings!
 
 def pods_for_errbody
-    pod 'BuildaUtils', '~> 0.2.6'
+    pod 'BuildaUtils', '~> 0.2.7'
 end
 
 def rac
