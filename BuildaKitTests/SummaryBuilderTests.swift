@@ -16,8 +16,8 @@ class SummaryBuilderTests: XCTestCase {
     
     //MARK: utils
     
-    func integration(result: Integration.Result, buildResultSummary: BuildResultSummary) -> Integration {
-        let integration = MockIntegration(number: 15, step: .Completed, result: result, buildResultSummary: buildResultSummary)
+    func integration(result: Integration.Result, step: Integration.Step = .Completed, buildResultSummary: BuildResultSummary = MockBuildResultSummary(), estimatedCompletionTime: NSDate? = nil) -> Integration {
+        let integration = MockIntegration(number: 15, step: step, result: result, buildResultSummary: buildResultSummary, estimatedCompletionTime: estimatedCompletionTime)
         return integration
     }
     
@@ -180,4 +180,24 @@ class SummaryBuilderTests: XCTestCase {
         expect(result.status.description).to(beNil())
         expect(result.status.state) == exp_state
     }
+    
+    //status description generation tests
+    
+    func testRunning_EstimateUnder3Minutes() {
+        
+        let estimatedCompletion = NSDate().dateByAddingTimeInterval(2 * 60 + 15)
+        let integration = self.integration(.Unknown, step: .Building, estimatedCompletionTime: estimatedCompletion)
+        
+        let status = HDGitHubXCBotSyncer.createPendingStatusFromIntegration(integration, link: { _ in nil })
+        expect(status.description) == "Integration step: building... (< 3 mins left)"
+    }
+    
+    func testPending_NoEstimate() {
+        
+        let integration = self.integration(.Unknown, step: .Pending, estimatedCompletionTime: nil)
+        
+        let status = HDGitHubXCBotSyncer.createPendingStatusFromIntegration(integration, link: { _ in nil })
+        expect(status.description) == "Build waiting in the queue..."
+    }
+    
 }

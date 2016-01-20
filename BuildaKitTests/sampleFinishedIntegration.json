@@ -68,6 +68,7 @@
   "currentStep": "completed",
   "number": 1,
   "queuedDate": "2015-05-17T00:38:04.264Z",
+  "expectedCompletionDate": "2015-05-17T00:39:54.264Z",
   "success_streak": 1,
   "doc_type": "integration",
   "tinyID": "BEEA407",

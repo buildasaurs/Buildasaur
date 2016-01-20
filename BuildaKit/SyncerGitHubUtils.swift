@@ -9,8 +9,30 @@
 import Foundation
 import BuildaGitServer
 import BuildaUtils
+import XcodeServerSDK
 
 extension HDGitHubXCBotSyncer {
+    
+    class func createPendingStatusFromIntegration(integration: Integration, link: (Integration) -> String?) -> Status {
+        
+        var text: String
+        if integration.currentStep == .Pending {
+            text = "Build waiting in the queue..."
+        } else {
+            let currentStepString = integration.currentStep.rawValue
+            text = "Integration step: \(currentStepString)..."
+        }
+        
+        //if we have the estimated completion time, add it to the text
+        if let estimatedCompletionTime = integration.expectedCompletionDate {
+            let diff = estimatedCompletionTime.timeIntervalSinceNow
+            let minutesLeftOverestimate = Int(ceil(diff / 60.0))
+            text += " (< \(minutesLeftOverestimate) \("min".pluralizeStringIfNecessary(minutesLeftOverestimate)) left)"
+        }
+        
+        let url = link(integration)
+        return self.createStatusFromState(.Pending, description: text, targetUrl: url)
+    }
     
     class func createStatusFromState(state: Status.State, description: String?, targetUrl: String?) -> Status {
         
