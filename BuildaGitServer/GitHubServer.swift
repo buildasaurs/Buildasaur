@@ -128,7 +128,7 @@ extension GitHubServer {
                 completion(response: response, body: body, error: error)
                 return
             }
-            
+
             if response == nil {
                 completion(response: nil, body: body, error: Error.withInfo("Nil response"))
                 return
