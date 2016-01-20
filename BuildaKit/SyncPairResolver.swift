@@ -220,7 +220,7 @@ public class SyncPairResolver {
                 
                 //TODO: show how many builds are ahead in the queue and estimate when it will be
                 //started and when finished? (there is an average running time on each bot, it should be easy)
-                let status = HDGitHubXCBotSyncer.createStatusFromState(.Pending, description: "Build waiting in the queue...", targetUrl: link(pending))
+                let status = HDGitHubXCBotSyncer.createPendingStatusFromIntegration(pending, link: link)
                 statusWithComment = (status: status, comment: nil)
                 
                 //also, cancel the running integration, if it's there any
@@ -233,9 +233,7 @@ public class SyncPairResolver {
                 if let running = running {
                     
                     //there is a running integration.
-                    //TODO: estimate, based on the average running time of this bot and on the started timestamp, when it will finish. add that to the description.
-                    let currentStepString = running.currentStep.rawValue
-                    let status = HDGitHubXCBotSyncer.createStatusFromState(.Pending, description: "Integration step: \(currentStepString)...", targetUrl: link(running))
+                    let status = HDGitHubXCBotSyncer.createPendingStatusFromIntegration(running, link: link)
                     statusWithComment = (status: status, comment: nil)
                     
                 } else {

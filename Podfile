@@ -2,8 +2,10 @@ platform :osx, '10.10'
 use_frameworks!
 inhibit_all_warnings!
 
+xcodeproj 'Buildasaur', 'Testing' => :debug
+
 def pods_for_errbody
-    pod 'BuildaUtils', '~> 0.2.7'
+    pod 'BuildaUtils', '~> 0.2.8'
 end
 
 def rac
@@ -12,7 +14,7 @@ end
 
 def also_xcode_pods
     pods_for_errbody
-    pod 'XcodeServerSDK', '~> 0.5.4'
+    pod 'XcodeServerSDK', '~> 0.5.5'
     pod 'ekgclient', '~> 0.3.0'
 end
 

@@ -1,6 +1,6 @@
 PODS:
   - Alamofire (2.0.0-beta.3)
-  - BuildaUtils (0.2.7):
+  - BuildaUtils (0.2.8):
     - SwiftSafe (~> 0.1)
   - CryptoSwift (0.2.2)
   - ekgclient (0.3.0):
@@ -24,21 +24,21 @@ PODS:
     - Result (~> 1.0)
   - Result (1.0.1)
   - SwiftSafe (0.1)
-  - XcodeServerSDK (0.5.4):
+  - XcodeServerSDK (0.5.5):
     - BuildaUtils (~> 0.2.3)
 
 DEPENDENCIES:
-  - BuildaUtils (~> 0.2.7)
+  - BuildaUtils (~> 0.2.8)
   - CryptoSwift
   - ekgclient (~> 0.3.0)
   - Ji (~> 1.2.0)
   - Nimble (~> 3.0.0)
   - ReactiveCocoa (= 4.0.0-RC.1)
-  - XcodeServerSDK (~> 0.5.4)
+  - XcodeServerSDK (~> 0.5.5)
 
 SPEC CHECKSUMS:
   Alamofire: 39dddb7d3725d1771b1d2f7099c8bd45bd83ffbb
-  BuildaUtils: dacc580246b52c7b5029c993ff4732e025c633a8
+  BuildaUtils: 0974c128ace30916b9b9429e8585c1c6402593dd
   CryptoSwift: d382228d6301c09474132417878a741c2a2e68cd
   ekgclient: 40f5d347e2ede450b3e50ac7c6bd84d96e7b84ad
   Ji: ddebb22f9ac445db6e884b66f78ea74fb135fdb7
@@ -46,6 +46,6 @@ SPEC CHECKSUMS:
   ReactiveCocoa: 2b0f654beb7642b82cfd3fdb845205ae9889422c
   Result: caef80340451e1f07492fa1e89117f83613bce24
   SwiftSafe: 77ffd12b02678790bec1ef56a2d14ec5036f1fd6
-  XcodeServerSDK: 38c2bbdbc8e1387480adde299c0dc4455f0af11b
+  XcodeServerSDK: f56b521e016a1efd593dda649535eea254d41ec3
 
 COCOAPODS: 0.39.0

@@ -192,7 +192,7 @@ class MockBot: Bot {
 
 class MockIntegration: Integration {
     
-    init(number: Int = 1, step: Step = Step.Completed, sha: String = "head_sha", result: Result = Result.Succeeded, buildResultSummary: BuildResultSummary? = nil) {
+    init(number: Int = 1, step: Step = Step.Completed, sha: String = "head_sha", result: Result = Result.Succeeded, buildResultSummary: BuildResultSummary? = nil, estimatedCompletionTime: NSDate? = nil) {
         
         let dict = MockHelpers.loadSampleIntegration()
         dict["currentStep"] = step.rawValue
@@ -203,6 +203,11 @@ class MockIntegration: Integration {
         let d2 = d1["DVTSourceControlWorkspaceBlueprintLocationsKey"] as! NSMutableDictionary
         let d3 = d2["CEE8472CC4AB69CD27173B930EB93B6B4AA4BAFC"] as! NSMutableDictionary
         d3["DVTSourceControlLocationRevisionKey"] = sha
+        if let estimatedCompletionTime = estimatedCompletionTime {
+            dict["expectedCompletionDate"] = NSDate.XCSStringFromDate(estimatedCompletionTime)
+        } else {
+            dict.removeObjectForKey("expectedCompletionDate")
+        }
         super.init(json: dict)
     }
 
