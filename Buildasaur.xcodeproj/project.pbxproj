@@ -668,6 +668,7 @@
 				3AAF6EE81A3CE5BA00C657FB /* BuildaGitServer.h */,
 				3AAF6F031A3CE66A00C657FB /* GitServerPublic.swift */,
 				3A35CD6B1BE96E880088D57A /* Base */,
+				3ABF0ADC1C51A47A00882A40 /* BitBucket */,
 				3A6355DB1A3BBDB000545BF9 /* GitHub */,
 				3AAF6EE61A3CE5BA00C657FB /* Supporting Files */,
 			);
@@ -697,6 +698,21 @@
 				3AAF6EF61A3CE5BA00C657FB /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3ABF0ADC1C51A47A00882A40 /* BitBucket */ = {
+			isa = PBXGroup;
+			children = (
+				3ABF0ADD1C51A48C00882A40 /* Entities */,
+			);
+			name = BitBucket;
+			sourceTree = "<group>";
+		};
+		3ABF0ADD1C51A48C00882A40 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Entities;
 			sourceTree = "<group>";
 		};
 		3AC156251BB95C130068A1A3 /* Dashboard */ = {
