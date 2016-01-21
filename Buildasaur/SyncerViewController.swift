@@ -182,7 +182,7 @@ class SyncerViewController: ConfigEditViewController {
                     sself.syncInterval.value = value
                 }
             }
-            sendCompleted(sink)
+            sink.sendCompleted()
         }
         let action = Action { (_: AnyObject?) in handler }
         self.syncIntervalStepper.rac_command = toRACCommand(action)

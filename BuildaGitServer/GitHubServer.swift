@@ -14,6 +14,8 @@ class GitHubServer : GitServer {
     let endpoints: GitHubEndpoints
     var latestRateLimitInfo: GitHubRateLimit?
 
+	let cache = InMemoryURLCache()
+
     init(endpoints: GitHubEndpoints, http: HTTP? = nil) {
         
         self.endpoints = endpoints
@@ -182,13 +184,18 @@ extension GitHubServer {
     
     private func _sendRequest(request: NSURLRequest, completion: HTTP.Completion) {
         
+        let cachedInfo = self.cache.getCachedInfoForRequest(request)
+        if let etag = cachedInfo.etag {
+            request.setValue(etag, forHTTPHeaderField: "If-None-Match")
+        }
+
         self.http.sendRequest(request, completion: { (response, body, error) -> () in
             
             if let error = error {
                 completion(response: response, body: body, error: error)
                 return
             }
-            
+
             if response == nil {
                 completion(response: nil, body: body, error: Error.withInfo("Nil response"))
                 return
@@ -223,7 +230,13 @@ extension GitHubServer {
             //error out on special HTTP status codes
             let statusCode = response!.statusCode
             switch statusCode {
-                
+            case 200...299: //good response, cache the returned data
+                let responseInfo = ResponseInfo(response: response!, body: body)
+                cachedInfo.update(responseInfo)
+            case 304: //not modified, return the cached response
+                let responseInfo = cachedInfo.responseInfo!
+                completion(response: responseInfo.response, body: responseInfo.body, error: nil)
+                return
             case 400 ... 500:
                 let message = (body as? NSDictionary)?["message"] as? String ?? "Unknown error"
                 let resultString = "\(statusCode): \(message)"

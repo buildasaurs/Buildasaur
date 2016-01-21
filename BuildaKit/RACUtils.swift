@@ -13,24 +13,24 @@ public func flattenArray<T, E>(inProducer: SignalProducer<[T], E>) -> SignalProd
     
     return inProducer.flatMap(.Merge) { (vals: [T]) -> SignalProducer<T, E> in
         return SignalProducer { sink, _ in
-            vals.forEach { sendNext(sink, $0) }
-            sendCompleted(sink)
+            vals.forEach { sink.sendNext($0) }
+            sink.sendCompleted()
         }
     }
 }
 
 extension SignalProducer {
     
-    public func ignoreErrors(action: ((E) -> ())? = nil) -> SignalProducer<T, NoError> {
+    public func ignoreErrors(action: ((Error) -> ())? = nil) -> SignalProducer<Value, NoError> {
         return self.flatMapError {
             action?($0)
-            return SignalProducer<T, NoError> { _, _ in }
+            return SignalProducer<Value, NoError> { _, _ in }
         }
     }
     
     //only sends values when condition has value true
-    public func forwardIf(condition: SignalProducer<Bool, E>) -> SignalProducer<T, E> {
-        return combineLatest(self, condition).map { (value: T, condition: Bool) -> T? in
+    public func forwardIf(condition: SignalProducer<Bool, Error>) -> SignalProducer<Value, Error> {
+        return combineLatest(self, condition).map { (value: Value, condition: Bool) -> Value? in
             return condition ? value : nil
         }.ignoreNil()
     }

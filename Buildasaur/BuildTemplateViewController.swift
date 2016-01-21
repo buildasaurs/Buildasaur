@@ -207,8 +207,8 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
             
             do {
                 let platformType = try XcodeDeviceParser.parseDeviceTypeFromProjectUrlAndScheme(sself.project.value.url, scheme: scheme).toPlatformType()
-                sendNext(sink, platformType)
-                sendCompleted(sink)
+                sink.sendNext(platformType)
+                sink.sendCompleted()
             } catch {
                 UIUtils.showAlertWithError(error)
             }
@@ -232,7 +232,7 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
                 let scheme = schemes[index]
                 sself.selectedScheme.value = scheme.name
             }
-            sendCompleted(sink)
+            sink.sendCompleted()
         }
         let action = Action { (_: AnyObject?) in handler }
         self.schemesPopup.rac_command = toRACCommand(action)
@@ -267,7 +267,7 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
                 
                 sself.selectedSchedule.value = schedule
             }
-            sendCompleted(sink)
+            sink.sendCompleted()
         }
         let action = Action { (_: AnyObject?) in handler }
         self.schedulePopup.rac_command = toRACCommand(action)
@@ -292,7 +292,7 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
                 let policy = policies[index]
                 sself.cleaningPolicy.value = policy
             }
-            sendCompleted(sink)
+            sink.sendCompleted()
         }
         let action = Action { (_: AnyObject?) in handler }
         self.cleaningPolicyPopup.rac_command = toRACCommand(action)
@@ -344,7 +344,7 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
                 let filter = filters[index]
                 sself.deviceFilter.value = filter
             }
-            sendCompleted(sink)
+            sink.sendCompleted()
         }
         let action = Action { (_: AnyObject?) in handler }
         self.deviceFilterPopup.rac_command = toRACCommand(action)
@@ -426,16 +426,16 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
             
             sself.xcodeServer.value.getDevices { (devices, error) -> () in
                 if let error = error {
-                    sendError(sink, error)
+                    sink.sendFailed(error)
                 } else {
-                    sendNext(sink, devices!)
+                    sink.sendNext(devices!)
                 }
-                sendCompleted(sink)
+                sink.sendCompleted()
             }
             }
             .observeOn(UIScheduler())
-            .start(Event.sink(
-                error: { UIUtils.showAlertWithError($0) },
+            .start(Observer(
+                failed: { UIUtils.showAlertWithError($0) },
                 completed: completion,
                 next: { [weak self] (devices) -> () in
                     let processed = BuildTemplateViewController
@@ -466,16 +466,25 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
             return (equal: false, shouldGoBefore: !a.simulator)
         }
         
-        let sortConnected = {
+        let sortByName = {
             (a: Device, b: Device) -> (equal: Bool, shouldGoBefore: Bool) in
             
-            if a.connected == b.connected {
+            if a.name == b.name {
                 return (equal: true, shouldGoBefore: false)
             }
-            return (equal: false, shouldGoBefore: a.connected)
+            return (equal: false, shouldGoBefore: a.name < b.name)
+        }
+
+        let sortByOSVersion = {
+            (a: Device, b: Device) -> (equal: Bool, shouldGoBefore: Bool) in
+            
+            if a.osVersion == b.osVersion {
+                return (equal: true, shouldGoBefore: false)
+            }
+            return (equal: false, shouldGoBefore: a.osVersion < b.osVersion)
         }
         
-        //then sort, devices first and if match, connected first
+        //then sort, devices first and if match, then by name & os version
         let sortedDevices = filtered.sort { (a, b) -> Bool in
             
             let (equalDevices, goBeforeDevices) = sortDevices(a, b)
@@ -483,9 +492,14 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
                 return goBeforeDevices
             }
             
-            let (equalConnected, goBeforeConnected) = sortConnected(a, b)
-            if !equalConnected {
-                return goBeforeConnected
+            let (equalName, goBeforeName) = sortByName(a, b)
+            if !equalName {
+                return goBeforeName
+            }
+            
+            let (equalOSVersion, goBeforeOSVersion) = sortByOSVersion(a, b)
+            if !equalOSVersion {
+                return goBeforeOSVersion
             }
             return true
         }

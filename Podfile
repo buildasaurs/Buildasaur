@@ -3,16 +3,16 @@ use_frameworks!
 inhibit_all_warnings!
 
 def pods_for_errbody
-    pod 'BuildaUtils', '~> 0.2.2'
+    pod 'BuildaUtils', '~> 0.2.7'
 end
 
 def rac
-    pod 'ReactiveCocoa', '~> 4.0.4-alpha-1'
+    pod 'ReactiveCocoa', '=4.0.0-RC.1'
 end
 
 def also_xcode_pods
     pods_for_errbody
-    pod 'XcodeServerSDK', '~> 0.5.1'
+    pod 'XcodeServerSDK', '~> 0.5.5'
     pod 'ekgclient', '~> 0.3.0'
 end
 

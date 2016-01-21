@@ -159,7 +159,7 @@ class TriggerViewController: NSViewController {
                 let all = sself.kinds.value
                 sself.selectedKind.value = all[index]
             }
-            sendCompleted(sink)
+            sink.sendCompleted()
         }
         let action = Action { (_: AnyObject?) in handler }
         self.kindPopup.rac_command = toRACCommand(action)
@@ -185,7 +185,7 @@ class TriggerViewController: NSViewController {
                 let all = sself.phases.value
                 sself.selectedPhase.value = all[index]
             }
-            sendCompleted(sink)
+            sink.sendCompleted()
         }
         let action = Action { (_: AnyObject?) in handler }
         self.phasePopup.rac_command = toRACCommand(action)

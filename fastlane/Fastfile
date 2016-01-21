@@ -87,6 +87,10 @@ private_lane :github do |params|
 
   sh "cd .. && rm -rf build" #delete built ipa/app
 
+  # regenerate changelog to get it committed
+  sh "cd .. && github_changelog_generator -t $GITHUB_TOKEN"
+  sh "cd .. && git commit -am \"changelog\" && git push"
+
   # notify us on slack
   slack(
     slack_url: ENV['SLACK_RELEASES_URL'],
@@ -95,10 +99,6 @@ private_lane :github do |params|
       "New" => release['body']
     }
   )
-
-  # regenerate changelog to get it committed
-  sh "cd .. && github_changelog_generator -t $GITHUB_TOKEN"
-  sh "cd .. && git commit -am \"changelog\" && git push"
 
 end
 

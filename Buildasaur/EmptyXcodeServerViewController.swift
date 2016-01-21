@@ -82,7 +82,7 @@ class EmptyXcodeServerViewController: EditableViewController {
                 let index = sself.existingXcodeServersPopup.indexOfSelectedItem
                 sself.selectItemAtIndex(index)
             }
-            sendCompleted(sink)
+            sink.sendCompleted()
         }
         let action = Action { (_: AnyObject?) in handler }
         self.existingXcodeServersPopup.rac_command = toRACCommand(action)

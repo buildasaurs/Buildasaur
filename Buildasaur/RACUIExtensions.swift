@@ -88,7 +88,7 @@ extension NSButton {
             let button = input as! NSButton
             return SignalProducer { sink, _ in
                 on.value = button.on
-                sendCompleted(sink)
+                sink.sendCompleted()
             }
         }
         
