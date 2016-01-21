@@ -60,7 +60,7 @@ class SyncerTests: XCTestCase {
     
     func testCreatingChangeActions_MultiplePR_NoBots() {
         
-        let prs = [
+        let prs: [PullRequestType] = [
             MockPullRequest(number: 4, title: ""),
             MockPullRequest(number: 7, title: "")
         ]
@@ -100,12 +100,12 @@ class SyncerTests: XCTestCase {
             MockBot(name: "BuildaBot [me/Repo] |-> gh/bot_to_delete"),
         ]
         
-        let prs = [
+        let prs: [PullRequestType] = [
             MockPullRequest(number: 4, title: ""),
             MockPullRequest(number: 7, title: "")
         ]
         
-        let branches = [
+        let branches: [BranchType] = [
             MockBranch(name: "cd/broke_something"),
             MockBranch(name: "ab/fixed_errthing"),
             MockBranch(name: "ef/migrating_from_php_to_mongo_db")

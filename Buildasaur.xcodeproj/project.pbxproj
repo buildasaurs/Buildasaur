@@ -126,7 +126,7 @@
 		3ACF93AA1BBEC7AB00CD888C /* XcodeScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACF93A81BBEC7AB00CD888C /* XcodeScheme.swift */; };
 		3AD338B01AAE31D500ECD0F2 /* BuildTemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD338AF1AAE31D500ECD0F2 /* BuildTemplateViewController.swift */; };
 		3AD5D2E81BD01EAF008DBB45 /* SummaryBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD5D2E71BD01EAF008DBB45 /* SummaryBuilder.swift */; };
-		3AD5D2EA1BD02144008DBB45 /* SummaryBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD5D2E91BD02144008DBB45 /* SummaryBuilderTests.swift */; };
+		3AD5D2EA1BD02144008DBB45 /* GitHubSummaryBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD5D2E91BD02144008DBB45 /* GitHubSummaryBuilderTests.swift */; };
 		3AE0AB2B1BB991AB00A52D20 /* SyncerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE0AB2A1BB991AB00A52D20 /* SyncerViewModel.swift */; };
 		3AE4F6CE1BBC88450006CA1C /* RACUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE4F6CD1BBC88450006CA1C /* RACUtils.swift */; };
 		3AE4F6D01BBC8D250006CA1C /* EmptyProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE4F6CF1BBC8D250006CA1C /* EmptyProjectViewController.swift */; };
@@ -350,7 +350,7 @@
 		3ACF93A81BBEC7AB00CD888C /* XcodeScheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeScheme.swift; sourceTree = "<group>"; };
 		3AD338AF1AAE31D500ECD0F2 /* BuildTemplateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildTemplateViewController.swift; sourceTree = "<group>"; };
 		3AD5D2E71BD01EAF008DBB45 /* SummaryBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SummaryBuilder.swift; sourceTree = "<group>"; };
-		3AD5D2E91BD02144008DBB45 /* SummaryBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SummaryBuilderTests.swift; sourceTree = "<group>"; };
+		3AD5D2E91BD02144008DBB45 /* GitHubSummaryBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubSummaryBuilderTests.swift; sourceTree = "<group>"; };
 		3AE0AB2A1BB991AB00A52D20 /* SyncerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerViewModel.swift; sourceTree = "<group>"; };
 		3AE4F6CD1BBC88450006CA1C /* RACUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RACUtils.swift; sourceTree = "<group>"; };
 		3AE4F6CF1BBC8D250006CA1C /* EmptyProjectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyProjectViewController.swift; sourceTree = "<group>"; };
@@ -609,7 +609,7 @@
 				3A7F0CC71BC1508C0079A511 /* GeneralTests.swift */,
 				3ACBADD61B5ADE0E00204457 /* MockHelpers.swift */,
 				3ACBADD81B5ADE1400204457 /* Mocks.swift */,
-				3AD5D2E91BD02144008DBB45 /* SummaryBuilderTests.swift */,
+				3AD5D2E91BD02144008DBB45 /* GitHubSummaryBuilderTests.swift */,
 				3ACBADDA1B5ADE1400204457 /* SyncerTests.swift */,
 				3ACBADDB1B5ADE1400204457 /* SyncPair_PR_Bot_Tests.swift */,
 				3A9D741E1BCBF86900DCA23C /* Migration */,
@@ -1489,7 +1489,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3ACBADD71B5ADE0E00204457 /* MockHelpers.swift in Sources */,
-				3AD5D2EA1BD02144008DBB45 /* SummaryBuilderTests.swift in Sources */,
+				3AD5D2EA1BD02144008DBB45 /* GitHubSummaryBuilderTests.swift in Sources */,
 				3ACBADDE1B5ADE1400204457 /* SyncerTests.swift in Sources */,
 				3ACBADDF1B5ADE1400204457 /* SyncPair_PR_Bot_Tests.swift in Sources */,
 				3ACBADDC1B5ADE1400204457 /* Mocks.swift in Sources */,

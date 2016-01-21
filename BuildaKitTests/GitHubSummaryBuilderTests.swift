@@ -34,6 +34,7 @@ class GitHubSummaryBuilderTests: XCTestCase {
         let buildResultSummary = MockBuildResultSummary()
         let integration = self.integration(.Succeeded, buildResultSummary: buildResultSummary)
         let summary = SummaryBuilder()
+        summary.statusCreator = MockGitHubServer()
         let result = summary.buildPassing(integration)
         
         let exp_comment = "Result of Integration 15\n---\n*Duration*: 28 seconds\n*Result*: **Perfect build!** :+1:"
@@ -50,6 +51,7 @@ class GitHubSummaryBuilderTests: XCTestCase {
         let buildResultSummary = MockBuildResultSummary()
         let integration = self.integration(.Succeeded, buildResultSummary: buildResultSummary)
         let summary = SummaryBuilder()
+        summary.statusCreator = MockGitHubServer()
         summary.linkBuilder = self.linkBuilder()
         let result = summary.buildPassing(integration)
         
@@ -68,6 +70,7 @@ class GitHubSummaryBuilderTests: XCTestCase {
         let buildResultSummary = MockBuildResultSummary(codeCoveragePercentage: 12)
         let integration = self.integration(.Succeeded, buildResultSummary: buildResultSummary)
         let summary = SummaryBuilder()
+        summary.statusCreator = MockGitHubServer()
         let result = summary.buildPassing(integration)
         
         let exp_comment = "Result of Integration 15\n---\n*Duration*: 28 seconds\n*Result*: **Perfect build!** :+1:\n*Test Coverage*: 12%"
@@ -84,6 +87,7 @@ class GitHubSummaryBuilderTests: XCTestCase {
         let buildResultSummary = MockBuildResultSummary(testsCount: 99, codeCoveragePercentage: 12)
         let integration = self.integration(.Succeeded, buildResultSummary: buildResultSummary)
         let summary = SummaryBuilder()
+        summary.statusCreator = MockGitHubServer()
         let result = summary.buildPassing(integration)
         
         let exp_comment = "Result of Integration 15\n---\n*Duration*: 28 seconds\n*Result*: **Perfect build!** All 99 tests passed. :+1:\n*Test Coverage*: 12%"
@@ -99,6 +103,7 @@ class GitHubSummaryBuilderTests: XCTestCase {
         let buildResultSummary = MockBuildResultSummary(testsCount: 99, warningCount: 2, codeCoveragePercentage: 12)
         let integration = self.integration(.Warnings, buildResultSummary: buildResultSummary)
         let summary = SummaryBuilder()
+        summary.statusCreator = MockGitHubServer()
         let result = summary.buildPassing(integration)
         
         let exp_comment = "Result of Integration 15\n---\n*Duration*: 28 seconds\n*Result*: All 99 tests passed, but please **fix 2 warnings**.\n*Test Coverage*: 12%"
@@ -114,6 +119,7 @@ class GitHubSummaryBuilderTests: XCTestCase {
         let buildResultSummary = MockBuildResultSummary(analyzerWarningCount: 3, testsCount: 99, codeCoveragePercentage: 12)
         let integration = self.integration(.AnalyzerWarnings, buildResultSummary: buildResultSummary)
         let summary = SummaryBuilder()
+        summary.statusCreator = MockGitHubServer()
         let result = summary.buildPassing(integration)
         
         let exp_comment = "Result of Integration 15\n---\n*Duration*: 28 seconds\n*Result*: All 99 tests passed, but please **fix 3 analyzer warnings**.\n*Test Coverage*: 12%"
@@ -130,6 +136,7 @@ class GitHubSummaryBuilderTests: XCTestCase {
         let buildResultSummary = MockBuildResultSummary(testFailureCount: 1, testsCount: 99)
         let integration = self.integration(.TestFailures, buildResultSummary: buildResultSummary)
         let summary = SummaryBuilder()
+        summary.statusCreator = MockGitHubServer()
         let result = summary.buildFailingTests(integration)
         
         let exp_comment = "Result of Integration 15\n---\n*Duration*: 28 seconds\n*Result*: **Build failed 1 test** out of 99"
@@ -145,6 +152,7 @@ class GitHubSummaryBuilderTests: XCTestCase {
         let buildResultSummary = MockBuildResultSummary(errorCount: 4)
         let integration = self.integration(.BuildErrors, buildResultSummary: buildResultSummary)
         let summary = SummaryBuilder()
+        summary.statusCreator = MockGitHubServer()
         let result = summary.buildErrorredIntegration(integration)
         
         let exp_comment = "Result of Integration 15\n---\n*Duration*: 28 seconds\n*Result*: **4 errors, failing state: build-errors**"
@@ -160,7 +168,7 @@ class GitHubSummaryBuilderTests: XCTestCase {
         let buildResultSummary = MockBuildResultSummary()
         let integration = self.integration(.Canceled, buildResultSummary: buildResultSummary)
         let summary = SummaryBuilder()
-        summary.statusCreator = MockBuildStatusCreator()
+        summary.statusCreator = MockGitHubServer()
         let result = summary.buildCanceledIntegration(integration)
         
         let exp_comment = "Result of Integration 15\n---\n*Duration*: 28 seconds\nBuild was **manually canceled**."
@@ -174,6 +182,7 @@ class GitHubSummaryBuilderTests: XCTestCase {
     func testEmpty() {
         
         let summary = SummaryBuilder()
+        summary.statusCreator = MockGitHubServer()
         let result = summary.buildEmptyIntegration()
         
         let exp_state = BuildState.NoState

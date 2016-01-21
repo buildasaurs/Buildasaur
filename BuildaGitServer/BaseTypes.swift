@@ -123,6 +123,7 @@ public protocol StatusType {
     
     var state: BuildState { get }
     var description: String? { get }
+    var targetUrl: String? { get }
     
     //TODO: add required properties
 }

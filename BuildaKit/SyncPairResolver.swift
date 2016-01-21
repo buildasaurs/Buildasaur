@@ -22,7 +22,7 @@ public class SyncPairResolver {
         issue: IssueType?,
         bot: Bot,
         hostname: String,
-        buildCreator: BuildStatusCreator,
+        buildStatusCreator: BuildStatusCreator,
         integrations: [Integration]) -> SyncPair.Actions {
             
             var integrationsToCancel: [Integration] = []
@@ -127,7 +127,7 @@ public class SyncPairResolver {
                 pending: latestPendingIntegration,
                 running: runningIntegration,
                 link: link,
-                statusCreator: buildCreator,
+                statusCreator: buildStatusCreator,
                 completed: completedIntegrations)
             
             //merge in nested actions
