@@ -30,7 +30,7 @@ extension HDGitHubXCBotSyncer {
         self._sourceServer.getStatusOfCommit(commit, repo: repoName, completion: { (status, error) -> () in
             
             if error != nil {
-                let e = Error.withInfo("Commit \(commit) failed to return status", internalError: error)
+                let e = Error.withInfo("Commit \(commit) failed to return status", internalError: error as? NSError)
                 completion(error: e)
                 return
             }
@@ -53,7 +53,7 @@ extension HDGitHubXCBotSyncer {
         self._sourceServer.postStatusOfCommit(commit, status: statusWithComment.status, repo: repo) { (status, error) -> () in
             
             if error != nil {
-                let e = Error.withInfo("Failed to post a status on commit \(commit) of repo \(repo)", internalError: error)
+                let e = Error.withInfo("Failed to post a status on commit \(commit) of repo \(repo)", internalError: error as? NSError)
                 completion(error: e)
                 return
             }
@@ -70,7 +70,7 @@ extension HDGitHubXCBotSyncer {
                 self._sourceServer.postCommentOnIssue(comment, issueNumber: issue.number, repo: repo, completion: { (comment, error) -> () in
                     
                     if error != nil {
-                        let e = Error.withInfo("Failed to post a comment \"\(comment)\" on Issue \(issue.number) of repo \(repo)", internalError: error)
+                        let e = Error.withInfo("Failed to post a comment \"\(comment)\" on Issue \(issue.number) of repo \(repo)", internalError: error as? NSError)
                         completion(error: e)
                     } else {
                         completion(error: nil)

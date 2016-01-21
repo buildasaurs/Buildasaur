@@ -90,11 +90,9 @@ extension GitHubServer: SourceServerType {
     }
 }
 
-//FYI - GitHub API has a rate limit of 5,000 requests per hour. should be more than enough, but keep it in mind
-//when calling the API frequently.
 extension GitHubServer {
     
-    private func _sendRequestWithPossiblePagination(request: NSURLRequest, accumulatedResponseBody: NSArray, completion: HTTP.Completion) {
+    private func _sendRequestWithPossiblePagination(request: NSMutableURLRequest, accumulatedResponseBody: NSArray, completion: HTTP.Completion) {
         
         self._sendRequest(request) {
             (response, body, error) -> () in
@@ -182,7 +180,7 @@ extension GitHubServer {
         return linkDict
     }
     
-    private func _sendRequest(request: NSURLRequest, completion: HTTP.Completion) {
+    private func _sendRequest(request: NSMutableURLRequest, completion: HTTP.Completion) {
         
         let cachedInfo = self.cache.getCachedInfoForRequest(request)
         if let etag = cachedInfo.etag {

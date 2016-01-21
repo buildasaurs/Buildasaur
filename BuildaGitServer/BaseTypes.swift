@@ -106,6 +106,10 @@ public protocol PullRequestType: IssueType {
     var headCommitSHA: String { get }
     var headRepo: RepoType { get }
     
+    var baseName: String { get }
+    
+    var title: String { get }
+    
     //TODO: add required properties
 }
 
@@ -127,7 +131,7 @@ public protocol StatusType {
 
 extension StatusType {
     
-    func isEqual(rhs: StatusType) -> Bool {
+    public func isEqual(rhs: StatusType) -> Bool {
         let lhs = self
         return lhs.state == rhs.state && lhs.description == rhs.description
     }

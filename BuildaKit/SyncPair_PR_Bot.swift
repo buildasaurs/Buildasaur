@@ -111,7 +111,7 @@ public class SyncPair_PR_Bot: SyncPair {
                 (foundComments, error) -> () in
                 
                 if error != nil {
-                    let e = Error.withInfo("Fetching comments", internalError: error)
+                    let e = Error.withInfo("Fetching comments", internalError: error as? NSError)
                     completion(isEnabled: false, error: e)
                     return
                 }

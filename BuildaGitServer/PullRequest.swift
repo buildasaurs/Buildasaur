@@ -35,4 +35,8 @@ extension PullRequest: PullRequestType {
     var headRepo: RepoType {
         return self.head.repo
     }
+    
+    var baseName: String {
+        return self.base.ref
+    }
 }

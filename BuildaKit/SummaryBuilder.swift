@@ -28,7 +28,7 @@ class SummaryBuilder {
         let linkToIntegration = self.linkBuilder(integration)
         self.addBaseCommentFromIntegration(integration)
         
-        let status = HDGitHubXCBotSyncer.createStatusFromState(.Success, description: "Build passed!", targetUrl: linkToIntegration)
+        let status = self.createStatus(.Success, description: "Build passed!", targetUrl: linkToIntegration)
         
         let buildResultSummary = integration.buildResultSummary!
         if integration.result == .Succeeded {
@@ -51,7 +51,7 @@ class SummaryBuilder {
         
         self.addBaseCommentFromIntegration(integration)
         
-        let status = HDGitHubXCBotSyncer.createStatusFromState(.Failure, description: "Build failed tests!", targetUrl: linkToIntegration)
+        let status = self.createStatus(.Failure, description: "Build failed tests!", targetUrl: linkToIntegration)
         let buildResultSummary = integration.buildResultSummary!
         self.appendTestFailure(buildResultSummary)
         return self.buildWithStatus(status)
@@ -62,7 +62,7 @@ class SummaryBuilder {
         let linkToIntegration = self.linkBuilder(integration)
         self.addBaseCommentFromIntegration(integration)
         
-        let status = HDGitHubXCBotSyncer.createStatusFromState(.Error, description: "Build error!", targetUrl: linkToIntegration)
+        let status = self.createStatus(.Error, description: "Build error!", targetUrl: linkToIntegration)
         
         self.appendErrors(integration)
         return self.buildWithStatus(status)
@@ -74,7 +74,7 @@ class SummaryBuilder {
         
         self.addBaseCommentFromIntegration(integration)
         
-        let status = HDGitHubXCBotSyncer.createStatusFromState(.Error, description: "Build canceled!", targetUrl: linkToIntegration)
+        let status = self.createStatus(.Error, description: "Build canceled!", targetUrl: linkToIntegration)
         
         self.appendCancel()
         return self.buildWithStatus(status)
@@ -82,11 +82,16 @@ class SummaryBuilder {
     
     func buildEmptyIntegration() -> StatusAndComment {
         
-        let status = HDGitHubXCBotSyncer.createStatusFromState(.NoState, description: nil, targetUrl: nil)
-        return (status: status, comment: nil)
+        let status = self.createStatus(.NoState, description: nil, targetUrl: nil)
+        return self.buildWithStatus(status)
     }
     
     //MARK: utils
+    
+    private func createStatus(state: BuildState, description: String?, targetUrl: String?) -> StatusType {
+        fatalError()
+//        let status = self.syncer.createStatusFromState(state, description: description, targetUrl: targetUrl)
+    }
     
     func addBaseCommentFromIntegration(integration: Integration) {
         

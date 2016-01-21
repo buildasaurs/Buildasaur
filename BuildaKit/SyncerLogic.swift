@@ -137,12 +137,12 @@ extension HDGitHubXCBotSyncer {
                 //we have both PRs and Bots, resolve
                 self.syncPRsAndBranchesAndBots(repo: repo, repoName: repoName, prs: prs, branches: branches, bots: bots, completion: {
                     
-                    //everything is done, report the damage of GitHub rate limit
-                    if let rateLimitInfo = self._sourceServer.latestRateLimitInfo {
+                    //everything is done, report the damage of the server's rate limit
+                    if let rateLimitInfo = repo.latestRateLimitInfo {
                         
-                        let report = rateLimitInfo.getReport()
-                        self.reports["GitHub Rate Limit"] = report
-                        Log.info("GitHub Rate Limit: \(report)")
+                        let report = rateLimitInfo.report
+                        self.reports["Rate Limit"] = report
+                        Log.info("Rate Limit: \(report)")
                     }
                     
                     completion()
@@ -156,9 +156,13 @@ extension HDGitHubXCBotSyncer {
     
     public func syncPRsAndBranchesAndBots(repo repo: RepoType, repoName: String, prs: [PullRequestType], branches: [BranchType], bots: [Bot], completion: () -> ()) {
         
-        let prsDescription = prs.map({ "    PR \($0.number): \($0.title) [\($0.head.ref) -> \($0.base.ref)]" }).joinWithSeparator("\n")
-        let branchesDescription = branches.map({ "    Branch [\($0.name):\($0.commit.sha)]" }).joinWithSeparator("\n")
-        let botsDescription = bots.map({ "    Bot \($0.name)" }).joinWithSeparator("\n")
+        let prsDescription = prs.map { (pr: PullRequestType) -> String in
+            "    PR \(pr.number): \(pr.title) [\(pr.headName) -> \(pr.baseName)]"
+            }.joinWithSeparator("\n")
+        let branchesDescription = branches.map { (branch: BranchType) -> String in
+            "    Branch [\(branch.name):\(branch.commitSHA)]" }
+            .joinWithSeparator("\n")
+        let botsDescription = bots.map { "    Bot \($0.name)" }.joinWithSeparator("\n")
         Log.verbose("Resolving prs:\n\(prsDescription) \nand branches:\n\(branchesDescription)\nand bots:\n\(botsDescription)")
         
         //create the changes necessary
