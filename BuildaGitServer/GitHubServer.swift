@@ -30,14 +30,14 @@ extension GitHubServer: SourceServerType {
     func getBranchesOfRepo(repo: String, completion: (branches: [BranchType]?, error: ErrorType?) -> ()) {
         
         self._getBranchesOfRepo(repo) { (branches, error) -> () in
-            completion(branches: branches, error: error)
+            completion(branches: branches?.map { $0 as BranchType }, error: error)
         }
     }
     
     func getOpenPullRequests(repo: String, completion: (prs: [PullRequestType]?, error: ErrorType?) -> ()) {
         
         self._getOpenPullRequests(repo) { (prs, error) -> () in
-            completion(prs: prs, error: error)
+            completion(prs: prs?.map { $0 as PullRequestType }, error: error)
         }
     }
     
@@ -79,7 +79,7 @@ extension GitHubServer: SourceServerType {
     func getCommentsOfIssue(issueNumber: Int, repo: String, completion: (comments: [CommentType]?, error: ErrorType?) -> ()) {
         
         self._getCommentsOfIssue(issueNumber, repo: repo) { (comments, error) -> () in
-            completion(comments: comments, error: error)
+            completion(comments: comments?.map { $0 as CommentType }, error: error)
         }
     }
     

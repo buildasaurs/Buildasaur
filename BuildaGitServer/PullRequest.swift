@@ -8,7 +8,7 @@
 
 import Foundation
 
-class PullRequest : Issue {
+class PullRequest : Issue, PullRequestType {
     
     let head: PullRequestBranch
     let base: PullRequestBranch
@@ -20,9 +20,6 @@ class PullRequest : Issue {
         
         super.init(json: json)
     }
-}
-
-extension PullRequest: PullRequestType {
     
     var headName: String {
         return self.head.ref

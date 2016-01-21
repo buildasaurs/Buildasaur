@@ -12,7 +12,7 @@ class Issue : GitHubEntity {
     
     let number: Int
     let body: String
-    let title: String
+    var title: String
     
     required init(json: NSDictionary) {
         
