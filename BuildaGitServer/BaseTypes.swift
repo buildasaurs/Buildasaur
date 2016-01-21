@@ -81,16 +81,12 @@ public protocol RepoType {
     var permissions: RepoPermissions { get }
     var originUrlSSH: String { get }
     var latestRateLimitInfo: RateLimitType? { get }
-    
-    //TODO: add required properties
 }
 
 public protocol BranchType {
     
     var name: String { get }
     var commitSHA: String { get }
-    
-    //TODO: add required properties
 }
 
 public protocol IssueType {
@@ -107,8 +103,6 @@ public protocol PullRequestType: IssueType {
     var baseName: String { get }
     
     var title: String { get }
-    
-    //TODO: add required properties
 }
 
 public enum BuildState {
@@ -124,8 +118,6 @@ public protocol StatusType {
     var state: BuildState { get }
     var description: String? { get }
     var targetUrl: String? { get }
-    
-    //TODO: add required properties
 }
 
 extension StatusType {
@@ -139,7 +131,5 @@ extension StatusType {
 public protocol CommentType {
     
     var body: String { get }
-    
-    //TODO: add required properties
 }
 
