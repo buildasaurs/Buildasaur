@@ -16,6 +16,8 @@ class Repo : GitHubEntity {
     let repoUrlSSH: String
     let permissionsDict: NSDictionary
     
+    var latestRateLimitInfo: RateLimitType?
+    
     required init(json: NSDictionary) {
 
         self.name = json.stringForKey("name")
@@ -45,10 +47,5 @@ extension Repo: RepoType {
     var originUrlSSH: String {
         
         return self.repoUrlSSH
-    }
-    
-    var latestRateLimitInfo: RateLimitType? {
-        
-        return self.latestRateLimitInfo
     }
 }
