@@ -10,15 +10,15 @@ import Foundation
 import BuildaGitServer
 import BuildaUtils
 
-extension HDGitHubXCBotSyncer {
+extension HDGitHubXCBotSyncer: BuildStatusCreator {
     
-    func createStatusFromState(state: BuildState, description: String?, targetUrl: String?) -> StatusType {
+    public func createStatusFromState(state: BuildState, description: String?, targetUrl: String?) -> StatusType {
         
-        //TODO: potentially have multiple contexts to show multiple stats on the PR
-        let context = "Buildasaur"
-        
-        return self._sourceServer.createStatusFromState(state, description: description, targetUrl: targetUrl, context: context)
+        return self._sourceServer.createStatusFromState(state, description: description, targetUrl: targetUrl)
     }
+}
+
+extension HDGitHubXCBotSyncer {
     
     func updateCommitStatusIfNecessary(
         newStatus: StatusAndComment,

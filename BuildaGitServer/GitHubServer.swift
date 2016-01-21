@@ -83,9 +83,10 @@ extension GitHubServer: SourceServerType {
         }
     }
     
-    func createStatusFromState(buildState: BuildState, description: String?, targetUrl: String?, context: String?) -> StatusType {
+    func createStatusFromState(buildState: BuildState, description: String?, targetUrl: String?) -> StatusType {
         
         let state = GitHubStatus.GitHubState.fromBuildState(buildState)
+        let context = "Buildasaur"
         return GitHubStatus(state: state, description: description, targetUrl: targetUrl, context: context)
     }
 }

@@ -73,7 +73,7 @@ public class SyncPair_PR_Bot: SyncPair {
                             issue: issue,
                             bot: bot,
                             hostname: hostname!,
-                            syncer: self.syncer,
+                            buildCreator: self.syncer,
                             integrations: integrations)
                         self.performActions(actions, completion: completion)
                     }

@@ -13,6 +13,7 @@ import BuildaGitServer
 
 class SummaryBuilder {
     
+    var statusCreator: BuildStatusCreator!
     var lines: [String] = []
     let resultString: String
     var linkBuilder: (Integration) -> String? = { _ in nil }
@@ -89,8 +90,9 @@ class SummaryBuilder {
     //MARK: utils
     
     private func createStatus(state: BuildState, description: String?, targetUrl: String?) -> StatusType {
-        fatalError()
-//        let status = self.syncer.createStatusFromState(state, description: description, targetUrl: targetUrl)
+        
+        let status = self.statusCreator.createStatusFromState(state, description: description, targetUrl: targetUrl)
+        return status
     }
     
     func addBaseCommentFromIntegration(integration: Integration) {

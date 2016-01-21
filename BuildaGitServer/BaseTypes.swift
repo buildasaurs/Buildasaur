@@ -8,11 +8,11 @@
 
 import Foundation
 
-//TODO: migrate all of buildasaur to handle the protocol types below so
-//that we can start hiding away the Git server details and support not just
-//GitHub but more, like Bitbucket.
+public protocol BuildStatusCreator {
+    func createStatusFromState(state: BuildState, description: String?, targetUrl: String?) -> StatusType
+}
 
-public protocol SourceServerType {
+public protocol SourceServerType: BuildStatusCreator {
     
     func getBranchesOfRepo(repo: String, completion: (branches: [BranchType]?, error: ErrorType?) -> ())
     func getOpenPullRequests(repo: String, completion: (prs: [PullRequestType]?, error: ErrorType?) -> ())
@@ -22,8 +22,6 @@ public protocol SourceServerType {
     func postStatusOfCommit(commit: String, status: StatusType, repo: String, completion: (status: StatusType?, error: ErrorType?) -> ())
     func postCommentOnIssue(comment: String, issueNumber: Int, repo: String, completion: (comment: CommentType?, error: ErrorType?) -> ())
     func getCommentsOfIssue(issueNumber: Int, repo: String, completion: (comments: [CommentType]?, error: ErrorType?) -> ())
-    
-    func createStatusFromState(state: BuildState, description: String?, targetUrl: String?, context: String?) -> StatusType
 }
 
 public enum SourceServerOption {
