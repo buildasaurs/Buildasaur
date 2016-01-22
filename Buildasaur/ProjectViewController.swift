@@ -80,7 +80,7 @@ class ProjectViewController: ConfigEditViewController {
         //dump whenever config changes
         prod.startWithNext { [weak self] in
             
-            self?.tokenTextField.stringValue = $0.githubToken
+            self?.tokenTextField.stringValue = $0.serverAuthentication ?? ""
             let priv = $0.privateSSHKeyPath
             self?.privateKeyUrl.value = priv.isEmpty ? nil : NSURL(fileURLWithPath: priv)
             let pub = $0.publicSSHKeyPath
@@ -178,12 +178,12 @@ class ProjectViewController: ConfigEditViewController {
         guard
             let privateKeyPath = self.privateKeyUrl.value?.path,
             let publicKeyPath = self.publicKeyUrl.value?.path,
-            let githubToken = self.tokenTextField.stringValue.nonEmpty() else {
+            let token = self.tokenTextField.stringValue.nonEmpty() else {
             return nil
         }
         
         var config = self.projectConfig.value
-        config.githubToken = githubToken
+        config.serverAuthentication = token
         config.sshPassphrase = sshPassphrase
         config.privateSSHKeyPath = privateKeyPath
         config.publicSSHKeyPath = publicKeyPath

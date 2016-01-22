@@ -130,6 +130,9 @@
 		3AE0AB2B1BB991AB00A52D20 /* SyncerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE0AB2A1BB991AB00A52D20 /* SyncerViewModel.swift */; };
 		3AE4F6CE1BBC88450006CA1C /* RACUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE4F6CD1BBC88450006CA1C /* RACUtils.swift */; };
 		3AE4F6D01BBC8D250006CA1C /* EmptyProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE4F6CF1BBC8D250006CA1C /* EmptyProjectViewController.swift */; };
+		3AE8B79B1C52DAD20033F6EF /* Buildasaur-format-2-example2 in Resources */ = {isa = PBXBuildFile; fileRef = 3AE8B79A1C52DAD20033F6EF /* Buildasaur-format-2-example2 */; };
+		3AED13131C529BB600E3B7FF /* Buildasaur-format-3-example1 in Resources */ = {isa = PBXBuildFile; fileRef = 3AED13121C529BB600E3B7FF /* Buildasaur-format-3-example1 */; };
+		3AED13151C52A1A300E3B7FF /* SecurePersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AED13141C52A1A300E3B7FF /* SecurePersistence.swift */; };
 		3AF090B81B1134AA0058567F /* BranchWatchingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF090B71B1134AA0058567F /* BranchWatchingViewController.swift */; };
 		3AF1B1241AAC7CA500917EF3 /* SyncerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF1B1231AAC7CA500917EF3 /* SyncerViewController.swift */; };
 		723E971AA98B199C70B7C3AA /* Pods_BuildaHeartbeatKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 406E01BAFEA2D2588BFD2D5A /* Pods_BuildaHeartbeatKit.framework */; };
@@ -354,6 +357,9 @@
 		3AE0AB2A1BB991AB00A52D20 /* SyncerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerViewModel.swift; sourceTree = "<group>"; };
 		3AE4F6CD1BBC88450006CA1C /* RACUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RACUtils.swift; sourceTree = "<group>"; };
 		3AE4F6CF1BBC8D250006CA1C /* EmptyProjectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyProjectViewController.swift; sourceTree = "<group>"; };
+		3AE8B79A1C52DAD20033F6EF /* Buildasaur-format-2-example2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Buildasaur-format-2-example2"; path = "Migration/Buildasaur-format-2-example2"; sourceTree = "<group>"; };
+		3AED13121C529BB600E3B7FF /* Buildasaur-format-3-example1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Buildasaur-format-3-example1"; path = "Migration/Buildasaur-format-3-example1"; sourceTree = "<group>"; };
+		3AED13141C52A1A300E3B7FF /* SecurePersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecurePersistence.swift; sourceTree = "<group>"; };
 		3AF090B71B1134AA0058567F /* BranchWatchingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BranchWatchingViewController.swift; sourceTree = "<group>"; };
 		3AF1B1231AAC7CA500917EF3 /* SyncerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerViewController.swift; sourceTree = "<group>"; };
 		406E01BAFEA2D2588BFD2D5A /* Pods_BuildaHeartbeatKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BuildaHeartbeatKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -634,9 +640,11 @@
 		3A9D741E1BCBF86900DCA23C /* Migration */ = {
 			isa = PBXGroup;
 			children = (
-				3A9D74251BCC19BB00DCA23C /* Buildasaur-format-2-example1 */,
-				3A9D74231BCC103E00DCA23C /* Buildasaur-format-1-example1 */,
 				3A9D74211BCC041600DCA23C /* Buildasaur-format-0-example1 */,
+				3A9D74231BCC103E00DCA23C /* Buildasaur-format-1-example1 */,
+				3A9D74251BCC19BB00DCA23C /* Buildasaur-format-2-example1 */,
+				3AE8B79A1C52DAD20033F6EF /* Buildasaur-format-2-example2 */,
+				3AED13121C529BB600E3B7FF /* Buildasaur-format-3-example1 */,
 				3A9D741F1BCBF87900DCA23C /* MigrationTests.swift */,
 			);
 			name = Migration;
@@ -748,6 +756,7 @@
 				3ACBADE71B5ADE2A00204457 /* StorageManager.swift */,
 				3A9D741C1BCBDDA200DCA23C /* PersistenceMigrator.swift */,
 				3A395B541BCF007000BB6947 /* LoginItem.swift */,
+				3AED13141C52A1A300E3B7FF /* SecurePersistence.swift */,
 			);
 			name = Persistence;
 			sourceTree = "<group>";
@@ -1144,8 +1153,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A9D74221BCC041600DCA23C /* Buildasaur-format-0-example1 in Resources */,
+				3AED13131C529BB600E3B7FF /* Buildasaur-format-3-example1 in Resources */,
 				3ACBADDD1B5ADE1400204457 /* sampleFinishedIntegration.json in Resources */,
 				3A9D74241BCC103E00DCA23C /* Buildasaur-format-1-example1 in Resources */,
+				3AE8B79B1C52DAD20033F6EF /* Buildasaur-format-2-example2 in Resources */,
 				3A9D74261BCC19BB00DCA23C /* Buildasaur-format-2-example1 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1455,6 +1466,7 @@
 				3A0FF5A41BBFF9FA00FB8051 /* ProjectConfig.swift in Sources */,
 				3ACBAE0E1B5ADE2A00204457 /* SyncPair_PR_NoBot.swift in Sources */,
 				3ACF93AA1BBEC7AB00CD888C /* XcodeScheme.swift in Sources */,
+				3AED13151C52A1A300E3B7FF /* SecurePersistence.swift in Sources */,
 				3A28AF531BC984850011756E /* ConfigTriplet.swift in Sources */,
 				3ACBADFD1B5ADE2A00204457 /* CommonExtensions.swift in Sources */,
 				3ACBAE131B5ADE2A00204457 /* SyncPairResolver.swift in Sources */,

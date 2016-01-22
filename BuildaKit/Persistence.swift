@@ -228,6 +228,16 @@ public class Persistence {
         _ = try? self.fileManager.copyItemAtURL(url, toURL: writeUrl)
     }
     
+    public func copyFileToFolder(fileName: String, folder: String) {
+        
+        let url = self.fileURLWithName(fileName, intention: .Reading, isDirectory: false)
+        let writeUrl = self
+            .fileURLWithName(folder, intention: .Writing, isDirectory: true)
+            .URLByAppendingPathComponent(fileName, isDirectory: false)
+        
+        _ = try? self.fileManager.copyItemAtURL(url, toURL: writeUrl)
+    }
+    
     public func createFolderIfNotExists(url: NSURL) {
         
         let fm = self.fileManager
@@ -244,7 +254,7 @@ public class Persistence {
         case WritingNoCreateFolder
     }
     
-    private func folderForIntention(intention: PersistenceIntention) -> NSURL {
+    func folderForIntention(intention: PersistenceIntention) -> NSURL {
         switch intention {
         case .Reading:
             return self.readingFolder
