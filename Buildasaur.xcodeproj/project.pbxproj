@@ -235,11 +235,11 @@
 		3A0FF5AD1BC0067700FB8051 /* SyncerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerManager.swift; sourceTree = "<group>"; };
 		3A28AF521BC984850011756E /* ConfigTriplet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigTriplet.swift; sourceTree = "<group>"; };
 		3A3231B01B5AEF7900B53E3F /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
-		3A32CD131A3D00F800861A34 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
-		3A32CD171A3D01E300861A34 /* Issue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Issue.swift; sourceTree = "<group>"; };
+		3A32CD131A3D00F800861A34 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Comment.swift; path = GitHub/Comment.swift; sourceTree = "<group>"; };
+		3A32CD171A3D01E300861A34 /* Issue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Issue.swift; path = GitHub/Issue.swift; sourceTree = "<group>"; };
 		3A35CD6C1BE96E9B0088D57A /* BaseTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTypes.swift; sourceTree = "<group>"; };
 		3A35CD6D1BE96E9B0088D57A /* SourceServerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SourceServerExtensions.swift; sourceTree = "<group>"; };
-		3A38CF951A3CE94C00F41AFA /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Status.swift; path = BuildaGitServer/Status.swift; sourceTree = SOURCE_ROOT; };
+		3A38CF951A3CE94C00F41AFA /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Status.swift; path = GitHub/Status.swift; sourceTree = "<group>"; };
 		3A395B541BCF007000BB6947 /* LoginItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginItem.swift; sourceTree = "<group>"; };
 		3A3BDC1E1AF6D34900D2CD99 /* GitHubRateLimit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubRateLimit.swift; sourceTree = "<group>"; };
 		3A3BF8C61BD7C1680050A0B7 /* CheckoutFileParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckoutFileParser.swift; sourceTree = "<group>"; };
@@ -256,15 +256,15 @@
 		3A5687751A3B93BD0066DB2B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3A5687791A3B93BD0066DB2B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3A56877C1A3B93BD0066DB2B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		3A58B1521A3B967C003E0266 /* GitHubServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GitHubServer.swift; path = BuildaGitServer/GitHubServer.swift; sourceTree = SOURCE_ROOT; };
+		3A58B1521A3B967C003E0266 /* GitHubServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubServer.swift; sourceTree = "<group>"; };
 		3A58B1581A3B96C9003E0266 /* GitHubServerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubServerTests.swift; sourceTree = "<group>"; };
 		3A5B04A91AB4ABEB00F60536 /* TriggerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TriggerViewController.swift; sourceTree = "<group>"; };
 		3A5B04AF1AB5144700F60536 /* ManualBotManagementViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualBotManagementViewController.swift; sourceTree = "<group>"; };
-		3A6355D71A3BBCD200545BF9 /* GitHubEndpoints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GitHubEndpoints.swift; path = BuildaGitServer/GitHubEndpoints.swift; sourceTree = SOURCE_ROOT; };
-		3A6355D91A3BBDA500545BF9 /* GitHubFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GitHubFactory.swift; path = BuildaGitServer/GitHubFactory.swift; sourceTree = SOURCE_ROOT; };
-		3A6355DF1A3BC77F00545BF9 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = BuildaGitServer/User.swift; sourceTree = SOURCE_ROOT; };
-		3A6355E11A3BCD2800545BF9 /* Repo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Repo.swift; path = BuildaGitServer/Repo.swift; sourceTree = SOURCE_ROOT; };
-		3A6355E31A3BD57D00545BF9 /* PullRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PullRequest.swift; path = BuildaGitServer/PullRequest.swift; sourceTree = SOURCE_ROOT; };
+		3A6355D71A3BBCD200545BF9 /* GitHubEndpoints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubEndpoints.swift; sourceTree = "<group>"; };
+		3A6355D91A3BBDA500545BF9 /* GitHubFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubFactory.swift; sourceTree = "<group>"; };
+		3A6355DF1A3BC77F00545BF9 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = GitHub/User.swift; sourceTree = "<group>"; };
+		3A6355E11A3BCD2800545BF9 /* Repo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Repo.swift; path = GitHub/Repo.swift; sourceTree = "<group>"; };
+		3A6355E31A3BD57D00545BF9 /* PullRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PullRequest.swift; path = GitHub/PullRequest.swift; sourceTree = "<group>"; };
 		3A756DBD1BAB425E00508B69 /* BuildaHeartbeatKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BuildaHeartbeatKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A756DBF1BAB425E00508B69 /* BuildaHeartbeatKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BuildaHeartbeatKit.h; sourceTree = "<group>"; };
 		3A756DC11BAB425E00508B69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -293,15 +293,15 @@
 		3A9D74211BCC041600DCA23C /* Buildasaur-format-0-example1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Buildasaur-format-0-example1"; path = "Migration/Buildasaur-format-0-example1"; sourceTree = "<group>"; };
 		3A9D74231BCC103E00DCA23C /* Buildasaur-format-1-example1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Buildasaur-format-1-example1"; path = "Migration/Buildasaur-format-1-example1"; sourceTree = "<group>"; };
 		3A9D74251BCC19BB00DCA23C /* Buildasaur-format-2-example1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Buildasaur-format-2-example1"; path = "Migration/Buildasaur-format-2-example1"; sourceTree = "<group>"; };
-		3A9DEC7A1A3BDA6C008C8270 /* PullRequestBranch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PullRequestBranch.swift; path = BuildaGitServer/PullRequestBranch.swift; sourceTree = SOURCE_ROOT; };
+		3A9DEC7A1A3BDA6C008C8270 /* PullRequestBranch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PullRequestBranch.swift; path = GitHub/PullRequestBranch.swift; sourceTree = "<group>"; };
 		3AA573051BCD70FC00172D3E /* URLUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLUtils.swift; sourceTree = "<group>"; };
 		3AAA1B651AAB6E9800FA1598 /* SeparatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
 		3AAA1B671AAB722600FA1598 /* ProjectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectViewController.swift; sourceTree = "<group>"; };
 		3AAA1B751AAC504700FA1598 /* XcodeServerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeServerViewController.swift; sourceTree = "<group>"; };
 		3AAA1B771AAC508A00FA1598 /* ConfigEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigEditViewController.swift; sourceTree = "<group>"; };
-		3AAF6E671A3CC1F400C657FB /* GitHubEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GitHubEntity.swift; path = BuildaGitServer/GitHubEntity.swift; sourceTree = SOURCE_ROOT; };
-		3AAF6E691A3CCA0900C657FB /* Branch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Branch.swift; path = BuildaGitServer/Branch.swift; sourceTree = SOURCE_ROOT; };
-		3AAF6E6B1A3CCA3B00C657FB /* Commit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Commit.swift; path = BuildaGitServer/Commit.swift; sourceTree = SOURCE_ROOT; };
+		3AAF6E671A3CC1F400C657FB /* GitHubEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GitHubEntity.swift; path = GitHub/GitHubEntity.swift; sourceTree = "<group>"; };
+		3AAF6E691A3CCA0900C657FB /* Branch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Branch.swift; path = GitHub/Branch.swift; sourceTree = "<group>"; };
+		3AAF6E6B1A3CCA3B00C657FB /* Commit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Commit.swift; path = GitHub/Commit.swift; sourceTree = "<group>"; };
 		3AAF6EE41A3CE5BA00C657FB /* BuildaGitServer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BuildaGitServer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AAF6EE71A3CE5BA00C657FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3AAF6EE81A3CE5BA00C657FB /* BuildaGitServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BuildaGitServer.h; sourceTree = "<group>"; };
@@ -480,7 +480,7 @@
 				3A35CD6C1BE96E9B0088D57A /* BaseTypes.swift */,
 				3A35CD6D1BE96E9B0088D57A /* SourceServerExtensions.swift */,
 			);
-			name = Base;
+			path = Base;
 			sourceTree = "<group>";
 		};
 		3A5687671A3B93BD0066DB2B = {
@@ -548,7 +548,7 @@
 				3A3BDC1E1AF6D34900D2CD99 /* GitHubRateLimit.swift */,
 			);
 			name = GitHub;
-			path = BuildaGitServer;
+			path = BuildaGitServer/GitHub;
 			sourceTree = SOURCE_ROOT;
 		};
 		3A6355DE1A3BC77500545BF9 /* Entities */ = {
@@ -668,6 +668,7 @@
 				3AAF6EE81A3CE5BA00C657FB /* BuildaGitServer.h */,
 				3AAF6F031A3CE66A00C657FB /* GitServerPublic.swift */,
 				3A35CD6B1BE96E880088D57A /* Base */,
+				3ABF0ADC1C51A47A00882A40 /* BitBucket */,
 				3A6355DB1A3BBDB000545BF9 /* GitHub */,
 				3AAF6EE61A3CE5BA00C657FB /* Supporting Files */,
 			);
@@ -697,6 +698,21 @@
 				3AAF6EF61A3CE5BA00C657FB /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3ABF0ADC1C51A47A00882A40 /* BitBucket */ = {
+			isa = PBXGroup;
+			children = (
+				3ABF0ADD1C51A48C00882A40 /* Entities */,
+			);
+			name = BitBucket;
+			sourceTree = "<group>";
+		};
+		3ABF0ADD1C51A48C00882A40 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Entities;
 			sourceTree = "<group>";
 		};
 		3AC156251BB95C130068A1A3 /* Dashboard */ = {
