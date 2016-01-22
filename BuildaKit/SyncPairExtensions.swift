@@ -15,7 +15,7 @@ extension SyncPair {
     
     public struct Actions {
         public let integrationsToCancel: [Integration]?
-        public let githubStatusToSet: (status: HDGitHubXCBotSyncer.GitHubStatusAndComment, commit: String, issue: Issue?)?
+        public let statusToSet: (status: StatusAndComment, commit: String, issue: IssueType?)?
         public let startNewIntegrationBot: Bot? //if non-nil, starts a new integration on this bot
     }
 
@@ -32,7 +32,7 @@ extension SyncPair {
             })
         }
         
-        if let newStatus = actions.githubStatusToSet {
+        if let newStatus = actions.statusToSet {
             
             let status = newStatus.status
             let commit = newStatus.commit

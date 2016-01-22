@@ -16,7 +16,7 @@ public protocol SyncerFactoryType {
     func newEditableTriplet() -> EditableConfigTriplet
     func createXcodeServer(config: XcodeServerConfig) -> XcodeServer
     func createProject(config: ProjectConfig) -> Project?
-    func createSourceServer(token: String) -> GitHubServer
+    func createSourceServer(token: String) -> SourceServerType
     func createTrigger(config: TriggerConfig) -> Trigger
 }
 
@@ -31,7 +31,8 @@ public class SyncerFactory: SyncerFactoryType {
     private func createSyncer(triplet: ConfigTriplet) -> HDGitHubXCBotSyncer? {
         
         let xcodeServer = self.createXcodeServer(triplet.server)
-        let githubServer = self.createSourceServer(triplet.project.githubToken)
+        //TODO: pull out authentication as SourceServerOptions
+        let sourceServer = self.createSourceServer(triplet.project.serverAuthentication ?? "")
         let maybeProject = self.createProject(triplet.project)
         let triggers = triplet.triggers.map { self.createTrigger($0) }
         
@@ -41,7 +42,7 @@ public class SyncerFactory: SyncerFactoryType {
         {
             poolAttempt.config.value = triplet.syncer
             poolAttempt.xcodeServer = xcodeServer
-            poolAttempt.github = githubServer
+            poolAttempt.sourceServer = sourceServer
             poolAttempt.project = project
             poolAttempt.buildTemplate = triplet.buildTemplate
             poolAttempt.triggers = triggers
@@ -50,7 +51,7 @@ public class SyncerFactory: SyncerFactoryType {
         
         let syncer = HDGitHubXCBotSyncer(
             integrationServer: xcodeServer,
-            sourceServer: githubServer,
+            sourceServer: sourceServer,
             project: project,
             buildTemplate: triplet.buildTemplate,
             triggers: triggers,
@@ -117,8 +118,10 @@ public class SyncerFactory: SyncerFactoryType {
         return project
     }
     
-    public func createSourceServer(token: String) -> GitHubServer {
-        let server = GitHubFactory.server(token)
+    public func createSourceServer(token: String) -> SourceServerType {
+        
+        let options: Set<SourceServerOption> = [.Token(token)]
+        let server: SourceServerType = SourceServerFactory().createServer(options)
         return server
     }
     

@@ -8,7 +8,7 @@
 
 import Foundation
 import BuildaUtils
-import BuildaGitServer
+@testable import BuildaGitServer
 import Buildasaur
 import XcodeServerSDK
 import BuildaKit
@@ -121,6 +121,14 @@ class MockIssue: Issue {
     required init(json: NSDictionary) {
         super.init(json: json)
     }
+}
+
+class MockBuildStatusCreator: BuildStatusCreator {
+    func createStatusFromState(state: BuildState, description: String?, targetUrl: String?) -> StatusType {
+        return GitHubStatus(state: GitHubStatus.GitHubState.fromBuildState(state), description: "Things happened", targetUrl: "http://hello.world", context: "Buildasaur")
+    }
+    
+    init() { }
 }
 
 class MockPullRequest: PullRequest {

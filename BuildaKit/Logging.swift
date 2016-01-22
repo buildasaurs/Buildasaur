@@ -13,7 +13,9 @@ public class Logging {
     
     public class func setup(persistence: Persistence, alsoIntoFile: Bool) {
         
-        let path = persistence.fileURLWithName("Builda.log", intention: .Writing, isDirectory: false)
+        let path = persistence
+            .fileURLWithName("Logs", intention: .Writing, isDirectory: true)
+            .URLByAppendingPathComponent("Builda.log", isDirectory: false)
         
         var loggers = [Logger]()
         

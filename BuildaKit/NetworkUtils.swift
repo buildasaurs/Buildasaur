@@ -13,10 +13,14 @@ import XcodeServerSDK
 
 public class NetworkUtils {
     
-    public class func checkAvailabilityOfGitHubWithCurrentSettingsOfProject(project: Project, completion: (success: Bool, error: NSError?) -> ()) {
+    public class func checkAvailabilityOfGitHubWithCurrentSettingsOfProject(project: Project, completion: (success: Bool, error: ErrorType?) -> ()) {
         
-        let token = project.config.value.githubToken
-        let server = GitHubFactory.server(token)
+        let token = project.config.value.serverAuthentication!
+        //TODO: have project spit out Set<SourceServerOption>
+        
+        let options: Set<SourceServerOption> = [.Token(token)]
+        let server: SourceServerType = SourceServerFactory().createServer(options)
+
         let credentialValidationBlueprint = project.createSourceControlBlueprintForCredentialVerification()
         
         //check if we can get PRs, that should be representative enough
@@ -30,12 +34,12 @@ public class NetworkUtils {
                     return
                 }
                 
-                if
-                    let repo = repo,
-                    let readPermission = repo.permissions["pull"] as? Bool,
-                    let writePermission = repo.permissions["push"] as? Bool
-                {
+                if let repo = repo {
 
+                    let permissions = repo.permissions
+                    let readPermission = permissions.read
+                    let writePermission = permissions.write
+                    
                     //look at the permissions in the PR metadata
                     if !readPermission {
                         completion(success: false, error: Error.withInfo("Missing read permission for repo"))

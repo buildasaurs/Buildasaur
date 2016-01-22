@@ -18,7 +18,8 @@
 		3A3231B11B5AEF7900B53E3F /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3231B01B5AEF7900B53E3F /* Logging.swift */; };
 		3A32CD141A3D00F800861A34 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A32CD131A3D00F800861A34 /* Comment.swift */; };
 		3A32CD181A3D01E300861A34 /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A32CD171A3D01E300861A34 /* Issue.swift */; };
-		3A32CD1E1A3D2ADD00861A34 /* GitHubServerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A32CD1D1A3D2ADD00861A34 /* GitHubServerExtensions.swift */; };
+		3A35CD6E1BE96E9B0088D57A /* BaseTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A35CD6C1BE96E9B0088D57A /* BaseTypes.swift */; };
+		3A35CD6F1BE96E9B0088D57A /* SourceServerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A35CD6D1BE96E9B0088D57A /* SourceServerExtensions.swift */; };
 		3A395B551BCF007000BB6947 /* LoginItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A395B541BCF007000BB6947 /* LoginItem.swift */; };
 		3A3BDC1F1AF6D34900D2CD99 /* GitHubRateLimit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3BDC1E1AF6D34900D2CD99 /* GitHubRateLimit.swift */; };
 		3A3BF8C71BD7C1680050A0B7 /* CheckoutFileParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3BF8C61BD7C1680050A0B7 /* CheckoutFileParser.swift */; };
@@ -39,7 +40,6 @@
 		3A756DC51BAB425E00508B69 /* BuildaHeartbeatKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3A756DBD1BAB425E00508B69 /* BuildaHeartbeatKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3A756DCB1BAB42C200508B69 /* Heartbeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A756DCA1BAB42C200508B69 /* Heartbeat.swift */; };
 		3A756DCC1BAB44A200508B69 /* BuildaHeartbeatKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A756DBD1BAB425E00508B69 /* BuildaHeartbeatKit.framework */; };
-		3A7F0CBF1BC14E640079A511 /* BuildasaurUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7F0CBE1BC14E640079A511 /* BuildasaurUITests.swift */; };
 		3A7F0CC81BC1508C0079A511 /* GeneralTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7F0CC71BC1508C0079A511 /* GeneralTests.swift */; };
 		3A81BB191B5A77E9004732CD /* BuildaKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A81BB181B5A77E9004732CD /* BuildaKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A81BB201B5A77E9004732CD /* BuildaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A81BB161B5A77E9004732CD /* BuildaKit.framework */; };
@@ -125,10 +125,13 @@
 		3ACF93AA1BBEC7AB00CD888C /* XcodeScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACF93A81BBEC7AB00CD888C /* XcodeScheme.swift */; };
 		3AD338B01AAE31D500ECD0F2 /* BuildTemplateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD338AF1AAE31D500ECD0F2 /* BuildTemplateViewController.swift */; };
 		3AD5D2E81BD01EAF008DBB45 /* SummaryBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD5D2E71BD01EAF008DBB45 /* SummaryBuilder.swift */; };
-		3AD5D2EA1BD02144008DBB45 /* SummaryBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD5D2E91BD02144008DBB45 /* SummaryBuilderTests.swift */; };
+		3AD5D2EA1BD02144008DBB45 /* GitHubSummaryBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD5D2E91BD02144008DBB45 /* GitHubSummaryBuilderTests.swift */; };
 		3AE0AB2B1BB991AB00A52D20 /* SyncerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE0AB2A1BB991AB00A52D20 /* SyncerViewModel.swift */; };
 		3AE4F6CE1BBC88450006CA1C /* RACUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE4F6CD1BBC88450006CA1C /* RACUtils.swift */; };
 		3AE4F6D01BBC8D250006CA1C /* EmptyProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE4F6CF1BBC8D250006CA1C /* EmptyProjectViewController.swift */; };
+		3AE8B79B1C52DAD20033F6EF /* Buildasaur-format-2-example2 in Resources */ = {isa = PBXBuildFile; fileRef = 3AE8B79A1C52DAD20033F6EF /* Buildasaur-format-2-example2 */; };
+		3AED13131C529BB600E3B7FF /* Buildasaur-format-3-example1 in Resources */ = {isa = PBXBuildFile; fileRef = 3AED13121C529BB600E3B7FF /* Buildasaur-format-3-example1 */; };
+		3AED13151C52A1A300E3B7FF /* SecurePersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AED13141C52A1A300E3B7FF /* SecurePersistence.swift */; };
 		3AF090B81B1134AA0058567F /* BranchWatchingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF090B71B1134AA0058567F /* BranchWatchingViewController.swift */; };
 		3AF1B1241AAC7CA500917EF3 /* SyncerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF1B1231AAC7CA500917EF3 /* SyncerViewController.swift */; };
 		723E971AA98B199C70B7C3AA /* Pods_BuildaHeartbeatKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 406E01BAFEA2D2588BFD2D5A /* Pods_BuildaHeartbeatKit.framework */; };
@@ -143,13 +146,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 3A756DBC1BAB425E00508B69;
 			remoteInfo = BuildaHeartbeatKit;
-		};
-		3A7F0CC11BC14E640079A511 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3A5687681A3B93BD0066DB2B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3A56876F1A3B93BD0066DB2B;
-			remoteInfo = Buildasaur;
 		};
 		3A81BB211B5A77E9004732CD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -234,10 +230,11 @@
 		3A0FF5AD1BC0067700FB8051 /* SyncerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerManager.swift; sourceTree = "<group>"; };
 		3A28AF521BC984850011756E /* ConfigTriplet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigTriplet.swift; sourceTree = "<group>"; };
 		3A3231B01B5AEF7900B53E3F /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
-		3A32CD131A3D00F800861A34 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
-		3A32CD171A3D01E300861A34 /* Issue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Issue.swift; sourceTree = "<group>"; };
-		3A32CD1D1A3D2ADD00861A34 /* GitHubServerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubServerExtensions.swift; sourceTree = "<group>"; };
-		3A38CF951A3CE94C00F41AFA /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Status.swift; path = BuildaGitServer/Status.swift; sourceTree = SOURCE_ROOT; };
+		3A32CD131A3D00F800861A34 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Comment.swift; path = GitHub/Comment.swift; sourceTree = "<group>"; };
+		3A32CD171A3D01E300861A34 /* Issue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Issue.swift; path = GitHub/Issue.swift; sourceTree = "<group>"; };
+		3A35CD6C1BE96E9B0088D57A /* BaseTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTypes.swift; sourceTree = "<group>"; };
+		3A35CD6D1BE96E9B0088D57A /* SourceServerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SourceServerExtensions.swift; sourceTree = "<group>"; };
+		3A38CF951A3CE94C00F41AFA /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Status.swift; path = GitHub/Status.swift; sourceTree = "<group>"; };
 		3A395B541BCF007000BB6947 /* LoginItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginItem.swift; sourceTree = "<group>"; };
 		3A3BDC1E1AF6D34900D2CD99 /* GitHubRateLimit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubRateLimit.swift; sourceTree = "<group>"; };
 		3A3BF8C61BD7C1680050A0B7 /* CheckoutFileParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckoutFileParser.swift; sourceTree = "<group>"; };
@@ -254,22 +251,19 @@
 		3A5687751A3B93BD0066DB2B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3A5687791A3B93BD0066DB2B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3A56877C1A3B93BD0066DB2B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		3A58B1521A3B967C003E0266 /* GitHubServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GitHubServer.swift; path = BuildaGitServer/GitHubServer.swift; sourceTree = SOURCE_ROOT; };
+		3A58B1521A3B967C003E0266 /* GitHubServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubServer.swift; sourceTree = "<group>"; };
 		3A58B1581A3B96C9003E0266 /* GitHubServerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubServerTests.swift; sourceTree = "<group>"; };
 		3A5B04A91AB4ABEB00F60536 /* TriggerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TriggerViewController.swift; sourceTree = "<group>"; };
 		3A5B04AF1AB5144700F60536 /* ManualBotManagementViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualBotManagementViewController.swift; sourceTree = "<group>"; };
-		3A6355D71A3BBCD200545BF9 /* GitHubEndpoints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GitHubEndpoints.swift; path = BuildaGitServer/GitHubEndpoints.swift; sourceTree = SOURCE_ROOT; };
-		3A6355D91A3BBDA500545BF9 /* GitHubFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GitHubFactory.swift; path = BuildaGitServer/GitHubFactory.swift; sourceTree = SOURCE_ROOT; };
-		3A6355DF1A3BC77F00545BF9 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = BuildaGitServer/User.swift; sourceTree = SOURCE_ROOT; };
-		3A6355E11A3BCD2800545BF9 /* Repo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Repo.swift; path = BuildaGitServer/Repo.swift; sourceTree = SOURCE_ROOT; };
-		3A6355E31A3BD57D00545BF9 /* PullRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PullRequest.swift; path = BuildaGitServer/PullRequest.swift; sourceTree = SOURCE_ROOT; };
+		3A6355D71A3BBCD200545BF9 /* GitHubEndpoints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubEndpoints.swift; sourceTree = "<group>"; };
+		3A6355D91A3BBDA500545BF9 /* GitHubFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubFactory.swift; sourceTree = "<group>"; };
+		3A6355DF1A3BC77F00545BF9 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = GitHub/User.swift; sourceTree = "<group>"; };
+		3A6355E11A3BCD2800545BF9 /* Repo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Repo.swift; path = GitHub/Repo.swift; sourceTree = "<group>"; };
+		3A6355E31A3BD57D00545BF9 /* PullRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PullRequest.swift; path = GitHub/PullRequest.swift; sourceTree = "<group>"; };
 		3A756DBD1BAB425E00508B69 /* BuildaHeartbeatKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BuildaHeartbeatKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A756DBF1BAB425E00508B69 /* BuildaHeartbeatKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BuildaHeartbeatKit.h; sourceTree = "<group>"; };
 		3A756DC11BAB425E00508B69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A756DCA1BAB42C200508B69 /* Heartbeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Heartbeat.swift; sourceTree = "<group>"; };
-		3A7F0CBC1BC14E640079A511 /* BuildasaurUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BuildasaurUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3A7F0CBE1BC14E640079A511 /* BuildasaurUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildasaurUITests.swift; sourceTree = "<group>"; };
-		3A7F0CC01BC14E640079A511 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A7F0CC71BC1508C0079A511 /* GeneralTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralTests.swift; sourceTree = "<group>"; };
 		3A81BB161B5A77E9004732CD /* BuildaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BuildaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A81BB181B5A77E9004732CD /* BuildaKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BuildaKit.h; sourceTree = "<group>"; };
@@ -291,15 +285,15 @@
 		3A9D74211BCC041600DCA23C /* Buildasaur-format-0-example1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Buildasaur-format-0-example1"; path = "Migration/Buildasaur-format-0-example1"; sourceTree = "<group>"; };
 		3A9D74231BCC103E00DCA23C /* Buildasaur-format-1-example1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Buildasaur-format-1-example1"; path = "Migration/Buildasaur-format-1-example1"; sourceTree = "<group>"; };
 		3A9D74251BCC19BB00DCA23C /* Buildasaur-format-2-example1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Buildasaur-format-2-example1"; path = "Migration/Buildasaur-format-2-example1"; sourceTree = "<group>"; };
-		3A9DEC7A1A3BDA6C008C8270 /* PullRequestBranch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PullRequestBranch.swift; path = BuildaGitServer/PullRequestBranch.swift; sourceTree = SOURCE_ROOT; };
+		3A9DEC7A1A3BDA6C008C8270 /* PullRequestBranch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PullRequestBranch.swift; path = GitHub/PullRequestBranch.swift; sourceTree = "<group>"; };
 		3AA573051BCD70FC00172D3E /* URLUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLUtils.swift; sourceTree = "<group>"; };
 		3AAA1B651AAB6E9800FA1598 /* SeparatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
 		3AAA1B671AAB722600FA1598 /* ProjectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectViewController.swift; sourceTree = "<group>"; };
 		3AAA1B751AAC504700FA1598 /* XcodeServerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeServerViewController.swift; sourceTree = "<group>"; };
 		3AAA1B771AAC508A00FA1598 /* ConfigEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigEditViewController.swift; sourceTree = "<group>"; };
-		3AAF6E671A3CC1F400C657FB /* GitHubEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GitHubEntity.swift; path = BuildaGitServer/GitHubEntity.swift; sourceTree = SOURCE_ROOT; };
-		3AAF6E691A3CCA0900C657FB /* Branch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Branch.swift; path = BuildaGitServer/Branch.swift; sourceTree = SOURCE_ROOT; };
-		3AAF6E6B1A3CCA3B00C657FB /* Commit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Commit.swift; path = BuildaGitServer/Commit.swift; sourceTree = SOURCE_ROOT; };
+		3AAF6E671A3CC1F400C657FB /* GitHubEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GitHubEntity.swift; path = GitHub/GitHubEntity.swift; sourceTree = "<group>"; };
+		3AAF6E691A3CCA0900C657FB /* Branch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Branch.swift; path = GitHub/Branch.swift; sourceTree = "<group>"; };
+		3AAF6E6B1A3CCA3B00C657FB /* Commit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Commit.swift; path = GitHub/Commit.swift; sourceTree = "<group>"; };
 		3AAF6EE41A3CE5BA00C657FB /* BuildaGitServer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BuildaGitServer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AAF6EE71A3CE5BA00C657FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3AAF6EE81A3CE5BA00C657FB /* BuildaGitServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BuildaGitServer.h; sourceTree = "<group>"; };
@@ -348,10 +342,13 @@
 		3ACF93A81BBEC7AB00CD888C /* XcodeScheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeScheme.swift; sourceTree = "<group>"; };
 		3AD338AF1AAE31D500ECD0F2 /* BuildTemplateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildTemplateViewController.swift; sourceTree = "<group>"; };
 		3AD5D2E71BD01EAF008DBB45 /* SummaryBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SummaryBuilder.swift; sourceTree = "<group>"; };
-		3AD5D2E91BD02144008DBB45 /* SummaryBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SummaryBuilderTests.swift; sourceTree = "<group>"; };
+		3AD5D2E91BD02144008DBB45 /* GitHubSummaryBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GitHubSummaryBuilderTests.swift; sourceTree = "<group>"; };
 		3AE0AB2A1BB991AB00A52D20 /* SyncerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerViewModel.swift; sourceTree = "<group>"; };
 		3AE4F6CD1BBC88450006CA1C /* RACUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RACUtils.swift; sourceTree = "<group>"; };
 		3AE4F6CF1BBC8D250006CA1C /* EmptyProjectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyProjectViewController.swift; sourceTree = "<group>"; };
+		3AE8B79A1C52DAD20033F6EF /* Buildasaur-format-2-example2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Buildasaur-format-2-example2"; path = "Migration/Buildasaur-format-2-example2"; sourceTree = "<group>"; };
+		3AED13121C529BB600E3B7FF /* Buildasaur-format-3-example1 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Buildasaur-format-3-example1"; path = "Migration/Buildasaur-format-3-example1"; sourceTree = "<group>"; };
+		3AED13141C52A1A300E3B7FF /* SecurePersistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecurePersistence.swift; sourceTree = "<group>"; };
 		3AF090B71B1134AA0058567F /* BranchWatchingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BranchWatchingViewController.swift; sourceTree = "<group>"; };
 		3AF1B1231AAC7CA500917EF3 /* SyncerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerViewController.swift; sourceTree = "<group>"; };
 		406E01BAFEA2D2588BFD2D5A /* Pods_BuildaHeartbeatKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BuildaHeartbeatKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -388,13 +385,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				723E971AA98B199C70B7C3AA /* Pods_BuildaHeartbeatKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3A7F0CB91BC14E640079A511 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -472,11 +462,19 @@
 			name = Utils;
 			sourceTree = "<group>";
 		};
+		3A35CD6B1BE96E880088D57A /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				3A35CD6C1BE96E9B0088D57A /* BaseTypes.swift */,
+				3A35CD6D1BE96E9B0088D57A /* SourceServerExtensions.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
 		3A5687671A3B93BD0066DB2B = {
 			isa = PBXGroup;
 			children = (
 				3A5687721A3B93BD0066DB2B /* Buildasaur */,
-				3A7F0CBD1BC14E640079A511 /* BuildasaurUITests */,
 				3A81BB171B5A77E9004732CD /* BuildaKit */,
 				3A81BB251B5A77E9004732CD /* BuildaKitTests */,
 				3AAF6EE51A3CE5BA00C657FB /* BuildaGitServer */,
@@ -497,7 +495,6 @@
 				3A81BB161B5A77E9004732CD /* BuildaKit.framework */,
 				3A81BB1F1B5A77E9004732CD /* BuildaKitTests.xctest */,
 				3A756DBD1BAB425E00508B69 /* BuildaHeartbeatKit.framework */,
-				3A7F0CBC1BC14E640079A511 /* BuildasaurUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -534,11 +531,10 @@
 				3A6355D71A3BBCD200545BF9 /* GitHubEndpoints.swift */,
 				3A6355D91A3BBDA500545BF9 /* GitHubFactory.swift */,
 				3A58B1521A3B967C003E0266 /* GitHubServer.swift */,
-				3A32CD1D1A3D2ADD00861A34 /* GitHubServerExtensions.swift */,
 				3A3BDC1E1AF6D34900D2CD99 /* GitHubRateLimit.swift */,
 			);
 			name = GitHub;
-			path = BuildaGitServer;
+			path = BuildaGitServer/GitHub;
 			sourceTree = SOURCE_ROOT;
 		};
 		3A6355DE1A3BC77500545BF9 /* Entities */ = {
@@ -569,15 +565,6 @@
 			path = BuildaHeartbeatKit;
 			sourceTree = "<group>";
 		};
-		3A7F0CBD1BC14E640079A511 /* BuildasaurUITests */ = {
-			isa = PBXGroup;
-			children = (
-				3A7F0CBE1BC14E640079A511 /* BuildasaurUITests.swift */,
-				3A7F0CC01BC14E640079A511 /* Info.plist */,
-			);
-			path = BuildasaurUITests;
-			sourceTree = "<group>";
-		};
 		3A81BB171B5A77E9004732CD /* BuildaKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -599,7 +586,7 @@
 				3A7F0CC71BC1508C0079A511 /* GeneralTests.swift */,
 				3ACBADD61B5ADE0E00204457 /* MockHelpers.swift */,
 				3ACBADD81B5ADE1400204457 /* Mocks.swift */,
-				3AD5D2E91BD02144008DBB45 /* SummaryBuilderTests.swift */,
+				3AD5D2E91BD02144008DBB45 /* GitHubSummaryBuilderTests.swift */,
 				3ACBADDA1B5ADE1400204457 /* SyncerTests.swift */,
 				3ACBADDB1B5ADE1400204457 /* SyncPair_PR_Bot_Tests.swift */,
 				3A9D741E1BCBF86900DCA23C /* Migration */,
@@ -624,9 +611,11 @@
 		3A9D741E1BCBF86900DCA23C /* Migration */ = {
 			isa = PBXGroup;
 			children = (
-				3A9D74251BCC19BB00DCA23C /* Buildasaur-format-2-example1 */,
-				3A9D74231BCC103E00DCA23C /* Buildasaur-format-1-example1 */,
 				3A9D74211BCC041600DCA23C /* Buildasaur-format-0-example1 */,
+				3A9D74231BCC103E00DCA23C /* Buildasaur-format-1-example1 */,
+				3A9D74251BCC19BB00DCA23C /* Buildasaur-format-2-example1 */,
+				3AE8B79A1C52DAD20033F6EF /* Buildasaur-format-2-example2 */,
+				3AED13121C529BB600E3B7FF /* Buildasaur-format-3-example1 */,
 				3A9D741F1BCBF87900DCA23C /* MigrationTests.swift */,
 			);
 			name = Migration;
@@ -655,8 +644,10 @@
 		3AAF6EE51A3CE5BA00C657FB /* BuildaGitServer */ = {
 			isa = PBXGroup;
 			children = (
-				3AAF6F031A3CE66A00C657FB /* GitServerPublic.swift */,
 				3AAF6EE81A3CE5BA00C657FB /* BuildaGitServer.h */,
+				3AAF6F031A3CE66A00C657FB /* GitServerPublic.swift */,
+				3A35CD6B1BE96E880088D57A /* Base */,
+				3ABF0ADC1C51A47A00882A40 /* BitBucket */,
 				3A6355DB1A3BBDB000545BF9 /* GitHub */,
 				3AAF6EE61A3CE5BA00C657FB /* Supporting Files */,
 			);
@@ -686,6 +677,21 @@
 				3AAF6EF61A3CE5BA00C657FB /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3ABF0ADC1C51A47A00882A40 /* BitBucket */ = {
+			isa = PBXGroup;
+			children = (
+				3ABF0ADD1C51A48C00882A40 /* Entities */,
+			);
+			name = BitBucket;
+			sourceTree = "<group>";
+		};
+		3ABF0ADD1C51A48C00882A40 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Entities;
 			sourceTree = "<group>";
 		};
 		3AC156251BB95C130068A1A3 /* Dashboard */ = {
@@ -721,6 +727,7 @@
 				3ACBADE71B5ADE2A00204457 /* StorageManager.swift */,
 				3A9D741C1BCBDDA200DCA23C /* PersistenceMigrator.swift */,
 				3A395B541BCF007000BB6947 /* LoginItem.swift */,
+				3AED13141C52A1A300E3B7FF /* SecurePersistence.swift */,
 			);
 			name = Persistence;
 			sourceTree = "<group>";
@@ -909,24 +916,6 @@
 			productReference = 3A756DBD1BAB425E00508B69 /* BuildaHeartbeatKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		3A7F0CBB1BC14E640079A511 /* BuildasaurUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3A7F0CC61BC14E640079A511 /* Build configuration list for PBXNativeTarget "BuildasaurUITests" */;
-			buildPhases = (
-				3A7F0CB81BC14E640079A511 /* Sources */,
-				3A7F0CB91BC14E640079A511 /* Frameworks */,
-				3A7F0CBA1BC14E640079A511 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				3A7F0CC21BC14E640079A511 /* PBXTargetDependency */,
-			);
-			name = BuildasaurUITests;
-			productName = BuildasaurUITests;
-			productReference = 3A7F0CBC1BC14E640079A511 /* BuildasaurUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 		3A81BB151B5A77E9004732CD /* BuildaKit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3A81BB331B5A77E9004732CD /* Build configuration list for PBXNativeTarget "BuildaKit" */;
@@ -1035,10 +1024,6 @@
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = 7BJ2984YDK;
 					};
-					3A7F0CBB1BC14E640079A511 = {
-						CreatedOnToolsVersion = 7.0.1;
-						TestTargetID = 3A56876F1A3B93BD0066DB2B;
-					};
 					3A81BB151B5A77E9004732CD = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = 7BJ2984YDK;
@@ -1070,7 +1055,6 @@
 			projectRoot = "";
 			targets = (
 				3A56876F1A3B93BD0066DB2B /* Buildasaur */,
-				3A7F0CBB1BC14E640079A511 /* BuildasaurUITests */,
 				3A81BB151B5A77E9004732CD /* BuildaKit */,
 				3A81BB1E1B5A77E9004732CD /* BuildaKitTests */,
 				3AAF6EE31A3CE5BA00C657FB /* BuildaGitServer */,
@@ -1098,13 +1082,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3A7F0CBA1BC14E640079A511 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3A81BB141B5A77E9004732CD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1117,8 +1094,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A9D74221BCC041600DCA23C /* Buildasaur-format-0-example1 in Resources */,
+				3AED13131C529BB600E3B7FF /* Buildasaur-format-3-example1 in Resources */,
 				3ACBADDD1B5ADE1400204457 /* sampleFinishedIntegration.json in Resources */,
 				3A9D74241BCC103E00DCA23C /* Buildasaur-format-1-example1 in Resources */,
+				3AE8B79B1C52DAD20033F6EF /* Buildasaur-format-2-example2 in Resources */,
 				3A9D74261BCC19BB00DCA23C /* Buildasaur-format-2-example1 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1411,14 +1390,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3A7F0CB81BC14E640079A511 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3A7F0CBF1BC14E640079A511 /* BuildasaurUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3A81BB111B5A77E9004732CD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1428,6 +1399,7 @@
 				3A0FF5A41BBFF9FA00FB8051 /* ProjectConfig.swift in Sources */,
 				3ACBAE0E1B5ADE2A00204457 /* SyncPair_PR_NoBot.swift in Sources */,
 				3ACF93AA1BBEC7AB00CD888C /* XcodeScheme.swift in Sources */,
+				3AED13151C52A1A300E3B7FF /* SecurePersistence.swift in Sources */,
 				3A28AF531BC984850011756E /* ConfigTriplet.swift in Sources */,
 				3ACBADFD1B5ADE2A00204457 /* CommonExtensions.swift in Sources */,
 				3ACBAE131B5ADE2A00204457 /* SyncPairResolver.swift in Sources */,
@@ -1478,7 +1450,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3ACBADD71B5ADE0E00204457 /* MockHelpers.swift in Sources */,
-				3AD5D2EA1BD02144008DBB45 /* SummaryBuilderTests.swift in Sources */,
+				3AD5D2EA1BD02144008DBB45 /* GitHubSummaryBuilderTests.swift in Sources */,
 				3ACBADDE1B5ADE1400204457 /* SyncerTests.swift in Sources */,
 				3ACBADDF1B5ADE1400204457 /* SyncPair_PR_Bot_Tests.swift in Sources */,
 				3ACBADDC1B5ADE1400204457 /* Mocks.swift in Sources */,
@@ -1501,12 +1473,13 @@
 				3AB3F0EB1A3CEBE9005F717F /* GitServerPublic.swift in Sources */,
 				3AB3F0E81A3CEBAC005F717F /* GitHubEndpoints.swift in Sources */,
 				3A32CD141A3D00F800861A34 /* Comment.swift in Sources */,
+				3A35CD6E1BE96E9B0088D57A /* BaseTypes.swift in Sources */,
 				3AB3F0EA1A3CEBAC005F717F /* GitHubServer.swift in Sources */,
 				3AB3F0E41A3CEBAC005F717F /* PullRequestBranch.swift in Sources */,
 				3AB3F0E61A3CEBAC005F717F /* User.swift in Sources */,
 				3AB3F0E91A3CEBAC005F717F /* GitHubFactory.swift in Sources */,
+				3A35CD6F1BE96E9B0088D57A /* SourceServerExtensions.swift in Sources */,
 				3A3BDC1F1AF6D34900D2CD99 /* GitHubRateLimit.swift in Sources */,
-				3A32CD1E1A3D2ADD00861A34 /* GitHubServerExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1525,11 +1498,6 @@
 			isa = PBXTargetDependency;
 			target = 3A756DBC1BAB425E00508B69 /* BuildaHeartbeatKit */;
 			targetProxy = 3A756DC21BAB425E00508B69 /* PBXContainerItemProxy */;
-		};
-		3A7F0CC21BC14E640079A511 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 3A56876F1A3B93BD0066DB2B /* Buildasaur */;
-			targetProxy = 3A7F0CC11BC14E640079A511 /* PBXContainerItemProxy */;
 		};
 		3A81BB221B5A77E9004732CD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1888,56 +1856,6 @@
 			};
 			name = Testing;
 		};
-		3A7F0CC31BC14E640079A511 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = BuildasaurUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = com.honzadvorsky.BuildasaurUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = Buildasaur;
-				USES_XCTRUNNER = YES;
-			};
-			name = Debug;
-		};
-		3A7F0CC41BC14E640079A511 /* Testing */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				ENABLE_NS_ASSERTIONS = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = BuildasaurUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = com.honzadvorsky.BuildasaurUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = Buildasaur;
-				USES_XCTRUNNER = YES;
-			};
-			name = Testing;
-		};
-		3A7F0CC51BC14E640079A511 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				ENABLE_NS_ASSERTIONS = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = BuildasaurUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = com.honzadvorsky.BuildasaurUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = Buildasaur;
-				USES_XCTRUNNER = YES;
-			};
-			name = Release;
-		};
 		3A81BB2D1B5A77E9004732CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 17FE44590CED1491A8F03F35 /* Pods-BuildaKit.debug.xcconfig */;
@@ -2110,6 +2028,7 @@
 			baseConfigurationReference = AFE44BFFCEFA7E33318AFA65 /* Pods-BuildaGitServer.release.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -2199,16 +2118,6 @@
 				3A756DC61BAB425E00508B69 /* Debug */,
 				3A756DC71BAB425E00508B69 /* Testing */,
 				3A756DC81BAB425E00508B69 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		3A7F0CC61BC14E640079A511 /* Build configuration list for PBXNativeTarget "BuildasaurUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3A7F0CC31BC14E640079A511 /* Debug */,
-				3A7F0CC41BC14E640079A511 /* Testing */,
-				3A7F0CC51BC14E640079A511 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

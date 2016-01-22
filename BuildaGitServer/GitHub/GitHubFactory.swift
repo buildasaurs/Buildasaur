@@ -8,9 +8,9 @@
 
 import Foundation
 
-public class GitHubFactory {
+class GitHubFactory {
     
-    public class func server(token: String?) -> GitHubServer {
+    class func server(token: String?) -> GitHubServer {
      
         let baseURL = "https://api.github.com"
         let endpoints = GitHubEndpoints(baseURL: baseURL, token: token)
