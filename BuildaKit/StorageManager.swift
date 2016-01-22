@@ -173,7 +173,7 @@ public class StorageManager {
         self.projectConfigs.value = allProjects
             .map {
                 (var p: ProjectConfig) -> ProjectConfig in
-                p.serverAuthentication = projectConfigKeychain[p.keychainKey()]
+                p.serverAuthentication = projectConfigKeychain.read(p.keychainKey())
                 return p
             }.dictionarifyWithKey { $0.id }
         
@@ -183,7 +183,7 @@ public class StorageManager {
         self.serverConfigs.value = allServerConfigs
             .map {
                 (var x: XcodeServerConfig) -> XcodeServerConfig in
-                x.password = xcsConfigKeychain[x.keychainKey()]
+                x.password = xcsConfigKeychain.read(x.keychainKey())
                 return x
             }.dictionarifyWithKey { $0.id }
         
@@ -229,7 +229,7 @@ public class StorageManager {
         let projectConfigs: NSArray = Array(configs.values).map { $0.jsonify() }
         let projectConfigKeychain = SecurePersistence.sourceServerTokenKeychain()
         configs.values.forEach {
-            projectConfigKeychain.updateIfNeeded($0.keychainKey(), value: $0.serverAuthentication)
+            projectConfigKeychain.writeIfNeeded($0.keychainKey(), value: $0.serverAuthentication)
         }
         self.persistence.saveArray("Projects.json", items: projectConfigs)
     }
@@ -238,7 +238,7 @@ public class StorageManager {
         let serverConfigs = Array(configs.values).map { $0.jsonify() }
         let serverConfigKeychain = SecurePersistence.sourceServerTokenKeychain()
         configs.values.forEach {
-            serverConfigKeychain.updateIfNeeded($0.keychainKey(), value: $0.password)
+            serverConfigKeychain.writeIfNeeded($0.keychainKey(), value: $0.password)
         }
         self.persistence.saveArray("ServerConfigs.json", items: serverConfigs)
     }

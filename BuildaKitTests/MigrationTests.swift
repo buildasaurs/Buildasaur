@@ -133,6 +133,13 @@ class MigrationTests: XCTestCase {
         do {
             try migrator.attemptMigration()
             try self.ensureEqualHierarchies(persistence, urlExpected: expectedURL, urlReal: writingURL)
+            
+            //wipe the test keychains
+            SecurePersistence.sourceServerPassphraseKeychain().wipe()
+            SecurePersistence.sourceServerTokenKeychain().wipe()
+            SecurePersistence.xcodeServerPasswordKeychain().wipe()
+            NSThread.sleepForTimeInterval(0.5) //let the queues finish
+            
         } catch {
             fail("\(error)")
         }

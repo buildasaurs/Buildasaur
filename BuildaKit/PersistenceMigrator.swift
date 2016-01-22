@@ -327,13 +327,13 @@ class Migrator_v2_v3: MigratorType {
             d.removeObjectForKey("ssh_passphrase")
             
             let tokenKeychain = SecurePersistence.sourceServerTokenKeychain()
-            tokenKeychain[id] = token
+            tokenKeychain.writeIfNeeded(id, value: token)
             
             let passphraseKeychain = SecurePersistence.sourceServerPassphraseKeychain()
-            passphraseKeychain[id] = passphrase
+            passphraseKeychain.writeIfNeeded(id, value: passphrase)
             
-            precondition(tokenKeychain[id] == token, "Saved token must match")
-            precondition(passphraseKeychain[id] == passphrase, "Saved passphrase must match")
+            precondition(tokenKeychain.read(id) == token, "Saved token must match")
+            precondition(passphraseKeychain.read(id) == passphrase, "Saved passphrase must match")
             
             return d
         }
@@ -354,11 +354,11 @@ class Migrator_v2_v3: MigratorType {
             let key = (try! XcodeServerConfig(json: d)).keychainKey()
             
             let keychain = SecurePersistence.xcodeServerPasswordKeychain()
-            keychain[key] = password
+            keychain.writeIfNeeded(key, value: password)
             
             d.removeObjectForKey("password")
             
-            precondition(keychain[key] == password, "Saved password must match")
+            precondition(keychain.read(key) == password, "Saved password must match")
             
             return d
         }
