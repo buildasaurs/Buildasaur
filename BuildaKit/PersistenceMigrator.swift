@@ -58,7 +58,9 @@ public class CompositeMigrator: MigratorType {
     }
     
     public func attemptMigration() throws {
-        try self.childMigrators.forEach { try $0.attemptMigration() }
+        try self.childMigrators
+            .filter { $0.isMigrationRequired() }
+            .forEach { try $0.attemptMigration() }
     }
 }
 

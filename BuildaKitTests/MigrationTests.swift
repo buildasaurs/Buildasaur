@@ -144,7 +144,7 @@ class MigrationTests: XCTestCase {
             fail("\(error)")
         }
     }
-    
+        
     func testPersistenceSetter() {
         
         let tmp = NSURL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)

@@ -40,7 +40,6 @@
 		3A756DC51BAB425E00508B69 /* BuildaHeartbeatKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3A756DBD1BAB425E00508B69 /* BuildaHeartbeatKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3A756DCB1BAB42C200508B69 /* Heartbeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A756DCA1BAB42C200508B69 /* Heartbeat.swift */; };
 		3A756DCC1BAB44A200508B69 /* BuildaHeartbeatKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A756DBD1BAB425E00508B69 /* BuildaHeartbeatKit.framework */; };
-		3A7F0CBF1BC14E640079A511 /* BuildasaurUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7F0CBE1BC14E640079A511 /* BuildasaurUITests.swift */; };
 		3A7F0CC81BC1508C0079A511 /* GeneralTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7F0CC71BC1508C0079A511 /* GeneralTests.swift */; };
 		3A81BB191B5A77E9004732CD /* BuildaKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A81BB181B5A77E9004732CD /* BuildaKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A81BB201B5A77E9004732CD /* BuildaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A81BB161B5A77E9004732CD /* BuildaKit.framework */; };
@@ -147,13 +146,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 3A756DBC1BAB425E00508B69;
 			remoteInfo = BuildaHeartbeatKit;
-		};
-		3A7F0CC11BC14E640079A511 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3A5687681A3B93BD0066DB2B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3A56876F1A3B93BD0066DB2B;
-			remoteInfo = Buildasaur;
 		};
 		3A81BB211B5A77E9004732CD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -272,9 +264,6 @@
 		3A756DBF1BAB425E00508B69 /* BuildaHeartbeatKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BuildaHeartbeatKit.h; sourceTree = "<group>"; };
 		3A756DC11BAB425E00508B69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A756DCA1BAB42C200508B69 /* Heartbeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Heartbeat.swift; sourceTree = "<group>"; };
-		3A7F0CBC1BC14E640079A511 /* BuildasaurUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BuildasaurUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3A7F0CBE1BC14E640079A511 /* BuildasaurUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildasaurUITests.swift; sourceTree = "<group>"; };
-		3A7F0CC01BC14E640079A511 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A7F0CC71BC1508C0079A511 /* GeneralTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralTests.swift; sourceTree = "<group>"; };
 		3A81BB161B5A77E9004732CD /* BuildaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BuildaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A81BB181B5A77E9004732CD /* BuildaKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BuildaKit.h; sourceTree = "<group>"; };
@@ -399,13 +388,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3A7F0CB91BC14E640079A511 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3A81BB121B5A77E9004732CD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -493,7 +475,6 @@
 			isa = PBXGroup;
 			children = (
 				3A5687721A3B93BD0066DB2B /* Buildasaur */,
-				3A7F0CBD1BC14E640079A511 /* BuildasaurUITests */,
 				3A81BB171B5A77E9004732CD /* BuildaKit */,
 				3A81BB251B5A77E9004732CD /* BuildaKitTests */,
 				3AAF6EE51A3CE5BA00C657FB /* BuildaGitServer */,
@@ -514,7 +495,6 @@
 				3A81BB161B5A77E9004732CD /* BuildaKit.framework */,
 				3A81BB1F1B5A77E9004732CD /* BuildaKitTests.xctest */,
 				3A756DBD1BAB425E00508B69 /* BuildaHeartbeatKit.framework */,
-				3A7F0CBC1BC14E640079A511 /* BuildasaurUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -583,15 +563,6 @@
 				3A756DCA1BAB42C200508B69 /* Heartbeat.swift */,
 			);
 			path = BuildaHeartbeatKit;
-			sourceTree = "<group>";
-		};
-		3A7F0CBD1BC14E640079A511 /* BuildasaurUITests */ = {
-			isa = PBXGroup;
-			children = (
-				3A7F0CBE1BC14E640079A511 /* BuildasaurUITests.swift */,
-				3A7F0CC01BC14E640079A511 /* Info.plist */,
-			);
-			path = BuildasaurUITests;
 			sourceTree = "<group>";
 		};
 		3A81BB171B5A77E9004732CD /* BuildaKit */ = {
@@ -945,24 +916,6 @@
 			productReference = 3A756DBD1BAB425E00508B69 /* BuildaHeartbeatKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		3A7F0CBB1BC14E640079A511 /* BuildasaurUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3A7F0CC61BC14E640079A511 /* Build configuration list for PBXNativeTarget "BuildasaurUITests" */;
-			buildPhases = (
-				3A7F0CB81BC14E640079A511 /* Sources */,
-				3A7F0CB91BC14E640079A511 /* Frameworks */,
-				3A7F0CBA1BC14E640079A511 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				3A7F0CC21BC14E640079A511 /* PBXTargetDependency */,
-			);
-			name = BuildasaurUITests;
-			productName = BuildasaurUITests;
-			productReference = 3A7F0CBC1BC14E640079A511 /* BuildasaurUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 		3A81BB151B5A77E9004732CD /* BuildaKit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3A81BB331B5A77E9004732CD /* Build configuration list for PBXNativeTarget "BuildaKit" */;
@@ -1071,10 +1024,6 @@
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = 7BJ2984YDK;
 					};
-					3A7F0CBB1BC14E640079A511 = {
-						CreatedOnToolsVersion = 7.0.1;
-						TestTargetID = 3A56876F1A3B93BD0066DB2B;
-					};
 					3A81BB151B5A77E9004732CD = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = 7BJ2984YDK;
@@ -1106,7 +1055,6 @@
 			projectRoot = "";
 			targets = (
 				3A56876F1A3B93BD0066DB2B /* Buildasaur */,
-				3A7F0CBB1BC14E640079A511 /* BuildasaurUITests */,
 				3A81BB151B5A77E9004732CD /* BuildaKit */,
 				3A81BB1E1B5A77E9004732CD /* BuildaKitTests */,
 				3AAF6EE31A3CE5BA00C657FB /* BuildaGitServer */,
@@ -1128,13 +1076,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		3A756DBB1BAB425E00508B69 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3A7F0CBA1BC14E640079A511 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1449,14 +1390,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3A7F0CB81BC14E640079A511 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3A7F0CBF1BC14E640079A511 /* BuildasaurUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3A81BB111B5A77E9004732CD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1565,11 +1498,6 @@
 			isa = PBXTargetDependency;
 			target = 3A756DBC1BAB425E00508B69 /* BuildaHeartbeatKit */;
 			targetProxy = 3A756DC21BAB425E00508B69 /* PBXContainerItemProxy */;
-		};
-		3A7F0CC21BC14E640079A511 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 3A56876F1A3B93BD0066DB2B /* Buildasaur */;
-			targetProxy = 3A7F0CC11BC14E640079A511 /* PBXContainerItemProxy */;
 		};
 		3A81BB221B5A77E9004732CD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1928,56 +1856,6 @@
 			};
 			name = Testing;
 		};
-		3A7F0CC31BC14E640079A511 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = BuildasaurUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = com.honzadvorsky.BuildasaurUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = Buildasaur;
-				USES_XCTRUNNER = YES;
-			};
-			name = Debug;
-		};
-		3A7F0CC41BC14E640079A511 /* Testing */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				ENABLE_NS_ASSERTIONS = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = BuildasaurUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = com.honzadvorsky.BuildasaurUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = Buildasaur;
-				USES_XCTRUNNER = YES;
-			};
-			name = Testing;
-		};
-		3A7F0CC51BC14E640079A511 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				COPY_PHASE_STRIP = NO;
-				ENABLE_NS_ASSERTIONS = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = BuildasaurUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = com.honzadvorsky.BuildasaurUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = Buildasaur;
-				USES_XCTRUNNER = YES;
-			};
-			name = Release;
-		};
 		3A81BB2D1B5A77E9004732CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 17FE44590CED1491A8F03F35 /* Pods-BuildaKit.debug.xcconfig */;
@@ -2240,16 +2118,6 @@
 				3A756DC61BAB425E00508B69 /* Debug */,
 				3A756DC71BAB425E00508B69 /* Testing */,
 				3A756DC81BAB425E00508B69 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		3A7F0CC61BC14E640079A511 /* Build configuration list for PBXNativeTarget "BuildasaurUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3A7F0CC31BC14E640079A511 /* Debug */,
-				3A7F0CC41BC14E640079A511 /* Testing */,
-				3A7F0CC51BC14E640079A511 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

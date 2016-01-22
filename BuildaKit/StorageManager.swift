@@ -236,7 +236,7 @@ public class StorageManager {
     
     private func saveServerConfigs(configs: [String: XcodeServerConfig]) {
         let serverConfigs = Array(configs.values).map { $0.jsonify() }
-        let serverConfigKeychain = SecurePersistence.sourceServerTokenKeychain()
+        let serverConfigKeychain = SecurePersistence.xcodeServerPasswordKeychain()
         configs.values.forEach {
             serverConfigKeychain.writeIfNeeded($0.keychainKey(), value: $0.password)
         }
