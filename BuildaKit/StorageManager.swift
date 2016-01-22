@@ -168,12 +168,14 @@ public class StorageManager {
         self.config.value = self.persistence.loadDictionaryFromFile("Config.json") ?? [:]
         
         let allProjects: [ProjectConfig] = self.persistence.loadArrayFromFile("Projects.json") ?? []
-        //load server tokens from keychain
-        let projectConfigKeychain = SecurePersistence.sourceServerTokenKeychain()
+        //load server token & ssh passphrase from keychain
+        let tokenKeychain = SecurePersistence.sourceServerTokenKeychain()
+        let passphraseKeychain = SecurePersistence.sourceServerPassphraseKeychain()
         self.projectConfigs.value = allProjects
             .map {
                 (var p: ProjectConfig) -> ProjectConfig in
-                p.serverAuthentication = projectConfigKeychain.read(p.keychainKey())
+                p.serverAuthentication = tokenKeychain.read(p.keychainKey())
+                p.sshPassphrase = passphraseKeychain.read(p.keychainKey())
                 return p
             }.dictionarifyWithKey { $0.id }
         
@@ -227,9 +229,11 @@ public class StorageManager {
     
     private func saveProjectConfigs(configs: [String: ProjectConfig]) {
         let projectConfigs: NSArray = Array(configs.values).map { $0.jsonify() }
-        let projectConfigKeychain = SecurePersistence.sourceServerTokenKeychain()
+        let tokenKeychain = SecurePersistence.sourceServerTokenKeychain()
+        let passphraseKeychain = SecurePersistence.sourceServerPassphraseKeychain()
         configs.values.forEach {
-            projectConfigKeychain.writeIfNeeded($0.keychainKey(), value: $0.serverAuthentication)
+            tokenKeychain.writeIfNeeded($0.keychainKey(), value: $0.serverAuthentication)
+            passphraseKeychain.writeIfNeeded($0.keychainKey(), value: $0.sshPassphrase)
         }
         self.persistence.saveArray("Projects.json", items: projectConfigs)
     }
