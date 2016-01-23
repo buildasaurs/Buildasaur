@@ -31,7 +31,8 @@ public class SyncerFactory: SyncerFactoryType {
     private func createSyncer(triplet: ConfigTriplet) -> HDGitHubXCBotSyncer? {
         
         let xcodeServer = self.createXcodeServer(triplet.server)
-        let sourceServer = self.createSourceServer(triplet.project.githubToken) //TODO: pull out as SourceServerOptions
+        //TODO: pull out authentication as SourceServerOptions
+        let sourceServer = self.createSourceServer(triplet.project.serverAuthentication ?? "")
         let maybeProject = self.createProject(triplet.project)
         let triggers = triplet.triggers.map { self.createTrigger($0) }
         

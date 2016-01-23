@@ -1,0 +1,12 @@
+[
+  {
+    "id" : "D143B09C-CB1B-4831-8BA1-E2F8AB039B56",
+    "host" : "https:\/\/127.0.0.1",
+    "user" : "testadmin1"
+  },
+  {
+    "id" : "76826238-64AE-4F48-B4B8-52A6B7A65EE4",
+    "host" : "https:\/\/localhost",
+    "user" : "testadmin8"
+  }
+]

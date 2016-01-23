@@ -68,19 +68,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let migrator = CompositeMigrator(persistence: persistence)
         if migrator.isMigrationRequired() {
             
-            Log.info("Migration required, launching migrator")
+            print("Migration required, launching migrator")
 
             do {
                 try migrator.attemptMigration()
             } catch {
-                Log.error("Migration failed with error \(error), wiping folder...")
+                print("Migration failed with error \(error), wiping folder...")
                 
                 //wipe the persistence. start over if we failed to migrate
                 _ = try? fileManager.removeItemAtURL(persistence.readingFolder)
             }
-            Log.info("Migration finished")
+            print("Migration finished")
         } else {
-            Log.verbose("No migration necessary, skipping...")
+            print("No migration necessary, skipping...")
         }
     }
     
@@ -88,11 +88,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         let persistence = PersistenceFactory.createStandardPersistence()
         
-        //setup logging
-        Logging.setup(persistence, alsoIntoFile: true)
-        
         //migration
         self.migratePersistence(persistence)
+        
+        //setup logging
+        Logging.setup(persistence, alsoIntoFile: true)
         
         //create storage manager
         let storageManager = StorageManager(persistence: persistence)

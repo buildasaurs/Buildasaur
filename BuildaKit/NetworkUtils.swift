@@ -15,7 +15,7 @@ public class NetworkUtils {
     
     public class func checkAvailabilityOfGitHubWithCurrentSettingsOfProject(project: Project, completion: (success: Bool, error: ErrorType?) -> ()) {
         
-        let token = project.config.value.githubToken
+        let token = project.config.value.serverAuthentication!
         //TODO: have project spit out Set<SourceServerOption>
         
         let options: Set<SourceServerOption> = [.Token(token)]
