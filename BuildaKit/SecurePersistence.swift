@@ -14,38 +14,48 @@ import SwiftSafe
 final class SecurePersistence {
     
     #if TESTING
-        static let Prefix = "com.honzadvorsky.buildasaur.testing"
-    #else
-        static let Prefix = "com.honzadvorsky.buildasaur"
+        typealias Keychain = NSMutableDictionary
     #endif
     
-    static func xcodeServerPasswordKeychain() -> SecurePersistence {
-        let keychain = Keychain(service: "\(Prefix).xcs.password")
-        return self.init(keychain: keychain)
-    }
-    
-    static func sourceServerTokenKeychain() -> SecurePersistence {
-        let keychain = Keychain(service: "\(Prefix).source_server.oauth_tokens")
-        return self.init(keychain: keychain)
-    }
-    
-    static func sourceServerPassphraseKeychain() -> SecurePersistence {
-        let keychain = Keychain(service: "\(Prefix).source_server.passphrase")
-        return self.init(keychain: keychain)
-    }
+    static let Prefix = "com.honzadvorsky.buildasaur"
     
     private let keychain: Keychain
     private let safe: Safe
     
-    private init(keychain: Keychain, safe: Safe = CREW()) {
+    private init(keychain: Keychain, safe: Safe = EREW()) {
         self.keychain = keychain
         self.safe = safe
+    }
+
+    static func xcodeServerPasswordKeychain() -> SecurePersistence {
+        return self.keychain("\(Prefix).xcs.password")
+    }
+    
+    static func sourceServerTokenKeychain() -> SecurePersistence {
+        return self.keychain("\(Prefix).source_server.oauth_tokens")
+    }
+    
+    static func sourceServerPassphraseKeychain() -> SecurePersistence {
+        return self.keychain("\(Prefix).source_server.passphrase")
+    }
+    
+    static private func keychain(service: String) -> SecurePersistence {
+        #if TESTING
+        let keychain = NSMutableDictionary()
+        #else
+        let keychain = Keychain(service: service)
+        #endif
+        return self.init(keychain: keychain)
     }
     
     func read(key: String) -> String? {
         var val: String?
         self.safe.read {
-            val = self.keychain[key]
+            #if TESTING
+                val = self.keychain[key] as? String
+            #else
+                val = self.keychain[key]
+            #endif
         }
         return val
     }
@@ -57,18 +67,15 @@ final class SecurePersistence {
     }
     
     private func updateIfNeeded(key: String, value: String?) {
-        if self.keychain[key] != value {
+        #if TESTING
+            let existing = self.keychain[key] as? String
+        #else
+            let existing = self.keychain[key]
+        #endif
+        if existing != value {
             self.keychain[key] = value
         }
     }
-    
-    #if TESTING
-    func wipe() {
-        self.safe.write {
-            _ = try? self.keychain.removeAll()
-        }
-    }
-    #endif
 }
 
 public protocol KeychainSaveable {
