@@ -1212,7 +1212,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "if [[ $(whoami) == \"honzadvorsky\" ]] ; then\n    source ~/.zshrc\n    \"${PODS_ROOT}/Fabric/run\" $KEY_FABRIC_BUILDASAUR_PUBLIC $KEY_FABRIC_BUILDASAUR_PRIVATE\nfi";
+			shellScript = "if [[ $(whoami) == \"honzadvorsky\" ]] ; then\n    source ~/.zshrc\n    echo \"Running Crashlytics\"\n    \"${PODS_ROOT}/Fabric/run\" $KEY_FABRIC_BUILDASAUR_PUBLIC $KEY_FABRIC_BUILDASAUR_PRIVATE\nfi";
 		};
 		42B0EC7C6499F97F0D1A8F42 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;

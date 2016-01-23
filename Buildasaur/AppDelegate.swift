@@ -106,7 +106,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let heartbeatOptOut = storageManager.config.value["crash_reporting_opt_out"] as? Bool where heartbeatOptOut {
             Log.info("User opted out of crash reporting")
         } else {
-            #if Release
+            #if DEBUG
+                Log.info("Not starting Crashlytics in debug mode.")
+            #else
                 Log.info("Will send crashlogs to Crashlytics. To opt out add `\"crash_reporting_opt_out\" = true` to ~/Library/Application Support/Buildasaur/Config.json")
                 Fabric.with([Crashlytics.self])
             #endif
