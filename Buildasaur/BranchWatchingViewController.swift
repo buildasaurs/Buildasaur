@@ -58,7 +58,7 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
         }).map { branches, prs -> [ShowableBranch] in
             
             //map branches to PR numbers
-            let mappedPRs = prs.dictionarifyWithKey { $0.head.ref }
+            let mappedPRs = prs.dictionarifyWithKey { $0.headName }
             
             return branches.map {
                 let pr = mappedPRs[$0.name]?.number
@@ -77,16 +77,16 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
         }))
     }
     
-    func fetchBranchesProducer() -> SignalProducer<[Branch], NSError> {
+    func fetchBranchesProducer() -> SignalProducer<[BranchType], NSError> {
         
         let repoName = self.syncer.project.githubRepoName()!
         
         return SignalProducer { [weak self] sink, _ in
             guard let sself = self else { return }
             
-            sself.syncer.github.getBranchesOfRepo(repoName) { (branches, error) -> () in
+            sself.syncer.sourceServer.getBranchesOfRepo(repoName) { (branches, error) -> () in
                 if let error = error {
-                    sink.sendFailed(error)
+                    sink.sendFailed(error as NSError)
                 } else {
                     sink.sendNext(branches!)
                     sink.sendCompleted()
@@ -95,16 +95,16 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
         }.observeOn(UIScheduler())
     }
     
-    func fetchPRsProducer() -> SignalProducer<[PullRequest], NSError> {
+    func fetchPRsProducer() -> SignalProducer<[PullRequestType], NSError> {
         
         let repoName = self.syncer.project.githubRepoName()!
         
         return SignalProducer { [weak self] sink, _ in
             guard let sself = self else { return }
             
-            sself.syncer.github.getOpenPullRequests(repoName) { (prs, error) -> () in
+            sself.syncer.sourceServer.getOpenPullRequests(repoName) { (prs, error) -> () in
                 if let error = error {
-                    sink.sendFailed(error)
+                    sink.sendFailed(error as NSError)
                 } else {
                     sink.sendNext(prs!)
                     sink.sendCompleted()

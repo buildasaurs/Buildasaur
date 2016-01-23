@@ -8,36 +8,36 @@
 
 import Foundation
 
-public protocol GitHub {
+protocol GitHub {
     init(json: NSDictionary)
 }
 
-public class GitHubEntity : GitHub {
+class GitHubEntity : GitHub {
     
-    public let htmlUrl: String?
-    public let url: String?
-    public let id: Int?
+    let htmlUrl: String?
+    let url: String?
+    let id: Int?
     
     //initializer which takes a dictionary and fills in values for recognized keys
-    public required init(json: NSDictionary) {
+    required init(json: NSDictionary) {
         
         self.htmlUrl = json.optionalStringForKey("html_url")
         self.url = json.optionalStringForKey("url")
         self.id = json.optionalIntForKey("id")
     }
     
-    public init() {
+    init() {
         self.htmlUrl = nil
         self.url = nil
         self.id = nil
     }
     
-    public func dictionarify() -> NSDictionary {
+    func dictionarify() -> NSDictionary {
         assertionFailure("Must be overriden by subclasses that wish to dictionarify their data")
         return NSDictionary()
     }
     
-    public class func optional<T: GitHubEntity>(json: NSDictionary?) -> T? {
+    class func optional<T: GitHubEntity>(json: NSDictionary?) -> T? {
         if let json = json {
             return T(json: json)
         }
@@ -47,7 +47,7 @@ public class GitHubEntity : GitHub {
 }
 
 //parse an array of dictionaries into an array of parsed entities
-public func GitHubArray<T where T:GitHub>(jsonArray: NSArray!) -> [T] {
+func GitHubArray<T where T:GitHub>(jsonArray: NSArray!) -> [T] {
     
     let array = jsonArray as! [NSDictionary]!
     let parsed = array.map {

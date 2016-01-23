@@ -9,9 +9,9 @@
 import Foundation
 import BuildaUtils
 
-public class GitHubEndpoints {
+class GitHubEndpoints {
     
-    public enum Endpoint {
+    enum Endpoint {
         case Users
         case Repos
         case PullRequests
@@ -23,7 +23,7 @@ public class GitHubEndpoints {
         case Merges
     }
     
-    public enum MergeResult {
+    enum MergeResult {
         case Success(NSDictionary)
         case NothingToMerge
         case Conflict
@@ -33,7 +33,7 @@ public class GitHubEndpoints {
     private let baseURL: String
     private let token: String?
     
-    public init(baseURL: String, token: String?) {
+    init(baseURL: String, token: String?) {
         self.baseURL = baseURL
         self.token = token
     }
@@ -141,7 +141,7 @@ public class GitHubEndpoints {
     }
     
     
-    public func createRequest(method:HTTP.Method, endpoint:Endpoint, params: [String : String]? = nil, query: [String : String]? = nil, body:NSDictionary? = nil) throws -> NSMutableURLRequest {
+    func createRequest(method:HTTP.Method, endpoint:Endpoint, params: [String : String]? = nil, query: [String : String]? = nil, body:NSDictionary? = nil) throws -> NSMutableURLRequest {
         
         let endpointURL = self.endpointURL(endpoint, params: params)
         let queryString = HTTP.stringForQuery(query)

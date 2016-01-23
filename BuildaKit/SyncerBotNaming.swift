@@ -20,11 +20,11 @@ class BotNaming {
         return bot.name.hasPrefix(self.prefixForBuildaBotInRepoWithName(repoName))
     }
     
-    class func nameForBotWithBranch(branch: Branch, repoName: String) -> String {
+    class func nameForBotWithBranch(branch: BranchType, repoName: String) -> String {
         return "\(self.prefixForBuildaBotInRepoWithName(repoName)) |-> \(branch.name)"
     }
     
-    class func nameForBotWithPR(pr: PullRequest, repoName: String) -> String {
+    class func nameForBotWithPR(pr: PullRequestType, repoName: String) -> String {
         return "\(self.prefixForBuildaBotInRepoWithName(repoName)) PR #\(pr.number)"
     }
     

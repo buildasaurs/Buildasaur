@@ -10,13 +10,13 @@ import Foundation
 
 //PullRequestBranch is a special type of a branch - it also includes repo info (bc PRs can be cross repos)
 //normal branches include less information
-public class PullRequestBranch : GitHubEntity {
+class PullRequestBranch : GitHubEntity {
     
-    public let ref: String
-    public let sha: String
-    public let repo: Repo
+    let ref: String
+    let sha: String
+    let repo: Repo
     
-    public required init(json: NSDictionary) {
+    required init(json: NSDictionary) {
         
         self.ref = json.stringForKey("ref")
         self.sha = json.stringForKey("sha")

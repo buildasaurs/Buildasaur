@@ -119,6 +119,25 @@ class MigrationTests: XCTestCase {
         }
     }
     
+    func testMigration_v2_v3() {
+        
+        let readingURL = self.resourceURLFromTestBundle("Buildasaur-format-2-example2")
+        let writingURL = self.writingURL("v2-v3")
+        let expectedURL = self.resourceURLFromTestBundle("Buildasaur-format-3-example1")
+        
+        let fileManager = NSFileManager.defaultManager()
+        
+        let persistence = Persistence(readingFolder: readingURL, writingFolder: writingURL, fileManager: fileManager)
+        let migrator = Migrator_v2_v3(persistence: persistence)
+        
+        do {
+            try migrator.attemptMigration()
+            try self.ensureEqualHierarchies(persistence, urlExpected: expectedURL, urlReal: writingURL)
+        } catch {
+            fail("\(error)")
+        }
+    }
+        
     func testPersistenceSetter() {
         
         let tmp = NSURL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)

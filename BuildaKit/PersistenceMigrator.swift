@@ -8,6 +8,7 @@
 
 import Foundation
 import BuildaUtils
+import XcodeServerSDK
 
 public protocol MigratorType {
     init(persistence: Persistence)
@@ -47,7 +48,8 @@ public class CompositeMigrator: MigratorType {
     public required init(persistence: Persistence) {
         self.childMigrators = [
             Migrator_v0_v1(persistence: persistence),
-            Migrator_v1_v2(persistence: persistence)
+            Migrator_v1_v2(persistence: persistence),
+            Migrator_v2_v3(persistence: persistence)
         ]
     }
     
@@ -56,7 +58,9 @@ public class CompositeMigrator: MigratorType {
     }
     
     public func attemptMigration() throws {
-        try self.childMigrators.forEach { try $0.attemptMigration() }
+        try self.childMigrators
+            .filter { $0.isMigrationRequired() }
+            .forEach { try $0.attemptMigration() }
     }
 }
 
@@ -107,8 +111,6 @@ class Migrator_v0_v1: MigratorType {
 
 /*
     - ServerConfigs.json: each server now has an id
-
-
     - Config.json: persistence_version: 1 -> 2
 */
 class Migrator_v1_v2: MigratorType {
@@ -271,3 +273,111 @@ class Migrator_v1_v2: MigratorType {
         self.persistence.saveDictionary("Config.json", item: mutableConfig)
     }
 }
+
+/*
+- ServerConfigs.json: password moved to the keychain
+- Projects.json: github_token -> server_authentication, ssh_passphrase moved to keychain
+- move any .log files to a separate folder called 'Logs'
+*/
+class Migrator_v2_v3: MigratorType {
+    
+    internal var persistence: Persistence
+    required init(persistence: Persistence) {
+        self.persistence = persistence
+    }
+    
+    func isMigrationRequired() -> Bool {
+        
+        return self.persistenceVersion() == 2
+    }
+    
+    func attemptMigration() throws {
+        
+        let pers = self.persistence
+        
+        //migrate
+        self.migrateProjectAuthentication()
+        self.migrateServerAuthentication()
+        self.migrateLogs()
+        
+        //copy the rest
+        pers.copyFileToWriteLocation("Syncers.json", isDirectory: false)
+        pers.copyFileToWriteLocation("BuildTemplates", isDirectory: true)
+        pers.copyFileToWriteLocation("Triggers", isDirectory: true)
+        
+        let config = self.config()
+        let mutableConfig = config.mutableCopy() as! NSMutableDictionary
+        mutableConfig[kPersistenceVersion] = 3
+        
+        //save the updated config
+        pers.saveDictionary("Config.json", item: mutableConfig)
+    }
+
+    func migrateProjectAuthentication() {
+        
+        let pers = self.persistence
+        let projects = pers.loadArrayOfDictionariesFromFile("Projects.json") ?? []
+        let mutableProjects = projects.map { $0.mutableCopy() as! NSMutableDictionary }
+
+        let renamedAuth = mutableProjects.map {
+            (d: NSMutableDictionary) -> NSDictionary in
+            
+            let id = d.stringForKey("id")
+            let token = d.stringForKey("github_token")
+            let passphrase = d.optionalStringForKey("ssh_passphrase")
+            d.removeObjectForKey("github_token")
+            d.removeObjectForKey("ssh_passphrase")
+            
+            let tokenKeychain = SecurePersistence.sourceServerTokenKeychain()
+            tokenKeychain.writeIfNeeded(id, value: token)
+            
+            let passphraseKeychain = SecurePersistence.sourceServerPassphraseKeychain()
+            passphraseKeychain.writeIfNeeded(id, value: passphrase)
+            
+            precondition(tokenKeychain.read(id) == token, "Saved token must match")
+            precondition(passphraseKeychain.read(id) == passphrase, "Saved passphrase must match")
+            
+            return d
+        }
+        
+        pers.saveArray("Projects.json", items: renamedAuth)
+    }
+    
+    func migrateServerAuthentication() {
+
+        let pers = self.persistence
+        let servers = pers.loadArrayOfDictionariesFromFile("ServerConfigs.json") ?? []
+        let mutableServers = servers.map { $0.mutableCopy() as! NSMutableDictionary }
+        
+        let withoutPasswords = mutableServers.map {
+            (d: NSMutableDictionary) -> NSDictionary in
+            
+            let password = d.stringForKey("password")
+            let key = (try! XcodeServerConfig(json: d)).keychainKey()
+            
+            let keychain = SecurePersistence.xcodeServerPasswordKeychain()
+            keychain.writeIfNeeded(key, value: password)
+            
+            d.removeObjectForKey("password")
+            
+            precondition(keychain.read(key) == password, "Saved password must match")
+            
+            return d
+        }
+        
+        pers.saveArray("ServerConfigs.json", items: withoutPasswords)
+    }
+    
+    func migrateLogs() {
+        
+        let pers = self.persistence
+        (pers.filesInFolder(pers.folderForIntention(.Reading)) ?? [])
+            .map { $0.lastPathComponent ?? "" }
+            .filter { $0.hasSuffix("log") }
+            .forEach {
+                pers.copyFileToFolder($0, folder: "Logs")
+                pers.deleteFile($0)
+        }
+    }
+}
+

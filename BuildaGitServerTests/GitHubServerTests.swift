@@ -8,7 +8,7 @@
 
 import Cocoa
 import XCTest
-import BuildaGitServer
+@testable import BuildaGitServer
 import BuildaUtils
 
 class GitHubSourceTests: XCTestCase {

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import BuildaGitServer
 import BuildaUtils
 import XcodeServerSDK
 import ReactiveCocoa
@@ -142,6 +141,10 @@ class Trampoline: NSObject {
     
     func notifyErrorString(errorString: String, context: String?) {
         self.notifyError(Error.withInfo(errorString), context: context)
+    }
+    
+    func notifyError(error: ErrorType?, context: String?) {
+        self.notifyError(error as? NSError, context: context)
     }
     
     func notifyError(error: NSError?, context: String?) {

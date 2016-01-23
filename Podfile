@@ -12,7 +12,7 @@ end
 
 def also_xcode_pods
     pods_for_errbody
-    pod 'XcodeServerSDK', '~> 0.5.4'
+    pod 'XcodeServerSDK', '~> 0.5.6'
     pod 'ekgclient', '~> 0.3.0'
 end
 
@@ -33,6 +33,7 @@ end
 
 target 'BuildaKit' do
     buildasaur_app_pods
+    pod 'KeychainAccess'
 end
 
 target 'BuildaKitTests' do

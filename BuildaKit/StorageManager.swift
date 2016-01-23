@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import BuildaGitServer
 import BuildaUtils
 import XcodeServerSDK
 import ReactiveCocoa
@@ -167,10 +166,29 @@ public class StorageManager {
     private func loadAllFromPersistence() {
         
         self.config.value = self.persistence.loadDictionaryFromFile("Config.json") ?? [:]
+        
         let allProjects: [ProjectConfig] = self.persistence.loadArrayFromFile("Projects.json") ?? []
-        self.projectConfigs.value = allProjects.dictionarifyWithKey { $0.id }
+        //load server token & ssh passphrase from keychain
+        let tokenKeychain = SecurePersistence.sourceServerTokenKeychain()
+        let passphraseKeychain = SecurePersistence.sourceServerPassphraseKeychain()
+        self.projectConfigs.value = allProjects
+            .map {
+                (var p: ProjectConfig) -> ProjectConfig in
+                p.serverAuthentication = tokenKeychain.read(p.keychainKey())
+                p.sshPassphrase = passphraseKeychain.read(p.keychainKey())
+                return p
+            }.dictionarifyWithKey { $0.id }
+        
         let allServerConfigs: [XcodeServerConfig] = self.persistence.loadArrayFromFile("ServerConfigs.json") ?? []
-        self.serverConfigs.value = allServerConfigs.dictionarifyWithKey { $0.id }
+        //load xcs passwords from keychain
+        let xcsConfigKeychain = SecurePersistence.xcodeServerPasswordKeychain()
+        self.serverConfigs.value = allServerConfigs
+            .map {
+                (var x: XcodeServerConfig) -> XcodeServerConfig in
+                x.password = xcsConfigKeychain.read(x.keychainKey())
+                return x
+            }.dictionarifyWithKey { $0.id }
+        
         let allTemplates: [BuildTemplate] = self.persistence.loadArrayFromFolder("BuildTemplates") ?? []
         self.buildTemplates.value = allTemplates.dictionarifyWithKey { $0.id }
         let allTriggers: [TriggerConfig] = self.persistence.loadArrayFromFolder("Triggers") ?? []
@@ -211,11 +229,21 @@ public class StorageManager {
     
     private func saveProjectConfigs(configs: [String: ProjectConfig]) {
         let projectConfigs: NSArray = Array(configs.values).map { $0.jsonify() }
+        let tokenKeychain = SecurePersistence.sourceServerTokenKeychain()
+        let passphraseKeychain = SecurePersistence.sourceServerPassphraseKeychain()
+        configs.values.forEach {
+            tokenKeychain.writeIfNeeded($0.keychainKey(), value: $0.serverAuthentication)
+            passphraseKeychain.writeIfNeeded($0.keychainKey(), value: $0.sshPassphrase)
+        }
         self.persistence.saveArray("Projects.json", items: projectConfigs)
     }
     
     private func saveServerConfigs(configs: [String: XcodeServerConfig]) {
         let serverConfigs = Array(configs.values).map { $0.jsonify() }
+        let serverConfigKeychain = SecurePersistence.xcodeServerPasswordKeychain()
+        configs.values.forEach {
+            serverConfigKeychain.writeIfNeeded($0.keychainKey(), value: $0.password)
+        }
         self.persistence.saveArray("ServerConfigs.json", items: serverConfigs)
     }
     
