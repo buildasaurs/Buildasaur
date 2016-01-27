@@ -27,6 +27,13 @@ public enum GitService: String {
         case .BitBucket: return "bitbucket"
         }
     }
+    
+    public func hostname() -> String {
+        switch self {
+        case .GitHub: return "github.com"
+        case .BitBucket: return "bitbucket.org"
+        }
+    }
 }
 
 public class GitServer : HTTPServer {

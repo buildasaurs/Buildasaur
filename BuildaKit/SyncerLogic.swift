@@ -39,7 +39,7 @@ extension HDGitHubXCBotSyncer {
         botsToDelete: [Bot])
             
     public func repoName() -> String? {
-        return self._project.githubRepoName()
+        return self._project.serviceRepoName()
     }
         
     internal func syncRepoWithName(repoName: String, completion: () -> ()) {

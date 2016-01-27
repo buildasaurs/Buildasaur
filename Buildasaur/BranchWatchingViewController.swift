@@ -79,7 +79,7 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
     
     func fetchBranchesProducer() -> SignalProducer<[BranchType], NSError> {
         
-        let repoName = self.syncer.project.githubRepoName()!
+        let repoName = self.syncer.project.serviceRepoName()!
         
         return SignalProducer { [weak self] sink, _ in
             guard let sself = self else { return }
@@ -97,7 +97,7 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
     
     func fetchPRsProducer() -> SignalProducer<[PullRequestType], NSError> {
         
-        let repoName = self.syncer.project.githubRepoName()!
+        let repoName = self.syncer.project.serviceRepoName()!
         
         return SignalProducer { [weak self] sink, _ in
             guard let sself = self else { return }

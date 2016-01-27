@@ -75,32 +75,36 @@ public class Project {
         return try XcodeProjectParser.parseRepoMetadataFromProjectOrWorkspaceURL(url)
     }
     
-    public func githubRepoName() -> String? {
+    public func serviceRepoName() -> String? {
         
-        if let projectUrl = self.workspaceMetadata?.projectURL {
-            let originalStringUrl = projectUrl.absoluteString
-            let stringUrl = originalStringUrl.lowercaseString
-            
-            /*
-            both https and ssh repos on github have a form of:
-            {https://|git@}github.com{:|/}organization/repo.git
-            here I need the organization/repo bit, which I'll do by finding "github.com" and shifting right by one
-            and scan up until ".git"
-            */
-            
-            if let githubRange = stringUrl.rangeOfString("github.com", options: NSStringCompareOptions(), range: nil, locale: nil),
-                let dotGitRange = stringUrl.rangeOfString(".git", options: NSStringCompareOptions.BackwardsSearch, range: nil, locale: nil) {
-                    
-                    let start = githubRange.endIndex.advancedBy(1)
-                    let end = dotGitRange.startIndex
-                    
-                    let repoName = originalStringUrl.substringWithRange(Range<String.Index>(start: start, end: end))
-                    return repoName
-            }
+        guard let meta = self.workspaceMetadata else { return nil }
+        
+        let projectUrl = meta.projectURL
+        let service = meta.service
+        
+        let originalStringUrl = projectUrl.absoluteString
+        let stringUrl = originalStringUrl.lowercaseString
+        
+        /*
+        both https and ssh repos on github have a form of:
+        {https://|git@}SERVICE_URL{:|/}organization/repo.git
+        here I need the organization/repo bit, which I'll do by finding "SERVICE_URL" and shifting right by one
+        and scan up until ".git"
+        */
+        
+        let serviceUrl = service.hostname().lowercaseString
+        if let githubRange = stringUrl.rangeOfString(serviceUrl, options: NSStringCompareOptions(), range: nil, locale: nil),
+            let dotGitRange = stringUrl.rangeOfString(".git", options: NSStringCompareOptions.BackwardsSearch, range: nil, locale: nil) {
+                
+                let start = githubRange.endIndex.advancedBy(1)
+                let end = dotGitRange.startIndex
+                
+                let repoName = originalStringUrl.substringWithRange(Range<String.Index>(start: start, end: end))
+                return repoName
         }
         return nil
     }
-    
+
     private func getContentsOfKeyAtPath(path: String) -> String? {
         
         let url = NSURL(fileURLWithPath: path)

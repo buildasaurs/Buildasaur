@@ -43,6 +43,7 @@
 		3A756DC51BAB425E00508B69 /* BuildaHeartbeatKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3A756DBD1BAB425E00508B69 /* BuildaHeartbeatKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3A756DCB1BAB42C200508B69 /* Heartbeat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A756DCA1BAB42C200508B69 /* Heartbeat.swift */; };
 		3A756DCC1BAB44A200508B69 /* BuildaHeartbeatKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A756DBD1BAB425E00508B69 /* BuildaHeartbeatKit.framework */; };
+		3A7AF60E1C590CC4000FD726 /* bitbucket.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A7AF60D1C590CC4000FD726 /* bitbucket.png */; };
 		3A7F0CC81BC1508C0079A511 /* GeneralTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7F0CC71BC1508C0079A511 /* GeneralTests.swift */; };
 		3A81BB191B5A77E9004732CD /* BuildaKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A81BB181B5A77E9004732CD /* BuildaKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A81BB201B5A77E9004732CD /* BuildaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A81BB161B5A77E9004732CD /* BuildaKit.framework */; };
@@ -271,6 +272,7 @@
 		3A756DBF1BAB425E00508B69 /* BuildaHeartbeatKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BuildaHeartbeatKit.h; sourceTree = "<group>"; };
 		3A756DC11BAB425E00508B69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A756DCA1BAB42C200508B69 /* Heartbeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Heartbeat.swift; sourceTree = "<group>"; };
+		3A7AF60D1C590CC4000FD726 /* bitbucket.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bitbucket.png; path = Meta/bitbucket.png; sourceTree = SOURCE_ROOT; };
 		3A7F0CC71BC1508C0079A511 /* GeneralTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralTests.swift; sourceTree = "<group>"; };
 		3A81BB161B5A77E9004732CD /* BuildaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BuildaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A81BB181B5A77E9004732CD /* BuildaKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BuildaKit.h; sourceTree = "<group>"; };
@@ -463,6 +465,7 @@
 		3A08B35D1C582FF700ED7A1F /* Service Logos */ = {
 			isa = PBXGroup;
 			children = (
+				3A7AF60D1C590CC4000FD726 /* bitbucket.png */,
 				3A08B3601C58301D00ED7A1F /* github.png */,
 			);
 			name = "Service Logos";
@@ -1097,6 +1100,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A7AF60E1C590CC4000FD726 /* bitbucket.png in Resources */,
 				3A08B3611C58301D00ED7A1F /* github.png in Resources */,
 				3A56877A1A3B93BD0066DB2B /* Images.xcassets in Resources */,
 				3A56877D1A3B93BD0066DB2B /* Main.storyboard in Resources */,
