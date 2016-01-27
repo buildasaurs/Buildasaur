@@ -62,6 +62,7 @@ end
 
 target 'BuildaGitServerTests' do
     pods_for_errbody
+    test_pods
     pod 'DVR', '~> 0.2.1-snap1'
 end
 

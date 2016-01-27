@@ -10,11 +10,24 @@ import Foundation
 
 class BitBucketRepo: BitBucketEntity, RepoType {
     
+    //kind of pointless here
+    let permissions = RepoPermissions(read: true, write: true)
+    let latestRateLimitInfo: RateLimitType? = BitBucketRateLimit()
+    let originUrlSSH: String
+    
     required init(json: NSDictionary) {
+        
+        //split with forward slash, the last two comps are the repo
+        //create a proper ssh url for bitbucket here
+        let repoName = json
+            .dictionaryForKey("links")
+            .dictionaryForKey("self")
+            .stringForKey("href")
+            .componentsSeparatedByString("/")
+            .suffix(2)
+            .joinWithSeparator("/")
+        self.originUrlSSH = "git@bitbucket.org:\(repoName).git"
+        
         super.init(json: json)
     }
-    
-    var permissions = RepoPermissions(read: true, write: true)
-    var originUrlSSH: String = ""
-    var latestRateLimitInfo: RateLimitType? = BitBucketRateLimit()
 }

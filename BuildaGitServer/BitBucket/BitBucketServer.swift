@@ -48,7 +48,7 @@ extension BitBucketServer: SourceServerType {
             
             if let body = body as? NSDictionary {
                 let prs: [BitBucketPullRequest] = BitBucketArray(body)
-                completion(prs: prs, error: nil)
+                completion(prs: prs.map { $0 as PullRequestType }, error: nil)
             } else {
                 completion(prs: nil, error: Error.withInfo("Wrong body \(body)"))
             }
