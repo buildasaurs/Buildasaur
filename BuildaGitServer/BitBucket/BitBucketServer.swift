@@ -32,6 +32,8 @@ extension BitBucketServer: SourceServerType {
     
     func getBranchesOfRepo(repo: String, completion: (branches: [BranchType]?, error: ErrorType?) -> ()) {
         
+        //TODO: start returning branches
+        completion(branches: [], error: nil)
     }
     
     func getOpenPullRequests(repo: String, completion: (prs: [PullRequestType]?, error: ErrorType?) -> ()) {
@@ -57,10 +59,48 @@ extension BitBucketServer: SourceServerType {
     
     func getPullRequest(pullRequestNumber: Int, repo: String, completion: (pr: PullRequestType?, error: ErrorType?) -> ()) {
         
+        let params = [
+            "repo": repo,
+            "pr": pullRequestNumber.description
+        ]
+        
+        self._sendRequestWithMethod(.GET, endpoint: .PullRequests, params: params, query: nil, body: nil) { (response, body, error) -> () in
+            
+            if error != nil {
+                completion(pr: nil, error: error)
+                return
+            }
+            
+            if let body = body as? NSDictionary {
+                let pr = BitBucketPullRequest(json: body)
+                completion(pr: pr, error: nil)
+            } else {
+                completion(pr: nil, error: Error.withInfo("Wrong body \(body)"))
+            }
+        }
     }
     
     func getRepo(repo: String, completion: (repo: RepoType?, error: ErrorType?) -> ()) {
         
+        let params = [
+            "repo": repo
+        ]
+        
+        self._sendRequestWithMethod(.GET, endpoint: .Repos, params: params, query: nil, body: nil) {
+            (response, body, error) -> () in
+            
+            if error != nil {
+                completion(repo: nil, error: error)
+                return
+            }
+            
+            if let body = body as? NSDictionary {
+                let repository = BitBucketRepo(json: body)
+                completion(repo: repository, error: nil)
+            } else {
+                completion(repo: nil, error: Error.withInfo("Wrong body \(body)"))
+            }
+        }
     }
     
     func getStatusOfCommit(commit: String, repo: String, completion: (status: StatusType?, error: ErrorType?) -> ()) {
@@ -73,10 +113,31 @@ extension BitBucketServer: SourceServerType {
     
     func postCommentOnIssue(comment: String, issueNumber: Int, repo: String, completion: (comment: CommentType?, error: ErrorType?) -> ()) {
         
+        //TODO
+        completion(comment: nil, error: Error.withInfo("Posting comments on BitBucket not yet supported"))
     }
     
     func getCommentsOfIssue(issueNumber: Int, repo: String, completion: (comments: [CommentType]?, error: ErrorType?) -> ()) {
         
+        let params = [
+            "repo": repo,
+            "pr": issueNumber.description
+        ]
+        
+        self._sendRequestWithMethod(.GET, endpoint: .PullRequestComments, params: params, query: nil, body: nil) { (response, body, error) -> () in
+            
+            if error != nil {
+                completion(comments: nil, error: error)
+                return
+            }
+            
+            if let body = body as? NSDictionary {
+                let comments: [BitBucketComment] = BitBucketArray(body)
+                completion(comments: comments.map { $0 as CommentType }, error: nil)
+            } else {
+                completion(comments: nil, error: Error.withInfo("Wrong body \(body)"))
+            }
+        }
     }
 }
 

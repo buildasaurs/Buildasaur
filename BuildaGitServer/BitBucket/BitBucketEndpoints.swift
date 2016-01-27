@@ -14,6 +14,7 @@ class BitBucketEndpoints {
     enum Endpoint {
         case Repos
         case PullRequests
+        case PullRequestComments
     }
     
     private let baseURL: String
@@ -46,7 +47,13 @@ class BitBucketEndpoints {
             } else {
                 return "\(repo)/pullrequests"
             }
-
+        
+        case .PullRequestComments:
+            
+            assert(params?["repo"] != nil, "A repo must be specified")
+            assert(params?["pr"] != nil, "A PR must be specified")
+            let pr = self.endpointURL(.PullRequests, params: params)
+            return "\(pr)/comments"
         }
     }
     

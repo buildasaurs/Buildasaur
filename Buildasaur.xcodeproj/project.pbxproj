@@ -45,6 +45,10 @@
 		3A756DCC1BAB44A200508B69 /* BuildaHeartbeatKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A756DBD1BAB425E00508B69 /* BuildaHeartbeatKit.framework */; };
 		3A7577AB1C593A740023F08C /* bitbucket_get_prs.json in Resources */ = {isa = PBXBuildFile; fileRef = 3A7577AA1C593A740023F08C /* bitbucket_get_prs.json */; };
 		3A7577AD1C593C5C0023F08C /* BitBucketPullRequestBranch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7577AC1C593C5C0023F08C /* BitBucketPullRequestBranch.swift */; };
+		3A7577AF1C59621E0023F08C /* bitbucket_get_pr.json in Resources */ = {isa = PBXBuildFile; fileRef = 3A7577AE1C59621E0023F08C /* bitbucket_get_pr.json */; };
+		3A7577B11C5963440023F08C /* bitbucket_get_repo.json in Resources */ = {isa = PBXBuildFile; fileRef = 3A7577B01C5963440023F08C /* bitbucket_get_repo.json */; };
+		3A7577B31C5963BF0023F08C /* BitBucketComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7577B21C5963BF0023F08C /* BitBucketComment.swift */; };
+		3A7577B51C5966530023F08C /* bitbucket_get_comments.json in Resources */ = {isa = PBXBuildFile; fileRef = 3A7577B41C5966530023F08C /* bitbucket_get_comments.json */; };
 		3A7AF60E1C590CC4000FD726 /* bitbucket.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A7AF60D1C590CC4000FD726 /* bitbucket.png */; };
 		3A7AF6101C591FAD000FD726 /* BitBucketServerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AF60F1C591FAD000FD726 /* BitBucketServerTests.swift */; };
 		3A7AF6121C592023000FD726 /* BitBucketServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7AF6111C592023000FD726 /* BitBucketServer.swift */; };
@@ -283,6 +287,10 @@
 		3A756DCA1BAB42C200508B69 /* Heartbeat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Heartbeat.swift; sourceTree = "<group>"; };
 		3A7577AA1C593A740023F08C /* bitbucket_get_prs.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = bitbucket_get_prs.json; path = Data/bitbucket_get_prs.json; sourceTree = "<group>"; };
 		3A7577AC1C593C5C0023F08C /* BitBucketPullRequestBranch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BitBucketPullRequestBranch.swift; path = BitBucket/BitBucketPullRequestBranch.swift; sourceTree = "<group>"; };
+		3A7577AE1C59621E0023F08C /* bitbucket_get_pr.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = bitbucket_get_pr.json; path = Data/bitbucket_get_pr.json; sourceTree = "<group>"; };
+		3A7577B01C5963440023F08C /* bitbucket_get_repo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = bitbucket_get_repo.json; path = Data/bitbucket_get_repo.json; sourceTree = "<group>"; };
+		3A7577B21C5963BF0023F08C /* BitBucketComment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BitBucketComment.swift; path = BitBucket/BitBucketComment.swift; sourceTree = "<group>"; };
+		3A7577B41C5966530023F08C /* bitbucket_get_comments.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = bitbucket_get_comments.json; path = Data/bitbucket_get_comments.json; sourceTree = "<group>"; };
 		3A7AF60D1C590CC4000FD726 /* bitbucket.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bitbucket.png; path = Meta/bitbucket.png; sourceTree = SOURCE_ROOT; };
 		3A7AF60F1C591FAD000FD726 /* BitBucketServerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BitBucketServerTests.swift; sourceTree = "<group>"; };
 		3A7AF6111C592023000FD726 /* BitBucketServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BitBucketServer.swift; path = BitBucket/BitBucketServer.swift; sourceTree = "<group>"; };
@@ -618,6 +626,9 @@
 		3A7577A91C593A6A0023F08C /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				3A7577B41C5966530023F08C /* bitbucket_get_comments.json */,
+				3A7577B01C5963440023F08C /* bitbucket_get_repo.json */,
+				3A7577AE1C59621E0023F08C /* bitbucket_get_pr.json */,
 				3A7577AA1C593A740023F08C /* bitbucket_get_prs.json */,
 			);
 			name = Data;
@@ -759,6 +770,7 @@
 				3A7577AC1C593C5C0023F08C /* BitBucketPullRequestBranch.swift */,
 				3A7AF61B1C592A17000FD726 /* BitBucketIssue.swift */,
 				3A7AF61D1C592A90000FD726 /* BitBucketRepo.swift */,
+				3A7577B21C5963BF0023F08C /* BitBucketComment.swift */,
 			);
 			name = Entities;
 			sourceTree = "<group>";
@@ -1185,6 +1197,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A7577B51C5966530023F08C /* bitbucket_get_comments.json in Resources */,
+				3A7577AF1C59621E0023F08C /* bitbucket_get_pr.json in Resources */,
+				3A7577B11C5963440023F08C /* bitbucket_get_repo.json in Resources */,
 				3A7577AB1C593A740023F08C /* bitbucket_get_prs.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1554,6 +1569,7 @@
 				3A7AF61C1C592A17000FD726 /* BitBucketIssue.swift in Sources */,
 				3A32CD141A3D00F800861A34 /* GitHubComment.swift in Sources */,
 				3A35CD6E1BE96E9B0088D57A /* BaseTypes.swift in Sources */,
+				3A7577B31C5963BF0023F08C /* BitBucketComment.swift in Sources */,
 				3AB3F0EA1A3CEBAC005F717F /* GitHubServer.swift in Sources */,
 				3AB3F0E41A3CEBAC005F717F /* GitHubPullRequestBranch.swift in Sources */,
 				3AB3F0E61A3CEBAC005F717F /* GitHubUser.swift in Sources */,
