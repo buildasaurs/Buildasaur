@@ -28,7 +28,7 @@ lane :prebuild do
     puts "Done injecting dummy credentials"
   end
 
-  # cocoapods
+  cocoapods
 end
 
 lane :install_cocoapods_if_needed do
