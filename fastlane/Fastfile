@@ -12,6 +12,8 @@ end
 
 lane :prebuild do
   
+  puts ENV
+
   # if you're not me, you need to inject your own GitHub etc app API keys.
   # but don't worry, those are only needed if you'll be using OAuth to authenticate
   # with services, not if you're using e.g. personal token from GitHub.
@@ -20,7 +22,7 @@ lane :prebuild do
   # if this is running on CI, just inject dummy keys - they're not used in tests at all.
   if ENV["XCS"] == 1
     puts "Running on XCS, injecting dummy credentials"
-    
+
   end
 
   # cocoapods
