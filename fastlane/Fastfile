@@ -13,7 +13,7 @@ end
 lane :prebuild do
   
   install_cocoapods_if_needed
-  
+
   # if you're not me, you need to inject your own GitHub etc app API keys.
   # but don't worry, those are only needed if you'll be using OAuth to authenticate
   # with services, not if you're using e.g. personal token from GitHub.
@@ -29,10 +29,12 @@ lane :prebuild do
   # cocoapods
 end
 
-private_lane :install_cocoapods_if_needed do
+lane :install_cocoapods_if_needed do
   ['cocoapods', 'cocoapods-keys'].each do |g|
-    is_installed = sh "gem list -i #{g}"
-    puts is_installed
+    begin
+      sh "test $(gem list -i #{g}) == false && gem install #{g}"
+    rescue Exception
+    end
   end
 end
 
