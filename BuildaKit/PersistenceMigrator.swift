@@ -433,8 +433,9 @@ class Migrator_v3_v4: MigratorType {
             let auth = ProjectAuthenticator(service: .GitHub, username: "GIT", type: .PersonalToken, secret: key)
             let formatted = auth.toString()
             tokenKeychain.writeIfNeeded(id, value: formatted)
+            
+            precondition(tokenKeychain.read(id) == formatted)
         }
-        tokenKeychain.readAll() //wait till all writes have completed
     }
 }
 

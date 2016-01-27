@@ -65,7 +65,7 @@ final class SecurePersistence {
         self.safe.read {
             #if TESTING
                 let keychain = self.keychain
-                all = keychain.allKeys.map { ($0, keychain[$0] as! String) }
+                all = keychain.allKeys.map { ($0 as! String, keychain[$0 as! String] as! String) }
             #else
                 let keychain = self.keychain
                 all = keychain.allKeys().map { ($0, keychain[$0]!) }

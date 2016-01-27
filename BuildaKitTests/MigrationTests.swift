@@ -140,7 +140,7 @@ class MigrationTests: XCTestCase {
     
     func testMigration_v3_v4() {
         
-        let readingURL = self.resourceURLFromTestBundle("Buildasaur-format-3-example2")
+        let readingURL = self.resourceURLFromTestBundle("Buildasaur-format-3-example1")
         let writingURL = self.writingURL("v3-v4")
         let expectedURL = self.resourceURLFromTestBundle("Buildasaur-format-4-example1")
         

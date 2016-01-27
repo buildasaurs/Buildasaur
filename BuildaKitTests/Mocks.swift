@@ -22,7 +22,7 @@ class MockXcodeServer: XcodeServer {
 
 class MockGitHubServer: GitHubServer {
     init() {
-        super.init(endpoints: GitHubEndpoints(baseURL: "", token: ""))
+        super.init(endpoints: GitHubEndpoints(baseURL: "", auth: nil))
     }
 }
 
