@@ -20,10 +20,28 @@ lane :prebuild do
   # if this is running on CI, just inject dummy keys - they're not used in tests at all.
   if ENV["XCS"] == "1"
     puts "Running on XCS, injecting dummy credentials"
-
+    inject_dummy_credentials
+    puts "Done injecting dummy credentials"
   end
 
   # cocoapods
+end
+
+private_lane :inject_dummy_credentials do
+    # inspired by https://github.com/artsy/eidolon/blob/master/fastlane/Fastfile
+    keys = [
+      'GitHubAPIClientId', 
+      'GitHubAPIClientSecret'
+    ]
+    commands = keys.map { |key|
+      command = "pod keys set #{key} 'INSERT_YOUR_OWN_KEY_HERE'"
+      if key == keys.first
+        command += " Buildasaur"
+      end
+
+      command
+    }.join(' ; ')
+    sh "cd .. ; #{commands}"
 end
 
 lane :test do
