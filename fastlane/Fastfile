@@ -47,12 +47,7 @@ private_lane :inject_dummy_credentials do
       'GitHubAPIClientSecret'
     ]
     commands = keys.map { |key|
-      command = "pod keys set #{key} 'INSERT_YOUR_OWN_KEY_HERE'"
-      if key == keys.first
-        command += " Buildasaur.xcodeproj"
-      end
-
-      command
+      "pod keys set #{key} 'INSERT_YOUR_OWN_KEY_HERE' Buildasaur.xcodeproj"
     }.join(' ; ')
     sh "cd .. ; #{commands}"
 end
