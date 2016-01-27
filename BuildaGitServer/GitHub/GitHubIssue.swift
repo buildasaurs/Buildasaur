@@ -1,5 +1,5 @@
 //
-//  Comment.swift
+//  GitHubIssue.swift
 //  Buildasaur
 //
 //  Created by Honza Dvorsky on 13/12/2014.
@@ -8,20 +8,20 @@
 
 import Foundation
 
-class Comment : GitHubEntity {
+class GitHubIssue : GitHubEntity {
     
+    let number: Int
     let body: String
-    let author: User
+    var title: String
     
     required init(json: NSDictionary) {
         
+        self.number = json.intForKey("number")
         self.body = json.stringForKey("body")
-        self.author = User(json: json.dictionaryForKey("user"))
-
+        self.title = json.stringForKey("title")
+        
         super.init(json: json)
     }
 }
 
-extension Comment: CommentType {
-    
-}
+
