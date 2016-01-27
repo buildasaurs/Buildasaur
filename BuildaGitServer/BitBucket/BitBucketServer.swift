@@ -115,6 +115,12 @@ extension BitBucketServer: SourceServerType {
         
         self._sendRequestWithMethod(.GET, endpoint: .CommitStatuses, params: params, query: nil, body: nil) { (response, body, error) -> () in
             
+            if response?.statusCode == 404 {
+                //no status yet, just pass nil but OK
+                completion(status: nil, error: nil)
+                return
+            }
+            
             if error != nil {
                 completion(status: nil, error: error)
                 return
