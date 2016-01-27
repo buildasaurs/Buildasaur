@@ -1,5 +1,7 @@
 # https://github.com/KrauseFx/fastlane/tree/master/docs
 
+ENV["LANG"]="en_US.UTF-8"
+
 # If you want to automatically update fastlane if a new version is available:
 update_fastlane
 
@@ -47,7 +49,7 @@ private_lane :inject_dummy_credentials do
     commands = keys.map { |key|
       command = "pod keys set #{key} 'INSERT_YOUR_OWN_KEY_HERE'"
       if key == keys.first
-        command += " Buildasaur"
+        command += " Buildasaur.xcodeproj"
       end
 
       command
