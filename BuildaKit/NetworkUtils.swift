@@ -15,11 +15,8 @@ public class NetworkUtils {
     
     public class func checkAvailabilityOfGitHubWithCurrentSettingsOfProject(project: Project, completion: (success: Bool, error: ErrorType?) -> ()) {
         
-        let token = project.config.value.serverAuthentication!
-        //TODO: have project spit out Set<SourceServerOption>
-        
-        let options: Set<SourceServerOption> = [.Token(token)]
-        let server: SourceServerType = SourceServerFactory().createServer(options)
+        let auth = project.config.value.serverAuthentication
+        let server = SourceServerFactory().createServer(.GitHub, auth: auth)
 
         let credentialValidationBlueprint = project.createSourceControlBlueprintForCredentialVerification()
         

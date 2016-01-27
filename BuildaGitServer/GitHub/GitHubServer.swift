@@ -19,7 +19,7 @@ class GitHubServer : GitServer {
     init(endpoints: GitHubEndpoints, http: HTTP? = nil) {
         
         self.endpoints = endpoints
-        super.init(http: http)
+        super.init(service: .GitHub, http: http)
     }
 }
 

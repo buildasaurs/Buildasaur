@@ -24,41 +24,22 @@ public protocol SourceServerType: BuildStatusCreator {
     func getCommentsOfIssue(issueNumber: Int, repo: String, completion: (comments: [CommentType]?, error: ErrorType?) -> ())
 }
 
-public enum SourceServerOption {
-    case Token(String)
-}
-
-extension SourceServerOption: Hashable {
-    public var hashValue: Int {
-        switch self {
-        case .Token(_):
-            return 1
-        }
-    }
-}
-
-public func ==(lhs: SourceServerOption, rhs: SourceServerOption) -> Bool {
-    
-    if case .Token(let lhsToken) = lhs, case .Token(let rhsToken) = rhs {
-        return lhsToken == rhsToken
-    }
-    
-    return false
-}
-
 public class SourceServerFactory {
     
     public init() { }
     
-    public func createServer(config: Set<SourceServerOption>) -> SourceServerType {
+    public func createServer(service: GitService, auth: ProjectAuthenticator?) -> SourceServerType {
         
-        //TODO: generalize
-        if let tokenOption = config.first,
-            case .Token(let token) = tokenOption {
-            
-                return GitHubFactory.server(token)
+        if let auth = auth {
+            precondition(service == auth.service)
         }
-        preconditionFailure("Insufficient data provided to create a source server")
+        
+        switch service {
+        case .GitHub:
+            return GitHubFactory.server(auth)
+        case .BitBucket:
+            fatalError("Not implemented yet")
+        }
     }
 }
 

@@ -16,7 +16,7 @@ public protocol SyncerFactoryType {
     func newEditableTriplet() -> EditableConfigTriplet
     func createXcodeServer(config: XcodeServerConfig) -> XcodeServer
     func createProject(config: ProjectConfig) -> Project?
-    func createSourceServer(token: String) -> SourceServerType
+    func createSourceServer(service: GitService, auth: ProjectAuthenticator?) -> SourceServerType
     func createTrigger(config: TriggerConfig) -> Trigger
 }
 
@@ -31,12 +31,14 @@ public class SyncerFactory: SyncerFactoryType {
     private func createSyncer(triplet: ConfigTriplet) -> HDGitHubXCBotSyncer? {
         
         let xcodeServer = self.createXcodeServer(triplet.server)
-        //TODO: pull out authentication as SourceServerOptions
-        let sourceServer = self.createSourceServer(triplet.project.serverAuthentication ?? "")
         let maybeProject = self.createProject(triplet.project)
         let triggers = triplet.triggers.map { self.createTrigger($0) }
         
         guard let project = maybeProject else { return nil }
+        
+        guard let service = project.workspaceMetadata?.service else { return nil }
+        
+        let sourceServer = self.createSourceServer(service, auth: triplet.project.serverAuthentication)
         
         if let poolAttempt = self.syncerPool[triplet.syncer.id]
         {
@@ -118,10 +120,9 @@ public class SyncerFactory: SyncerFactoryType {
         return project
     }
     
-    public func createSourceServer(token: String) -> SourceServerType {
+    public func createSourceServer(service: GitService, auth: ProjectAuthenticator?) -> SourceServerType {
         
-        let options: Set<SourceServerOption> = [.Token(token)]
-        let server: SourceServerType = SourceServerFactory().createServer(options)
+        let server = SourceServerFactory().createServer(service, auth: auth)
         return server
     }
     

@@ -8,6 +8,7 @@
 
 import Foundation
 import BuildaUtils
+import BuildaGitServer
 
 public struct ProjectConfig {
 
@@ -17,13 +18,13 @@ public struct ProjectConfig {
     public var publicSSHKeyPath: String
     
     public var sshPassphrase: String? //loaded from the keychain
-    public var serverAuthentication: String? //loaded from the keychain
+    public var serverAuthentication: ProjectAuthenticator? //loaded from the keychain
     
     //creates a new default ProjectConfig
     public init() {
         self.id = Ref.new()
         self.url = ""
-        self.serverAuthentication = ""
+        self.serverAuthentication = nil
         self.privateSSHKeyPath = ""
         self.publicSSHKeyPath = ""
         self.sshPassphrase = nil

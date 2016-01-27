@@ -22,9 +22,11 @@ enum EditorVCType: String {
 class EditorViewControllerFactory: EditorViewControllerFactoryType {
     
     let storyboardLoader: StoryboardLoader
+    let serviceAuthenticator: ServiceAuthenticator
     
-    init(storyboardLoader: StoryboardLoader) {
+    init(storyboardLoader: StoryboardLoader, serviceAuthenticator: ServiceAuthenticator) {
         self.storyboardLoader = storyboardLoader
+        self.serviceAuthenticator = serviceAuthenticator
     }
     
     func supplyViewControllerForState(state: EditorState, context: EditorContext) -> EditableViewController? {
@@ -61,6 +63,7 @@ class EditorViewControllerFactory: EditorViewControllerFactoryType {
             vc.projectConfig.value = context.configTriplet.project!
             vc.syncerManager = context.syncerManager
             vc.delegate = context.editeeDelegate
+            vc.serviceAuthenticator = self.serviceAuthenticator
             return vc
         
         case .NoBuildTemplate:

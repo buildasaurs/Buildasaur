@@ -8,6 +8,7 @@
 
 import Foundation
 import BuildaUtils
+import BuildaGitServer
 
 public enum CheckoutType: String {
     case SSH = "SSH"
@@ -23,6 +24,7 @@ public struct WorkspaceMetadata {
     public let projectWCCIdentifier: String
     public let projectWCCName: String
     public let projectURL: NSURL
+    public let service: GitService
     public let checkoutType: CheckoutType
     
     init(projectName: String?, projectPath: String?, projectWCCIdentifier: String?, projectWCCName: String?, projectURLString: String?) throws {
@@ -33,7 +35,7 @@ public struct WorkspaceMetadata {
         guard let projectWCCIdentifier = projectWCCIdentifier else { throw errorForMissingKey("Project WCC Identifier") }
         guard let projectWCCName = projectWCCName else { throw errorForMissingKey("Project WCC Name") }
         guard let projectURLString = projectURLString else { throw errorForMissingKey("Project URL") }
-        guard let checkoutType = WorkspaceMetadata.parseCheckoutType(projectURLString) else {
+        guard let (checkoutType, service) = WorkspaceMetadata.parse(projectURLString) else {
             let allowedString = [CheckoutType.SSH].map({ $0.rawValue }).joinWithSeparator(", ")
             let error = Error.withInfo("Disallowed checkout type, the project must be checked out over one of the supported schemes: \(allowedString)")
             throw error
@@ -53,6 +55,7 @@ public struct WorkspaceMetadata {
         self.projectWCCName = projectWCCName
         self.projectURL = projectURL
         self.checkoutType = checkoutType
+        self.service = service
     }
     
     func duplicateWithForkURL(forkUrlString: String?) throws -> WorkspaceMetadata {
@@ -62,7 +65,7 @@ public struct WorkspaceMetadata {
 
 extension WorkspaceMetadata {
     
-    internal static func parseCheckoutType(projectURLString: String) -> CheckoutType? {
+    internal static func parse(projectURLString: String) -> (CheckoutType, GitService)? {
         
         var urlString = projectURLString
         
@@ -76,7 +79,9 @@ extension WorkspaceMetadata {
         let scheme = NSURL(string: urlString)!.scheme
         switch scheme {
         case "github.com":
-            return CheckoutType.SSH
+            return (CheckoutType.SSH, .GitHub)
+        case "bitbucket.org":
+            return (CheckoutType.SSH, .BitBucket)
         case "https":
             
             if urlString.hasSuffix(".git") {

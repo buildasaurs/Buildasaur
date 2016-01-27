@@ -10,6 +10,7 @@ import Foundation
 import BuildaUtils
 import XcodeServerSDK
 import ReactiveCocoa
+import BuildaGitServer
 
 public enum StorageManagerError: ErrorType {
     case DuplicateServerConfig(XcodeServerConfig)
@@ -28,6 +29,7 @@ public class StorageManager {
     private let persistence: Persistence
     
     public init(persistence: Persistence) {
+        
         self.persistence = persistence
         self.loadAllFromPersistence()
         self.setupSaving()
@@ -174,7 +176,11 @@ public class StorageManager {
         self.projectConfigs.value = allProjects
             .map {
                 (var p: ProjectConfig) -> ProjectConfig in
-                p.serverAuthentication = tokenKeychain.read(p.keychainKey())
+                var auth: ProjectAuthenticator?
+                if let val = tokenKeychain.read(p.keychainKey()) {
+                    auth = try? ProjectAuthenticator.fromString(val)
+                }
+                p.serverAuthentication = auth
                 p.sshPassphrase = passphraseKeychain.read(p.keychainKey())
                 return p
             }.dictionarifyWithKey { $0.id }
@@ -232,7 +238,9 @@ public class StorageManager {
         let tokenKeychain = SecurePersistence.sourceServerTokenKeychain()
         let passphraseKeychain = SecurePersistence.sourceServerPassphraseKeychain()
         configs.values.forEach {
-            tokenKeychain.writeIfNeeded($0.keychainKey(), value: $0.serverAuthentication)
+            if let auth = $0.serverAuthentication {
+                tokenKeychain.writeIfNeeded($0.keychainKey(), value: auth.toString())
+            }
             passphraseKeychain.writeIfNeeded($0.keychainKey(), value: $0.sshPassphrase)
         }
         self.persistence.saveArray("Projects.json", items: projectConfigs)

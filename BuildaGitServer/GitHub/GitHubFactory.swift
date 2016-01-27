@@ -10,10 +10,10 @@ import Foundation
 
 class GitHubFactory {
     
-    class func server(token: String?) -> GitHubServer {
-     
+    class func server(auth: ProjectAuthenticator?) -> GitHubServer {
+        
         let baseURL = "https://api.github.com"
-        let endpoints = GitHubEndpoints(baseURL: baseURL, token: token)
+        let endpoints = GitHubEndpoints(baseURL: baseURL, auth: auth)
         
         let server = GitHubServer(endpoints: endpoints)
         return server

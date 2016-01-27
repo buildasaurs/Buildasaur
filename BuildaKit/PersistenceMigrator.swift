@@ -9,6 +9,7 @@
 import Foundation
 import BuildaUtils
 import XcodeServerSDK
+@testable import BuildaGitServer
 
 public protocol MigratorType {
     init(persistence: Persistence)
@@ -49,7 +50,8 @@ public class CompositeMigrator: MigratorType {
         self.childMigrators = [
             Migrator_v0_v1(persistence: persistence),
             Migrator_v1_v2(persistence: persistence),
-            Migrator_v2_v3(persistence: persistence)
+            Migrator_v2_v3(persistence: persistence),
+            Migrator_v3_v4(persistence: persistence)
         ]
     }
     
@@ -276,7 +278,7 @@ class Migrator_v1_v2: MigratorType {
 
 /*
 - ServerConfigs.json: password moved to the keychain
-- Projects.json: github_token -> server_authentication, ssh_passphrase moved to keychain
+- Projects.json: github_token -> oauth_tokens keychain, ssh_passphrase moved to keychain
 - move any .log files to a separate folder called 'Logs'
 */
 class Migrator_v2_v3: MigratorType {
@@ -380,4 +382,60 @@ class Migrator_v2_v3: MigratorType {
         }
     }
 }
+
+/*
+- keychain oauth_tokens need to be prepended with the service, username etc.
+- "token1234" -> "github:username:personaltoken:token1234" 
+- unfortunately we haven't kept the username anywhere, so we'll just put
+- "GIT" there instead.
+*/
+class Migrator_v3_v4: MigratorType {
+    
+    internal var persistence: Persistence
+    required init(persistence: Persistence) {
+        self.persistence = persistence
+    }
+    
+    func isMigrationRequired() -> Bool {
+        
+        return self.persistenceVersion() == 3
+    }
+    
+    func attemptMigration() throws {
+        
+        let pers = self.persistence
+        
+        //migrate
+        self.migrateKeychainTokens()
+        
+        //copy the rest
+        pers.copyFileToWriteLocation("Projects.json", isDirectory: false)
+        pers.copyFileToWriteLocation("ServerConfigs.json", isDirectory: false)
+        pers.copyFileToWriteLocation("Syncers.json", isDirectory: false)
+        pers.copyFileToWriteLocation("BuildTemplates", isDirectory: true)
+        pers.copyFileToWriteLocation("Triggers", isDirectory: true)
+        pers.copyFileToWriteLocation("Logs", isDirectory: true)
+        
+        let config = self.config()
+        let mutableConfig = config.mutableCopy() as! NSMutableDictionary
+        mutableConfig[kPersistenceVersion] = 4
+        
+        //save the updated config
+        pers.saveDictionary("Config.json", item: mutableConfig)
+    }
+    
+    func migrateKeychainTokens() {
+        
+        let tokenKeychain = SecurePersistence.sourceServerTokenKeychain()
+        
+        tokenKeychain.readAll().forEach { (id, key) in
+            //all keys migrated are github personal tokens
+            let auth = ProjectAuthenticator(service: .GitHub, username: "GIT", type: .PersonalToken, secret: key)
+            let formatted = auth.toString()
+            tokenKeychain.writeIfNeeded(id, value: formatted)
+        }
+        tokenKeychain.readAll() //wait till all writes have completed
+    }
+}
+
 
