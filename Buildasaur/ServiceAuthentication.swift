@@ -76,11 +76,12 @@ class ServiceAuthenticator {
     
     private func getGitHubParameters() -> ([ParamKey: String], SecretFromResponseParams) {
         let keys = BuildasaurKeys()
+        let service = GitService.GitHub
         let params: [ParamKey: String] = [
             .ConsumerId: keys.gitHubAPIClientId(),
             .ConsumerSecret: keys.gitHubAPIClientSecret(),
-            .AuthorizeUrl: "https://github.com/login/oauth/authorize",
-            .AccessTokenUrl: "https://github.com/login/oauth/access_token",
+            .AuthorizeUrl: service.authorizeUrl(),
+            .AccessTokenUrl: service.accessTokenUrl(),
             .ResponseType: "code",
             .CallbackUrl: "buildasaur://oauth-callback/github",
             .Scope: "repo",
@@ -95,11 +96,12 @@ class ServiceAuthenticator {
     
     private func getBitBucketParameters() -> ([ParamKey: String], SecretFromResponseParams) {
         let keys = BuildasaurKeys()
+        let service = GitService.BitBucket
         let params: [ParamKey: String] = [
             .ConsumerId: keys.bitBucketAPIClientId(),
             .ConsumerSecret: keys.bitBucketAPIClientSecret(),
-            .AuthorizeUrl: "https://bitbucket.org/site/oauth2/authorize",
-            .AccessTokenUrl: "https://bitbucket.org/site/oauth2/access_token",
+            .AuthorizeUrl: service.authorizeUrl(),
+            .AccessTokenUrl: service.accessTokenUrl(),
             .ResponseType: "code",
             .CallbackUrl: "buildasaur://oauth-callback/bitbucket",
             .Scope: "pullrequest",

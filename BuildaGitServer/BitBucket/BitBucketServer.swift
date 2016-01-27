@@ -191,7 +191,7 @@ extension BitBucketServer: SourceServerType {
 
 extension BitBucketServer {
     
-    private func _sendRequest(request: NSMutableURLRequest, completion: HTTP.Completion) {
+    private func _sendRequest(request: NSMutableURLRequest, isRetry: Bool = false, completion: HTTP.Completion) {
         
 //        let cachedInfo = self.cache.getCachedInfoForRequest(request)
 //        if let etag = cachedInfo.etag {
@@ -202,11 +202,6 @@ extension BitBucketServer {
             
             if let error = error {
                 completion(response: response, body: body, error: error)
-                return
-            }
-            
-            if response == nil {
-                completion(response: nil, body: body, error: Error.withInfo("Nil response"))
                 return
             }
             
@@ -237,8 +232,11 @@ extension BitBucketServer {
 //                completion(response: responseInfo.response, body: responseInfo.body, error: nil)
 //                return
             case 401: //TODO: handle unauthorized, use refresh token to get a new
-                //access token
-                break
+                //only try to refresh token once
+                if !isRetry {
+                    self._handle401(request, completion: completion)
+                }
+                return
             case 400, 402 ... 500:
                 
                 let message = ((body as? NSDictionary)?["error"] as? NSDictionary)?["message"] as? String ?? (body as? String ?? "Unknown error")
@@ -251,6 +249,35 @@ extension BitBucketServer {
             
             completion(response: response, body: body, error: error)
         })
+    }
+    
+    private func _handle401(request: NSMutableURLRequest, completion: HTTP.Completion) {
+        
+        //we need to use the refresh token to request a new access token
+        //then we need to notify that we updated the secret, so that it can
+        //be saved by buildasaur
+        //then we need to set the new access token to this waiting request and
+        //run it again. if that fails too, we fail for real.
+        
+        //get a new access token
+        self._refreshAccessToken(request, completion: completion)
+        
+        //retrying the original request
+        self._sendRequest(request, isRetry: true, completion: completion)
+    }
+    
+    private func _refreshAccessToken(request: NSMutableURLRequest, completion: HTTP.Completion) {
+        
+        let refreshRequest = self.endpoints.createRefreshTokenRequest()
+        self.http.sendRequest(refreshRequest) { (response, body, error) -> () in
+            
+            if let error = error {
+                completion(response: response, body: body, error: error)
+                return
+            }
+            
+            print("whoa")
+        }
     }
     
     private func _sendRequestWithMethod(method: HTTP.Method, endpoint: BitBucketEndpoints.Endpoint, params: [String: String]?, query: [String: String]?, body: NSDictionary?, completion: HTTP.Completion) {

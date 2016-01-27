@@ -34,6 +34,20 @@ public enum GitService: String {
         case .BitBucket: return "bitbucket.org"
         }
     }
+    
+    public func authorizeUrl() -> String {
+        switch self {
+        case .GitHub: return "https://github.com/login/oauth/authorize"
+        case .BitBucket: return "https://bitbucket.org/site/oauth2/authorize"
+        }
+    }
+    
+    public func accessTokenUrl() -> String {
+        switch self {
+        case .GitHub: return "https://github.com/login/oauth/access_token"
+        case .BitBucket: return "https://bitbucket.org/site/oauth2/access_token"
+        }
+    }
 }
 
 public class GitServer : HTTPServer {

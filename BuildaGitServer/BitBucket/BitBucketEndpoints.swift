@@ -75,6 +75,36 @@ class BitBucketEndpoints {
         
     }
     
+    func setAuthOnRequest(request: NSMutableURLRequest) {
+        
+        guard let auth = self.auth else { return }
+            
+        switch auth.type {
+        case .OAuthToken:
+            let tokens = auth.secret.componentsSeparatedByString(":")
+            //first is refresh token, second access token
+            request.setValue("Bearer \(tokens[1])", forHTTPHeaderField:"Authorization")
+        default:
+            fatalError("This kind of authentication is not supported for BitBucket")
+        }
+    }
+    
+    func createRefreshTokenRequest() -> NSMutableURLRequest {
+        
+        guard let auth = self.auth else { fatalError("No auth") }
+        let refreshUrl = auth.service.accessTokenUrl()
+        let refreshToken = auth.secret.componentsSeparatedByString(":")[0]
+        let body = [
+            ("grant_type", "refresh_token"),
+            ("refresh_token", refreshToken)
+            ].map { "\($0.0)=\($0.1)" }.joinWithSeparator("&")
+        
+        let request = NSMutableURLRequest(URL: NSURL(string: refreshUrl)!)
+        request.HTTPMethod = "POST"
+        self.setStringBody(request, body: body)
+        return request
+    }
+    
     func createRequest(method: HTTP.Method, endpoint: Endpoint, params: [String : String]? = nil, query: [String : String]? = nil, body: NSDictionary? = nil) throws -> NSMutableURLRequest {
         
         let endpointURL = self.endpointURL(endpoint, params: params)
@@ -86,25 +116,24 @@ class BitBucketEndpoints {
         let request = NSMutableURLRequest(URL: url)
         
         request.HTTPMethod = method.rawValue
-        if let auth = self.auth {
-            
-            switch auth.type {
-            case .OAuthToken:
-                let tokens = auth.secret.componentsSeparatedByString(":")
-                //first is refresh token, second access token
-                request.setValue("Bearer \(tokens[1])", forHTTPHeaderField:"Authorization")
-            default:
-                fatalError("This kind of authentication is not supported for BitBucket")
-            }
-        }
+        self.setAuthOnRequest(request)
         
         if let body = body {
-            
-            let data = try NSJSONSerialization.dataWithJSONObject(body, options: NSJSONWritingOptions())
-            request.HTTPBody = data
-            request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+            try self.setJSONBody(request, body: body)
         }
         
         return request
+    }
+    
+    func setStringBody(request: NSMutableURLRequest, body: String) {
+        let data = body.dataUsingEncoding(NSUTF8StringEncoding)
+        request.HTTPBody = data
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+    }
+
+    func setJSONBody(request: NSMutableURLRequest, body: NSDictionary) throws {
+        let data = try NSJSONSerialization.dataWithJSONObject(body, options: NSJSONWritingOptions())
+        request.HTTPBody = data
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
     }
 }
