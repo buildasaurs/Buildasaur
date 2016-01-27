@@ -14,6 +14,8 @@ class BitBucketEndpoints {
     enum Endpoint {
         case Repos
         case PullRequests
+        case PullRequestComments
+        case CommitStatuses
     }
     
     private let baseURL: String
@@ -46,8 +48,31 @@ class BitBucketEndpoints {
             } else {
                 return "\(repo)/pullrequests"
             }
-
+        
+        case .PullRequestComments:
+            
+            assert(params?["repo"] != nil, "A repo must be specified")
+            assert(params?["pr"] != nil, "A PR must be specified")
+            let pr = self.endpointURL(.PullRequests, params: params)
+            return "\(pr)/comments"
+            
+        case .CommitStatuses:
+            
+            assert(params?["repo"] != nil, "A repo must be specified")
+            assert(params?["sha"] != nil, "A commit sha must be specified")
+            let repo = self.endpointURL(.Repos, params: params)
+            let sha = params!["sha"]!
+            
+            let build = "\(repo)/commit/\(sha)/statuses/build"
+            
+            if let key = params?["status_key"] {
+                return "\(build)/\(key)"
+            }
+            
+            return build
+            
         }
+        
     }
     
     func createRequest(method: HTTP.Method, endpoint: Endpoint, params: [String : String]? = nil, query: [String : String]? = nil, body: NSDictionary? = nil) throws -> NSMutableURLRequest {
@@ -64,8 +89,12 @@ class BitBucketEndpoints {
         if let auth = self.auth {
             
             switch auth.type {
-            case .PersonalToken, .OAuthToken:
-                request.setValue("token \(auth.secret)", forHTTPHeaderField:"Authorization")
+            case .OAuthToken:
+                let tokens = auth.secret.componentsSeparatedByString(":")
+                //first is refresh token, second access token
+                request.setValue("Bearer \(tokens[1])", forHTTPHeaderField:"Authorization")
+            default:
+                fatalError("This kind of authentication is not supported for BitBucket")
             }
         }
         
@@ -73,6 +102,7 @@ class BitBucketEndpoints {
             
             let data = try NSJSONSerialization.dataWithJSONObject(body, options: NSJSONWritingOptions())
             request.HTTPBody = data
+            request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
         }
         
         return request

@@ -97,19 +97,6 @@ class GitHubStatus : GitHubEntity {
     }
 }
 
-//for sending statuses upstream
-extension GitHubStatus {
-        
-    class func toDict(state: GitHubState, description: String? = nil, targetUrl: String? = nil, context: String? = nil) -> [String: String] {
-        return [
-            "state" : state.rawValue,
-            "target_url" : targetUrl ?? "",
-            "description" : description ?? "",
-            "context" : context ?? ""
-        ]
-    }
-}
-
 extension GitHubStatus: StatusType {
     
     var state: BuildState {
