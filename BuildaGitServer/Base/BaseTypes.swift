@@ -34,12 +34,7 @@ public class SourceServerFactory {
             precondition(service == auth.service)
         }
         
-        switch service {
-        case .GitHub:
-            return GitHubFactory.server(auth)
-        case .BitBucket:
-            fatalError("Not implemented yet")
-        }
+        return GitServerFactory.server(service, auth: auth)
     }
 }
 

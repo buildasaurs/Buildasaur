@@ -1,5 +1,5 @@
 //
-//  Commit.swift
+//  GitHubCommit.swift
 //  Buildasaur
 //
 //  Created by Honza Dvorsky on 13/12/2014.
@@ -9,7 +9,7 @@
 import Foundation
 
 //GitHub commit in all its glory, with git commit metadata, plus comments, committer, author and parents info
-class Commit : GitHubEntity {
+class GitHubCommit : GitHubEntity {
     
     let sha: String
 
