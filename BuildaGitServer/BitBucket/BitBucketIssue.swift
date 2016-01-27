@@ -7,3 +7,12 @@
 //
 
 import Foundation
+
+class BitBucketIssue: BitBucketEntity, IssueType {
+    
+    required init(json: NSDictionary) {
+        super.init(json: json)
+    }
+    
+    var number: Int = 0
+}

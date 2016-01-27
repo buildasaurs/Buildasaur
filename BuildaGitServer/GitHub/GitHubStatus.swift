@@ -54,7 +54,7 @@ class GitHubStatus : GitHubEntity {
     let targetUrl: String?
     let context: String?
     let created: String?
-    let creator: User?
+    let creator: GitHubUser?
 
     required init(json: NSDictionary) {
         
@@ -64,7 +64,7 @@ class GitHubStatus : GitHubEntity {
         self.context = json.optionalStringForKey("context")
         self.created = json.optionalStringForKey("created_at")
         if let creator = json.optionalDictionaryForKey("creator") {
-            self.creator = User(json: creator)
+            self.creator = GitHubUser(json: creator)
         } else {
             self.creator = nil
         }

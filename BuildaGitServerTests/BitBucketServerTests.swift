@@ -6,30 +6,41 @@
 //  Copyright © 2016 Honza Dvorsky. All rights reserved.
 //
 
+import Cocoa
 import XCTest
+@testable import BuildaGitServer
+import BuildaUtils
+import DVR
 
 class BitBucketServerTests: XCTestCase {
 
+    var bitbucket: SourceServerType!
+    
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        
+        let session = DVR.Session
+        self.bitbucket = GitServerFactory.server(.BitBucket, auth: nil)
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        
+        self.bitbucket = nil
+        
         super.tearDown()
     }
-
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock {
-            // Put the code you want to measure the time of here.
+    
+    func testLiveGetPullRequests() {
+        
+        let expect = self.expectationWithDescription("Waiting for url request")
+        
+        self.bitbucket.getOpenPullRequests("honzadvorsky/buildasaur-tester") { (prs, error) -> () in
+            
+            print(prs)
+            print(error)
         }
+        
+        self.waitForExpectationsWithTimeout(10, handler: nil)
     }
-
+    
 }

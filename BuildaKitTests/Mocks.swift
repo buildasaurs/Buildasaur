@@ -45,7 +45,7 @@ class MockTemplate {
     }
 }
 
-class MockRepo: Repo {
+class MockRepo: GitHubRepo {
     
     class func mockDictionary() -> NSDictionary {
         return [
@@ -65,7 +65,7 @@ class MockRepo: Repo {
     }
 }
 
-class MockBranch: Branch {
+class MockBranch: GitHubBranch {
     
     class func mockDictionary(name: String = "master", sha: String = "1234f") -> NSDictionary {
         return [
@@ -85,7 +85,7 @@ class MockBranch: Branch {
     }
 }
 
-class MockPullRequestBranch: PullRequestBranch {
+class MockPullRequestBranch: GitHubPullRequestBranch {
     
     class func mockDictionary(ref: String = "mock_ref", sha: String = "1234f") -> NSDictionary {
         return [
@@ -104,7 +104,7 @@ class MockPullRequestBranch: PullRequestBranch {
     }
 }
 
-class MockIssue: Issue {
+class MockIssue: GitHubIssue {
     
     class func mockDictionary(number: Int = 1, body: String = "body", title: String = "title") -> NSDictionary {
         return [
@@ -131,7 +131,7 @@ class MockBuildStatusCreator: BuildStatusCreator {
     init() { }
 }
 
-class MockPullRequest: PullRequest {
+class MockPullRequest: GitHubPullRequest {
     
     class func mockDictionary(number: Int, title: String, head: NSDictionary, base: NSDictionary) -> NSDictionary {
         let dict = MockIssue.mockDictionary(number, body: "body", title: title).mutableCopy() as! NSMutableDictionary

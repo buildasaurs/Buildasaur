@@ -7,22 +7,23 @@
 //
 
 import Foundation
+import BuildaUtils
 
 class GitServerFactory {
     
-    class func server(auth: ProjectAuthenticator?) -> GitServer {
+    class func server(service: GitService, auth: ProjectAuthenticator?, http: HTTP? = nil) -> SourceServerType {
 
-        let server: GitServer
+        let server: SourceServerType
         
-        switch auth!.service {
+        switch service {
         case .GitHub:
             let baseURL = "https://api.github.com"
             let endpoints = GitHubEndpoints(baseURL: baseURL, auth: auth)
-            server = GitHubServer(endpoints: endpoints)
+            server = GitHubServer(endpoints: endpoints, http: http)
         case .BitBucket:
             let baseURL = "https://api.bitbucket.org"
             let endpoints = BitBucketEndpoints(baseURL: baseURL, auth: auth)
-            server = BitBucketServer(endpoints: endpoints)
+            server = BitBucketServer(endpoints: endpoints, http: http)
         }
         
         return server

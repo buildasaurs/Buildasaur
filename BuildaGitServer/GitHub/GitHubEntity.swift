@@ -8,11 +8,11 @@
 
 import Foundation
 
-protocol GitHub {
+protocol GitHubType {
     init(json: NSDictionary)
 }
 
-class GitHubEntity : GitHub {
+class GitHubEntity : GitHubType {
     
     let htmlUrl: String?
     let url: String?
@@ -47,7 +47,7 @@ class GitHubEntity : GitHub {
 }
 
 //parse an array of dictionaries into an array of parsed entities
-func GitHubArray<T where T:GitHub>(jsonArray: NSArray!) -> [T] {
+func GitHubArray<T where T: GitHubType>(jsonArray: NSArray!) -> [T] {
     
     let array = jsonArray as! [NSDictionary]!
     let parsed = array.map {

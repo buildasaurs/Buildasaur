@@ -9,8 +9,8 @@ plugin 'cocoapods-keys', {
     "BitBucketAPIClientSecret"
 ]}
 
-# for CI:
-# http://artsy.github.io/blog/2015/01/21/cocoapods-keys-and-CI/
+source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/czechboy0/Podspecs.git'
 
 platform :osx, '10.11'
 use_frameworks!
@@ -62,6 +62,7 @@ end
 
 target 'BuildaGitServerTests' do
     pods_for_errbody
+    pod 'DVR', '~> 0.2.1-snap1'
 end
 
 target 'BuildaHeartbeatKit' do

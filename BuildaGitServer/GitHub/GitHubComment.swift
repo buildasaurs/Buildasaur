@@ -11,12 +11,12 @@ import Foundation
 class GitHubComment : GitHubEntity {
     
     let body: String
-    let author: User
+    let author: GitHubUser
     
     required init(json: NSDictionary) {
         
         self.body = json.stringForKey("body")
-        self.author = User(json: json.dictionaryForKey("user"))
+        self.author = GitHubUser(json: json.dictionaryForKey("user"))
 
         super.init(json: json)
     }

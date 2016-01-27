@@ -1,5 +1,5 @@
 //
-//  PullRequest.swift
+//  GitHubPullRequest.swift
 //  Buildasaur
 //
 //  Created by Honza Dvorsky on 13/12/2014.
@@ -8,15 +8,15 @@
 
 import Foundation
 
-class PullRequest : Issue, PullRequestType {
+class GitHubPullRequest : GitHubIssue, PullRequestType {
     
-    let head: PullRequestBranch
-    let base: PullRequestBranch
+    let head: GitHubPullRequestBranch
+    let base: GitHubPullRequestBranch
     
     required init(json: NSDictionary) {
         
-        self.head = PullRequestBranch(json: json.dictionaryForKey("head"))
-        self.base = PullRequestBranch(json: json.dictionaryForKey("base"))
+        self.head = GitHubPullRequestBranch(json: json.dictionaryForKey("head"))
+        self.base = GitHubPullRequestBranch(json: json.dictionaryForKey("base"))
         
         super.init(json: json)
     }

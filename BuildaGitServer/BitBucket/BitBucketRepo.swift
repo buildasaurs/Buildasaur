@@ -7,3 +7,14 @@
 //
 
 import Foundation
+
+class BitBucketRepo: BitBucketEntity, RepoType {
+    
+    required init(json: NSDictionary) {
+        super.init(json: json)
+    }
+    
+    var permissions = RepoPermissions(read: true, write: true)
+    var originUrlSSH: String = ""
+    var latestRateLimitInfo: RateLimitType? = BitBucketRateLimit()
+}
