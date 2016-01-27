@@ -113,11 +113,6 @@ class ProjectViewController: ConfigEditViewController {
             .startWithNext { [weak self] (proj, auth, forceUseToken) in
                 self?.updateServiceMeta(proj, auth: auth, userWantsTokenAuth: forceUseToken)
         }
-        self.authenticator.producer.startWithNext { [weak self] in
-            if $0 == nil {
-                self?.userWantsTokenAuth.value = false
-            }
-        }
         combineLatest(self.tokenTextField.rac_text, self.userWantsTokenAuth.producer)
             .startWithNext { [weak self] token, forceToken in
                 if forceToken {
@@ -163,23 +158,29 @@ class ProjectViewController: ConfigEditViewController {
         let meta = proj.workspaceMetadata!
         let service = meta.service
         
-        self.serviceName.stringValue = service.prettyName()
+        let name = "\(service.prettyName())"
+        self.serviceName.stringValue = name
         self.serviceLogo.image = NSImage(named: service.logoName())
         
+        let alreadyHasAuth = auth != nil
+
         switch service {
         case .GitHub:
-            self.useTokenButton.hidden = false
-            self.tokenTextField.stringValue = auth?.secret ?? ""
+            if let auth = auth where auth.type == .PersonalToken && !auth.secret.isEmpty {
+                self.tokenTextField.stringValue = auth.secret
+            } else {
+                self.tokenTextField.stringValue = ""
+            }
+            self.useTokenButton.hidden = alreadyHasAuth
         case .BitBucket:
             self.useTokenButton.hidden = true
         }
         
-        let alreadyHasAuth = auth != nil
         self.loginButton.hidden = alreadyHasAuth
         self.logoutButton.hidden = !alreadyHasAuth
-        self.tokenStackView.hidden = !(userWantsTokenAuth && service == .GitHub && !alreadyHasAuth)
         
-        self.useTokenButton.hidden = !(!alreadyHasAuth && userWantsTokenAuth)
+        let showTokenField = userWantsTokenAuth && service == .GitHub && (auth?.type == .PersonalToken || auth == nil)
+        self.tokenStackView.hidden = !showTokenField
     }
     
     override func shouldGoNext() -> Bool {
@@ -296,6 +297,8 @@ class ProjectViewController: ConfigEditViewController {
     
     @IBAction func loginButtonClicked(sender: AnyObject) {
         
+        self.userWantsTokenAuth.value = false
+        
         let service = self.project.workspaceMetadata!.service
         self.serviceAuthenticator.getAccess(service) { (auth, error) -> () in
             
@@ -319,6 +322,8 @@ class ProjectViewController: ConfigEditViewController {
     @IBAction func logoutButtonClicked(sender: AnyObject) {
         
         self.authenticator.value = nil
+        self.userWantsTokenAuth.value = false
+        self.tokenTextField.rac_stringValue.value = ""
     }
     
 }
