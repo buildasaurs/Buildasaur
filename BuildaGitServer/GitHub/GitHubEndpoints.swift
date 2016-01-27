@@ -31,11 +31,11 @@ class GitHubEndpoints {
     }
     
     private let baseURL: String
-    private let token: String?
+    private let auth: ProjectAuthenticator?
     
-    init(baseURL: String, token: String?) {
+    init(baseURL: String, auth: ProjectAuthenticator?) {
         self.baseURL = baseURL
-        self.token = token
+        self.auth = auth
     }
     
     private func endpointURL(endpoint: Endpoint, params: [String: String]? = nil) -> String {
@@ -152,8 +152,12 @@ class GitHubEndpoints {
         let request = NSMutableURLRequest(URL: url)
         
         request.HTTPMethod = method.rawValue
-        if let token = self.token {
-            request.setValue("token \(token)", forHTTPHeaderField:"Authorization")
+        if let auth = self.auth {
+            
+            switch auth.type {
+            case .PersonalToken, .OAuthToken:
+                request.setValue("token \(auth.secret)", forHTTPHeaderField:"Authorization")
+            }
         }
         
         if let body = body {

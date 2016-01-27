@@ -1,5 +1,7 @@
 # https://github.com/KrauseFx/fastlane/tree/master/docs
 
+ENV["LANG"]="en_US.UTF-8"
+
 # If you want to automatically update fastlane if a new version is available:
 update_fastlane
 
@@ -11,7 +13,49 @@ before_all do |lane|
 end
 
 lane :prebuild do
+  
+  install_cocoapods_if_needed
+
+  # if you're not me, you need to inject your own GitHub etc app API keys.
+  # but don't worry, those are only needed if you'll be using OAuth to authenticate
+  # with services, not if you're using e.g. personal token from GitHub.
+  # you can register your own app at https://github.com/settings/applications/new
+
+  # if this is running on CI, just inject dummy keys - they're not used in tests at all.
+  if ENV["XCS"] == "1"
+    puts "Running on XCS, injecting dummy credentials"
+    inject_dummy_credentials
+    puts "Done injecting dummy credentials"
+  end
+
   cocoapods
+end
+
+lane :install_cocoapods_if_needed do
+  ['cocoapods', 'cocoapods-keys'].each do |g|
+    begin
+      sh "test $(gem list -i #{g}) == false && gem install #{g}"
+    rescue Exception
+    end
+  end
+end
+
+private_lane :inject_dummy_credentials do
+    # inspired by https://github.com/artsy/eidolon/blob/master/fastlane/Fastfile
+    keys = [
+      'GitHubAPIClientId', 
+      'GitHubAPIClientSecret'
+    ]
+    commands = keys.map { |key|
+      begin
+        sh "pod keys rm #{key} Buildasaur"
+        sh "pod keys rm #{key} Buildasaur.xcodeproj"
+      rescue Exception
+      end
+
+      "pod keys set #{key} 'INSERT_YOUR_OWN_KEY_HERE' Buildasaur"
+    }.join(' ; ')
+    sh "cd .. ; #{commands}"
 end
 
 lane :test do

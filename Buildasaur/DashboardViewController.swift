@@ -24,6 +24,7 @@ class DashboardViewController: PresentableViewController {
     
     //injected before viewDidLoad
     var syncerManager: SyncerManager!
+    var serviceAuthenticator: ServiceAuthenticator!
     
     private var syncerViewModels: MutableProperty<[SyncerViewModel]> = MutableProperty([])
     
@@ -184,7 +185,7 @@ extension DashboardViewController {
         var context = EditorContext()
         context.configTriplet = triplet
         context.syncerManager = self.syncerManager
-        viewController.factory = EditorViewControllerFactory(storyboardLoader: self.storyboardLoader)
+        viewController.factory = EditorViewControllerFactory(storyboardLoader: self.storyboardLoader, serviceAuthenticator: self.serviceAuthenticator)
         context.editeeDelegate = viewController
         viewController.context.value = context
         

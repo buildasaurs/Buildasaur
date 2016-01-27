@@ -11,7 +11,9 @@ PODS:
     - Ji/Ji-libxml
   - Ji/Ji-libxml (1.2.0)
   - KeychainAccess (2.3.3)
+  - Keys (1.0.0)
   - Nimble (3.0.0)
+  - OAuthSwift (0.5.0)
   - ReactiveCocoa (4.0.0-RC.1):
     - ReactiveCocoa/UI (= 4.0.0-RC.1)
     - Result (~> 1.0)
@@ -34,9 +36,15 @@ DEPENDENCIES:
   - ekgclient (~> 0.3.0)
   - Ji (~> 1.2.0)
   - KeychainAccess
+  - Keys (from `Pods/CocoaPodsKeys`)
   - Nimble (~> 3.0.0)
+  - OAuthSwift
   - ReactiveCocoa (= 4.0.0-RC.1)
   - XcodeServerSDK (~> 0.5.6)
+
+EXTERNAL SOURCES:
+  Keys:
+    :path: Pods/CocoaPodsKeys
 
 SPEC CHECKSUMS:
   Alamofire: 39dddb7d3725d1771b1d2f7099c8bd45bd83ffbb
@@ -45,7 +53,9 @@ SPEC CHECKSUMS:
   ekgclient: 40f5d347e2ede450b3e50ac7c6bd84d96e7b84ad
   Ji: ddebb22f9ac445db6e884b66f78ea74fb135fdb7
   KeychainAccess: 9b7e49e48277e329b1b3195e54697ed313d30acf
+  Keys: 7d2ff6ff42f6903358267ce56e9392f83c31acfe
   Nimble: 4c353d43735b38b545cbb4cb91504588eb5de926
+  OAuthSwift: f2e0de083739da5697be095c9af2671242a4ed8b
   ReactiveCocoa: 2b0f654beb7642b82cfd3fdb845205ae9889422c
   Result: caef80340451e1f07492fa1e89117f83613bce24
   SwiftSafe: 77ffd12b02678790bec1ef56a2d14ec5036f1fd6

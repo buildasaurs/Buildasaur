@@ -24,6 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var syncerManager: SyncerManager!
     
     let menuItemManager = MenuItemManager()
+    let serviceAuthenticator = ServiceAuthenticator()
 
     var storyboardLoader: StoryboardLoader!
     
@@ -38,6 +39,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         #else
             self.setup()
         #endif
+        
+        
     }
     
     func setup() {
@@ -47,6 +50,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         //        defs.setBool(true, forKey: "NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints")
         //        defs.synchronize()
         
+        self.setupURLCallback()
         self.setupPersistence()
         
         self.storyboardLoader = StoryboardLoader(storyboard: NSStoryboard.mainStoryboard)
@@ -60,6 +64,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.presentViewControllerInUniqueWindow(dashboard)
         self.dashboardWindow = self.windowForPresentableViewControllerWithIdentifier("dashboard")!.0
     }
+    
     
     func migratePersistence(persistence: Persistence) {
         
@@ -107,7 +112,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let dashboard: DashboardViewController = self.storyboardLoader
             .presentableViewControllerWithStoryboardIdentifier("dashboardViewController", uniqueIdentifier: "dashboard", delegate: self)
         dashboard.syncerManager = self.syncerManager
+        dashboard.serviceAuthenticator = self.serviceAuthenticator
         return dashboard
+    }
+    
+    func handleUrl(url: NSURL) {
+        
+        print("Handling incoming url")
+        
+        if url.host == "oauth-callback" {
+            self.serviceAuthenticator.handleUrl(url)
+        }
     }
     
     func applicationShouldHandleReopen(sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
@@ -153,6 +168,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         //first window. i wish there was a nicer way (please some tell me there is)
         if NSApp.windows.count < 3 {
             self.dashboardWindow?.makeKeyAndOrderFront(self)
+        }
+    }
+}
+
+extension AppDelegate {
+    
+    func setupURLCallback() {
+        
+        // listen to scheme url
+        NSAppleEventManager.sharedAppleEventManager().setEventHandler(self, andSelector:"handleGetURLEvent:withReplyEvent:", forEventClass: AEEventClass(kInternetEventClass), andEventID: AEEventID(kAEGetURL))
+    }
+    
+    func handleGetURLEvent(event: NSAppleEventDescriptor!, withReplyEvent: NSAppleEventDescriptor!) {
+        if let urlString = event.paramDescriptorForKeyword(AEKeyword(keyDirectObject))?.stringValue, url = NSURL(string: urlString) {
+            
+            //handle url
+            self.handleUrl(url)
         }
     }
 }

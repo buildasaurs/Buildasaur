@@ -60,6 +60,20 @@ final class SecurePersistence {
         return val
     }
     
+    func readAll() -> [(String, String)] {
+        var all: [(String, String)] = []
+        self.safe.read {
+            #if TESTING
+                let keychain = self.keychain
+                all = keychain.allKeys.map { ($0 as! String, keychain[$0 as! String] as! String) }
+            #else
+                let keychain = self.keychain
+                all = keychain.allKeys().map { ($0, keychain[$0]!) }
+            #endif
+        }
+        return all
+    }
+    
     func writeIfNeeded(key: String, value: String?) {
         self.safe.write {
             self.updateIfNeeded(key, value: value)

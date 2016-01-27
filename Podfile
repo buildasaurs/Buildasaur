@@ -1,4 +1,16 @@
-platform :osx, '10.10'
+
+plugin 'cocoapods-keys', {
+  :target => "Buildasaur",
+  :project => "Buildasaur.xcodeproj",
+  :keys => [
+    "GitHubAPIClientId",
+    "GitHubAPIClientSecret"
+]}
+
+# for CI:
+# http://artsy.github.io/blog/2015/01/21/cocoapods-keys-and-CI/
+
+platform :osx, '10.11'
 use_frameworks!
 inhibit_all_warnings!
 
@@ -29,6 +41,7 @@ end
 
 target 'Buildasaur' do
     buildasaur_app_pods
+    pod 'OAuthSwift'
 end
 
 target 'BuildaKit' do
@@ -52,4 +65,6 @@ end
 target 'BuildaHeartbeatKit' do
     also_xcode_pods
 end
+
+
 
