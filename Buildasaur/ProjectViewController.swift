@@ -68,7 +68,9 @@ class ProjectViewController: ConfigEditViewController {
             return try! Project(config: newConfig)
         }
         
-        self.authenticator <~ self.projectConfig.producer.map { $0.serverAuthentication }
+        let projectAuth = self.projectConfig.value.serverAuthentication
+        self.authenticator.value = projectAuth
+        self.userWantsTokenAuth.value = projectAuth?.type == .PersonalToken
         
         //project
         proj.startWithNext { [weak self] in self?.project = $0 }
