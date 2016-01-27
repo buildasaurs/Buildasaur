@@ -4,7 +4,9 @@ plugin 'cocoapods-keys', {
   :project => "Buildasaur.xcodeproj",
   :keys => [
     "GitHubAPIClientId",
-    "GitHubAPIClientSecret"
+    "GitHubAPIClientSecret",
+    "BitBucketAPIClientId",
+    "BitBucketAPIClientSecret"
 ]}
 
 # for CI:

@@ -44,7 +44,9 @@ private_lane :inject_dummy_credentials do
     # inspired by https://github.com/artsy/eidolon/blob/master/fastlane/Fastfile
     keys = [
       'GitHubAPIClientId', 
-      'GitHubAPIClientSecret'
+      'GitHubAPIClientSecret',
+      'BitBucketAPIClientId',
+      'BitBucketAPIClientSecret'
     ]
     commands = keys.map { |key|
       begin
