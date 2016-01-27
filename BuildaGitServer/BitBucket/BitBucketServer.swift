@@ -26,8 +26,10 @@ extension BitBucketServer: SourceServerType {
     
     func createStatusFromState(state: BuildState, description: String?, targetUrl: String?) -> StatusType {
         
-        //TODO: replace with bitbucket types
-        return GitHubStatus(state: GitHubStatus.GitHubState.NoState, description: nil, targetUrl: nil, context: nil)
+        let bbState = BitBucketStatus.BitBucketState.fromBuildState(state)
+        let key = "Buildasaur"
+        let url = targetUrl ?? "https://github.com/czechboy0/Buildasaur"
+        return BitBucketStatus(state: bbState, key: key, name: key, description: description, url: url)
     }
     
     func getBranchesOfRepo(repo: String, completion: (branches: [BranchType]?, error: ErrorType?) -> ()) {
@@ -105,10 +107,50 @@ extension BitBucketServer: SourceServerType {
     
     func getStatusOfCommit(commit: String, repo: String, completion: (status: StatusType?, error: ErrorType?) -> ()) {
         
+        let params = [
+            "repo": repo,
+            "sha": commit,
+            "status_key": "Buildasaur"
+        ]
+        
+        self._sendRequestWithMethod(.GET, endpoint: .CommitStatuses, params: params, query: nil, body: nil) { (response, body, error) -> () in
+            
+            if error != nil {
+                completion(status: nil, error: error)
+                return
+            }
+            
+            if let body = body as? NSDictionary {
+                let status = BitBucketStatus(json: body)
+                completion(status: status, error: nil)
+            } else {
+                completion(status: nil, error: Error.withInfo("Wrong body \(body)"))
+            }
+        }
     }
     
     func postStatusOfCommit(commit: String, status: StatusType, repo: String, completion: (status: StatusType?, error: ErrorType?) -> ()) {
         
+        let params = [
+            "repo": repo,
+            "sha": commit
+        ]
+        
+        let body = (status as! BitBucketStatus).dictionarify()
+        self._sendRequestWithMethod(.POST, endpoint: .CommitStatuses, params: params, query: nil, body: body) { (response, body, error) -> () in
+            
+            if error != nil {
+                completion(status: nil, error: error)
+                return
+            }
+            
+            if let body = body as? NSDictionary {
+                let status = BitBucketStatus(json: body)
+                completion(status: status, error: nil)
+            } else {
+                completion(status: nil, error: Error.withInfo("Wrong body \(body)"))
+            }
+        }
     }
     
     func postCommentOnIssue(comment: String, issueNumber: Int, repo: String, completion: (comment: CommentType?, error: ErrorType?) -> ()) {

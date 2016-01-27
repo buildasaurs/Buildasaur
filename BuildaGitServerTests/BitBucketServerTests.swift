@@ -129,5 +129,56 @@ class BitBucketServerTests: XCTestCase {
         self.waitForExpectationsWithTimeout(10, handler: nil)
     }
 
+    func testPostStatus() {
+        
+        self.prepServerWithName("bitbucket_post_status")
+        
+        let exp = self.expectationWithDescription("Waiting for url request")
+        
+        let status = self.bitbucket.createStatusFromState(BuildState.Success, description: "All went great!", targetUrl: "https://stlt.herokuapp.com/v1/xcs_deeplink/honzadvysmbpr14.home/1413f8578e54c3d052b8121a250255c0/1413f8578e54c3d052b8121a2509a923")
+        
+        self.bitbucket.postStatusOfCommit("787ce95", status: status, repo: "honzadvorsky/buildasaur-tester") { (status, error) -> () in
+            
+            expect(error).to(beNil())
+            guard let status = status else { fail(); return }
+            
+            expect(status.description) == "All went great!"
+            expect(status.state) == BuildState.Success
+            expect(status.targetUrl) == "https://stlt.herokuapp.com/v1/xcs_deeplink/honzadvysmbpr14.home/1413f8578e54c3d052b8121a250255c0/1413f8578e54c3d052b8121a2509a923"
+            
+            exp.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(10, handler: nil)
+    }
+    
+    func testGetStatus() {
+        
+        self.prepServerWithName("bitbucket_get_status")
+        
+        let exp = self.expectationWithDescription("Waiting for url request")
+        
+        self.bitbucket.getStatusOfCommit("787ce95", repo: "honzadvorsky/buildasaur-tester") { (status, error) -> () in
+            
+            expect(error).to(beNil())
+            guard let status = status else { fail(); return }
+            
+            expect(status.description) == "All went great!"
+            expect(status.state) == BuildState.Success
+            expect(status.targetUrl) == "https://stlt.herokuapp.com/v1/xcs_deeplink/honzadvysmbpr14.home/1413f8578e54c3d052b8121a250255c0/1413f8578e54c3d052b8121a2509a923"
+            
+            exp.fulfill()
+        }
+        
+        self.waitForExpectationsWithTimeout(10, handler: nil)
+    }
+    
+    //    func testPostComment() {
+    //        //TODO:
+    //    }
+    
+    //    func testGetBranches() {
+    //        //TODO:
+    //    }
     
 }
