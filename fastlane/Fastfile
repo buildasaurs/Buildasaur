@@ -79,8 +79,8 @@ lane :release do
   release_no_build
 end
 
-lane :release_no_build do
-  raise "No built app found" unless File.exist?("../build/Buildasaur.app")
+lane :release_app do
+  raise "No built app found in ./build/Buildasaur.app" unless File.exist?("../build/Buildasaur.app")
   version = get_info_plist_value(
     key: "CFBundleShortVersionString",
     path: "Buildasaur/Info.plist"
@@ -131,20 +131,20 @@ private_lane :github do |params|
     is_prerelease: false
   )
 
-  sh "cd .. && rm -rf build" #delete built ipa/app
+  # sh "cd .. && rm -rf build" #delete built ipa/app
 
   # regenerate changelog to get it committed
-  sh "cd .. && github_changelog_generator -t $GITHUB_TOKEN"
-  sh "cd .. && git commit -am \"changelog\" && git push"
+  # sh "cd .. && github_changelog_generator -t $GITHUB_TOKEN"
+  # sh "cd .. && git commit -am \"changelog\" && git push"
 
   # notify us on slack
-  slack(
-    slack_url: ENV['SLACK_RELEASES_URL'],
-    message: "Successfully released [Buildasaur #{version_tag}](#{release['html_url']}) :rocket:",
-    payload: {
-      "New" => release['body']
-    }
-  )
+  # slack(
+  #   slack_url: ENV['SLACK_RELEASES_URL'],
+  #   message: "Successfully released [Buildasaur #{version_tag}](#{release['html_url']}) :rocket:",
+  #   payload: {
+  #     "New" => release['body']
+  #   }
+  # )
 
 end
 

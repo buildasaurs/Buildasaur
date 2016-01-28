@@ -2,10 +2,13 @@ PODS:
   - Alamofire (2.0.0-beta.3)
   - BuildaUtils (0.2.8):
     - SwiftSafe (~> 0.1)
+  - Crashlytics (3.6.0):
+    - Fabric (~> 1.6.3)
   - CryptoSwift (0.2.2)
   - DVR (0.2.1-snap1)
   - ekgclient (0.3.0):
     - Alamofire (= 2.0.0-beta.3)
+  - Fabric (1.6.4)
   - Ji (1.2.0):
     - Ji/Ji (= 1.2.0)
   - Ji/Ji (1.2.0):
@@ -33,6 +36,7 @@ PODS:
 
 DEPENDENCIES:
   - BuildaUtils (~> 0.2.7)
+  - Crashlytics
   - CryptoSwift
   - DVR (~> 0.2.1-snap1)
   - ekgclient (~> 0.3.0)
@@ -51,9 +55,11 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Alamofire: 39dddb7d3725d1771b1d2f7099c8bd45bd83ffbb
   BuildaUtils: 0974c128ace30916b9b9429e8585c1c6402593dd
+  Crashlytics: e4e8d02914f2608fbc7bf42b1a7af838b0db67a2
   CryptoSwift: d382228d6301c09474132417878a741c2a2e68cd
   DVR: 05cb292d3f71608e0a35afa85d475cbb56e37132
   ekgclient: 40f5d347e2ede450b3e50ac7c6bd84d96e7b84ad
+  Fabric: ed41fd62173c6bdea24ab02c9d7707161eabb750
   Ji: ddebb22f9ac445db6e884b66f78ea74fb135fdb7
   KeychainAccess: 9b7e49e48277e329b1b3195e54697ed313d30acf
   Keys: 7d2ff6ff42f6903358267ce56e9392f83c31acfe

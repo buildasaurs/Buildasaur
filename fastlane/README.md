@@ -25,9 +25,9 @@ fastlane test
 fastlane release
 ```
 
-### release_no_build
+### release_app
 ```
-fastlane release_no_build
+fastlane release_app
 ```
 
 ### build

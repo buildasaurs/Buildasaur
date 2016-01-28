@@ -1,5 +1,27 @@
 # Change Log
 
+## [v0.8.0](https://github.com/czechboy0/buildasaur/tree/v0.8.0) (2016-01-28)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.6.5...v0.8.0)
+
+**Fixed bugs:**
+
+- Fix signing releases with Developer ID [\#211](https://github.com/czechboy0/Buildasaur/issues/211)
+
+**Closed issues:**
+
+- Put logs into a separate folder [\#202](https://github.com/czechboy0/Buildasaur/issues/202)
+- Add Crashlytics [\#198](https://github.com/czechboy0/Buildasaur/issues/198)
+- Split logs into multiple files  [\#142](https://github.com/czechboy0/Buildasaur/issues/142)
+- Request/response caching [\#62](https://github.com/czechboy0/Buildasaur/issues/62)
+
+**Merged pull requests:**
+
+- Adding Crashlytics [\#210](https://github.com/czechboy0/Buildasaur/pull/210) ([czechboy0](https://github.com/czechboy0))
+- Added Builda's beautiful face to the main window! [\#204](https://github.com/czechboy0/Buildasaur/pull/204) ([czechboy0](https://github.com/czechboy0))
+- GitHub response caching [\#203](https://github.com/czechboy0/Buildasaur/pull/203) ([czechboy0](https://github.com/czechboy0))
+- Cap log file size at 10MB [\#201](https://github.com/czechboy0/Buildasaur/pull/201) ([accatyyc](https://github.com/accatyyc))
+- RAC updated to 4.RC1 [\#200](https://github.com/czechboy0/Buildasaur/pull/200) ([czechboy0](https://github.com/czechboy0))
+
 ## [v0.6.5](https://github.com/czechboy0/buildasaur/tree/v0.6.5) (2016-01-14)
 [Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.6.4...v0.6.5)
 
