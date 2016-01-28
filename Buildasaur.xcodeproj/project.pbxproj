@@ -876,6 +876,7 @@
 				3A58B14E1A3B9604003E0266 /* Embed Frameworks */,
 				42B0EC7C6499F97F0D1A8F42 /* Embed Pods Frameworks */,
 				43AA8DD75DC7BE8FD9E910F5 /* Copy Pods Resources */,
+				3ABEF9741C4B1DD800ED983F /* Crashlytics */,
 			);
 			buildRules = (
 			);
@@ -1199,6 +1200,20 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
+		};
+		3ABEF9741C4B1DD800ED983F /* Crashlytics */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Crashlytics;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "#if [ \"Release\" = \"${CONFIGURATION}\" ]; then\n    if [[ $(whoami) == \"honzadvorsky\" ]] ; then\n        source ~/.profile\n        echo \"Running Crashlytics\"\n        \"${PODS_ROOT}/Fabric/run\" $KEY_FABRIC_BUILDASAUR_PUBLIC $KEY_FABRIC_BUILDASAUR_PRIVATE\n    fi\n#fi";
 		};
 		42B0EC7C6499F97F0D1A8F42 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1681,6 +1696,7 @@
 			baseConfigurationReference = 0D837FE44FBC9DCA51767650 /* Pods-Buildasaur.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Developer ID Application: Jan Dvorsky (7BJ2984YDK)";
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_NS_ASSERTIONS = YES;
 				INFOPLIST_FILE = Buildasaur/Info.plist;
