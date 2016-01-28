@@ -167,8 +167,29 @@ extension BitBucketServer: SourceServerType {
     
     func postCommentOnIssue(comment: String, issueNumber: Int, repo: String, completion: (comment: CommentType?, error: ErrorType?) -> ()) {
         
-        //TODO
-        completion(comment: nil, error: Error.withInfo("Posting comments on BitBucket not yet supported"))
+        let params = [
+            "repo": repo,
+            "pr": issueNumber.description
+        ]
+        
+        let body = [
+            "content": comment
+        ]
+        
+        self._sendRequestWithMethod(.POST, endpoint: .PullRequestComments, params: params, query: nil, body: body) { (response, body, error) -> () in
+            
+            if error != nil {
+                completion(comment: nil, error: error)
+                return
+            }
+            
+            if let body = body as? NSDictionary {
+                let comment = BitBucketComment(json: body)
+                completion(comment: comment, error: nil)
+            } else {
+                completion(comment: nil, error: Error.withInfo("Wrong body \(body)"))
+            }
+        }
     }
     
     func getCommentsOfIssue(issueNumber: Int, repo: String, completion: (comments: [CommentType]?, error: ErrorType?) -> ()) {

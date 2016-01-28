@@ -15,8 +15,8 @@ class BitBucketComment: BitBucketEntity, CommentType {
     required init(json: NSDictionary) {
         
         self.body = json
-            .dictionaryForKey("content")
-            .stringForKey("raw")
+            .optionalDictionaryForKey("content")?
+            .stringForKey("raw") ?? json.stringForKey("content")
         
         super.init(json: json)
     }
