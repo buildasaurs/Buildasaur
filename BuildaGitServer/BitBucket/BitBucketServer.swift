@@ -56,7 +56,7 @@ extension BitBucketServer: SourceServerType {
                 return
             }
             
-            if let body = body as? NSDictionary {
+            if let body = body as? [NSDictionary] {
                 let prs: [BitBucketPullRequest] = BitBucketArray(body)
                 completion(prs: prs.map { $0 as PullRequestType }, error: nil)
             } else {
@@ -206,7 +206,7 @@ extension BitBucketServer: SourceServerType {
                 return
             }
             
-            if let body = body as? NSDictionary {
+            if let body = body as? [NSDictionary] {
                 let comments: [BitBucketComment] = BitBucketArray(body)
                 completion(comments: comments.map { $0 as CommentType }, error: nil)
             } else {
@@ -321,9 +321,48 @@ extension BitBucketServer {
         
         do {
             let request = try self.endpoints.createRequest(method, endpoint: endpoint, params: allParams, query: query, body: body)
-            self._sendRequest(request, completion: completion)
+            self._sendRequestWithPossiblePagination(request, accumulatedResponseBody: NSArray(), completion: completion)
         } catch {
             completion(response: nil, body: nil, error: Error.withInfo("Couldn't create Request, error \(error)"))
         }
     }
+    
+    private func _sendRequestWithPossiblePagination(request: NSMutableURLRequest, accumulatedResponseBody: NSArray, completion: HTTP.Completion) {
+        
+        self._sendRequest(request) {
+            (response, body, error) -> () in
+            
+            if error != nil {
+                completion(response: response, body: body, error: error)
+                return
+            }
+            
+            guard let dictBody = body as? NSDictionary else {
+                completion(response: response, body: body, error: error)
+                return
+            }
+            
+            //pull out the values
+            guard let arrayBody = dictBody["values"] as? [AnyObject] else {
+                completion(response: response, body: dictBody, error: error)
+                return
+            }
+            
+            //we do have more, let's fetch it
+            let newBody = accumulatedResponseBody.arrayByAddingObjectsFromArray(arrayBody)
+
+            guard let nextLink = dictBody.optionalStringForKey("next") else {
+                
+                //is array, but we don't have any more data
+                completion(response: response, body: newBody, error: error)
+                return
+            }
+            
+            let newRequest = request.mutableCopy() as! NSMutableURLRequest
+            newRequest.URL = NSURL(string: nextLink)!
+            self._sendRequestWithPossiblePagination(newRequest, accumulatedResponseBody: newBody, completion: completion)
+            return
+        }
+    }
+
 }
