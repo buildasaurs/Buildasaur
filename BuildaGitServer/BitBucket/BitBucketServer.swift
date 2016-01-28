@@ -220,11 +220,6 @@ extension BitBucketServer {
     
     private func _sendRequest(request: NSMutableURLRequest, isRetry: Bool = false, completion: HTTP.Completion) {
         
-//        let cachedInfo = self.cache.getCachedInfoForRequest(request)
-//        if let etag = cachedInfo.etag {
-//            request.setValue(etag, forHTTPHeaderField: "If-None-Match")
-//        }
-        
         self.http.sendRequest(request) { (response, body, error) -> () in
             
             if let error = error {
@@ -232,32 +227,9 @@ extension BitBucketServer {
                 return
             }
             
-//            if let response = response {
-//                let headers = response.allHeaderFields
-//
-//                if
-//                    let resetTime = (headers["X-RateLimit-Reset"] as? NSString)?.doubleValue,
-//                    let limit = (headers["X-RateLimit-Limit"] as? NSString)?.integerValue,
-//                    let remaining = (headers["X-RateLimit-Remaining"] as? NSString)?.integerValue {
-//
-//                        let rateLimitInfo = GitHubRateLimit(resetTime: resetTime, limit: limit, remaining: remaining)
-//                        self.latestRateLimitInfo = rateLimitInfo
-//
-//                } else {
-//                    Log.error("No X-RateLimit info provided by GitHub in headers: \(headers), we're unable to detect the remaining number of allowed requests. GitHub might fail to return data any time now :(")
-//                }
-//            }
-            
             //error out on special HTTP status codes
             let statusCode = response!.statusCode
             switch statusCode {
-                //            case 200...299: //good response, cache the returned data
-                //                let responseInfo = ResponseInfo(response: response!, body: body)
-                //                cachedInfo.update(responseInfo)
-                //            case 304: //not modified, return the cached response
-                //                let responseInfo = cachedInfo.responseInfo!
-                //                completion(response: responseInfo.response, body: responseInfo.body, error: nil)
-                //                return
             case 401: //unauthorized, use refresh token to get a new access token
                       //only try to refresh token once
                 if !isRetry {
