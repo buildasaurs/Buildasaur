@@ -110,6 +110,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 Log.info("Not starting Crashlytics in debug mode.")
             #else
                 Log.info("Will send crashlogs to Crashlytics. To opt out add `\"crash_reporting_opt_out\" = true` to ~/Library/Application Support/Buildasaur/Config.json")
+                NSUserDefaults.standardUserDefaults().registerDefaults([
+                    "NSApplicationCrashOnExceptions": true
+                    ])
                 Fabric.with([Crashlytics.self])
             #endif
         }
