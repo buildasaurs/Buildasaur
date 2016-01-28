@@ -15,6 +15,7 @@
 		3A014BA51C57A94B00B82B4A /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A014BA41C57A94B00B82B4A /* Authentication.swift */; };
 		3A08B3611C58301D00ED7A1F /* github.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A08B3601C58301D00ED7A1F /* github.png */; };
 		3A08B3641C5837EA00ED7A1F /* ServiceAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A08B3631C5837EA00ED7A1F /* ServiceAuthentication.swift */; };
+		3A0BE6E31C5A754E00AC9C57 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0BE6E21C5A754E00AC9C57 /* Extensions.swift */; };
 		3A0FF5A01BBFDA7E00FB8051 /* RACUIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0FF59F1BBFDA7E00FB8051 /* RACUIExtensions.swift */; };
 		3A0FF5A21BBFE8BA00FB8051 /* SyncerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0FF5A11BBFE8BA00FB8051 /* SyncerConfig.swift */; };
 		3A0FF5A41BBFF9FA00FB8051 /* ProjectConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0FF5A31BBFF9FA00FB8051 /* ProjectConfig.swift */; };
@@ -250,6 +251,7 @@
 		3A014BA41C57A94B00B82B4A /* Authentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
 		3A08B3601C58301D00ED7A1F /* github.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = github.png; path = Meta/github.png; sourceTree = SOURCE_ROOT; };
 		3A08B3631C5837EA00ED7A1F /* ServiceAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceAuthentication.swift; sourceTree = "<group>"; };
+		3A0BE6E21C5A754E00AC9C57 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		3A0FF59F1BBFDA7E00FB8051 /* RACUIExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RACUIExtensions.swift; sourceTree = "<group>"; };
 		3A0FF5A11BBFE8BA00FB8051 /* SyncerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncerConfig.swift; sourceTree = "<group>"; };
 		3A0FF5A31BBFF9FA00FB8051 /* ProjectConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProjectConfig.swift; sourceTree = "<group>"; };
@@ -511,6 +513,14 @@
 			name = Authentication;
 			sourceTree = "<group>";
 		};
+		3A0BE6E11C5A753F00AC9C57 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				3A0BE6E21C5A754E00AC9C57 /* Extensions.swift */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
 		3A0FF59E1BBFDA5C00FB8051 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -725,6 +735,7 @@
 				3ABF0ADC1C51A47A00882A40 /* BitBucket */,
 				3A6355DB1A3BBDB000545BF9 /* GitHub */,
 				3AAF6EE61A3CE5BA00C657FB /* Supporting Files */,
+				3A0BE6E11C5A753F00AC9C57 /* Utils */,
 			);
 			path = BuildaGitServer;
 			sourceTree = "<group>";
@@ -1566,6 +1577,7 @@
 				3A7577AD1C593C5C0023F08C /* BitBucketPullRequestBranch.swift in Sources */,
 				3A7577B71C59691A0023F08C /* BitBucketStatus.swift in Sources */,
 				3A7AF6161C5923A4000FD726 /* GitServerFactory.swift in Sources */,
+				3A0BE6E31C5A754E00AC9C57 /* Extensions.swift in Sources */,
 				3AB3F0E31A3CEBAC005F717F /* GitHubPullRequest.swift in Sources */,
 				3AB3F0E71A3CEBAC005F717F /* GitHubStatus.swift in Sources */,
 				3AB3F0E51A3CEBAC005F717F /* GitHubRepo.swift in Sources */,

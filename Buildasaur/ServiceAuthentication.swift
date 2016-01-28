@@ -9,7 +9,6 @@
 import Foundation
 import OAuthSwift
 import BuildaGitServer
-import Keys
 
 class ServiceAuthenticator {
     
@@ -75,11 +74,10 @@ class ServiceAuthenticator {
     }
     
     private func getGitHubParameters() -> ([ParamKey: String], SecretFromResponseParams) {
-        let keys = BuildasaurKeys()
         let service = GitService.GitHub
         let params: [ParamKey: String] = [
-            .ConsumerId: keys.gitHubAPIClientId(),
-            .ConsumerSecret: keys.gitHubAPIClientSecret(),
+            .ConsumerId: service.serviceKey(),
+            .ConsumerSecret: service.serviceSecret(),
             .AuthorizeUrl: service.authorizeUrl(),
             .AccessTokenUrl: service.accessTokenUrl(),
             .ResponseType: "code",
@@ -95,11 +93,10 @@ class ServiceAuthenticator {
     }
     
     private func getBitBucketParameters() -> ([ParamKey: String], SecretFromResponseParams) {
-        let keys = BuildasaurKeys()
         let service = GitService.BitBucket
         let params: [ParamKey: String] = [
-            .ConsumerId: keys.bitBucketAPIClientId(),
-            .ConsumerSecret: keys.bitBucketAPIClientSecret(),
+            .ConsumerId: service.serviceKey(),
+            .ConsumerSecret: service.serviceSecret(),
             .AuthorizeUrl: service.authorizeUrl(),
             .AccessTokenUrl: service.accessTokenUrl(),
             .ResponseType: "code",

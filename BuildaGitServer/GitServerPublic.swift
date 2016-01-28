@@ -8,6 +8,7 @@
 
 import Foundation
 import BuildaUtils
+import Keys
 
 public enum GitService: String {
     case GitHub = "github"
@@ -46,6 +47,20 @@ public enum GitService: String {
         switch self {
         case .GitHub: return "https://github.com/login/oauth/access_token"
         case .BitBucket: return "https://bitbucket.org/site/oauth2/access_token"
+        }
+    }
+    
+    public func serviceKey() -> String {
+        switch self {
+        case .GitHub: return BuildasaurKeys().gitHubAPIClientId()
+        case .BitBucket: return BuildasaurKeys().bitBucketAPIClientId()
+        }
+    }
+    
+    public func serviceSecret() -> String {
+        switch self {
+        case .GitHub: return BuildasaurKeys().gitHubAPIClientSecret()
+        case .BitBucket: return BuildasaurKeys().bitBucketAPIClientSecret()
         }
     }
 }

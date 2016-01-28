@@ -19,7 +19,7 @@ class BitBucketEndpoints {
     }
     
     private let baseURL: String
-    private let auth: ProjectAuthenticator?
+    internal var auth: ProjectAuthenticator?
     
     init(baseURL: String, auth: ProjectAuthenticator?) {
         self.baseURL = baseURL
@@ -100,6 +100,13 @@ class BitBucketEndpoints {
             ].map { "\($0.0)=\($0.1)" }.joinWithSeparator("&")
         
         let request = NSMutableURLRequest(URL: NSURL(string: refreshUrl)!)
+        
+        let service = auth.service
+        let servicePublicKey = service.serviceKey()
+        let servicePrivateKey = service.serviceSecret()
+        let credentials = "\(servicePublicKey):\(servicePrivateKey)".base64String()
+        request.setValue("Basic \(credentials)", forHTTPHeaderField:"Authorization")
+        
         request.HTTPMethod = "POST"
         self.setStringBody(request, body: body)
         return request
@@ -128,7 +135,7 @@ class BitBucketEndpoints {
     func setStringBody(request: NSMutableURLRequest, body: String) {
         let data = body.dataUsingEncoding(NSUTF8StringEncoding)
         request.HTTPBody = data
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
     }
 
     func setJSONBody(request: NSMutableURLRequest, body: NSDictionary) throws {

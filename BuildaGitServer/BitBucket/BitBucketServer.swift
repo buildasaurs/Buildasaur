@@ -7,13 +7,15 @@
 //
 
 import Foundation
-
 import BuildaUtils
 
 class BitBucketServer : GitServer {
     
     let endpoints: BitBucketEndpoints
     let cache = InMemoryURLCache()
+    
+    //TODO: add a signal for getting auth changes from the server here
+    // -> used for saving credentials back into the keychain
     
     init(endpoints: BitBucketEndpoints, http: HTTP? = nil) {
         
@@ -198,7 +200,7 @@ extension BitBucketServer {
 //            request.setValue(etag, forHTTPHeaderField: "If-None-Match")
 //        }
         
-        self.http.sendRequest(request, completion: { (response, body, error) -> () in
+        self.http.sendRequest(request) { (response, body, error) -> () in
             
             if let error = error {
                 completion(response: response, body: body, error: error)
@@ -207,15 +209,15 @@ extension BitBucketServer {
             
 //            if let response = response {
 //                let headers = response.allHeaderFields
-//                
+//
 //                if
 //                    let resetTime = (headers["X-RateLimit-Reset"] as? NSString)?.doubleValue,
 //                    let limit = (headers["X-RateLimit-Limit"] as? NSString)?.integerValue,
 //                    let remaining = (headers["X-RateLimit-Remaining"] as? NSString)?.integerValue {
-//                        
+//
 //                        let rateLimitInfo = GitHubRateLimit(resetTime: resetTime, limit: limit, remaining: remaining)
 //                        self.latestRateLimitInfo = rateLimitInfo
-//                        
+//
 //                } else {
 //                    Log.error("No X-RateLimit info provided by GitHub in headers: \(headers), we're unable to detect the remaining number of allowed requests. GitHub might fail to return data any time now :(")
 //                }
@@ -224,15 +226,15 @@ extension BitBucketServer {
             //error out on special HTTP status codes
             let statusCode = response!.statusCode
             switch statusCode {
-//            case 200...299: //good response, cache the returned data
-//                let responseInfo = ResponseInfo(response: response!, body: body)
-//                cachedInfo.update(responseInfo)
-//            case 304: //not modified, return the cached response
-//                let responseInfo = cachedInfo.responseInfo!
-//                completion(response: responseInfo.response, body: responseInfo.body, error: nil)
-//                return
-            case 401: //TODO: handle unauthorized, use refresh token to get a new
-                //only try to refresh token once
+                //            case 200...299: //good response, cache the returned data
+                //                let responseInfo = ResponseInfo(response: response!, body: body)
+                //                cachedInfo.update(responseInfo)
+                //            case 304: //not modified, return the cached response
+                //                let responseInfo = cachedInfo.responseInfo!
+                //                completion(response: responseInfo.response, body: responseInfo.body, error: nil)
+                //                return
+            case 401: //unauthorized, use refresh token to get a new access token
+                      //only try to refresh token once
                 if !isRetry {
                     self._handle401(request, completion: completion)
                 }
@@ -248,7 +250,7 @@ extension BitBucketServer {
             }
             
             completion(response: response, body: body, error: error)
-        })
+        }
     }
     
     private func _handle401(request: NSMutableURLRequest, completion: HTTP.Completion) {
@@ -259,24 +261,51 @@ extension BitBucketServer {
         //then we need to set the new access token to this waiting request and
         //run it again. if that fails too, we fail for real.
         
-        //get a new access token
-        self._refreshAccessToken(request, completion: completion)
+        Log.verbose("Got 401, starting a BitBucket refresh token flow...")
         
-        //retrying the original request
-        self._sendRequest(request, isRetry: true, completion: completion)
+        //get a new access token
+        self._refreshAccessToken(request) { error in
+            
+            if let error = error {
+                Log.verbose("Failed to get a new access token")
+                completion(response: nil, body: nil, error: error)
+                return
+            }
+
+            //we have a new access token, force set the new cred on the original
+            //request
+            self.endpoints.setAuthOnRequest(request)
+            
+            Log.verbose("Successfully refreshed a BitBucket access token")
+            
+            //retrying the original request
+            self._sendRequest(request, isRetry: true, completion: completion)
+        }
     }
     
-    private func _refreshAccessToken(request: NSMutableURLRequest, completion: HTTP.Completion) {
+    private func _refreshAccessToken(request: NSMutableURLRequest, completion: (NSError?) -> ()) {
         
         let refreshRequest = self.endpoints.createRefreshTokenRequest()
         self.http.sendRequest(refreshRequest) { (response, body, error) -> () in
             
             if let error = error {
-                completion(response: response, body: body, error: error)
+                completion(error)
                 return
             }
             
-            print("whoa")
+            guard response?.statusCode == 200 else {
+                completion(Error.withInfo("Wrong status code returned, refreshing access token failed"))
+                return
+            }
+            
+            let payload = body as! NSDictionary
+            let accessToken = payload.stringForKey("access_token")
+            let refreshToken = payload.stringForKey("refresh_token")
+            let secret = [refreshToken, accessToken].joinWithSeparator(":")
+            
+            let newAuth = ProjectAuthenticator(service: .BitBucket, username: "GIT", type: .OAuthToken, secret: secret)
+            self.endpoints.auth = newAuth
+            completion(nil)
         }
     }
     
