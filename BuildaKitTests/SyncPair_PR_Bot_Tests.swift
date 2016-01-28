@@ -148,7 +148,7 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
         
         let (pr, bot, commit, statusCreator) = self.mockedPRAndBotAndCommit()
         let integrations = [
-            MockIntegration(number: 1, step: Integration.Step.Building, sha: "head_sha_old"),
+            MockIntegration(number: 1, step: Integration.Step.Building, sha: "old_head_sha"),
         ]
         
         let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, hostname: "localhost", buildStatusCreator: statusCreator, integrations: integrations)

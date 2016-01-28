@@ -1,7 +1,0 @@
-{
-  "phase" : 1,
-  "scriptBody" : "echo \"hello\"\n",
-  "id" : "E8F5285A-A262-4630-AF7B-236772B75760",
-  "type" : 1,
-  "name" : "Prebuild Script"
-}
