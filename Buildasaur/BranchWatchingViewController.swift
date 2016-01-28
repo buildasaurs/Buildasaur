@@ -26,7 +26,7 @@ private struct ShowableBranch {
 class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
     
     //these two must be set before viewDidLoad by its presenting view controller
-    var syncer: HDGitHubXCBotSyncer!
+    var syncer: StandardSyncer!
     var watchedBranchNames: Set<String>!
     weak var delegate: BranchWatchingViewControllerDelegate?
     

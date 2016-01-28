@@ -21,14 +21,14 @@ public class SyncerManager {
     public let factory: SyncerFactoryType
     public let loginItem: LoginItem
     
-    public let syncersProducer: SignalProducer<[HDGitHubXCBotSyncer], NoError>
+    public let syncersProducer: SignalProducer<[StandardSyncer], NoError>
     public let projectsProducer: SignalProducer<[Project], NoError>
     public let serversProducer: SignalProducer<[XcodeServer], NoError>
     
     public let buildTemplatesProducer: SignalProducer<[BuildTemplate], NoError>
     public let triggerProducer: SignalProducer<[Trigger], NoError>
     
-    public var syncers: [HDGitHubXCBotSyncer]
+    public var syncers: [StandardSyncer]
     private var configTriplets: SignalProducer<[ConfigTriplet], NoError>
     private var heartbeatManager: HeartbeatManager!
 
@@ -90,9 +90,9 @@ public class SyncerManager {
         }
     }
     
-    public func syncerWithRef(ref: RefType) -> SignalProducer<HDGitHubXCBotSyncer?, NoError> {
+    public func syncerWithRef(ref: RefType) -> SignalProducer<StandardSyncer?, NoError> {
         
-        return self.syncersProducer.map { allSyncers -> HDGitHubXCBotSyncer? in
+        return self.syncersProducer.map { allSyncers -> StandardSyncer? in
             return allSyncers.filter { $0.config.value.id == ref }.first
         }
     }

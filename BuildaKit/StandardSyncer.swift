@@ -1,5 +1,5 @@
 //
-//  HDGitHubXCBotSyncer.swift
+//  StandardSyncer.swift
 //  Buildasaur
 //
 //  Created by Honza Dvorsky on 15/02/2015.
@@ -11,7 +11,7 @@ import BuildaGitServer
 import XcodeServerSDK
 import ReactiveCocoa
 
-public class HDGitHubXCBotSyncer : Syncer {
+public class StandardSyncer : Syncer {
     
     public var sourceServer: SourceServerType
     public var xcodeServer: XcodeServer

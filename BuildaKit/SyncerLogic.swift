@@ -21,7 +21,7 @@ public struct StatusAndComment {
     }
 }
 
-extension HDGitHubXCBotSyncer {
+extension StandardSyncer {
     
     var _project: Project { return self.project }
     var _xcodeServer: XcodeServer { return self.xcodeServer }

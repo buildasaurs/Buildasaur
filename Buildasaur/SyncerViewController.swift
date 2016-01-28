@@ -30,7 +30,7 @@ class SyncerViewController: ConfigEditViewController {
     
     weak var delegate: SyncerViewControllerDelegate?
     
-    private let syncer = MutableProperty<HDGitHubXCBotSyncer?>(nil)
+    private let syncer = MutableProperty<StandardSyncer?>(nil)
     
     @IBOutlet weak var editButton: NSButton!
     @IBOutlet weak var statusTextField: NSTextField!
@@ -304,7 +304,7 @@ extension SyncerViewController {
         
         let producer = self.syncer
             .producer
-            .map { (maybeSyncer: HDGitHubXCBotSyncer?) -> SignalProducer<String, NoError> in
+            .map { (maybeSyncer: StandardSyncer?) -> SignalProducer<String, NoError> in
                 guard let syncer = maybeSyncer else { return SignalProducer(value: "") }
                 
                 return syncer.state.producer.map {
@@ -363,7 +363,7 @@ extension SyncerViewController {
             "Syncer is Idle... Waiting for the next sync...",
         ]
         
-        if let ourSyncer = syncer as? HDGitHubXCBotSyncer {
+        if let ourSyncer = syncer as? StandardSyncer {
             
             //error?
             if let error = ourSyncer.lastSyncError {

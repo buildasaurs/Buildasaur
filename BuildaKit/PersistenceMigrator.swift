@@ -50,8 +50,7 @@ public class CompositeMigrator: MigratorType {
         self.childMigrators = [
             Migrator_v0_v1(persistence: persistence),
             Migrator_v1_v2(persistence: persistence),
-            Migrator_v2_v3(persistence: persistence),
-            Migrator_v3_v4(persistence: persistence)
+            Migrator_v2_v3(persistence: persistence)
         ]
     }
     
@@ -280,6 +279,7 @@ class Migrator_v1_v2: MigratorType {
 - ServerConfigs.json: password moved to the keychain
 - Projects.json: github_token -> oauth_tokens keychain, ssh_passphrase moved to keychain
 - move any .log files to a separate folder called 'Logs'
+- "token1234" -> "github:username:personaltoken:token1234"
 */
 class Migrator_v2_v3: MigratorType {
     
@@ -326,17 +326,20 @@ class Migrator_v2_v3: MigratorType {
             
             let id = d.stringForKey("id")
             let token = d.stringForKey("github_token")
+            let auth = ProjectAuthenticator(service: .GitHub, username: "GIT", type: .PersonalToken, secret: token)
+            let formattedToken = auth.toString()
+
             let passphrase = d.optionalStringForKey("ssh_passphrase")
             d.removeObjectForKey("github_token")
             d.removeObjectForKey("ssh_passphrase")
             
             let tokenKeychain = SecurePersistence.sourceServerTokenKeychain()
-            tokenKeychain.writeIfNeeded(id, value: token)
+            tokenKeychain.writeIfNeeded(id, value: formattedToken)
             
             let passphraseKeychain = SecurePersistence.sourceServerPassphraseKeychain()
             passphraseKeychain.writeIfNeeded(id, value: passphrase)
             
-            precondition(tokenKeychain.read(id) == token, "Saved token must match")
+            precondition(tokenKeychain.read(id) == formattedToken, "Saved token must match")
             precondition(passphraseKeychain.read(id) == passphrase, "Saved passphrase must match")
             
             return d
@@ -382,61 +385,4 @@ class Migrator_v2_v3: MigratorType {
         }
     }
 }
-
-/*
-- keychain oauth_tokens need to be prepended with the service, username etc.
-- "token1234" -> "github:username:personaltoken:token1234" 
-- unfortunately we haven't kept the username anywhere, so we'll just put
-- "GIT" there instead.
-*/
-class Migrator_v3_v4: MigratorType {
-    
-    internal var persistence: Persistence
-    required init(persistence: Persistence) {
-        self.persistence = persistence
-    }
-    
-    func isMigrationRequired() -> Bool {
-        
-        return self.persistenceVersion() == 3
-    }
-    
-    func attemptMigration() throws {
-        
-        let pers = self.persistence
-        
-        //migrate
-        self.migrateKeychainTokens()
-        
-        //copy the rest
-        pers.copyFileToWriteLocation("Projects.json", isDirectory: false)
-        pers.copyFileToWriteLocation("ServerConfigs.json", isDirectory: false)
-        pers.copyFileToWriteLocation("Syncers.json", isDirectory: false)
-        pers.copyFileToWriteLocation("BuildTemplates", isDirectory: true)
-        pers.copyFileToWriteLocation("Triggers", isDirectory: true)
-        pers.copyFileToWriteLocation("Logs", isDirectory: true)
-        
-        let config = self.config()
-        let mutableConfig = config.mutableCopy() as! NSMutableDictionary
-        mutableConfig[kPersistenceVersion] = 4
-        
-        //save the updated config
-        pers.saveDictionary("Config.json", item: mutableConfig)
-    }
-    
-    func migrateKeychainTokens() {
-        
-        let tokenKeychain = SecurePersistence.sourceServerTokenKeychain()
-        
-        tokenKeychain.readAll().forEach { (id, key) in
-            //all keys migrated are github personal tokens
-            let auth = ProjectAuthenticator(service: .GitHub, username: "GIT", type: .PersonalToken, secret: key)
-            let formatted = auth.toString()
-            tokenKeychain.writeIfNeeded(id, value: formatted)
-            
-            precondition(tokenKeychain.read(id) == formatted)
-        }
-    }
-}
-
 

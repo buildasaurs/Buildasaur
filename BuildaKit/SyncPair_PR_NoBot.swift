@@ -33,7 +33,7 @@ class SyncPair_PR_NoBot: SyncPair {
     
     //MARK: Internal
     
-    private class func createBotForPR(syncer syncer: HDGitHubXCBotSyncer, pr: PullRequestType, completion: Completion) {
+    private class func createBotForPR(syncer syncer: StandardSyncer, pr: PullRequestType, completion: Completion) {
         
         syncer.createBotFromPR(pr, completion: { () -> () in
             completion(error: nil)

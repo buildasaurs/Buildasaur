@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import ReactiveCocoa
 
 public protocol BuildStatusCreator {
     func createStatusFromState(state: BuildState, description: String?, targetUrl: String?) -> StatusType
@@ -22,6 +23,8 @@ public protocol SourceServerType: BuildStatusCreator {
     func postStatusOfCommit(commit: String, status: StatusType, repo: String, completion: (status: StatusType?, error: ErrorType?) -> ())
     func postCommentOnIssue(comment: String, issueNumber: Int, repo: String, completion: (comment: CommentType?, error: ErrorType?) -> ())
     func getCommentsOfIssue(issueNumber: Int, repo: String, completion: (comments: [CommentType]?, error: ErrorType?) -> ())
+    
+    func authChangedSignal() -> Signal<ProjectAuthenticator?, NoError>
 }
 
 public class SourceServerFactory {

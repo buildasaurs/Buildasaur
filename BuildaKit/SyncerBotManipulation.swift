@@ -11,7 +11,7 @@ import XcodeServerSDK
 import BuildaGitServer
 import BuildaUtils
 
-extension HDGitHubXCBotSyncer {
+extension StandardSyncer {
     
     //MARK: Bot manipulation utils
     

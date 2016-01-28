@@ -57,7 +57,7 @@ class MenuItemManager : NSObject, NSMenuDelegate {
         }
         
         //now we have the right number, update the data
-        let texts = syncers.map({ (syncer: HDGitHubXCBotSyncer) -> String in
+        let texts = syncers.map({ (syncer: StandardSyncer) -> String in
             
             let statusEmoji: String
             if syncer.active {
