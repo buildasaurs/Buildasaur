@@ -8,6 +8,7 @@
 
 import Foundation
 import BuildaUtils
+import ReactiveCocoa
 
 class BitBucketEndpoints {
     
@@ -19,11 +20,11 @@ class BitBucketEndpoints {
     }
     
     private let baseURL: String
-    internal var auth: ProjectAuthenticator?
+    internal let auth = MutableProperty<ProjectAuthenticator?>(nil)
     
     init(baseURL: String, auth: ProjectAuthenticator?) {
         self.baseURL = baseURL
-        self.auth = auth
+        self.auth.value = auth
     }
     
     private func endpointURL(endpoint: Endpoint, params: [String: String]? = nil) -> String {
@@ -77,7 +78,7 @@ class BitBucketEndpoints {
     
     func setAuthOnRequest(request: NSMutableURLRequest) {
         
-        guard let auth = self.auth else { return }
+        guard let auth = self.auth.value else { return }
             
         switch auth.type {
         case .OAuthToken:
@@ -91,7 +92,7 @@ class BitBucketEndpoints {
     
     func createRefreshTokenRequest() -> NSMutableURLRequest {
         
-        guard let auth = self.auth else { fatalError("No auth") }
+        guard let auth = self.auth.value else { fatalError("No auth") }
         let refreshUrl = auth.service.accessTokenUrl()
         let refreshToken = auth.secret.componentsSeparatedByString(":")[0]
         let body = [

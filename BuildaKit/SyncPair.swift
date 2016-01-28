@@ -18,7 +18,7 @@ import XcodeServerSDK
 */
 public class SyncPair {
     
-    var syncer: HDGitHubXCBotSyncer!
+    var syncer: StandardSyncer!
     
     init() {
         //

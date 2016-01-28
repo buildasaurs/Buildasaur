@@ -15,7 +15,7 @@ import BuildaKit
 
 class ManualBotManagementViewController: NSViewController {
     
-    var syncer: HDGitHubXCBotSyncer!
+    var syncer: StandardSyncer!
     var storageManager: StorageManager!
     
     @IBOutlet weak var nameTextField: NSTextField!

@@ -8,19 +8,23 @@
 
 import Foundation
 import BuildaUtils
+import ReactiveCocoa
 
 class BitBucketServer : GitServer {
     
     let endpoints: BitBucketEndpoints
     let cache = InMemoryURLCache()
     
-    //TODO: add a signal for getting auth changes from the server here
-    // -> used for saving credentials back into the keychain
-    
     init(endpoints: BitBucketEndpoints, http: HTTP? = nil) {
         
         self.endpoints = endpoints
         super.init(service: .GitHub, http: http)
+    }
+    
+    override func authChangedSignal() -> Signal<ProjectAuthenticator?, NoError> {
+        var res: Signal<ProjectAuthenticator?, NoError>?
+        self.endpoints.auth.producer.startWithSignal { res = $0.0 }
+        return res!
     }
 }
 
@@ -304,7 +308,7 @@ extension BitBucketServer {
             let secret = [refreshToken, accessToken].joinWithSeparator(":")
             
             let newAuth = ProjectAuthenticator(service: .BitBucket, username: "GIT", type: .OAuthToken, secret: secret)
-            self.endpoints.auth = newAuth
+            self.endpoints.auth.value = newAuth
             completion(nil)
         }
     }

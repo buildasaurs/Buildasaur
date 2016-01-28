@@ -58,6 +58,7 @@ end
 
 target 'BuildaGitServer' do
     pods_for_errbody
+    rac
 end
 
 target 'BuildaGitServerTests' do

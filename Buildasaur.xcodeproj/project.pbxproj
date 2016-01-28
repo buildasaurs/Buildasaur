@@ -118,7 +118,7 @@
 		3ACBADDF1B5ADE1400204457 /* SyncPair_PR_Bot_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADDB1B5ADE1400204457 /* SyncPair_PR_Bot_Tests.swift */; };
 		3ACBADFC1B5ADE2A00204457 /* BuildTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADE01B5ADE2A00204457 /* BuildTemplate.swift */; };
 		3ACBADFD1B5ADE2A00204457 /* CommonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADE11B5ADE2A00204457 /* CommonExtensions.swift */; };
-		3ACBADFE1B5ADE2A00204457 /* HDGitHubXCBotSyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADE21B5ADE2A00204457 /* HDGitHubXCBotSyncer.swift */; };
+		3ACBADFE1B5ADE2A00204457 /* StandardSyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADE21B5ADE2A00204457 /* StandardSyncer.swift */; };
 		3ACBADFF1B5ADE2A00204457 /* NetworkUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADE31B5ADE2A00204457 /* NetworkUtils.swift */; };
 		3ACBAE001B5ADE2A00204457 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADE41B5ADE2A00204457 /* Persistence.swift */; };
 		3ACBAE011B5ADE2A00204457 /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ACBADE51B5ADE2A00204457 /* Project.swift */; };
@@ -357,7 +357,7 @@
 		3ACBADDB1B5ADE1400204457 /* SyncPair_PR_Bot_Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncPair_PR_Bot_Tests.swift; sourceTree = "<group>"; };
 		3ACBADE01B5ADE2A00204457 /* BuildTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuildTemplate.swift; sourceTree = "<group>"; };
 		3ACBADE11B5ADE2A00204457 /* CommonExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonExtensions.swift; sourceTree = "<group>"; };
-		3ACBADE21B5ADE2A00204457 /* HDGitHubXCBotSyncer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HDGitHubXCBotSyncer.swift; sourceTree = "<group>"; };
+		3ACBADE21B5ADE2A00204457 /* StandardSyncer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardSyncer.swift; sourceTree = "<group>"; };
 		3ACBADE31B5ADE2A00204457 /* NetworkUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkUtils.swift; sourceTree = "<group>"; };
 		3ACBADE41B5ADE2A00204457 /* Persistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		3ACBADE51B5ADE2A00204457 /* Project.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
@@ -856,7 +856,7 @@
 		3AC1562A1BB964A00068A1A3 /* Syncing Logic */ = {
 			isa = PBXGroup;
 			children = (
-				3ACBADE21B5ADE2A00204457 /* HDGitHubXCBotSyncer.swift */,
+				3ACBADE21B5ADE2A00204457 /* StandardSyncer.swift */,
 				3AD5D2E71BD01EAF008DBB45 /* SummaryBuilder.swift */,
 				3ACBADE91B5ADE2A00204457 /* Syncer.swift */,
 				3ACBADEA1B5ADE2A00204457 /* SyncerBotManipulation.swift */,
@@ -1513,7 +1513,7 @@
 				3A3BF8C91BD7C1920050A0B7 /* BlueprintFileParser.swift in Sources */,
 				3A4C15A01BBB2DD0007FA970 /* WorkspaceMetadata.swift in Sources */,
 				3ACBAE0A1B5ADE2A00204457 /* SyncPair_Branch_Bot.swift in Sources */,
-				3ACBADFE1B5ADE2A00204457 /* HDGitHubXCBotSyncer.swift in Sources */,
+				3ACBADFE1B5ADE2A00204457 /* StandardSyncer.swift in Sources */,
 				3ACBAE071B5ADE2A00204457 /* SyncerBotNaming.swift in Sources */,
 				3ACBAE0C1B5ADE2A00204457 /* SyncPair_Deletable_Bot.swift in Sources */,
 				3ACBAE171B5ADE2A00204457 /* XcodeServerSyncerUtils.swift in Sources */,

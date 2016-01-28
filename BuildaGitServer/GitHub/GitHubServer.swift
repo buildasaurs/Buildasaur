@@ -8,6 +8,7 @@
 
 import Foundation
 import BuildaUtils
+import ReactiveCocoa
 
 class GitHubServer : GitServer {
     

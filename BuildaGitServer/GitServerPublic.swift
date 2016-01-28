@@ -9,6 +9,7 @@
 import Foundation
 import BuildaUtils
 import Keys
+import ReactiveCocoa
 
 public enum GitService: String {
     case GitHub = "github"
@@ -66,7 +67,12 @@ public enum GitService: String {
 }
 
 public class GitServer : HTTPServer {
+    
     let service: GitService
+    
+    public func authChangedSignal() -> Signal<ProjectAuthenticator?, NoError> {
+        return Signal.never
+    }
     
     init(service: GitService, http: HTTP? = nil) {
         self.service = service
