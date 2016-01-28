@@ -8,7 +8,7 @@
 
 import Foundation
 
-class User : GitHubEntity {
+class GitHubUser : GitHubEntity {
 
     let userName: String
     let realName: String?

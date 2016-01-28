@@ -1,5 +1,5 @@
 //
-//  Repo.swift
+//  GitHubRepo.swift
 //  Buildasaur
 //
 //  Created by Honza Dvorsky on 13/12/2014.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Repo : GitHubEntity {
+class GitHubRepo : GitHubEntity {
     
     let name: String
     let fullName: String
@@ -35,7 +35,7 @@ class Repo : GitHubEntity {
     }
 }
 
-extension Repo: RepoType {
+extension GitHubRepo: RepoType {
     
     var permissions: RepoPermissions {
         

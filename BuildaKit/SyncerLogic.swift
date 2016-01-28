@@ -21,7 +21,7 @@ public struct StatusAndComment {
     }
 }
 
-extension HDGitHubXCBotSyncer {
+extension StandardSyncer {
     
     var _project: Project { return self.project }
     var _xcodeServer: XcodeServer { return self.xcodeServer }
@@ -39,7 +39,7 @@ extension HDGitHubXCBotSyncer {
         botsToDelete: [Bot])
             
     public func repoName() -> String? {
-        return self._project.githubRepoName()
+        return self._project.serviceRepoName()
     }
         
     internal func syncRepoWithName(repoName: String, completion: () -> ()) {

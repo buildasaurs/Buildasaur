@@ -148,7 +148,7 @@ public class SyncPairResolver {
             
             //if it's not pending, we need to take a look at the blueprint and inspect the SHA.
             if let blueprint = integration.blueprint, let sha = blueprint.commitSHA {
-                return sha == headCommit
+                return sha.hasPrefix(headCommit) //headCommit is sometimes a short version only
             }
             
             //when an integration is Pending, Preparing or Checking out, it doesn't have a blueprint, but it is, by definition, a headCommit

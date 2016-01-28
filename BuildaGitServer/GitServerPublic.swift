@@ -8,6 +8,8 @@
 
 import Foundation
 import BuildaUtils
+import Keys
+import ReactiveCocoa
 
 public enum GitService: String {
     case GitHub = "github"
@@ -27,10 +29,50 @@ public enum GitService: String {
         case .BitBucket: return "bitbucket"
         }
     }
+    
+    public func hostname() -> String {
+        switch self {
+        case .GitHub: return "github.com"
+        case .BitBucket: return "bitbucket.org"
+        }
+    }
+    
+    public func authorizeUrl() -> String {
+        switch self {
+        case .GitHub: return "https://github.com/login/oauth/authorize"
+        case .BitBucket: return "https://bitbucket.org/site/oauth2/authorize"
+        }
+    }
+    
+    public func accessTokenUrl() -> String {
+        switch self {
+        case .GitHub: return "https://github.com/login/oauth/access_token"
+        case .BitBucket: return "https://bitbucket.org/site/oauth2/access_token"
+        }
+    }
+    
+    public func serviceKey() -> String {
+        switch self {
+        case .GitHub: return BuildasaurKeys().gitHubAPIClientId()
+        case .BitBucket: return BuildasaurKeys().bitBucketAPIClientId()
+        }
+    }
+    
+    public func serviceSecret() -> String {
+        switch self {
+        case .GitHub: return BuildasaurKeys().gitHubAPIClientSecret()
+        case .BitBucket: return BuildasaurKeys().bitBucketAPIClientSecret()
+        }
+    }
 }
 
 public class GitServer : HTTPServer {
+    
     let service: GitService
+    
+    public func authChangedSignal() -> Signal<ProjectAuthenticator?, NoError> {
+        return Signal.never
+    }
     
     init(service: GitService, http: HTTP? = nil) {
         self.service = service

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import ReactiveCocoa
 
 public protocol BuildStatusCreator {
     func createStatusFromState(state: BuildState, description: String?, targetUrl: String?) -> StatusType
@@ -22,6 +23,8 @@ public protocol SourceServerType: BuildStatusCreator {
     func postStatusOfCommit(commit: String, status: StatusType, repo: String, completion: (status: StatusType?, error: ErrorType?) -> ())
     func postCommentOnIssue(comment: String, issueNumber: Int, repo: String, completion: (comment: CommentType?, error: ErrorType?) -> ())
     func getCommentsOfIssue(issueNumber: Int, repo: String, completion: (comments: [CommentType]?, error: ErrorType?) -> ())
+    
+    func authChangedSignal() -> Signal<ProjectAuthenticator?, NoError>
 }
 
 public class SourceServerFactory {
@@ -34,12 +37,7 @@ public class SourceServerFactory {
             precondition(service == auth.service)
         }
         
-        switch service {
-        case .GitHub:
-            return GitHubFactory.server(auth)
-        case .BitBucket:
-            fatalError("Not implemented yet")
-        }
+        return GitServerFactory.server(service, auth: auth)
     }
 }
 

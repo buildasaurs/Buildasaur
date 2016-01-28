@@ -22,7 +22,14 @@ class GitRepoMetadataParser: SourceControlFileParser {
         
         //find the first origin ending with "(fetch)"
         let remotes = try run("git remote -v")
-        let fetchRemote = remotes.split("\n").filter { $0.hasSuffix("(fetch)") }.first
+        let fetchRemotes = remotes.split("\n").filter { $0.hasSuffix("(fetch)") }
+        var fetchRemote = fetchRemotes.first
+        if fetchRemotes.count > 1 {
+            //choose the one named "origin" if it exists, best guess
+            if let origin = fetchRemotes.filter({ $0.hasPrefix("origin") }).first {
+                fetchRemote = origin
+            }
+        }
         guard let remoteLine = fetchRemote else {
             throw Error.withInfo("No fetch remote found in \(remotes)")
         }

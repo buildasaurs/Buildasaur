@@ -140,7 +140,6 @@ class GitHubEndpoints {
         }
     }
     
-    
     func createRequest(method:HTTP.Method, endpoint:Endpoint, params: [String : String]? = nil, query: [String : String]? = nil, body:NSDictionary? = nil) throws -> NSMutableURLRequest {
         
         let endpointURL = self.endpointURL(endpoint, params: params)

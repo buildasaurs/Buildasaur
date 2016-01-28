@@ -10,7 +10,7 @@ import Foundation
 import BuildaGitServer
 import BuildaUtils
 
-extension HDGitHubXCBotSyncer: BuildStatusCreator {
+extension StandardSyncer: BuildStatusCreator {
     
     public func createStatusFromState(state: BuildState, description: String?, targetUrl: String?) -> StatusType {
         
@@ -18,7 +18,7 @@ extension HDGitHubXCBotSyncer: BuildStatusCreator {
     }
 }
 
-extension HDGitHubXCBotSyncer {
+extension StandardSyncer {
     
     func updateCommitStatusIfNecessary(
         newStatus: StatusAndComment,

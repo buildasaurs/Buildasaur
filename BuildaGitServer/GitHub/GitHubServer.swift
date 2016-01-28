@@ -8,6 +8,7 @@
 
 import Foundation
 import BuildaUtils
+import ReactiveCocoa
 
 class GitHubServer : GitServer {
     
@@ -273,7 +274,7 @@ extension GitHubServer {
     /**
     *   GET all open pull requests of a repo (full name).
     */
-    private func _getOpenPullRequests(repo: String, completion: (prs: [PullRequest]?, error: NSError?) -> ()) {
+    private func _getOpenPullRequests(repo: String, completion: (prs: [GitHubPullRequest]?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo
@@ -286,7 +287,7 @@ extension GitHubServer {
             }
             
             if let body = body as? NSArray {
-                let prs: [PullRequest] = GitHubArray(body)
+                let prs: [GitHubPullRequest] = GitHubArray(body)
                 completion(prs: prs, error: nil)
             } else {
                 completion(prs: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -297,7 +298,7 @@ extension GitHubServer {
     /**
     *   GET a pull requests of a repo (full name) by its number.
     */
-    private func _getPullRequest(pullRequestNumber: Int, repo: String, completion: (pr: PullRequest?, error: NSError?) -> ()) {
+    private func _getPullRequest(pullRequestNumber: Int, repo: String, completion: (pr: GitHubPullRequest?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -312,7 +313,7 @@ extension GitHubServer {
             }
             
             if let body = body as? NSDictionary {
-                let pr = PullRequest(json: body)
+                let pr = GitHubPullRequest(json: body)
                 completion(pr: pr, error: nil)
             } else {
                 completion(pr: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -323,7 +324,7 @@ extension GitHubServer {
     /**
     *   GET all open issues of a repo (full name).
     */
-    private func _getOpenIssues(repo: String, completion: (issues: [Issue]?, error: NSError?) -> ()) {
+    private func _getOpenIssues(repo: String, completion: (issues: [GitHubIssue]?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo
@@ -336,7 +337,7 @@ extension GitHubServer {
             }
             
             if let body = body as? NSArray {
-                let issues: [Issue] = GitHubArray(body)
+                let issues: [GitHubIssue] = GitHubArray(body)
                 completion(issues: issues, error: nil)
             } else {
                 completion(issues: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -347,7 +348,7 @@ extension GitHubServer {
     /**
     *   GET an issue of a repo (full name) by its number.
     */
-    private func _getIssue(issueNumber: Int, repo: String, completion: (issue: Issue?, error: NSError?) -> ()) {
+    private func _getIssue(issueNumber: Int, repo: String, completion: (issue: GitHubIssue?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -362,7 +363,7 @@ extension GitHubServer {
             }
             
             if let body = body as? NSDictionary {
-                let issue = Issue(json: body)
+                let issue = GitHubIssue(json: body)
                 completion(issue: issue, error: nil)
             } else {
                 completion(issue: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -373,7 +374,7 @@ extension GitHubServer {
     /**
     *   POST a new Issue
     */
-    private func _postNewIssue(issueTitle: String, issueBody: String?, repo: String, completion: (issue: Issue?, error: NSError?) -> ()) {
+    private func _postNewIssue(issueTitle: String, issueBody: String?, repo: String, completion: (issue: GitHubIssue?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -392,7 +393,7 @@ extension GitHubServer {
             }
             
             if let body = body as? NSDictionary {
-                let issue = Issue(json: body)
+                let issue = GitHubIssue(json: body)
                 completion(issue: issue, error: nil)
             } else {
                 completion(issue: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -403,7 +404,7 @@ extension GitHubServer {
     /**
     *   Close an Issue by its number and repo (full name).
     */
-    private func _closeIssue(issueNumber: Int, repo: String, completion: (issue: Issue?, error: NSError?) -> ()) {
+    private func _closeIssue(issueNumber: Int, repo: String, completion: (issue: GitHubIssue?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -422,7 +423,7 @@ extension GitHubServer {
             }
             
             if let body = body as? NSDictionary {
-                let issue = Issue(json: body)
+                let issue = GitHubIssue(json: body)
                 completion(issue: issue, error: nil)
             } else {
                 completion(issue: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -490,7 +491,7 @@ extension GitHubServer {
     *   and general issue comments - which appear in both Issues and Pull Requests (bc a PR is an Issue + code)
     *   This API only fetches the general issue comments, NOT comments on code.
     */
-    private func _getCommentsOfIssue(issueNumber: Int, repo: String, completion: (comments: [Comment]?, error: NSError?) -> ()) {
+    private func _getCommentsOfIssue(issueNumber: Int, repo: String, completion: (comments: [GitHubComment]?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -505,7 +506,7 @@ extension GitHubServer {
             }
             
             if let body = body as? NSArray {
-                let comments: [Comment] = GitHubArray(body)
+                let comments: [GitHubComment] = GitHubArray(body)
                 completion(comments: comments, error: nil)
             } else {
                 completion(comments: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -516,7 +517,7 @@ extension GitHubServer {
     /**
     *   POST a comment on an issue.
     */
-    private func _postCommentOnIssue(commentBody: String, issueNumber: Int, repo: String, completion: (comment: Comment?, error: NSError?) -> ()) {
+    private func _postCommentOnIssue(commentBody: String, issueNumber: Int, repo: String, completion: (comment: GitHubComment?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -535,7 +536,7 @@ extension GitHubServer {
             }
             
             if let body = body as? NSDictionary {
-                let comment = Comment(json: body)
+                let comment = GitHubComment(json: body)
                 completion(comment: comment, error: nil)
             } else {
                 completion(comment: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -546,7 +547,7 @@ extension GitHubServer {
     /**
     *   PATCH edit a comment with id
     */
-    private func _editCommentOnIssue(commentId: Int, newCommentBody: String, repo: String, completion: (comment: Comment?, error: NSError?) -> ()) {
+    private func _editCommentOnIssue(commentId: Int, newCommentBody: String, repo: String, completion: (comment: GitHubComment?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo,
@@ -565,7 +566,7 @@ extension GitHubServer {
             }
             
             if let body = body as? NSDictionary {
-                let comment = Comment(json: body)
+                let comment = GitHubComment(json: body)
                 completion(comment: comment, error: nil)
             } else {
                 completion(comment: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -628,7 +629,7 @@ extension GitHubServer {
     /**
     *   GET branches of a repo
     */
-    private func _getBranchesOfRepo(repo: String, completion: (branches: [Branch]?, error: NSError?) -> ()) {
+    private func _getBranchesOfRepo(repo: String, completion: (branches: [GitHubBranch]?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo
@@ -643,7 +644,7 @@ extension GitHubServer {
             }
             
             if let body = body as? NSArray {
-                let branches: [Branch] = GitHubArray(body)
+                let branches: [GitHubBranch] = GitHubArray(body)
                 completion(branches: branches, error: nil)
             } else {
                 completion(branches: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -654,7 +655,7 @@ extension GitHubServer {
     /**
     *   GET repo metadata
     */
-    private func _getRepo(repo: String, completion: (repo: Repo?, error: NSError?) -> ()) {
+    private func _getRepo(repo: String, completion: (repo: GitHubRepo?, error: NSError?) -> ()) {
         
         let params = [
             "repo": repo
@@ -669,7 +670,7 @@ extension GitHubServer {
             }
             
             if let body = body as? NSDictionary {
-                let repository: Repo = Repo(json: body)
+                let repository: GitHubRepo = GitHubRepo(json: body)
                 completion(repo: repository, error: nil)
             } else {
                 completion(repo: nil, error: Error.withInfo("Wrong body \(body)"))

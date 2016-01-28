@@ -13,58 +13,72 @@ import XcodeServerSDK
 
 public class NetworkUtils {
     
-    public class func checkAvailabilityOfGitHubWithCurrentSettingsOfProject(project: Project, completion: (success: Bool, error: ErrorType?) -> ()) {
+    public typealias VerificationCompletion = (success: Bool, error: ErrorType?) -> ()
+    
+    public class func checkAvailabilityOfServiceWithProject(project: Project, completion: VerificationCompletion) {
+        
+        self.checkService(project, completion: { success, error in
+            
+            if !success {
+                completion(success: false, error: error)
+                return
+            }
+            
+            //now test ssh keys
+            let credentialValidationBlueprint = project.createSourceControlBlueprintForCredentialVerification()
+            self.checkValidityOfSSHKeys(credentialValidationBlueprint, completion: { (success, error) -> () in
+                
+                if success {
+                    Log.verbose("Finished blueprint validation with success!")
+                } else {
+                    Log.verbose("Finished blueprint validation with error: \(error)")
+                }
+                
+                //now complete
+                completion(success: success, error: error)
+            })
+        })
+    }
+    
+    private class func checkService(project: Project, completion: VerificationCompletion) {
         
         let auth = project.config.value.serverAuthentication
-        let server = SourceServerFactory().createServer(.GitHub, auth: auth)
-
-        let credentialValidationBlueprint = project.createSourceControlBlueprintForCredentialVerification()
+        let service = auth!.service
+        let server = SourceServerFactory().createServer(service, auth: auth)
         
-        //check if we can get PRs, that should be representative enough
-        if let repoName = project.githubRepoName() {
-            
-            //we have a repo name
-            server.getRepo(repoName, completion: { (repo, error) -> () in
-                
-                if error != nil {
-                    completion(success: false, error: error)
-                    return
-                }
-                
-                if let repo = repo {
-
-                    let permissions = repo.permissions
-                    let readPermission = permissions.read
-                    let writePermission = permissions.write
-                    
-                    //look at the permissions in the PR metadata
-                    if !readPermission {
-                        completion(success: false, error: Error.withInfo("Missing read permission for repo"))
-                    } else if !writePermission {
-                        completion(success: false, error: Error.withInfo("Missing write permission for repo"))
-                    } else {
-                        //now test ssh keys
-                        //TODO: do SSH Key validation properly in the new UI once we have Xcode Server credentials.
-                        self.checkValidityOfSSHKeys(credentialValidationBlueprint, completion: { (success, error) -> () in
-                            
-                            if success {
-                                Log.verbose("Finished blueprint validation with success!")
-                            } else {
-                                Log.verbose("Finished blueprint validation with error: \(error)")
-                            }
-                        
-                            //now complete
-                            completion(success: success, error: error)
-                        })
-                    }
-                } else {
-                    completion(success: false, error: Error.withInfo("Couldn't find repo permissions in GitHub response"))
-                }
-            })
-            
-        } else {
+        //check if we can get the repo and verify permissions
+        guard let repoName = project.serviceRepoName() else {
             completion(success: false, error: Error.withInfo("Invalid repo name"))
+            return
         }
+        
+        //we have a repo name
+        server.getRepo(repoName, completion: { (repo, error) -> () in
+            
+            if error != nil {
+                completion(success: false, error: error)
+                return
+            }
+            
+            if let repo = repo {
+                
+                let permissions = repo.permissions
+                let readPermission = permissions.read
+                let writePermission = permissions.write
+                
+                //look at the permissions in the PR metadata
+                if !readPermission {
+                    completion(success: false, error: Error.withInfo("Missing read permission for repo"))
+                } else if !writePermission {
+                    completion(success: false, error: Error.withInfo("Missing write permission for repo"))
+                } else {
+                    //now complete
+                    completion(success: true, error: nil)
+                }
+            } else {
+                completion(success: false, error: Error.withInfo("Couldn't find repo permissions in \(service.prettyName()) response"))
+            }
+        })
     }
     
     public class func checkAvailabilityOfXcodeServerWithCurrentSettings(config: XcodeServerConfig, completion: (success: Bool, error: NSError?) -> ()) {

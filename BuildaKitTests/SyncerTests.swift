@@ -16,7 +16,7 @@ import BuildaKit
 
 class SyncerTests: XCTestCase {
 
-    var syncer: HDGitHubXCBotSyncer!
+    var syncer: StandardSyncer!
     
     override func setUp() {
         super.setUp()
@@ -28,14 +28,14 @@ class SyncerTests: XCTestCase {
         super.tearDown()
     }
     
-    func mockedSyncer(config: SyncerConfig = SyncerConfig()) -> HDGitHubXCBotSyncer {
+    func mockedSyncer(config: SyncerConfig = SyncerConfig()) -> StandardSyncer {
         
         let xcodeServer = MockXcodeServer()
         let githubServer = MockGitHubServer()
         let project = MockProject()
         let template = MockTemplate.new()
         
-        let syncer = HDGitHubXCBotSyncer(
+        let syncer = StandardSyncer(
             integrationServer: xcodeServer,
             sourceServer: githubServer,
             project: project,

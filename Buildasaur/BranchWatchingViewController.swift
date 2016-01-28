@@ -26,7 +26,7 @@ private struct ShowableBranch {
 class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
     
     //these two must be set before viewDidLoad by its presenting view controller
-    var syncer: HDGitHubXCBotSyncer!
+    var syncer: StandardSyncer!
     var watchedBranchNames: Set<String>!
     weak var delegate: BranchWatchingViewControllerDelegate?
     
@@ -79,7 +79,7 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
     
     func fetchBranchesProducer() -> SignalProducer<[BranchType], NSError> {
         
-        let repoName = self.syncer.project.githubRepoName()!
+        let repoName = self.syncer.project.serviceRepoName()!
         
         return SignalProducer { [weak self] sink, _ in
             guard let sself = self else { return }
@@ -97,7 +97,7 @@ class BranchWatchingViewController: NSViewController, NSTableViewDelegate, NSTab
     
     func fetchPRsProducer() -> SignalProducer<[PullRequestType], NSError> {
         
-        let repoName = self.syncer.project.githubRepoName()!
+        let repoName = self.syncer.project.serviceRepoName()!
         
         return SignalProducer { [weak self] sink, _ in
             guard let sself = self else { return }

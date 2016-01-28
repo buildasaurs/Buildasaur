@@ -1,14 +1,16 @@
 
 plugin 'cocoapods-keys', {
-  :target => "Buildasaur",
+  :target => "BuildaGitServer",
   :project => "Buildasaur.xcodeproj",
   :keys => [
     "GitHubAPIClientId",
-    "GitHubAPIClientSecret"
+    "GitHubAPIClientSecret",
+    "BitBucketAPIClientId",
+    "BitBucketAPIClientSecret"
 ]}
 
-# for CI:
-# http://artsy.github.io/blog/2015/01/21/cocoapods-keys-and-CI/
+source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/czechboy0/Podspecs.git'
 
 platform :osx, '10.11'
 use_frameworks!
@@ -56,10 +58,13 @@ end
 
 target 'BuildaGitServer' do
     pods_for_errbody
+    rac
 end
 
 target 'BuildaGitServerTests' do
     pods_for_errbody
+    test_pods
+    pod 'DVR', '~> 0.2.1-snap1'
 end
 
 target 'BuildaHeartbeatKit' do

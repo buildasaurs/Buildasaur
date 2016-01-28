@@ -26,6 +26,10 @@ public class StorageManager {
     public let triggerConfigs = MutableProperty<[String: TriggerConfig]>([:])
     public let config = MutableProperty<[String: AnyObject]>([:])
     
+    let tokenKeychain = SecurePersistence.sourceServerTokenKeychain()
+    let passphraseKeychain = SecurePersistence.sourceServerPassphraseKeychain()
+    let serverConfigKeychain = SecurePersistence.xcodeServerPasswordKeychain()
+    
     private let persistence: Persistence
     
     public init(persistence: Persistence) {
@@ -171,8 +175,8 @@ public class StorageManager {
         
         let allProjects: [ProjectConfig] = self.persistence.loadArrayFromFile("Projects.json") ?? []
         //load server token & ssh passphrase from keychain
-        let tokenKeychain = SecurePersistence.sourceServerTokenKeychain()
-        let passphraseKeychain = SecurePersistence.sourceServerPassphraseKeychain()
+        let tokenKeychain = self.tokenKeychain
+        let passphraseKeychain = self.passphraseKeychain
         self.projectConfigs.value = allProjects
             .map {
                 (var p: ProjectConfig) -> ProjectConfig in
@@ -187,7 +191,7 @@ public class StorageManager {
         
         let allServerConfigs: [XcodeServerConfig] = self.persistence.loadArrayFromFile("ServerConfigs.json") ?? []
         //load xcs passwords from keychain
-        let xcsConfigKeychain = SecurePersistence.xcodeServerPasswordKeychain()
+        let xcsConfigKeychain = self.serverConfigKeychain
         self.serverConfigs.value = allServerConfigs
             .map {
                 (var x: XcodeServerConfig) -> XcodeServerConfig in
@@ -280,6 +284,21 @@ public class StorageManager {
         self.persistence.deleteFolder(folderName)
         let items = Array(configs.values)
         self.persistence.saveArrayIntoFolder(folderName, items: items) { $0.id }
+    }
+}
+
+extension StorageManager: SyncerLifetimeChangeObserver {
+    
+    public func authChanged(projectConfigId: String, auth: ProjectAuthenticator) {
+        
+        //and modify in the owner's config
+        var config = self.projectConfigs.value[projectConfigId]!
+
+        //auth info changed, re-save it into the keychain
+        self.tokenKeychain.writeIfNeeded(config.keychainKey(), value: auth.toString())
+        
+        config.serverAuthentication = auth
+        self.projectConfigs.value[projectConfigId] = config
     }
 }
 

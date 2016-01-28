@@ -1,5 +1,5 @@
 //
-//  Branch.swift
+//  GitHubBranch.swift
 //  Buildasaur
 //
 //  Created by Honza Dvorsky on 13/12/2014.
@@ -8,20 +8,20 @@
 
 import Foundation
 
-class Branch : GitHubEntity {
+class GitHubBranch : GitHubEntity {
     
     let name: String
-    let commit: Commit
+    let commit: GitHubCommit
     
     required init(json: NSDictionary) {
         
         self.name = json.stringForKey("name")
-        self.commit = Commit(json: json.dictionaryForKey("commit"))
+        self.commit = GitHubCommit(json: json.dictionaryForKey("commit"))
         super.init(json: json)
     }
 }
 
-extension Branch: BranchType {
+extension GitHubBranch: BranchType {
     
     //name (see above)
     
