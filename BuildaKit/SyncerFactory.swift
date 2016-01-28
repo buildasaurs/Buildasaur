@@ -20,8 +20,8 @@ public protocol SyncerFactoryType {
     func createTrigger(config: TriggerConfig) -> Trigger
 }
 
-protocol SyncerLifetimeChangeObserver {
-    func authChanged(auth: ProjectAuthenticator)
+public protocol SyncerLifetimeChangeObserver {
+    func authChanged(projectConfigId: String, auth: ProjectAuthenticator)
 }
 
 public class SyncerFactory: SyncerFactoryType {
@@ -29,7 +29,8 @@ public class SyncerFactory: SyncerFactoryType {
     private var syncerPool = [RefType: StandardSyncer]()
     private var projectPool = [RefType: Project]()
     private var xcodeServerPool = [RefType: XcodeServer]()
-    internal var syncerLifetimeChangeObserver: SyncerLifetimeChangeObserver!
+    
+    public var syncerLifetimeChangeObserver: SyncerLifetimeChangeObserver!
     
     public init() { }
     
@@ -45,8 +46,16 @@ public class SyncerFactory: SyncerFactoryType {
         
         guard let service = project.workspaceMetadata?.service else { return nil }
         
-        let sourceServer = self.createSourceServer(service, auth: triplet.project.serverAuthentication)
-        sourceServer.
+        let projectConfig = triplet.project
+        let sourceServer = self.createSourceServer(service, auth: projectConfig.serverAuthentication)
+        sourceServer
+            .authChangedSignal()
+            .ignoreNil()
+            .observeNext { [weak self] (auth) -> () in
+                self?
+                    .syncerLifetimeChangeObserver
+                    .authChanged(projectConfig.id, auth: auth)
+        }
         
         if let poolAttempt = self.syncerPool[triplet.syncer.id]
         {
