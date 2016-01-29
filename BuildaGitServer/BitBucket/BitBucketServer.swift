@@ -24,7 +24,7 @@ class BitBucketServer : GitServer {
     override func authChangedSignal() -> Signal<ProjectAuthenticator?, NoError> {
         var res: Signal<ProjectAuthenticator?, NoError>?
         self.endpoints.auth.producer.startWithSignal { res = $0.0 }
-        return res!
+        return res!.observeOn(UIScheduler())
     }
 }
 
