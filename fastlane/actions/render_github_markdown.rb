@@ -6,9 +6,12 @@ module Fastlane
     class RenderGithubMarkdownAction < Action
       def self.run(params)
 
+        contents = params[:markdown_contents] || File.read(params[:markdown_file])
+        raise "You must pass either the markdown contents or a file path" unless contents
+
         require 'json'
         body = { 
-          text: File.read(params[:markdown_file]), 
+          text: contents, 
           mode: "gfm", 
           context: params[:context_repository] 
           }.to_json
@@ -41,9 +44,14 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :markdown_file,
                                        env_name: "FL_RENDER_GITHUB_MARKDOWN_FILE",
                                        description: "The path to your markdown file",
+                                       optional: true,
                                        verify_block: proc do |value|
                                          raise "File doesn't exist '#{value}'".red unless File.exists?(value)
                                        end),          
+          FastlaneCore::ConfigItem.new(key: :markdown_contents,
+                                       env_name: "FL_RENDER_GITHUB_MARKDOWN_CONTENTS",
+                                       optional: true,
+                                       description: "The markdown contents"),          
           FastlaneCore::ConfigItem.new(key: :context_repository,
                                        env_name: "FL_RENDER_GITHUB_MARKDOWN_CONTEXT_REPOSITORY",
                                        description: "The path to your repo, e.g. 'fastlane/fastlane'",

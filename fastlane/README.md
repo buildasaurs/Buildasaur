@@ -35,11 +35,6 @@ fastlane release_app
 fastlane build
 ```
 
-### sparkle
-```
-fastlane sparkle
-```
-
 
 ----
 
