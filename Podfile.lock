@@ -30,6 +30,7 @@ PODS:
     - ReactiveCocoa/Core
     - Result (~> 1.0)
   - Result (1.0.1)
+  - Sparkle (1.13.1)
   - SwiftSafe (0.1)
   - XcodeServerSDK (0.5.6):
     - BuildaUtils (~> 0.2.3)
@@ -46,6 +47,7 @@ DEPENDENCIES:
   - Nimble (~> 3.0.0)
   - OAuthSwift
   - ReactiveCocoa (= 4.0.0-RC.1)
+  - Sparkle
   - XcodeServerSDK (~> 0.5.6)
 
 EXTERNAL SOURCES:
@@ -67,6 +69,7 @@ SPEC CHECKSUMS:
   OAuthSwift: f2e0de083739da5697be095c9af2671242a4ed8b
   ReactiveCocoa: 2b0f654beb7642b82cfd3fdb845205ae9889422c
   Result: caef80340451e1f07492fa1e89117f83613bce24
+  Sparkle: 2fbd47b869621d1e679c7554e3e19dda02104818
   SwiftSafe: 77ffd12b02678790bec1ef56a2d14ec5036f1fd6
   XcodeServerSDK: 6300badc4a799da9ad6e970b366eda18d4a47bda
 

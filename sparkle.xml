@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?> 
+<rss version='2.0' xmlns:dc='http://purl.org/dc/elements/1.1/' xmlns:sparkle='http://www.andymatuschak.org/xml-namespaces/sparkle'>
+  <channel>
+    <title>Buildasaur Changelog</title>
+    <link>https://raw.githubusercontent.com/czechboy0/Buildasaur/master/sparkle.xml</link>
+    <description>Most recent changes with links to updates.</description>
+    <language>en</language>
+    <item>
+      <title>Version 0.8.0</title>
+      <sparkle:releaseNotesLink>https://github.com/czechboy0/Buildasaur/releases/tag/v0.8.0</sparkle:releaseNotesLink>
+      <pubDate>Thu, 28 Jan 2016 22:40:00 +0000</pubDate>
+      <enclosure type='application/octet-stream' sparkle:version='32' sparkle:shortVersionString='0.8.0' length='10313161' url='https://github.com/czechboy0/Buildasaur/releases/download/v0.8.0/Buildasaur.app.zip'/>
+      <sparkle:minimumSystemVersion>10.11</sparkle:minimumSystemVersion>
+    </item>
+  </channel>
+</rss>

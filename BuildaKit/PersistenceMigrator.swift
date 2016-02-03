@@ -9,7 +9,7 @@
 import Foundation
 import BuildaUtils
 import XcodeServerSDK
-@testable import BuildaGitServer
+import BuildaGitServer
 
 public protocol MigratorType {
     init(persistence: Persistence)

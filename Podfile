@@ -35,6 +35,7 @@ def buildasaur_app_pods
     rac
     pod 'Ji', '~> 1.2.0'
     pod 'CryptoSwift'
+    pod 'Sparkle'
 end
 
 def test_pods
