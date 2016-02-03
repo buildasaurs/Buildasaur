@@ -3,11 +3,11 @@
 ENV["LANG"]="en_US.UTF-8"
 
 # If you want to automatically update fastlane if a new version is available:
-update_fastlane
+# update_fastlane
 
 # This is the minimum version number required.
 # Update this, if you use features of a newer version
-fastlane_version "1.26.0"
+fastlane_version "1.57.0"
 
 before_all do |lane|
 end
@@ -81,22 +81,67 @@ end
 
 lane :release_app do
   raise "No built app found in ./build/Buildasaur.app" unless File.exist?("../build/Buildasaur.app")
-  version = get_info_plist_value(
+  human_version = get_info_plist_value(
     key: "CFBundleShortVersionString",
     path: "Buildasaur/Info.plist"
   )
+  machine_version = get_info_plist_value(
+    key: "CFBundleShortVersionString",
+    path: "Buildasaur/Info.plist"
+  )
+  # TODO: add validation that the version was really up'ed
   github(
     assets: ["./build/Buildasaur.app"],
-    version: version
+    version: human_version
     )
+  # TODO: add sparkle lane call
 end
 
 lane :build do
+  # TODO: fix for Developer-ID signing & exporting & crashlytics dSYM sending
   gym(
     scheme: 'Buildasaur',
     output_name: 'Buildasaur',
     output_directory: './build'
     )
+end
+
+lane :sparkle do |params|
+
+  # TODO: pass the actual path if different
+  app_zip_path = "../build/Buildasaur.app.zip"
+
+  release_info = create_sparkle_release_notes
+
+  sparkle_add_update(
+      feed_file: "sparkle.xml",
+      app_download_url: "https://github.com/czechboy0/Buildasaur/releases/download/v0.8.0/Buildasaur.app.zip",
+      app_size: "#{File.size(app_zip_path)}",
+      machine_version: "40",
+      human_version: "1.0-beta1",
+      title: release_info[:title],
+      release_notes_link: release_info[:release_notes_link],
+      deployment_target: "10.11"
+    )
+end
+
+private_lane :create_sparkle_release_notes do |params|
+  # Download the markdown release title and release notes from GitHub, render them into HTML and save that HTML to a separate file
+  # TODO
+
+    # release_notes_html = render_github_markdown(
+  #     context_repository: "czechboy0/Buildasaur",
+  #     api_token: ENV["GITHUB_TOKEN"],
+  #     markdown_file: "test.md"
+  #   )
+
+  # puts release_notes_html
+
+  # return a hash of 1) title, 2) release notes HTML link
+  {
+    title: "New Version v1.0-beta1!",
+    release_notes_link: "https://github.com/czechboy0/Buildasaur/releases/tag/v0.8.0"
+  }
 end
 
 private_lane :github do |params|
