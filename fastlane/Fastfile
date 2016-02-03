@@ -122,6 +122,7 @@ private_lane :zip_app_bundle do |params|
 end
 
 lane :build do
+  raise "There already is a build app" if File.exists?('../build/Buildasaur.app')
   gym(
     scheme: 'Buildasaur',
     output_name: 'Buildasaur',
