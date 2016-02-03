@@ -36,6 +36,7 @@ def buildasaur_app_pods
     pod 'Ji', '~> 1.2.0'
     pod 'CryptoSwift'
     pod 'Sparkle'
+    pod 'KeychainAccess'
 end
 
 def test_pods
@@ -50,7 +51,6 @@ end
 
 target 'BuildaKit' do
     buildasaur_app_pods
-    pod 'KeychainAccess'
 end
 
 target 'BuildaKitTests' do
