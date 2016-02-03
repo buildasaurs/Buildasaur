@@ -19,6 +19,7 @@ import XcodeServerSDK
 import BuildaKit
 import Fabric
 import Crashlytics
+import Sparkle
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -186,6 +187,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if NSApp.windows.count < 3 {
             self.dashboardWindow?.makeKeyAndOrderFront(self)
         }
+    }
+    
+    @IBOutlet weak var updater: SUUpdater!
+    
+    //Sparkle magic
+    func checkForUpdates(sender: AnyObject!) {
+        self.updater.checkForUpdates(sender)
     }
 }
 

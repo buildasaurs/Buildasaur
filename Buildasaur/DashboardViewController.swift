@@ -160,6 +160,10 @@ class DashboardViewController: PresentableViewController {
         //to be in sync in the UI, in case setting fails
         self.launchOnLoginButton.on = loginItem.isLaunchItem
     }
+    
+    @IBAction func checkForUpdatesClicked(sender: NSButton) {
+        (NSApp.delegate as! AppDelegate).checkForUpdates(sender)
+    }
 }
 
 extension DashboardViewController {

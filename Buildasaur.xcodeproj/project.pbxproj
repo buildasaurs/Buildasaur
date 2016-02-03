@@ -981,6 +981,7 @@
 				3A58B14E1A3B9604003E0266 /* Embed Frameworks */,
 				42B0EC7C6499F97F0D1A8F42 /* Embed Pods Frameworks */,
 				43AA8DD75DC7BE8FD9E910F5 /* Copy Pods Resources */,
+				3ADE242B1C6275070097ED3B /* Sign Sparkle */,
 				3ABEF9741C4B1DD800ED983F /* Crashlytics */,
 			);
 			buildRules = (
@@ -1299,6 +1300,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
 			shellScript = "#if [ \"Release\" = \"${CONFIGURATION}\" ]; then\n    if [[ $(whoami) == \"honzadvorsky\" ]] ; then\n        source ~/.profile\n        echo \"Running Crashlytics\"\n        \"${PODS_ROOT}/Fabric/run\" $KEY_FABRIC_BUILDASAUR_PUBLIC $KEY_FABRIC_BUILDASAUR_PRIVATE\n    fi\n#fi";
+		};
+		3ADE242B1C6275070097ED3B /* Sign Sparkle */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Sign Sparkle";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"Release\" = \"${CONFIGURATION}\" ]; then\n\nLOCATION=\"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}\"\n\ncodesign --verbose --force --sign \"$CODE_SIGN_IDENTITY\" \"$LOCATION/Sparkle.framework/Versions/A\"\nfi";
 		};
 		42B0EC7C6499F97F0D1A8F42 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
