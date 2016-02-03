@@ -135,7 +135,7 @@ end
 private_lane :sparkle do |params|
 
   # Checkout the github-pages branch of buildasaur if we don't already have it
-  sh "git clone https://github.com/czechboy0/Buildasaur.git --branch gh-pages --single-branch gh-pages" unless Dir.exists? "./gh-pages"
+  sh "cd .. && git clone https://github.com/czechboy0/Buildasaur.git --branch gh-pages --single-branch gh-pages" unless Dir.exists? "../gh-pages"
 
   # Create release notes file
   release_notes_html = render_github_markdown(
@@ -146,12 +146,11 @@ private_lane :sparkle do |params|
   release_notes_html_path = File.absolute_path("../gh-pages/Sparkle_Release_Notes/#{params[:release_version_tag]}.html")
   File.open(release_notes_html_path, "w") { |io| io.write(release_notes_html) }
   # Commit and push the changes
-  Dir.chdir("gh-pages") do
+  Dir.chdir("../gh-pages") do
     sh "git add ."
     sh "git commit -m 'Added the release notes for #{version}.'"
     sh "git push"
   end
-
   release_notes_html_url = "https://honzadvorsky.com/Buildasaur/Sparkle_Release_Notes/#{params[:release_version_tag]}.html"
   app_download_url = "https://github.com/czechboy0/Buildasaur/releases/download/#{params[:release_version_tag]}/Buildasaur.app.zip"
 
