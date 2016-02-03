@@ -127,7 +127,8 @@ lane :build do
     scheme: 'Buildasaur',
     output_name: 'Buildasaur',
     output_directory: './build',
-    export_method: 'developer-id'
+    export_method: 'developer-id',
+    clean: true
     )
 end
 

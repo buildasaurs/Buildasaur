@@ -1,6 +1,6 @@
 
 plugin 'cocoapods-keys', {
-  :target => "BuildaGitServer",
+  :target => "Buildasaur",
   :project => "Buildasaur.xcodeproj",
   :keys => [
     "GitHubAPIClientId",
