@@ -1,6 +1,7 @@
 # Xcode
 #
 build/
+gh-pages/
 *.pbxuser
 !default.pbxuser
 *.mode1v3
