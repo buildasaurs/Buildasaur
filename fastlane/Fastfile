@@ -148,7 +148,7 @@ private_lane :sparkle do |params|
   # Commit and push the changes
   Dir.chdir("../gh-pages") do
     sh "git add ."
-    sh "git commit -m 'Added the release notes for #{version}.'"
+    sh "git commit -m 'Added the release notes for #{params[:release_version_tag]}.'"
     sh "git push"
   end
   release_notes_html_url = "https://honzadvorsky.com/Buildasaur/Sparkle_Release_Notes/#{params[:release_version_tag]}.html"
