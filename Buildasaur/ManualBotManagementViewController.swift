@@ -15,7 +15,7 @@ import BuildaKit
 
 class ManualBotManagementViewController: NSViewController {
     
-    var syncer: HDGitHubXCBotSyncer!
+    var syncer: StandardSyncer!
     var storageManager: StorageManager!
     
     @IBOutlet weak var nameTextField: NSTextField!
@@ -50,11 +50,11 @@ class ManualBotManagementViewController: NSViewController {
         }
     }
     
-    func fetchBranches(completion: ([Branch]?, NSError?) -> ()) {
+    func fetchBranches(completion: ([BranchType]?, ErrorType?) -> ()) {
         
         self.branchActivityIndicator.startAnimation(nil)
-        let repoName = self.syncer.project.githubRepoName()!
-        self.syncer.github.getBranchesOfRepo(repoName, completion: { (branches, error) -> () in
+        let repoName = self.syncer.project.serviceRepoName()!
+        self.syncer.sourceServer.getBranchesOfRepo(repoName, completion: { (branches, error) -> () in
             
             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
                 

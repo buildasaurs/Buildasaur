@@ -1,0 +1,112 @@
+{
+  "interactions" : [
+    {
+      "recorded_at" : 1453927330.056467,
+      "response" : {
+        "body" : {
+          "uuid" : "{c839d4b0-eeb6-4e09-865e-f29db3e51f28}",
+          "full_name" : "honzadvorsky\/buildasaur-tester",
+          "description" : "",
+          "owner" : {
+            "username" : "honzadvorsky",
+            "links" : {
+              "avatar" : {
+                "href" : "https:\/\/bitbucket.org\/account\/honzadvorsky\/avatar\/32\/"
+              },
+              "html" : {
+                "href" : "https:\/\/bitbucket.org\/honzadvorsky\/"
+              },
+              "self" : {
+                "href" : "https:\/\/api.bitbucket.org\/2.0\/users\/honzadvorsky"
+              }
+            },
+            "display_name" : "Honza Dvorsky",
+            "type" : "user",
+            "uuid" : "{c78fc04e-2594-4f79-a518-ae1593921663}"
+          },
+          "type" : "repository",
+          "size" : 163544,
+          "created_on" : "2016-01-21T19:29:27.826816+00:00",
+          "has_wiki" : false,
+          "fork_policy" : "allow_forks",
+          "links" : {
+            "avatar" : {
+              "href" : "https:\/\/bitbucket.org\/honzadvorsky\/buildasaur-tester\/avatar\/32\/"
+            },
+            "forks" : {
+              "href" : "https:\/\/api.bitbucket.org\/2.0\/repositories\/honzadvorsky\/buildasaur-tester\/forks"
+            },
+            "pullrequests" : {
+              "href" : "https:\/\/api.bitbucket.org\/2.0\/repositories\/honzadvorsky\/buildasaur-tester\/pullrequests"
+            },
+            "html" : {
+              "href" : "https:\/\/bitbucket.org\/honzadvorsky\/buildasaur-tester"
+            },
+            "commits" : {
+              "href" : "https:\/\/api.bitbucket.org\/2.0\/repositories\/honzadvorsky\/buildasaur-tester\/commits"
+            },
+            "self" : {
+              "href" : "https:\/\/api.bitbucket.org\/2.0\/repositories\/honzadvorsky\/buildasaur-tester"
+            },
+            "hooks" : {
+              "href" : "https:\/\/api.bitbucket.org\/2.0\/repositories\/honzadvorsky\/buildasaur-tester\/hooks"
+            },
+            "downloads" : {
+              "href" : "https:\/\/api.bitbucket.org\/2.0\/repositories\/honzadvorsky\/buildasaur-tester\/downloads"
+            },
+            "clone" : [
+              {
+                "name" : "https",
+                "href" : "https:\/\/bitbucket.org\/honzadvorsky\/buildasaur-tester.git"
+              },
+              {
+                "name" : "ssh",
+                "href" : "ssh:\/\/git@bitbucket.org\/honzadvorsky\/buildasaur-tester.git"
+              }
+            ],
+            "watchers" : {
+              "href" : "https:\/\/api.bitbucket.org\/2.0\/repositories\/honzadvorsky\/buildasaur-tester\/watchers"
+            }
+          },
+          "language" : "swift",
+          "scm" : "git",
+          "has_issues" : false,
+          "website" : "",
+          "is_private" : false,
+          "name" : "Buildasaur-Tester",
+          "updated_on" : "2016-01-27T17:08:54.773844+00:00"
+        },
+        "status" : 200,
+        "url" : "https:\/\/api.bitbucket.org\/2.0\/repositories\/honzadvorsky\/buildasaur-tester",
+        "headers" : {
+          "Content-Type" : "application\/json; charset=utf-8",
+          "X-Render-Time" : "0.0204379558563",
+          "X-Frame-Options" : "SAMEORIGIN",
+          "X-Cache-Info" : "caching",
+          "Content-Encoding" : "gzip",
+          "Server" : "nginx\/1.6.2",
+          "X-Accepted-OAuth-Scopes" : "repository",
+          "Transfer-Encoding" : "Identity",
+          "X-Request-Count" : "471",
+          "X-Version" : "66b40159990c",
+          "Cache-Control" : "max-age=900",
+          "Date" : "Wed, 27 Jan 2016 20:42:09 GMT",
+          "Strict-Transport-Security" : "max-age=31536000",
+          "X-Static-Version" : "66b40159990c",
+          "Connection" : "keep-alive",
+          "X-Content-Type-Options" : "nosniff",
+          "X-Served-By" : "app22",
+          "Vary" : "Authorization, Cookie, Accept-Encoding"
+        }
+      },
+      "request" : {
+        "method" : "GET",
+        "url" : "https:\/\/api.bitbucket.org\/2.0\/repositories\/honzadvorsky\/buildasaur-tester",
+        "headers" : {
+
+        }
+      }
+    }
+  ],
+  "name" : "bitbucket_get_repo"
+}

@@ -52,7 +52,7 @@ public class AvailabilityChecker {
                     return
                 }
                 
-                NetworkUtils.checkAvailabilityOfGitHubWithCurrentSettingsOfProject(project, completion: { (success, error) -> () in
+                NetworkUtils.checkAvailabilityOfServiceWithProject(project, completion: { (success, error) -> () in
                     
                     NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
                         

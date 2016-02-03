@@ -7,10 +7,10 @@
 //
 
 import Foundation
-import BuildaGitServer
 import BuildaUtils
 import XcodeServerSDK
 import ReactiveCocoa
+import BuildaGitServer
 
 public enum StorageManagerError: ErrorType {
     case DuplicateServerConfig(XcodeServerConfig)
@@ -26,9 +26,14 @@ public class StorageManager {
     public let triggerConfigs = MutableProperty<[String: TriggerConfig]>([:])
     public let config = MutableProperty<[String: AnyObject]>([:])
     
+    let tokenKeychain = SecurePersistence.sourceServerTokenKeychain()
+    let passphraseKeychain = SecurePersistence.sourceServerPassphraseKeychain()
+    let serverConfigKeychain = SecurePersistence.xcodeServerPasswordKeychain()
+    
     private let persistence: Persistence
     
     public init(persistence: Persistence) {
+        
         self.persistence = persistence
         self.loadAllFromPersistence()
         self.setupSaving()
@@ -167,10 +172,33 @@ public class StorageManager {
     private func loadAllFromPersistence() {
         
         self.config.value = self.persistence.loadDictionaryFromFile("Config.json") ?? [:]
+        
         let allProjects: [ProjectConfig] = self.persistence.loadArrayFromFile("Projects.json") ?? []
-        self.projectConfigs.value = allProjects.dictionarifyWithKey { $0.id }
+        //load server token & ssh passphrase from keychain
+        let tokenKeychain = self.tokenKeychain
+        let passphraseKeychain = self.passphraseKeychain
+        self.projectConfigs.value = allProjects
+            .map {
+                (var p: ProjectConfig) -> ProjectConfig in
+                var auth: ProjectAuthenticator?
+                if let val = tokenKeychain.read(p.keychainKey()) {
+                    auth = try? ProjectAuthenticator.fromString(val)
+                }
+                p.serverAuthentication = auth
+                p.sshPassphrase = passphraseKeychain.read(p.keychainKey())
+                return p
+            }.dictionarifyWithKey { $0.id }
+        
         let allServerConfigs: [XcodeServerConfig] = self.persistence.loadArrayFromFile("ServerConfigs.json") ?? []
-        self.serverConfigs.value = allServerConfigs.dictionarifyWithKey { $0.id }
+        //load xcs passwords from keychain
+        let xcsConfigKeychain = self.serverConfigKeychain
+        self.serverConfigs.value = allServerConfigs
+            .map {
+                (var x: XcodeServerConfig) -> XcodeServerConfig in
+                x.password = xcsConfigKeychain.read(x.keychainKey())
+                return x
+            }.dictionarifyWithKey { $0.id }
+        
         let allTemplates: [BuildTemplate] = self.persistence.loadArrayFromFolder("BuildTemplates") ?? []
         self.buildTemplates.value = allTemplates.dictionarifyWithKey { $0.id }
         let allTriggers: [TriggerConfig] = self.persistence.loadArrayFromFolder("Triggers") ?? []
@@ -211,11 +239,23 @@ public class StorageManager {
     
     private func saveProjectConfigs(configs: [String: ProjectConfig]) {
         let projectConfigs: NSArray = Array(configs.values).map { $0.jsonify() }
+        let tokenKeychain = SecurePersistence.sourceServerTokenKeychain()
+        let passphraseKeychain = SecurePersistence.sourceServerPassphraseKeychain()
+        configs.values.forEach {
+            if let auth = $0.serverAuthentication {
+                tokenKeychain.writeIfNeeded($0.keychainKey(), value: auth.toString())
+            }
+            passphraseKeychain.writeIfNeeded($0.keychainKey(), value: $0.sshPassphrase)
+        }
         self.persistence.saveArray("Projects.json", items: projectConfigs)
     }
     
     private func saveServerConfigs(configs: [String: XcodeServerConfig]) {
         let serverConfigs = Array(configs.values).map { $0.jsonify() }
+        let serverConfigKeychain = SecurePersistence.xcodeServerPasswordKeychain()
+        configs.values.forEach {
+            serverConfigKeychain.writeIfNeeded($0.keychainKey(), value: $0.password)
+        }
         self.persistence.saveArray("ServerConfigs.json", items: serverConfigs)
     }
     
@@ -244,6 +284,21 @@ public class StorageManager {
         self.persistence.deleteFolder(folderName)
         let items = Array(configs.values)
         self.persistence.saveArrayIntoFolder(folderName, items: items) { $0.id }
+    }
+}
+
+extension StorageManager: SyncerLifetimeChangeObserver {
+    
+    public func authChanged(projectConfigId: String, auth: ProjectAuthenticator) {
+        
+        //and modify in the owner's config
+        var config = self.projectConfigs.value[projectConfigId]!
+
+        //auth info changed, re-save it into the keychain
+        self.tokenKeychain.writeIfNeeded(config.keychainKey(), value: auth.toString())
+        
+        config.serverAuthentication = auth
+        self.projectConfigs.value[projectConfigId] = config
     }
 }
 

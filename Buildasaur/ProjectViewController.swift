@@ -11,6 +11,7 @@ import AppKit
 import BuildaUtils
 import XcodeServerSDK
 import BuildaKit
+import BuildaGitServer
 import ReactiveCocoa
 
 protocol ProjectViewControllerDelegate: class {
@@ -23,20 +24,33 @@ class ProjectViewController: ConfigEditViewController {
     let projectConfig = MutableProperty<ProjectConfig!>(nil)
     weak var delegate: ProjectViewControllerDelegate?
     
+    var serviceAuthenticator: ServiceAuthenticator!
+    
     private var project: Project!
     
-    private var privateKeyUrl = MutableProperty<NSURL?>(nil)
-    private var publicKeyUrl = MutableProperty<NSURL?>(nil)
+    private let privateKeyUrl = MutableProperty<NSURL?>(nil)
+    private let publicKeyUrl = MutableProperty<NSURL?>(nil)
+    
+    private let authenticator = MutableProperty<ProjectAuthenticator?>(nil)
+    private let userWantsTokenAuth = MutableProperty<Bool>(false)
 
     //we have a project
     @IBOutlet weak var projectNameLabel: NSTextField!
     @IBOutlet weak var projectPathLabel: NSTextField!
     @IBOutlet weak var projectURLLabel: NSTextField!
     
-    @IBOutlet weak var tokenTextField: NSTextField!
     @IBOutlet weak var selectSSHPrivateKeyButton: NSButton!
     @IBOutlet weak var selectSSHPublicKeyButton: NSButton!
     @IBOutlet weak var sshPassphraseTextField: NSSecureTextField!
+    
+    //authentication stuff
+    @IBOutlet weak var tokenTextField: NSTextField!
+    @IBOutlet weak var tokenStackView: NSStackView!
+    @IBOutlet weak var serviceName: NSTextField!
+    @IBOutlet weak var serviceLogo: NSImageView!
+    @IBOutlet weak var loginButton: NSButton!
+    @IBOutlet weak var useTokenButton: NSButton!
+    @IBOutlet weak var logoutButton: NSButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +67,10 @@ class ProjectViewController: ConfigEditViewController {
             //this config already went through validation like a second ago.
             return try! Project(config: newConfig)
         }
+        
+        let projectAuth = self.projectConfig.value.serverAuthentication
+        self.authenticator.value = projectAuth
+        self.userWantsTokenAuth.value = projectAuth?.type == .PersonalToken
         
         //project
         proj.startWithNext { [weak self] in self?.project = $0 }
@@ -80,7 +98,6 @@ class ProjectViewController: ConfigEditViewController {
         //dump whenever config changes
         prod.startWithNext { [weak self] in
             
-            self?.tokenTextField.stringValue = $0.githubToken
             let priv = $0.privateSSHKeyPath
             self?.privateKeyUrl.value = priv.isEmpty ? nil : NSURL(fileURLWithPath: priv)
             let pub = $0.publicSSHKeyPath
@@ -89,6 +106,25 @@ class ProjectViewController: ConfigEditViewController {
         }
         
         let meta = proj.map { $0.workspaceMetadata! }
+        
+        combineLatest(
+            proj,
+            self.authenticator.producer,
+            self.userWantsTokenAuth.producer
+            )
+            .startWithNext { [weak self] (proj, auth, forceUseToken) in
+                self?.updateServiceMeta(proj, auth: auth, userWantsTokenAuth: forceUseToken)
+        }
+        combineLatest(self.tokenTextField.rac_text, self.userWantsTokenAuth.producer)
+            .startWithNext { [weak self] token, forceToken in
+                if forceToken {
+                    if token.isEmpty {
+                        self?.authenticator.value = nil
+                    } else {
+                        self?.authenticator.value = ProjectAuthenticator(service: .GitHub, username: "GIT", type: .PersonalToken, secret: token)
+                    }
+                }
+        }
         
         //fill data in
         self.projectNameLabel.rac_stringValue <~ meta.map { $0.projectName }
@@ -106,7 +142,7 @@ class ProjectViewController: ConfigEditViewController {
         //listen for changes
         let privateKeyValid = privateKey.map { $0 != nil }
         let publicKeyValid = publicKey.map { $0 != nil }
-        let githubTokenValid = self.tokenTextField.rac_text.map { !$0.isEmpty }
+        let githubTokenValid = self.authenticator.producer.map { $0 != nil }
         
         let allInputs = combineLatest(privateKeyValid, publicKeyValid, githubTokenValid)
         let valid = allInputs.map { $0.0 && $0.1 && $0.2 }
@@ -117,6 +153,36 @@ class ProjectViewController: ConfigEditViewController {
             .map { $0 && $1 }
         self.nextAllowed <~ enableNext
         self.trashButton.rac_enabled <~ editing
+    }
+    
+    func updateServiceMeta(proj: Project, auth: ProjectAuthenticator?, userWantsTokenAuth: Bool) {
+        
+        let meta = proj.workspaceMetadata!
+        let service = meta.service
+        
+        let name = "\(service.prettyName())"
+        self.serviceName.stringValue = name
+        self.serviceLogo.image = NSImage(named: service.logoName())
+        
+        let alreadyHasAuth = auth != nil
+
+        switch service {
+        case .GitHub:
+            if let auth = auth where auth.type == .PersonalToken && !auth.secret.isEmpty {
+                self.tokenTextField.stringValue = auth.secret
+            } else {
+                self.tokenTextField.stringValue = ""
+            }
+            self.useTokenButton.hidden = alreadyHasAuth
+        case .BitBucket:
+            self.useTokenButton.hidden = true
+        }
+        
+        self.loginButton.hidden = alreadyHasAuth
+        self.logoutButton.hidden = !alreadyHasAuth
+        
+        let showTokenField = userWantsTokenAuth && service == .GitHub && (auth?.type == .PersonalToken || auth == nil)
+        self.tokenStackView.hidden = !showTokenField
     }
     
     override func shouldGoNext() -> Bool {
@@ -178,12 +244,12 @@ class ProjectViewController: ConfigEditViewController {
         guard
             let privateKeyPath = self.privateKeyUrl.value?.path,
             let publicKeyPath = self.publicKeyUrl.value?.path,
-            let githubToken = self.tokenTextField.stringValue.nonEmpty() else {
+            let auth = self.authenticator.value else {
             return nil
         }
         
         var config = self.projectConfig.value
-        config.githubToken = githubToken
+        config.serverAuthentication = auth
         config.sshPassphrase = sshPassphrase
         config.privateSSHKeyPath = privateKeyPath
         config.publicSSHKeyPath = publicKeyPath
@@ -231,7 +297,35 @@ class ProjectViewController: ConfigEditViewController {
         self.selectKey("private")
     }
     
-    @IBAction func tokenQuestionClicked(sender: AnyObject) {
-        openLink("https://github.com/settings/tokens")
+    @IBAction func loginButtonClicked(sender: AnyObject) {
+        
+        self.userWantsTokenAuth.value = false
+        
+        let service = self.project.workspaceMetadata!.service
+        self.serviceAuthenticator.getAccess(service) { (auth, error) -> () in
+            
+            guard let auth = auth else {
+                //TODO: show UI error that login failed
+                UIUtils.showAlertWithError(Error.withInfo("Failed to log in, please try again", internalError: (error as! NSError), userInfo: nil))
+                self.authenticator.value = nil
+                return
+            }
+            
+            //we have been authenticated, hooray!
+            self.authenticator.value = auth
+        }
     }
+    
+    @IBAction func useTokenClicked(sender: AnyObject) {
+        
+        self.userWantsTokenAuth.value = true
+    }
+    
+    @IBAction func logoutButtonClicked(sender: AnyObject) {
+        
+        self.authenticator.value = nil
+        self.userWantsTokenAuth.value = false
+        self.tokenTextField.rac_stringValue.value = ""
+    }
+    
 }

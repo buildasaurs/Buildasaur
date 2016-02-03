@@ -1,17 +1,63 @@
 # https://github.com/KrauseFx/fastlane/tree/master/docs
 
+ENV["LANG"]="en_US.UTF-8"
+
 # If you want to automatically update fastlane if a new version is available:
 update_fastlane
 
 # This is the minimum version number required.
 # Update this, if you use features of a newer version
-fastlane_version "1.26.0"
+fastlane_version "1.57.0"
 
 before_all do |lane|
 end
 
 lane :prebuild do
+  
+  install_cocoapods_if_needed
+
+  # if you're not me, you need to inject your own GitHub etc app API keys.
+  # but don't worry, those are only needed if you'll be using OAuth to authenticate
+  # with services, not if you're using e.g. personal token from GitHub.
+  # you can register your own app at https://github.com/settings/applications/new
+
+  # if this is running on CI, just inject dummy keys - they're not used in tests at all.
+  if ENV["XCS"] == "1"
+    puts "Running on XCS, injecting dummy credentials"
+    inject_dummy_credentials
+    puts "Done injecting dummy credentials"
+  end
+
   cocoapods
+end
+
+lane :install_cocoapods_if_needed do
+  ['cocoapods', 'cocoapods-keys'].each do |g|
+    begin
+      sh "test $(gem list -i #{g}) == false && gem install #{g}"
+    rescue Exception
+    end
+  end
+end
+
+private_lane :inject_dummy_credentials do
+    # inspired by https://github.com/artsy/eidolon/blob/master/fastlane/Fastfile
+    keys = [
+      'GitHubAPIClientId', 
+      'GitHubAPIClientSecret',
+      'BitBucketAPIClientId',
+      'BitBucketAPIClientSecret'
+    ]
+    commands = keys.map { |key|
+      begin
+        sh "pod keys rm #{key} Buildasaur"
+        sh "pod keys rm #{key} Buildasaur.xcodeproj"
+      rescue Exception
+      end
+
+      "pod keys set #{key} 'INSERT_YOUR_OWN_KEY_HERE' Buildasaur"
+    }.join(' ; ')
+    sh "cd .. ; #{commands}"
 end
 
 lane :test do
@@ -30,27 +76,91 @@ end
 lane :release do
   run_tests
   build
-  release_no_build
+  release_app
 end
 
 lane :release_app do
-  raise "No built app found in ./build/Buildasaur.app" unless File.exist?("../build/Buildasaur.app")
-  version = get_info_plist_value(
-    key: "CFBundleShortVersionString",
-    path: "Buildasaur/Info.plist"
-  )
-  github(
-    assets: ["./build/Buildasaur.app"],
-    version: version
+
+  app_path = "../build/Buildasaur.app"
+  raise "No built app found in #{app_path}" unless File.exist?(app_path)
+
+  app_zip_path = zip_app_bundle(app_path: app_path)
+  raise "No zipped app found in #{app_zip_path}" unless File.exist?(app_zip_path)
+  
+  ENV['FL_GET_INFO_PLIST_PATH'] = File.absolute_path("#{app_path}/Contents/Info.plist")
+  human_version = get_info_plist_value(key: "CFBundleShortVersionString")
+  machine_version = get_info_plist_value(key: "CFBundleVersion")
+
+  release_info = github(
+    assets: [app_zip_path],
+    version: human_version
     )
+  # release_info = {
+  #   title: "v1.0-beta1 - Hello!",
+  #   description: "# Hey\n[Link](http://here)",
+  #   version_tag: "v1.0-beta1"
+  # }
+  sparkle(
+    app_zip_path: app_zip_path,
+    release_title: release_info[:title],
+    release_description: release_info[:description],
+    release_version_tag: release_info[:version_tag],
+    machine_version: machine_version,
+    human_version: human_version
+    )
+
+  UI.message "Now review and commit changes to the repository!"
+end
+
+private_lane :zip_app_bundle do |params|
+  app_path = params[:app_path]
+  app_zip_path = "#{app_path}.zip"
+  abs_app_path = File.absolute_path(app_path)
+  app_folder = File.dirname(abs_app_path)
+  sh "cd '#{app_folder}'; zip -r --symlinks '#{File.basename(app_zip_path)}' '#{File.basename(app_path)}'"
+  File.absolute_path(app_zip_path)
 end
 
 lane :build do
+  raise "There already is a build app" if File.exists?('../build/Buildasaur.app')
   gym(
     scheme: 'Buildasaur',
     output_name: 'Buildasaur',
-    output_directory: './build'
+    output_directory: './build',
+    export_method: 'developer-id'
     )
+end
+
+private_lane :sparkle do |params|
+
+  # Create release notes file
+  release_notes_html = render_github_markdown(
+    context_repository: "czechboy0/Buildasaur",
+    api_token: ENV["GITHUB_TOKEN"],
+    markdown_contents: params[:release_description]
+  )
+  release_notes_html_path = File.absolute_path("../Meta/Sparkle_Release_Notes/#{params[:release_version_tag]}.html")
+  File.open(release_notes_html_path, "w") { |io| io.write(release_notes_html) }
+  # Now we need to commit this new file at the end of the workflow!
+  sh "cd .. && git add '#{release_notes_html_path}'"
+
+  release_notes_html_url = "https://raw.githubusercontent.com/czechboy0/Buildasaur/master/Meta/Sparkle_Release_Notes/#{params[:release_version_tag]}.html"
+  app_download_url = "https://github.com/czechboy0/Buildasaur/releases/download/#{params[:release_version_tag]}/Buildasaur.app.zip"
+
+  UI.message "Successfully created release notes file at path #{release_notes_html_path}"
+
+  sparkle_add_update(
+      feed_file: "sparkle.xml",
+      app_download_url: app_download_url,
+      app_size: "#{File.size(params[:app_zip_path])}",
+      machine_version: params[:machine_version],
+      human_version: params[:human_version],
+      title: params[:release_title],
+      release_notes_link: release_notes_html_url,
+      deployment_target: "10.11"
+    )
+
+  UI.message "Successfully added a release item to the Sparkle XML file (review before committing)"
 end
 
 private_lane :github do |params|
@@ -71,6 +181,7 @@ private_lane :github do |params|
   title = prompt(text: 'Release Title: ')
   description = prompt(text: "Release changelog: ",
    multi_line_end_keyword: "END")
+  release_name = [version_tag, title].join(" - ")
 
   # create a new release on GitHub
   repo_url = "czechboy0/Buildasaur"
@@ -78,7 +189,7 @@ private_lane :github do |params|
   release = set_github_release(
     repository_name: repo_url,
     upload_assets: assets,
-    name: [version_tag, title].join(" - "),
+    name: release_name,
     tag_name: version_tag,
     description: description,
     is_draft: false,
@@ -100,5 +211,10 @@ private_lane :github do |params|
   #   }
   # )
 
+  {
+    title: release_name,
+    description: description,
+    version_tag: version_tag
+  }
 end
 

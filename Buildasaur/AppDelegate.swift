@@ -26,6 +26,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var syncerManager: SyncerManager!
     
     let menuItemManager = MenuItemManager()
+    let serviceAuthenticator = ServiceAuthenticator()
 
     var storyboardLoader: StoryboardLoader!
     
@@ -40,6 +41,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         #else
             self.setup()
         #endif
+        
+        
     }
     
     func setup() {
@@ -49,6 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         //        defs.setBool(true, forKey: "NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints")
         //        defs.synchronize()
         
+        self.setupURLCallback()
         self.setupPersistence()
         
         self.storyboardLoader = StoryboardLoader(storyboard: NSStoryboard.mainStoryboard)
@@ -63,6 +67,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.dashboardWindow = self.windowForPresentableViewControllerWithIdentifier("dashboard")!.0
     }
     
+    
     func migratePersistence(persistence: Persistence) {
         
         let fileManager = NSFileManager.defaultManager()
@@ -70,19 +75,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let migrator = CompositeMigrator(persistence: persistence)
         if migrator.isMigrationRequired() {
             
-            Log.info("Migration required, launching migrator")
+            print("Migration required, launching migrator")
 
             do {
                 try migrator.attemptMigration()
             } catch {
-                Log.error("Migration failed with error \(error), wiping folder...")
+                print("Migration failed with error \(error), wiping folder...")
                 
                 //wipe the persistence. start over if we failed to migrate
                 _ = try? fileManager.removeItemAtURL(persistence.readingFolder)
             }
-            Log.info("Migration finished")
+            print("Migration finished")
         } else {
-            Log.verbose("No migration necessary, skipping...")
+            print("No migration necessary, skipping...")
         }
     }
     
@@ -90,15 +95,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         let persistence = PersistenceFactory.createStandardPersistence()
         
-        //setup logging
-        Logging.setup(persistence, alsoIntoFile: true)
-        
         //migration
         self.migratePersistence(persistence)
+        
+        //setup logging
+        Logging.setup(persistence, alsoIntoFile: true)
         
         //create storage manager
         let storageManager = StorageManager(persistence: persistence)
         let factory = SyncerFactory()
+        factory.syncerLifetimeChangeObserver = storageManager
         let loginItem = LoginItem()
         let syncerManager = SyncerManager(storageManager: storageManager, factory: factory, loginItem: loginItem)
         self.syncerManager = syncerManager
@@ -123,7 +129,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let dashboard: DashboardViewController = self.storyboardLoader
             .presentableViewControllerWithStoryboardIdentifier("dashboardViewController", uniqueIdentifier: "dashboard", delegate: self)
         dashboard.syncerManager = self.syncerManager
+        dashboard.serviceAuthenticator = self.serviceAuthenticator
         return dashboard
+    }
+    
+    func handleUrl(url: NSURL) {
+        
+        print("Handling incoming url")
+        
+        if url.host == "oauth-callback" {
+            self.serviceAuthenticator.handleUrl(url)
+        }
     }
     
     func applicationShouldHandleReopen(sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
@@ -169,6 +185,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         //first window. i wish there was a nicer way (please some tell me there is)
         if NSApp.windows.count < 3 {
             self.dashboardWindow?.makeKeyAndOrderFront(self)
+        }
+    }
+}
+
+extension AppDelegate {
+    
+    func setupURLCallback() {
+        
+        // listen to scheme url
+        NSAppleEventManager.sharedAppleEventManager().setEventHandler(self, andSelector:"handleGetURLEvent:withReplyEvent:", forEventClass: AEEventClass(kInternetEventClass), andEventID: AEEventID(kAEGetURL))
+    }
+    
+    func handleGetURLEvent(event: NSAppleEventDescriptor!, withReplyEvent: NSAppleEventDescriptor!) {
+        if let urlString = event.paramDescriptorForKeyword(AEKeyword(keyDirectObject))?.stringValue, url = NSURL(string: urlString) {
+            
+            //handle url
+            self.handleUrl(url)
         }
     }
 }

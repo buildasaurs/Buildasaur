@@ -16,7 +16,7 @@ import BuildaKit
 
 class SyncerTests: XCTestCase {
 
-    var syncer: HDGitHubXCBotSyncer!
+    var syncer: StandardSyncer!
     
     override func setUp() {
         super.setUp()
@@ -28,14 +28,14 @@ class SyncerTests: XCTestCase {
         super.tearDown()
     }
     
-    func mockedSyncer(config: SyncerConfig = SyncerConfig()) -> HDGitHubXCBotSyncer {
+    func mockedSyncer(config: SyncerConfig = SyncerConfig()) -> StandardSyncer {
         
         let xcodeServer = MockXcodeServer()
         let githubServer = MockGitHubServer()
         let project = MockProject()
         let template = MockTemplate.new()
         
-        let syncer = HDGitHubXCBotSyncer(
+        let syncer = StandardSyncer(
             integrationServer: xcodeServer,
             sourceServer: githubServer,
             project: project,
@@ -60,7 +60,7 @@ class SyncerTests: XCTestCase {
     
     func testCreatingChangeActions_MultiplePR_NoBots() {
         
-        let prs = [
+        let prs: [PullRequestType] = [
             MockPullRequest(number: 4, title: ""),
             MockPullRequest(number: 7, title: "")
         ]
@@ -100,12 +100,12 @@ class SyncerTests: XCTestCase {
             MockBot(name: "BuildaBot [me/Repo] |-> gh/bot_to_delete"),
         ]
         
-        let prs = [
+        let prs: [PullRequestType] = [
             MockPullRequest(number: 4, title: ""),
             MockPullRequest(number: 7, title: "")
         ]
         
-        let branches = [
+        let branches: [BranchType] = [
             MockBranch(name: "cd/broke_something"),
             MockBranch(name: "ab/fixed_errthing"),
             MockBranch(name: "ef/migrating_from_php_to_mongo_db")

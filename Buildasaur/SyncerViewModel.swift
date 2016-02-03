@@ -12,7 +12,7 @@ import ReactiveCocoa
 
 struct SyncerViewModel {
     
-    let syncer: HDGitHubXCBotSyncer
+    let syncer: StandardSyncer
     
     let status: SignalProducer<String, NoError>
     let host: SignalProducer<String, NoError>
@@ -25,7 +25,7 @@ struct SyncerViewModel {
     typealias PresentEditViewControllerType = (ConfigTriplet) -> ()
     let presentEditViewController: PresentEditViewControllerType
     
-    init(syncer: HDGitHubXCBotSyncer, presentEditViewController: PresentEditViewControllerType) {
+    init(syncer: StandardSyncer, presentEditViewController: PresentEditViewControllerType) {
         self.syncer = syncer
         self.presentEditViewController = presentEditViewController
         

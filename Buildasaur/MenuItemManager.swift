@@ -57,7 +57,7 @@ class MenuItemManager : NSObject, NSMenuDelegate {
         }
         
         //now we have the right number, update the data
-        let texts = syncers.map({ (syncer: HDGitHubXCBotSyncer) -> String in
+        let texts = syncers.map({ (syncer: StandardSyncer) -> String in
             
             let statusEmoji: String
             if syncer.active {
@@ -67,7 +67,7 @@ class MenuItemManager : NSObject, NSMenuDelegate {
             }
             
             let repo: String
-            if let repoName = syncer.project.githubRepoName() {
+            if let repoName = syncer.project.serviceRepoName() {
                 repo = repoName
             } else {
                 repo = "???"

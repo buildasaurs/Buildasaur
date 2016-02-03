@@ -11,32 +11,40 @@ import BuildaGitServer
 import XcodeServerSDK
 import BuildaUtils
 
-extension HDGitHubXCBotSyncer {
+public struct StatusAndComment {
+    public let status: StatusType
+    public let comment: String?
+    
+    public init(status: StatusType, comment: String? = nil) {
+        self.status = status
+        self.comment = comment
+    }
+}
+
+extension StandardSyncer {
     
     var _project: Project { return self.project }
     var _xcodeServer: XcodeServer { return self.xcodeServer }
-    var _github: GitHubServer { return self.github }
+    var _sourceServer: SourceServerType { return self.sourceServer }
     var _buildTemplate: BuildTemplate { return self.buildTemplate }
     var _waitForLttm: Bool { return self.config.value.waitForLttm }
     var _postStatusComments: Bool { return self.config.value.postStatusComments }
     var _watchedBranchNames: [String] { return self.config.value.watchedBranchNames }
     
     public typealias BotActions = (
-        prsToSync: [(pr: PullRequest, bot: Bot)],
-        prBotsToCreate: [PullRequest],
-        branchesToSync: [(branch: Branch, bot: Bot)],
-        branchBotsToCreate: [Branch],
+        prsToSync: [(pr: PullRequestType, bot: Bot)],
+        prBotsToCreate: [PullRequestType],
+        branchesToSync: [(branch: BranchType, bot: Bot)],
+        branchBotsToCreate: [BranchType],
         botsToDelete: [Bot])
-    
-    public typealias GitHubStatusAndComment = (status: Status, comment: String?)
-        
+            
     public func repoName() -> String? {
-        return self._project.githubRepoName()
+        return self._project.serviceRepoName()
     }
         
     internal func syncRepoWithName(repoName: String, completion: () -> ()) {
         
-        self._github.getRepo(repoName, completion: { (repo, error) -> () in
+        self._sourceServer.getRepo(repoName, completion: { (repo, error) -> () in
             
             if error != nil {
                 //whoops, no more syncing for now
@@ -55,10 +63,10 @@ extension HDGitHubXCBotSyncer {
         })
     }
     
-    private func syncRepoWithNameAndMetadata(repoName: String, repo: Repo, completion: () -> ()) {
+    private func syncRepoWithNameAndMetadata(repoName: String, repo: RepoType, completion: () -> ()) {
         
-        //pull PRs from github
-        self._github.getOpenPullRequests(repoName, completion: { (prs, error) -> () in
+        //pull PRs from source server
+        self._sourceServer.getOpenPullRequests(repoName, completion: { (prs, error) -> () in
             
             if error != nil {
                 //whoops, no more syncing for now
@@ -79,14 +87,14 @@ extension HDGitHubXCBotSyncer {
         })
     }
     
-    private func syncRepoWithPRs(repoName: String, repo: Repo, prs: [PullRequest], completion: () -> ()) {
+    private func syncRepoWithPRs(repoName: String, repo: RepoType, prs: [PullRequestType], completion: () -> ()) {
         
         //only fetch branches if there are any watched ones. there might be tens or hundreds of branches
         //so we don't want to fetch them unless user actually is watching any non-PR branches.
         if self._watchedBranchNames.count > 0 {
             
             //we have PRs, now fetch branches
-            self._github.getBranchesOfRepo(repoName, completion: { (branches, error) -> () in
+            self._sourceServer.getBranchesOfRepo(repoName, completion: { (branches, error) -> () in
                 
                 if error != nil {
                     //whoops, no more syncing for now
@@ -110,7 +118,7 @@ extension HDGitHubXCBotSyncer {
         }
     }
     
-    private func syncRepoWithPRsAndBranches(repoName: String, repo: Repo, prs: [PullRequest], branches: [Branch], completion: () -> ()) {
+    private func syncRepoWithPRsAndBranches(repoName: String, repo: RepoType, prs: [PullRequestType], branches: [BranchType], completion: () -> ()) {
         
         //we have branches, now fetch bots
         self._xcodeServer.getBots({ (bots, error) -> () in
@@ -129,12 +137,12 @@ extension HDGitHubXCBotSyncer {
                 //we have both PRs and Bots, resolve
                 self.syncPRsAndBranchesAndBots(repo: repo, repoName: repoName, prs: prs, branches: branches, bots: bots, completion: {
                     
-                    //everything is done, report the damage of GitHub rate limit
-                    if let rateLimitInfo = self._github.latestRateLimitInfo {
+                    //everything is done, report the damage of the server's rate limit
+                    if let rateLimitInfo = repo.latestRateLimitInfo {
                         
-                        let report = rateLimitInfo.getReport()
-                        self.reports["GitHub Rate Limit"] = report
-                        Log.info("GitHub Rate Limit: \(report)")
+                        let report = rateLimitInfo.report
+                        self.reports["Rate Limit"] = report
+                        Log.info("Rate Limit: \(report)")
                     }
                     
                     completion()
@@ -146,11 +154,15 @@ extension HDGitHubXCBotSyncer {
         })
     }
     
-    public func syncPRsAndBranchesAndBots(repo repo: Repo, repoName: String, prs: [PullRequest], branches: [Branch], bots: [Bot], completion: () -> ()) {
+    public func syncPRsAndBranchesAndBots(repo repo: RepoType, repoName: String, prs: [PullRequestType], branches: [BranchType], bots: [Bot], completion: () -> ()) {
         
-        let prsDescription = prs.map({ "    PR \($0.number): \($0.title) [\($0.head.ref) -> \($0.base.ref)]" }).joinWithSeparator("\n")
-        let branchesDescription = branches.map({ "    Branch [\($0.name):\($0.commit.sha)]" }).joinWithSeparator("\n")
-        let botsDescription = bots.map({ "    Bot \($0.name)" }).joinWithSeparator("\n")
+        let prsDescription = prs.map { (pr: PullRequestType) -> String in
+            "    PR \(pr.number): \(pr.title) [\(pr.headName) -> \(pr.baseName)]"
+            }.joinWithSeparator("\n")
+        let branchesDescription = branches.map { (branch: BranchType) -> String in
+            "    Branch [\(branch.name):\(branch.commitSHA)]" }
+            .joinWithSeparator("\n")
+        let botsDescription = bots.map { "    Bot \($0.name)" }.joinWithSeparator("\n")
         Log.verbose("Resolving prs:\n\(prsDescription) \nand branches:\n\(branchesDescription)\nand bots:\n\(botsDescription)")
         
         //create the changes necessary
@@ -165,8 +177,8 @@ extension HDGitHubXCBotSyncer {
     
     public func resolvePRsAndBranchesAndBots(
         repoName repoName: String,
-        prs: [PullRequest],
-        branches: [Branch],
+        prs: [PullRequestType],
+        branches: [BranchType],
         bots: [Bot])
         -> BotActions {
             
@@ -178,16 +190,16 @@ extension HDGitHubXCBotSyncer {
             var mappedBots = buildaBots.toDictionary({ $0.name })
             
             //PRs that also have a bot, prsToSync
-            var prsToSync: [(pr: PullRequest, bot: Bot)] = []
+            var prsToSync: [(pr: PullRequestType, bot: Bot)] = []
             
             //branches that also have a bot, branchesToSync
-            var branchesToSync: [(branch: Branch, bot: Bot)] = []
+            var branchesToSync: [(branch: BranchType, bot: Bot)] = []
             
             //PRs that don't have a bot yet, to create
-            var prBotsToCreate: [PullRequest] = []
+            var prBotsToCreate: [PullRequestType] = []
             
             //branches that don't have a bot yet, to create
-            var branchBotsToCreate: [Branch] = []
+            var branchBotsToCreate: [BranchType] = []
             
             //make sure every PR has a bot
             for pr in prs {
@@ -246,7 +258,7 @@ extension HDGitHubXCBotSyncer {
             return (prsToSync, prBotsToCreate, branchesToSync, branchBotsToCreate, botsToDelete)
     }
     
-    public func createSyncPairsFrom(repo repo: Repo, botActions: BotActions) -> [SyncPair] {
+    public func createSyncPairsFrom(repo repo: RepoType, botActions: BotActions) -> [SyncPair] {
         
         //create sync pairs for each action needed
         let syncPRBotSyncPairs = botActions.prsToSync.map({

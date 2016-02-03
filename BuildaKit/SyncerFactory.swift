@@ -11,46 +11,66 @@ import XcodeServerSDK
 import BuildaGitServer
 
 public protocol SyncerFactoryType {
-    func createSyncers(configs: [ConfigTriplet]) -> [HDGitHubXCBotSyncer]
+    func createSyncers(configs: [ConfigTriplet]) -> [StandardSyncer]
     func defaultConfigTriplet() -> ConfigTriplet
     func newEditableTriplet() -> EditableConfigTriplet
     func createXcodeServer(config: XcodeServerConfig) -> XcodeServer
     func createProject(config: ProjectConfig) -> Project?
-    func createSourceServer(token: String) -> GitHubServer
+    func createSourceServer(service: GitService, auth: ProjectAuthenticator?) -> SourceServerType
     func createTrigger(config: TriggerConfig) -> Trigger
+}
+
+public protocol SyncerLifetimeChangeObserver {
+    func authChanged(projectConfigId: String, auth: ProjectAuthenticator)
 }
 
 public class SyncerFactory: SyncerFactoryType {
     
-    private var syncerPool = [RefType: HDGitHubXCBotSyncer]()
+    private var syncerPool = [RefType: StandardSyncer]()
     private var projectPool = [RefType: Project]()
     private var xcodeServerPool = [RefType: XcodeServer]()
     
+    public var syncerLifetimeChangeObserver: SyncerLifetimeChangeObserver!
+    
     public init() { }
     
-    private func createSyncer(triplet: ConfigTriplet) -> HDGitHubXCBotSyncer? {
+    private func createSyncer(triplet: ConfigTriplet) -> StandardSyncer? {
+        
+        precondition(self.syncerLifetimeChangeObserver != nil)
         
         let xcodeServer = self.createXcodeServer(triplet.server)
-        let githubServer = self.createSourceServer(triplet.project.githubToken)
         let maybeProject = self.createProject(triplet.project)
         let triggers = triplet.triggers.map { self.createTrigger($0) }
         
         guard let project = maybeProject else { return nil }
         
+        guard let service = project.workspaceMetadata?.service else { return nil }
+        
+        let projectConfig = triplet.project
+        let sourceServer = self.createSourceServer(service, auth: projectConfig.serverAuthentication)
+        sourceServer
+            .authChangedSignal()
+            .ignoreNil()
+            .observeNext { [weak self] (auth) -> () in
+                self?
+                    .syncerLifetimeChangeObserver
+                    .authChanged(projectConfig.id, auth: auth)
+        }
+        
         if let poolAttempt = self.syncerPool[triplet.syncer.id]
         {
             poolAttempt.config.value = triplet.syncer
             poolAttempt.xcodeServer = xcodeServer
-            poolAttempt.github = githubServer
+            poolAttempt.sourceServer = sourceServer
             poolAttempt.project = project
             poolAttempt.buildTemplate = triplet.buildTemplate
             poolAttempt.triggers = triggers
             return poolAttempt
         }
         
-        let syncer = HDGitHubXCBotSyncer(
+        let syncer = StandardSyncer(
             integrationServer: xcodeServer,
-            sourceServer: githubServer,
+            sourceServer: sourceServer,
             project: project,
             buildTemplate: triplet.buildTemplate,
             triggers: triggers,
@@ -62,7 +82,7 @@ public class SyncerFactory: SyncerFactoryType {
         return syncer
     }
     
-    public func createSyncers(configs: [ConfigTriplet]) -> [HDGitHubXCBotSyncer] {
+    public func createSyncers(configs: [ConfigTriplet]) -> [StandardSyncer] {
         
         //create syncers
         let created = configs.map { self.createSyncer($0) }.filter { $0 != nil }.map { $0! }
@@ -117,8 +137,9 @@ public class SyncerFactory: SyncerFactoryType {
         return project
     }
     
-    public func createSourceServer(token: String) -> GitHubServer {
-        let server = GitHubFactory.server(token)
+    public func createSourceServer(service: GitService, auth: ProjectAuthenticator?) -> SourceServerType {
+        
+        let server = SourceServerFactory().createServer(service, auth: auth)
         return server
     }
     

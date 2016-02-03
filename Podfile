@@ -1,4 +1,18 @@
-platform :osx, '10.10'
+
+plugin 'cocoapods-keys', {
+  :target => "BuildaGitServer",
+  :project => "Buildasaur.xcodeproj",
+  :keys => [
+    "GitHubAPIClientId",
+    "GitHubAPIClientSecret",
+    "BitBucketAPIClientId",
+    "BitBucketAPIClientSecret"
+]}
+
+source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/czechboy0/Podspecs.git'
+
+platform :osx, '10.11'
 use_frameworks!
 inhibit_all_warnings!
 
@@ -12,7 +26,7 @@ end
 
 def also_xcode_pods
     pods_for_errbody
-    pod 'XcodeServerSDK', '~> 0.5.5'
+    pod 'XcodeServerSDK', '~> 0.5.6'
     pod 'ekgclient', '~> 0.3.0'
 end
 
@@ -21,6 +35,8 @@ def buildasaur_app_pods
     rac
     pod 'Ji', '~> 1.2.0'
     pod 'CryptoSwift'
+    pod 'Sparkle'
+    pod 'KeychainAccess'
 end
 
 def test_pods
@@ -30,6 +46,7 @@ end
 target 'Buildasaur' do
     buildasaur_app_pods
     pod 'Crashlytics'
+    pod 'OAuthSwift'
 end
 
 target 'BuildaKit' do
@@ -43,13 +60,18 @@ end
 
 target 'BuildaGitServer' do
     pods_for_errbody
+    rac
 end
 
 target 'BuildaGitServerTests' do
     pods_for_errbody
+    test_pods
+    pod 'DVR', '~> 0.2.1-snap1'
 end
 
 target 'BuildaHeartbeatKit' do
     also_xcode_pods
 end
+
+
 

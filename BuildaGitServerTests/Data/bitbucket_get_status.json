@@ -1,0 +1,56 @@
+{
+  "interactions" : [
+    {
+      "recorded_at" : 1453932419.386528,
+      "response" : {
+        "body" : {
+          "state" : "SUCCESSFUL",
+          "updated_on" : "2016-01-27T22:00:48.330475+00:00",
+          "description" : "All went great!",
+          "links" : {
+            "commit" : {
+              "href" : "https:\/\/api.bitbucket.org\/2.0\/repositories\/honzadvorsky\/buildasaur-tester\/commit\/787ce956a784346755ac1a01da7bc1e20f87c006"
+            },
+            "self" : {
+              "href" : "https:\/\/api.bitbucket.org\/2.0\/repositories\/honzadvorsky\/buildasaur-tester\/commit\/787ce956a784346755ac1a01da7bc1e20f87c006\/statuses\/build\/Buildasaur"
+            }
+          },
+          "key" : "Buildasaur",
+          "created_on" : "2016-01-27T21:52:34.066284+00:00",
+          "type" : "build",
+          "name" : "Buildasaur",
+          "url" : "https:\/\/stlt.herokuapp.com\/v1\/xcs_deeplink\/honzadvysmbpr14.home\/1413f8578e54c3d052b8121a250255c0\/1413f8578e54c3d052b8121a2509a923"
+        },
+        "status" : 200,
+        "url" : "https:\/\/api.bitbucket.org\/2.0\/repositories\/honzadvorsky\/buildasaur-tester\/commit\/787ce95\/statuses\/build\/Buildasaur",
+        "headers" : {
+          "Content-Type" : "application\/json; charset=utf-8",
+          "X-Render-Time" : "0.498512983322",
+          "X-Frame-Options" : "SAMEORIGIN",
+          "Content-Encoding" : "gzip",
+          "Server" : "nginx\/1.6.2",
+          "X-Accepted-OAuth-Scopes" : "repository",
+          "Transfer-Encoding" : "Identity",
+          "X-Request-Count" : "69",
+          "X-OAuth-Scopes" : "pullrequest:write",
+          "X-Version" : "66b40159990c",
+          "Date" : "Wed, 27 Jan 2016 22:06:59 GMT",
+          "Strict-Transport-Security" : "max-age=31536000",
+          "X-Static-Version" : "66b40159990c",
+          "Connection" : "keep-alive",
+          "X-Content-Type-Options" : "nosniff",
+          "X-Served-By" : "app18",
+          "Vary" : "Authorization, Cookie"
+        }
+      },
+      "request" : {
+        "method" : "GET",
+        "url" : "https:\/\/api.bitbucket.org\/2.0\/repositories\/honzadvorsky\/buildasaur-tester\/commit\/787ce95\/statuses\/build\/Buildasaur",
+        "headers" : {
+          "Authorization" : "Bearer dont_looky_here"
+        }
+      }
+    }
+  ],
+  "name" : "bitbucket_get_status"
+}

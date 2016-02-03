@@ -19,9 +19,10 @@ public class SyncPairResolver {
     
     public func resolveActionsForCommitAndIssueWithBotIntegrations(
         commit: String,
-        issue: Issue?,
+        issue: IssueType?,
         bot: Bot,
         hostname: String,
+        buildStatusCreator: BuildStatusCreator,
         integrations: [Integration]) -> SyncPair.Actions {
             
             var integrationsToCancel: [Integration] = []
@@ -76,7 +77,7 @@ public class SyncPairResolver {
                 //A1. - it's empty, kick off an integration for the latest commit
                 return SyncPair.Actions(
                     integrationsToCancel: integrationsToCancel,
-                    githubStatusToSet: nil,
+                    statusToSet: nil,
                     startNewIntegrationBot: bot
                 )
             }
@@ -126,12 +127,13 @@ public class SyncPairResolver {
                 pending: latestPendingIntegration,
                 running: runningIntegration,
                 link: link,
+                statusCreator: buildStatusCreator,
                 completed: completedIntegrations)
             
             //merge in nested actions
             return SyncPair.Actions(
                 integrationsToCancel: integrationsToCancel + (actions.integrationsToCancel ?? []),
-                githubStatusToSet: actions.githubStatusToSet,
+                statusToSet: actions.statusToSet,
                 startNewIntegrationBot: actions.startNewIntegrationBot ?? (startNewIntegration ? bot : nil)
             )
     }
@@ -146,7 +148,7 @@ public class SyncPairResolver {
             
             //if it's not pending, we need to take a look at the blueprint and inspect the SHA.
             if let blueprint = integration.blueprint, let sha = blueprint.commitSHA {
-                return sha == headCommit
+                return sha.hasPrefix(headCommit) //headCommit is sometimes a short version only
             }
             
             //when an integration is Pending, Preparing or Checking out, it doesn't have a blueprint, but it is, by definition, a headCommit
@@ -206,13 +208,14 @@ public class SyncPairResolver {
     
     func resolveCommitStatusFromLatestIntegrations(
         commit: String,
-        issue: Issue?,
+        issue: IssueType?,
         pending: Integration?,
         running: Integration?,
         link: (Integration) -> String?,
+        statusCreator: BuildStatusCreator,
         completed: Set<Integration>) -> SyncPair.Actions {
             
-            let statusWithComment: HDGitHubXCBotSyncer.GitHubStatusAndComment
+            let statusWithComment: StatusAndComment
             var integrationsToCancel: [Integration] = []
             
             //if there's any pending integration, we're ["Pending" - Waiting in the queue]
@@ -220,8 +223,8 @@ public class SyncPairResolver {
                 
                 //TODO: show how many builds are ahead in the queue and estimate when it will be
                 //started and when finished? (there is an average running time on each bot, it should be easy)
-                let status = HDGitHubXCBotSyncer.createStatusFromState(.Pending, description: "Build waiting in the queue...", targetUrl: link(pending))
-                statusWithComment = (status: status, comment: nil)
+                let status = statusCreator.createStatusFromState(.Pending, description: "Build waiting in the queue...", targetUrl: link(pending))
+                statusWithComment = StatusAndComment(status: status, comment: nil)
                 
                 //also, cancel the running integration, if it's there any
                 if let running = running {
@@ -235,8 +238,8 @@ public class SyncPairResolver {
                     //there is a running integration.
                     //TODO: estimate, based on the average running time of this bot and on the started timestamp, when it will finish. add that to the description.
                     let currentStepString = running.currentStep.rawValue
-                    let status = HDGitHubXCBotSyncer.createStatusFromState(.Pending, description: "Integration step: \(currentStepString)...", targetUrl: link(running))
-                    statusWithComment = (status: status, comment: nil)
+                    let status = statusCreator.createStatusFromState(.Pending, description: "Integration step: \(currentStepString)...", targetUrl: link(running))
+                    statusWithComment = StatusAndComment(status: status, comment: nil)
                     
                 } else {
                     
@@ -244,33 +247,35 @@ public class SyncPairResolver {
                     if completed.count > 0 {
                         
                         //we have some completed integrations
-                        statusWithComment = self.resolveStatusFromCompletedIntegrations(completed, link: link)
+                        statusWithComment = self.resolveStatusFromCompletedIntegrations(completed, statusCreator: statusCreator, link: link)
                         
                     } else {
                         //this shouldn't happen.
                         Log.error("LOGIC ERROR! This shouldn't happen, there are no completed integrations!")
-                        let status = HDGitHubXCBotSyncer.createStatusFromState(.Error, description: "* UNKNOWN STATE, Builda ERROR *", targetUrl: nil)
-                        statusWithComment = (status: status, "Builda error, unknown state!")
+                        let status = statusCreator.createStatusFromState(.Error, description: "* UNKNOWN STATE, Builda ERROR *", targetUrl: nil)
+                        statusWithComment = StatusAndComment(status: status, comment: "Builda error, unknown state!")
                     }
                 }
             }
             
             return SyncPair.Actions(
                 integrationsToCancel: integrationsToCancel,
-                githubStatusToSet: (status: statusWithComment, commit: commit, issue: issue),
+                statusToSet: (status: statusWithComment, commit: commit, issue: issue),
                 startNewIntegrationBot: nil
             )
     }
     
     func resolveStatusFromCompletedIntegrations(
         integrations: Set<Integration>,
+        statusCreator: BuildStatusCreator,
         link: (Integration) -> String?
-        ) -> HDGitHubXCBotSyncer.GitHubStatusAndComment {
+        ) -> StatusAndComment {
             
             //get integrations sorted by number
             let sortedDesc = Array(integrations).sort { $0.number > $1.number }
             let summary = SummaryBuilder()
             summary.linkBuilder = link
+            summary.statusCreator = statusCreator
             
             //if there are any succeeded, it wins - iterating from the end
             if let passingIntegration = sortedDesc.filter({
