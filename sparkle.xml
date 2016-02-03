@@ -6,10 +6,10 @@
     <description>Most recent changes with links to updates.</description>
     <language>en</language>
     <item>
-      <title>Version 0.6.5</title>
-      <sparkle:releaseNotesLink>https://github.com/czechboy0/Buildasaur/releases/tag/v0.6.5</sparkle:releaseNotesLink>
-      <pubDate>Thu, 20 Dec 2015 21:30:00 +0000</pubDate>
-      <enclosure type='application/octet-stream' sparkle:version='31' sparkle:shortVersionString='0.6.5' length='10313161' url='https://github.com/czechboy0/Buildasaur/releases/download/v0.6.5/Buildasaur.app.zip'/>
+      <title>Version 0.8.0</title>
+      <sparkle:releaseNotesLink>https://github.com/czechboy0/Buildasaur/releases/tag/v0.8.0</sparkle:releaseNotesLink>
+      <pubDate>Thu, 28 Jan 2016 22:40:00 +0000</pubDate>
+      <enclosure type='application/octet-stream' sparkle:version='32' sparkle:shortVersionString='0.8.0' length='10313161' url='https://github.com/czechboy0/Buildasaur/releases/download/v0.8.0/Buildasaur.app.zip'/>
       <sparkle:minimumSystemVersion>10.11</sparkle:minimumSystemVersion>
     </item>
   </channel>
