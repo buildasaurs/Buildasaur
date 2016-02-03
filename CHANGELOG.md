@@ -1,5 +1,23 @@
 # Change Log
 
+## [Unreleased](https://github.com/czechboy0/buildasaur/tree/HEAD)
+
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.8.0...HEAD)
+
+**Closed issues:**
+
+- Create a Sparkle xml feed update fastlane action [\#228](https://github.com/czechboy0/Buildasaur/issues/228)
+- Add pushing to Cask into the Fastfile release lane [\#191](https://github.com/czechboy0/Buildasaur/issues/191)
+- Investigate opening a socket to the GitHub server [\#170](https://github.com/czechboy0/Buildasaur/issues/170)
+- Bitbucket Support [\#65](https://github.com/czechboy0/Buildasaur/issues/65)
+- Automatic updates [\#44](https://github.com/czechboy0/Buildasaur/issues/44)
+
+**Merged pull requests:**
+
+- Adding Sparkle autoupdater [\#230](https://github.com/czechboy0/Buildasaur/pull/230) ([czechboy0](https://github.com/czechboy0))
+- \[WIP\] Full BitBucket Support [\#217](https://github.com/czechboy0/Buildasaur/pull/217) ([czechboy0](https://github.com/czechboy0))
+- Developing 1.0 - Iris [\#214](https://github.com/czechboy0/Buildasaur/pull/214) ([czechboy0](https://github.com/czechboy0))
+
 ## [v0.8.0](https://github.com/czechboy0/buildasaur/tree/v0.8.0) (2016-01-28)
 [Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.6.5...v0.8.0)
 
@@ -9,14 +27,26 @@
 
 **Closed issues:**
 
+- Extend SwiftSafe to async ops, use it to synchronize HTTP server for refresh token bottleneck [\#220](https://github.com/czechboy0/Buildasaur/issues/220)
 - Put logs into a separate folder [\#202](https://github.com/czechboy0/Buildasaur/issues/202)
 - Add Crashlytics [\#198](https://github.com/czechboy0/Buildasaur/issues/198)
+- Introduce more state granularity when syncing [\#168](https://github.com/czechboy0/Buildasaur/issues/168)
 - Split logs into multiple files  [\#142](https://github.com/czechboy0/Buildasaur/issues/142)
+- Password Storage [\#137](https://github.com/czechboy0/Buildasaur/issues/137)
 - Request/response caching [\#62](https://github.com/czechboy0/Buildasaur/issues/62)
 
 **Merged pull requests:**
 
+- BitBucket pagination [\#224](https://github.com/czechboy0/Buildasaur/pull/224) ([czechboy0](https://github.com/czechboy0))
+- BitBucket posting comments [\#223](https://github.com/czechboy0/Buildasaur/pull/223) ([czechboy0](https://github.com/czechboy0))
+- BitBucket refresh token flow [\#222](https://github.com/czechboy0/Buildasaur/pull/222) ([czechboy0](https://github.com/czechboy0))
+- Most BitBucket entities [\#221](https://github.com/czechboy0/Buildasaur/pull/221) ([czechboy0](https://github.com/czechboy0))
+- \[WIP\] BitBucket entities [\#218](https://github.com/czechboy0/Buildasaur/pull/218) ([czechboy0](https://github.com/czechboy0))
+- BitBucket authentication [\#216](https://github.com/czechboy0/Buildasaur/pull/216) ([czechboy0](https://github.com/czechboy0))
+- Authentication refactoring [\#215](https://github.com/czechboy0/Buildasaur/pull/215) ([czechboy0](https://github.com/czechboy0))
 - Adding Crashlytics [\#210](https://github.com/czechboy0/Buildasaur/pull/210) ([czechboy0](https://github.com/czechboy0))
+- Storing credentials in Keychain [\#209](https://github.com/czechboy0/Buildasaur/pull/209) ([czechboy0](https://github.com/czechboy0))
+- Just moving files around... [\#207](https://github.com/czechboy0/Buildasaur/pull/207) ([czechboy0](https://github.com/czechboy0))
 - Added Builda's beautiful face to the main window! [\#204](https://github.com/czechboy0/Buildasaur/pull/204) ([czechboy0](https://github.com/czechboy0))
 - GitHub response caching [\#203](https://github.com/czechboy0/Buildasaur/pull/203) ([czechboy0](https://github.com/czechboy0))
 - Cap log file size at 10MB [\#201](https://github.com/czechboy0/Buildasaur/pull/201) ([accatyyc](https://github.com/accatyyc))
