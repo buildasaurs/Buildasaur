@@ -122,11 +122,11 @@ private_lane :zip_app_bundle do |params|
 end
 
 lane :build do
-  # TODO: fix for Developer-ID signing & exporting & crashlytics dSYM sending
   gym(
     scheme: 'Buildasaur',
     output_name: 'Buildasaur',
-    output_directory: './build'
+    output_directory: './build',
+    export_method: 'developer-id'
     )
 end
 
