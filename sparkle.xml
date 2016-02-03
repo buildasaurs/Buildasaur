@@ -6,13 +6,6 @@
     <description>Most recent changes with links to updates.</description>
     <language>en</language>
     <item>
-      <title>Version 0.8.0</title>
-      <sparkle:releaseNotesLink>https://github.com/czechboy0/Buildasaur/releases/tag/v0.8.0</sparkle:releaseNotesLink>
-      <pubDate>Thu, 28 Jan 2016 22:40:00 +0000</pubDate>
-      <enclosure type='application/octet-stream' sparkle:version='32' sparkle:shortVersionString='0.8.0' length='10313161' url='https://github.com/czechboy0/Buildasaur/releases/download/v0.8.0/Buildasaur.app.zip'/>
-      <sparkle:minimumSystemVersion>10.11</sparkle:minimumSystemVersion>
-    </item>
-    <item>
       <title>v1.0.0-b1 - First Beta of Iris</title>
       <sparkle:minimumSystemVersion>10.11</sparkle:minimumSystemVersion>
       <sparkle:releaseNotesLink>
@@ -20,13 +13,6 @@
       </sparkle:releaseNotesLink>
       <pubDate>Wed, 03 Feb 2016 17:08:34 +0000</pubDate>
       <enclosure type='application/octet-stream' sparkle:version='33' sparkle:shortVersionString='1.0.0-b1' length='11755070' url='https://github.com/czechboy0/Buildasaur/releases/download/v1.0.0-b1/Buildasaur.app.zip'/>
-    </item>
-    <item>
-      <title>v1.0.0-b2 - Test</title>
-      <sparkle:minimumSystemVersion>10.11</sparkle:minimumSystemVersion>
-      <sparkle:releaseNotesLink>https://honzadvorsky.com/Buildasaur/Sparkle_Release_Notes/v1.0.0-b2.html</sparkle:releaseNotesLink>
-      <pubDate>Wed, 03 Feb 2016 20:50:09 +0000</pubDate>
-      <enclosure type='application/octet-stream' sparkle:version='34' sparkle:shortVersionString='1.0.0-b2' length='11905523' url='https://github.com/czechboy0/Buildasaur/releases/download/v1.0.0-b2/Buildasaur.app.zip'/>
     </item>
   </channel>
 </rss>
