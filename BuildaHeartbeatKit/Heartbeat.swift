@@ -11,7 +11,7 @@ import ekgclient
 import BuildaUtils
 
 public protocol HeartbeatManagerDelegate {
-    func numberOfRunningSyncers() -> Int
+    func typesOfRunningSyncers() -> [String: Int]
 }
 
 //READ: https://github.com/czechboy0/Buildasaur/tree/master#heartpulse-heartbeat
@@ -22,6 +22,7 @@ public protocol HeartbeatManagerDelegate {
     private let client: EkgClient
     private let creationTime: Double
     private var timer: NSTimer?
+    private var initialTimer: NSTimer?
     private let interval: Double = 24 * 60 * 60 //send heartbeat once in 24 hours
     
     public init(server: String) {
@@ -69,18 +70,29 @@ public protocol HeartbeatManagerDelegate {
     
     private func sendHeartbeatEvent() {
         let uptime = NSDate().timeIntervalSince1970 - self.creationTime
-        let numberOfRunningSyncers = self.delegate?.numberOfRunningSyncers() ?? 0
-        self.sendEvent(HeartbeatEvent(uptime: uptime, numberOfRunningSyncers: numberOfRunningSyncers))
+        let typesOfRunningSyncers = self.delegate?.typesOfRunningSyncers() ?? [:]
+        self.sendEvent(HeartbeatEvent(uptime: uptime, typesOfRunningSyncers: typesOfRunningSyncers))
     }
     
     func _timerFired(timer: NSTimer?=nil) {
         self.sendHeartbeatEvent()
+        
+        if let initialTimer = self.initialTimer where initialTimer.valid {
+            initialTimer.invalidate()
+            self.initialTimer = nil
+        }
     }
     
     private func startSendingHeartbeat() {
         
-        //send once now
-        self._timerFired()
+        //send once in 10 seconds to give builda a chance to init and start
+        self.initialTimer?.invalidate()
+        self.initialTimer = NSTimer.scheduledTimerWithTimeInterval(
+            20,
+            target: self,
+            selector: "_timerFired:",
+            userInfo: nil,
+            repeats: false)
         
         self.timer?.invalidate()
         self.timer = NSTimer.scheduledTimerWithTimeInterval(
@@ -92,6 +104,6 @@ public protocol HeartbeatManagerDelegate {
     }
     
     private func stopSendingHeartbeat() {
-        timer?.invalidate()
+        self.timer?.invalidate()
     }
 }
