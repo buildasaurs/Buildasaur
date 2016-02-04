@@ -11,7 +11,7 @@ import Cocoa
 /*
 Please report any crashes on GitHub, I may optionally ask you to email them to me. Thanks!
 You can find them at ~/Library/Logs/DiagnosticReports/Buildasaur-*
-Also, you can find the log at ~/Library/Application Support/Buildasaur/Builda.log
+Also, you can find the logs at ~/Library/Application Support/Buildasaur/Logs
 */
 
 import BuildaUtils
@@ -42,8 +42,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         #else
             self.setup()
         #endif
-        
-        
     }
     
     func setup() {
@@ -110,7 +108,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let syncerManager = SyncerManager(storageManager: storageManager, factory: factory, loginItem: loginItem)
         self.syncerManager = syncerManager
         
-        if let heartbeatOptOut = storageManager.config.value["crash_reporting_opt_out"] as? Bool where heartbeatOptOut {
+        if let crashlyticsOptOut = storageManager.config.value["crash_reporting_opt_out"] as? Bool where crashlyticsOptOut {
             Log.info("User opted out of crash reporting")
         } else {
             #if DEBUG

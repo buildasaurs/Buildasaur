@@ -111,7 +111,13 @@ public class SyncerManager {
 }
 
 extension SyncerManager: HeartbeatManagerDelegate {
-    public func numberOfRunningSyncers() -> Int {
-        return self.syncers.filter { $0.active }.count
+    
+    public func typesOfRunningSyncers() -> [String : Int] {
+        return self.syncers.filter { $0.active }.reduce([:]) { (all, syncer) -> [String: Int] in
+            var stats = all
+            let syncerType = syncer._project.workspaceMetadata!.service.rawValue
+            stats[syncerType] = (stats[syncerType] ?? 0) + 1
+            return stats
+        }
     }
 }

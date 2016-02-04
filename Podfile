@@ -26,7 +26,7 @@ end
 def also_xcode_pods
     pods_for_errbody
     pod 'XcodeServerSDK', '~> 0.5.6'
-    pod 'ekgclient', '~> 0.3.0'
+    pod 'ekgclient', '~> 0.3.1'
 end
 
 def buildasaur_app_pods
