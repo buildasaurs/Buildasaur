@@ -201,7 +201,7 @@ private_lane :github do |params|
     tag_name: version_tag,
     description: description,
     is_draft: false,
-    is_prerelease: false
+    is_prerelease: true
   )
 
   # sh "cd .. && rm -rf build" #delete built ipa/app
