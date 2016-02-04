@@ -2,7 +2,28 @@
 
 ## [Unreleased](https://github.com/czechboy0/buildasaur/tree/HEAD)
 
-[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.8.0...HEAD)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v1.0.0-b1...HEAD)
+
+**Fixed bugs:**
+
+- Clean install prints errors on startup \(migration related\) [\#227](https://github.com/czechboy0/Buildasaur/issues/227)
+- Bugfix in migration [\#234](https://github.com/czechboy0/Buildasaur/pull/234) ([czechboy0](https://github.com/czechboy0))
+
+**Closed issues:**
+
+- Add types of used services to Heartbeat \(to better allocate time for features\) [\#219](https://github.com/czechboy0/Buildasaur/issues/219)
+- Update README [\#213](https://github.com/czechboy0/Buildasaur/issues/213)
+- Show on dashboard when a bot is erroring out [\#206](https://github.com/czechboy0/Buildasaur/issues/206)
+
+**Merged pull requests:**
+
+- Sparkle and Keychain fixes in development [\#235](https://github.com/czechboy0/Buildasaur/pull/235) ([czechboy0](https://github.com/czechboy0))
+- Syncer status UI improvements [\#233](https://github.com/czechboy0/Buildasaur/pull/233) ([czechboy0](https://github.com/czechboy0))
+- Added syncer types to heartbeat to know the github/bitbucket split [\#232](https://github.com/czechboy0/Buildasaur/pull/232) ([czechboy0](https://github.com/czechboy0))
+- Readme improvements for 1.0 [\#231](https://github.com/czechboy0/Buildasaur/pull/231) ([czechboy0](https://github.com/czechboy0))
+
+## [v1.0.0-b1](https://github.com/czechboy0/buildasaur/tree/v1.0.0-b1) (2016-02-03)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v0.8.0...v1.0.0-b1)
 
 **Closed issues:**
 
