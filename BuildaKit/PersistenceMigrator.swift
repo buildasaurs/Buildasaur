@@ -59,9 +59,17 @@ public class CompositeMigrator: MigratorType {
     }
     
     public func attemptMigration() throws {
-        try self.childMigrators
-            .filter { $0.isMigrationRequired() }
-            .forEach { try $0.attemptMigration() }
+        
+        //if we find a required migration, we need to also run all
+        //the ones that come after it
+        for (idx, mig) in self.childMigrators.enumerate() {
+            if mig.isMigrationRequired() {
+                let toRun = self.childMigrators.suffixFrom(idx)
+                print("Performing \(toRun.count) migrations")
+                try toRun.forEach { try $0.attemptMigration() }
+                break
+            }
+        }
     }
 }
 

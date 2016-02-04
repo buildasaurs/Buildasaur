@@ -269,7 +269,9 @@ public class Persistence {
             let contents = try self.fileManager.contentsOfDirectoryAtURL(folderUrl, includingPropertiesForKeys: nil, options: [.SkipsHiddenFiles, .SkipsSubdirectoryDescendants])
             return contents
         } catch {
-            Log.error("Couldn't read folder \(folderUrl), error \(error)")
+            if (error as NSError).code != 260 { //ignore not found errors
+                Log.error("Couldn't read folder \(folderUrl), error \(error)")
+            }
             return nil
         }
     }
