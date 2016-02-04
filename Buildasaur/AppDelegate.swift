@@ -34,6 +34,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var dashboardViewController: DashboardViewController?
     var dashboardWindow: NSWindow?
     var windows: Set<NSWindow> = []
+    var updater: SUUpdater!
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         
@@ -51,6 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         //        defs.setBool(true, forKey: "NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints")
         //        defs.synchronize()
         
+        self.setupSparkle()
         self.setupURLCallback()
         self.setupPersistence()
         
@@ -66,6 +68,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.dashboardWindow = self.windowForPresentableViewControllerWithIdentifier("dashboard")!.0
     }
     
+    func setupSparkle() {
+        #if RELEASE
+            self.updater = SUUpdater.sharedUpdater()
+        #endif
+    }
     
     func migratePersistence(persistence: Persistence) {
         
@@ -186,8 +193,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.dashboardWindow?.makeKeyAndOrderFront(self)
         }
     }
-    
-    @IBOutlet weak var updater: SUUpdater!
     
     //Sparkle magic
     func checkForUpdates(sender: AnyObject!) {
