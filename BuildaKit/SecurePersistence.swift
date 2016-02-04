@@ -17,7 +17,11 @@ final class SecurePersistence {
         typealias Keychain = NSMutableDictionary
     #endif
     
-    static let Prefix = "com.honzadvorsky.buildasaur"
+    #if RELEASE
+        static let Prefix = "com.honzadvorsky.buildasaur"
+    #else
+        static let Prefix = "com.honzadvorsky.buildasaur.debug"
+    #endif
     
     private let keychain: Keychain
     private let safe: Safe
