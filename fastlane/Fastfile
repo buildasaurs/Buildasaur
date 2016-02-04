@@ -147,6 +147,7 @@ private_lane :sparkle do |params|
   File.open(release_notes_html_path, "w") { |io| io.write(release_notes_html) }
   # Commit and push the changes
   Dir.chdir("../gh-pages") do
+    sh "git pull"
     sh "git add ."
     sh "git commit -m 'Added the release notes for #{params[:release_version_tag]}.'"
     sh "git push"
