@@ -19,7 +19,7 @@ public enum SyncerEventType {
     case DidStop
     
     case DidStartSyncing
-    case DidFinishSyncing
+    case DidFinishSyncing(ErrorType?)
     
     case DidEncounterError(ErrorType)
 }
@@ -53,7 +53,7 @@ class Trampoline: NSObject {
                 self.state.value = .DidStartSyncing
             } else if oldValue && !self.isSyncing {
                 self.lastSyncFinishedDate = NSDate()
-                self.state.value = .DidFinishSyncing
+                self.state.value = .DidFinishSyncing(self.lastSyncError)
             }
         }
     }

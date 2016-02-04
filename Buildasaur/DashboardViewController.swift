@@ -105,9 +105,9 @@ class DashboardViewController: PresentableViewController {
             self.showSyncerEditViewControllerWithTriplet($0.toEditable(), state: .Syncer)
         }
         self.syncerManager.syncersProducer.startWithNext { newSyncers in
-            self.syncerViewModels.value = newSyncers.map {
-                SyncerViewModel(syncer: $0, presentEditViewController: present)
-            }
+            self.syncerViewModels.value = newSyncers
+                .map { SyncerViewModel(syncer: $0, presentEditViewController: present) }
+                .sort { $0.0.initialProjectName < $0.1.initialProjectName }
             self.syncersTableView.reloadData()
         }
     }
