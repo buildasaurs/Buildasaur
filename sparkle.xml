@@ -9,7 +9,7 @@
       <title>v1.0.0-b1 - First Beta of Iris</title>
       <sparkle:minimumSystemVersion>10.11</sparkle:minimumSystemVersion>
       <sparkle:releaseNotesLink>
-        https://raw.githubusercontent.com/czechboy0/Buildasaur/master/Meta/Sparkle_Release_Notes/v1.0.0-b1.html 
+        https://honzadvorsky.com/Buildasaur/Sparkle_Release_Notes/v1.0.0-b1.html 
       </sparkle:releaseNotesLink>
       <pubDate>Wed, 03 Feb 2016 17:08:34 +0000</pubDate>
       <enclosure type='application/octet-stream' sparkle:version='33' sparkle:shortVersionString='1.0.0-b1' length='11755070' url='https://github.com/czechboy0/Buildasaur/releases/download/v1.0.0-b1/Buildasaur.app.zip'/>
