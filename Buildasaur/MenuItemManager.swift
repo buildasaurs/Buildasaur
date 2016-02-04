@@ -57,14 +57,11 @@ class MenuItemManager : NSObject, NSMenuDelegate {
         }
         
         //now we have the right number, update the data
-        let texts = syncers.map({ (syncer: StandardSyncer) -> String in
+        let texts = syncers
+            .sort { $0.project.serviceRepoName() < $1.project.serviceRepoName() }
+            .map({ (syncer: StandardSyncer) -> String in
             
-            let statusEmoji: String
-            if syncer.active {
-                statusEmoji = "✔️"
-            } else {
-                statusEmoji = "✖️"
-            }
+            let state = SyncerStatePresenter.stringForState(syncer.state.value, active: syncer.active)
             
             let repo: String
             if let repoName = syncer.project.serviceRepoName() {
@@ -77,10 +74,10 @@ class MenuItemManager : NSObject, NSMenuDelegate {
             if let lastSuccess = syncer.lastSuccessfulSyncFinishedDate where syncer.active {
                 time = "last synced \(lastSuccess.nicelyFormattedRelativeTimeToNow())"
             } else {
-                time = "is not active"
+                time = ""
             }
             
-            let report = "\(statusEmoji) \(repo) \(time)"
+            let report = "\(repo) \(state) \(time)"
             return report
         })
         

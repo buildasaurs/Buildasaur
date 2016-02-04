@@ -36,6 +36,7 @@ class SyncerViewController: ConfigEditViewController {
     @IBOutlet weak var statusTextField: NSTextField!
     @IBOutlet weak var startStopButton: NSButton!
     @IBOutlet weak var statusActivityIndicator: NSProgressIndicator!
+    @IBOutlet weak var stateLabel: NSTextField!
 
     @IBOutlet weak var xcodeServerNameLabel: NSTextField!
     @IBOutlet weak var projectNameLabel: NSTextField!
@@ -71,11 +72,18 @@ class SyncerViewController: ConfigEditViewController {
 
         self.editing <~ isSyncing.map { !$0 }
         
-        //when a new syncer comes in, rebind the isSyncing property
+        //when a new syncer comes in, rebind appropriate properties
         self.syncer.producer.startWithNext { [weak self] in
             guard let sself = self else { return }
             if let syncer = $0 {
                 sself.isSyncing <~ syncer.activeSignalProducer
+                
+                let stateString = combineLatest(
+                    syncer.state.producer,
+                    syncer.activeSignalProducer.producer
+                    ).map { SyncerStatePresenter.stringForState($0.0, active: $0.1) }
+                sself.stateLabel.rac_stringValue <~ stateString
+
             } else {
                 sself.isSyncing <~ ConstantProperty(false)
             }
