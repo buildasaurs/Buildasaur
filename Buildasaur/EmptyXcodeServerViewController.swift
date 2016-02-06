@@ -11,6 +11,7 @@ import BuildaKit
 import BuildaUtils
 import XcodeServerSDK
 import ReactiveCocoa
+import Result
 
 protocol EmptyXcodeServerViewControllerDelegate: class {
     func didSelectXcodeServerConfig(config: XcodeServerConfig)

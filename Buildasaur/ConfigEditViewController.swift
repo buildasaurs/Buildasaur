@@ -11,6 +11,7 @@ import BuildaUtils
 import XcodeServerSDK
 import BuildaKit
 import ReactiveCocoa
+import Result
 
 class ConfigEditViewController: EditableViewController {
     

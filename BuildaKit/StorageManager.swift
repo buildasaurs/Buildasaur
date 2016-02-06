@@ -10,6 +10,7 @@ import Foundation
 import BuildaUtils
 import XcodeServerSDK
 import ReactiveCocoa
+import Result
 import BuildaGitServer
 
 public enum StorageManagerError: ErrorType {

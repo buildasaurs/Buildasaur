@@ -10,6 +10,7 @@ import Foundation
 import BuildaUtils
 import Keys
 import ReactiveCocoa
+import Result
 
 public enum GitService: String {
     case GitHub = "github"

@@ -72,7 +72,7 @@ extension WorkspaceMetadata {
         //for SSH URLs we need to remove the git@ prefix to be properly parsable
         if urlString.hasPrefix("git@") {
             let s = urlString.startIndex
-            let range = Range<String.Index>(start: s, end: s.advancedBy(4))
+            let range = s ..< s.advancedBy(4)
             urlString = urlString.stringByReplacingCharactersInRange(range, withString: "")
         }
         

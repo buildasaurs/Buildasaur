@@ -98,8 +98,8 @@ public class Project {
                 
                 let start = githubRange.endIndex.advancedBy(1)
                 let end = dotGitRange.startIndex
-                
-                let repoName = originalStringUrl.substringWithRange(Range<String.Index>(start: start, end: end))
+            
+                let repoName = originalStringUrl[start ..< end]
                 return repoName
         }
         return nil

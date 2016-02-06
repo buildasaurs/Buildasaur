@@ -16,23 +16,23 @@ PODS:
   - Ji/Ji-libxml (1.2.0)
   - KeychainAccess (2.3.3)
   - Keys (1.0.0)
-  - Nimble (3.0.0)
+  - Nimble (3.1.0)
   - OAuthSwift (0.5.0)
-  - ReactiveCocoa (4.0.0-RC.1):
-    - ReactiveCocoa/UI (= 4.0.0-RC.1)
-    - Result (~> 1.0)
-  - ReactiveCocoa/Core (4.0.0-RC.1):
+  - ReactiveCocoa (4.0.1):
+    - ReactiveCocoa/UI (= 4.0.1)
+    - Result (~> 1.0.2)
+  - ReactiveCocoa/Core (4.0.1):
     - ReactiveCocoa/no-arc
-    - Result (~> 1.0)
-  - ReactiveCocoa/no-arc (4.0.0-RC.1):
-    - Result (~> 1.0)
-  - ReactiveCocoa/UI (4.0.0-RC.1):
+    - Result (~> 1.0.2)
+  - ReactiveCocoa/no-arc (4.0.1):
+    - Result (~> 1.0.2)
+  - ReactiveCocoa/UI (4.0.1):
     - ReactiveCocoa/Core
-    - Result (~> 1.0)
-  - Result (1.0.1)
+    - Result (~> 1.0.2)
+  - Result (1.0.2)
   - Sparkle (1.13.1)
   - SwiftSafe (0.1)
-  - XcodeServerSDK (0.5.6):
+  - XcodeServerSDK (0.5.7):
     - BuildaUtils (~> 0.2.3)
 
 DEPENDENCIES:
@@ -44,15 +44,23 @@ DEPENDENCIES:
   - Ji (~> 1.2.0)
   - KeychainAccess
   - Keys (from `Pods/CocoaPodsKeys`)
-  - Nimble (~> 3.0.0)
+  - Nimble (from `https://github.com/Quick/Nimble.git`, commit `b9256b0bdecc4ef1f659b7663dcd3aab6f43fb5f`)
   - OAuthSwift
-  - ReactiveCocoa (= 4.0.0-RC.1)
+  - ReactiveCocoa (~> 4.0.1)
   - Sparkle
-  - XcodeServerSDK (~> 0.5.6)
+  - XcodeServerSDK (~> 0.5.7)
 
 EXTERNAL SOURCES:
   Keys:
     :path: Pods/CocoaPodsKeys
+  Nimble:
+    :commit: b9256b0bdecc4ef1f659b7663dcd3aab6f43fb5f
+    :git: https://github.com/Quick/Nimble.git
+
+CHECKOUT OPTIONS:
+  Nimble:
+    :commit: b9256b0bdecc4ef1f659b7663dcd3aab6f43fb5f
+    :git: https://github.com/Quick/Nimble.git
 
 SPEC CHECKSUMS:
   Alamofire: 39dddb7d3725d1771b1d2f7099c8bd45bd83ffbb
@@ -65,14 +73,14 @@ SPEC CHECKSUMS:
   Ji: ddebb22f9ac445db6e884b66f78ea74fb135fdb7
   KeychainAccess: 9b7e49e48277e329b1b3195e54697ed313d30acf
   Keys: 9c35bf00f612ee1d48556f4a4b9b4551e224e90f
-  Nimble: 4c353d43735b38b545cbb4cb91504588eb5de926
+  Nimble: eb2a9b164b9a3f16df6581c692a0bfced7d072a4
   OAuthSwift: f2e0de083739da5697be095c9af2671242a4ed8b
-  ReactiveCocoa: 2b0f654beb7642b82cfd3fdb845205ae9889422c
-  Result: caef80340451e1f07492fa1e89117f83613bce24
+  ReactiveCocoa: f7011630aee4deeb16352fcb1b50d6bde9db4f90
+  Result: dd3dd71af3fa2e262f1a999e14fba2c25ec14f16
   Sparkle: 2fbd47b869621d1e679c7554e3e19dda02104818
   SwiftSafe: 77ffd12b02678790bec1ef56a2d14ec5036f1fd6
-  XcodeServerSDK: 6300badc4a799da9ad6e970b366eda18d4a47bda
+  XcodeServerSDK: 34e18e12f683fec69ad0a1897d1f5447a660a927
 
-PODFILE CHECKSUM: 719a0c9e06ae8dea3e42db2d1c92a2218365900c
+PODFILE CHECKSUM: 4d479fa3b979a6faa03462e751aa08a2b4774660
 
 COCOAPODS: 1.0.0.beta.3

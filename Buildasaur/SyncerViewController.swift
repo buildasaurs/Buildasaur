@@ -12,6 +12,7 @@ import BuildaUtils
 import XcodeServerSDK
 import BuildaKit
 import ReactiveCocoa
+import Result
 
 protocol SyncerViewControllerDelegate: class {
     

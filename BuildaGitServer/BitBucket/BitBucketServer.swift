@@ -9,6 +9,7 @@
 import Foundation
 import BuildaUtils
 import ReactiveCocoa
+import Result
 
 class BitBucketServer : GitServer {
     
