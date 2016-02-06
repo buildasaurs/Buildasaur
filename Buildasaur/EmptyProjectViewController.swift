@@ -9,6 +9,7 @@
 import Cocoa
 import BuildaKit
 import ReactiveCocoa
+import Result
 import BuildaUtils
 
 protocol EmptyProjectViewControllerDelegate: class {

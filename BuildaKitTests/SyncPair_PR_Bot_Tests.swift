@@ -16,12 +16,12 @@ import BuildaKit
 
 //for tuples, XCTAssert... doesn't work for them
 func XCTBAssertNil<T>(@autoclosure expression:  () -> T?, message: String = "Must be nil",
-    file: String = __FILE__, line: UInt = __LINE__) {
+    file: StaticString = __FILE__, line: UInt = __LINE__) {
     XCTAssert(expression() == nil, message, file:file, line:line);
 }
 
 func XCTBAssertNotNil<T>(@autoclosure expression:  () -> T?, message: String = "Must not be nil",
-    file: String = __FILE__, line: UInt = __LINE__) {
+    file: StaticString = __FILE__, line: UInt = __LINE__) {
         XCTAssert(expression() != nil, message, file:file, line:line);
 }
 

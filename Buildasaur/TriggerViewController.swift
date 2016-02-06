@@ -11,6 +11,7 @@ import XcodeServerSDK
 import BuildaUtils
 import BuildaKit
 import ReactiveCocoa
+import Result
 
 protocol TriggerViewControllerDelegate: class {
     func triggerViewControllerDidCancelEditingTrigger(trigger: TriggerConfig)

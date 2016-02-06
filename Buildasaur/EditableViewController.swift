@@ -10,6 +10,7 @@ import Cocoa
 import BuildaUtils
 import BuildaKit
 import ReactiveCocoa
+import Result
 
 class EditableViewController: NSViewController {
     

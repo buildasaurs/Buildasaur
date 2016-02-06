@@ -154,8 +154,7 @@ extension GitHubServer {
             //url
             var urlString = link[0].stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             if urlString.hasPrefix("<") && urlString.hasSuffix(">") {
-                urlString = urlString.substringWithRange(Range<String.Index>(start: urlString.startIndex.successor(),
-                    end: urlString.endIndex.predecessor()))
+                urlString = urlString[urlString.startIndex.successor() ..< urlString.endIndex.predecessor()]
             }
             
             //rel
@@ -167,8 +166,7 @@ extension GitHubServer {
             
             var relName = relComps[1]
             if relName.hasPrefix("\"") && relName.hasSuffix("\"") {
-                relName = relName.substringWithRange(Range<String.Index>(start: relName.startIndex.successor(),
-                    end: relName.endIndex.predecessor()))
+                relName = relName[relName.startIndex.successor() ..< relName.endIndex.predecessor()]
             }
             
             if

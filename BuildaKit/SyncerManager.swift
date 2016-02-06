@@ -8,6 +8,7 @@
 
 import Foundation
 import ReactiveCocoa
+import Result
 import XcodeServerSDK
 import BuildaHeartbeatKit
 import BuildaUtils

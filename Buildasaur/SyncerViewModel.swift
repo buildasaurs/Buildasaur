@@ -9,6 +9,7 @@
 import Foundation
 import BuildaKit
 import ReactiveCocoa
+import Result
 
 struct SyncerStatePresenter {
     

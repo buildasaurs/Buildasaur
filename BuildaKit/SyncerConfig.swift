@@ -14,7 +14,9 @@ public typealias RefType = String
 public struct Ref {
     static func new() -> RefType {
         #if TESTING
-            return testIds[(counter++) % testIds.count]
+            let ref = testIds[counter % testIds.count]
+            counter += 1
+            return ref
         #else
             return NSUUID().UUIDString
         #endif

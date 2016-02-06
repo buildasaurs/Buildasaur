@@ -8,6 +8,7 @@
 
 import Foundation
 import ReactiveCocoa
+import Result
 
 public protocol BuildStatusCreator {
     func createStatusFromState(state: BuildState, description: String?, targetUrl: String?) -> StatusType
