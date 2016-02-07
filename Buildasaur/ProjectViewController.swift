@@ -167,7 +167,7 @@ class ProjectViewController: ConfigEditViewController {
         let alreadyHasAuth = auth != nil
 
         switch service {
-        case .GitHub:
+        case .GitHub, .GitLab:
             if let auth = auth where auth.type == .PersonalToken && !auth.secret.isEmpty {
                 self.tokenTextField.stringValue = auth.secret
             } else {

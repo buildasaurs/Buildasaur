@@ -18,7 +18,6 @@ public protocol SourceServerType: BuildStatusCreator {
     
     func getBranchesOfRepo(repo: String, completion: (branches: [BranchType]?, error: ErrorType?) -> ())
     func getOpenPullRequests(repo: String, completion: (prs: [PullRequestType]?, error: ErrorType?) -> ())
-    func getPullRequest(pullRequestNumber: Int, repo: String, completion: (pr: PullRequestType?, error: ErrorType?) -> ())
     func getRepo(repo: String, completion: (repo: RepoType?, error: ErrorType?) -> ())
     func getStatusOfCommit(commit: String, repo: String, completion: (status: StatusType?, error: ErrorType?) -> ())
     func postStatusOfCommit(commit: String, status: StatusType, repo: String, completion: (status: StatusType?, error: ErrorType?) -> ())

@@ -1,0 +1,53 @@
+[
+    {
+        "name": "gitlab",
+        "commit": {
+            "id": "aa5dd9e3388252ccd783895cd9267060eb1a20e4",
+            "message": "blah\n",
+            "parent_ids": [
+                "0abe12ba02d80438f930b1eaa4557c6e0a82a163"
+            ],
+            "authored_date": "2015-07-25T11:59:54.000+01:00",
+            "author_name": "Honza Dvorsky",
+            "author_email": "honza@swiftkey.com",
+            "committed_date": "2015-07-25T11:59:54.000+01:00",
+            "committer_name": "Honza Dvorsky",
+            "committer_email": "honza@swiftkey.com"
+        },
+        "protected": false
+    },
+    {
+        "name": "master",
+        "commit": {
+            "id": "9c0a5ad540ce1ae440cabf097afc93163ee64f69",
+            "message": "enable code coverage\n",
+            "parent_ids": [
+                "124f872043d1af402310d8ed4ba330382373a90a"
+            ],
+            "authored_date": "2015-07-19T21:29:23.000+01:00",
+            "author_name": "Honza Dvorsky",
+            "author_email": "honza@swiftkey.com",
+            "committed_date": "2015-07-19T21:29:23.000+01:00",
+            "committer_name": "Honza Dvorsky",
+            "committer_email": "honza@swiftkey.com"
+        },
+        "protected": false
+    },
+    {
+        "name": "test_branch",
+        "commit": {
+            "id": "124f872043d1af402310d8ed4ba330382373a90a",
+            "message": "adding shared scheme\n",
+            "parent_ids": [
+                "f7e7eda3055ead6e496936904859fde32c096f15"
+            ],
+            "authored_date": "2015-07-19T19:33:59.000+01:00",
+            "author_name": "Honza Dvorsky",
+            "author_email": "honza@swiftkey.com",
+            "committed_date": "2015-07-19T19:33:59.000+01:00",
+            "committer_name": "Honza Dvorsky",
+            "committer_email": "honza@swiftkey.com"
+        },
+        "protected": false
+    }
+]

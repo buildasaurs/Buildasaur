@@ -63,30 +63,6 @@ class BitBucketServerTests: XCTestCase {
         self.waitForExpectationsWithTimeout(10, handler: nil)
     }
     
-    func testGetPullRequest() {
-        
-        self.prepServerWithName("bitbucket_get_pr")
-        
-        let exp = self.expectationWithDescription("Waiting for url request")
-        
-        self.bitbucket.getPullRequest(4, repo: "honzadvorsky/buildasaur-tester") { (pr, error) -> () in
-            
-            expect(error).to(beNil())
-            guard let pr = pr else { fail(); return }
-            
-            expect(pr.title) == "README.md edited online with Bitbucket"
-            expect(pr.number) == 4
-            expect(pr.baseName) == "czechboy0-patch-6"
-            expect(pr.headCommitSHA) == "787ce956a784"
-            expect(pr.headName) == "honzadvorsky/readmemd-edited-online-with-bitbucket-1453476305123"
-            expect(pr.headRepo.originUrlSSH) == "git@bitbucket.org:honzadvorsky/buildasaur-tester.git"
-            
-            exp.fulfill()
-        }
-        
-        self.waitForExpectationsWithTimeout(10, handler: nil)
-    }
-    
     func testGetRepo() {
         
         self.prepServerWithName("bitbucket_get_repo")

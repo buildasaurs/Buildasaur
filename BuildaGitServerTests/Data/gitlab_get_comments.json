@@ -1,0 +1,59 @@
+[
+    {
+        "id": 3600486,
+        "body": "thumbsup",
+        "attachment": null,
+        "author": {
+            "name": "Honza Dvorsky",
+            "username": "czechboy0",
+            "id": 201028,
+            "state": "active",
+            "avatar_url": "https://secure.gravatar.com/avatar/bc38aef146f886571b3c445851add884?s=80&d=identicon",
+            "web_url": "https://gitlab.com/u/czechboy0"
+        },
+        "created_at": "2016-02-07T20:01:53.502Z",
+        "system": false,
+        "noteable_id": 116989,
+        "noteable_type": "MergeRequest",
+        "upvote": true,
+        "downvote": false
+    },
+    {
+        "id": 3600484,
+        "body": "Hello *world*",
+        "attachment": null,
+        "author": {
+            "name": "Honza Dvorsky",
+            "username": "czechboy0",
+            "id": 201028,
+            "state": "active",
+            "avatar_url": "https://secure.gravatar.com/avatar/bc38aef146f886571b3c445851add884?s=80&d=identicon",
+            "web_url": "https://gitlab.com/u/czechboy0"
+        },
+        "created_at": "2016-02-07T20:01:32.104Z",
+        "system": false,
+        "noteable_id": 116989,
+        "noteable_type": "MergeRequest",
+        "upvote": false,
+        "downvote": false
+    },
+    {
+        "id": 1684646,
+        "body": "This is a comment 1",
+        "attachment": null,
+        "author": {
+            "name": "Honza Dvorsky",
+            "username": "czechboy0",
+            "id": 201028,
+            "state": "active",
+            "avatar_url": "https://secure.gravatar.com/avatar/bc38aef146f886571b3c445851add884?s=80&d=identicon",
+            "web_url": "https://gitlab.com/u/czechboy0"
+        },
+        "created_at": "2015-07-25T11:02:05.531Z",
+        "system": false,
+        "noteable_id": 116989,
+        "noteable_type": "MergeRequest",
+        "upvote": false,
+        "downvote": false
+    }
+]

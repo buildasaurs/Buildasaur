@@ -46,7 +46,9 @@ private_lane :inject_dummy_credentials do
       'GitHubAPIClientId', 
       'GitHubAPIClientSecret',
       'BitBucketAPIClientId',
-      'BitBucketAPIClientSecret'
+      'BitBucketAPIClientSecret',
+      'GitLabAPIClientId',
+      'GitLabAPIClientSecret'
     ]
     commands = keys.map { |key|
       begin

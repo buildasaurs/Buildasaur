@@ -24,6 +24,9 @@ class GitServerFactory {
             let baseURL = "https://api.bitbucket.org"
             let endpoints = BitBucketEndpoints(baseURL: baseURL, auth: auth)
             server = BitBucketServer(endpoints: endpoints, http: http)
+        case .GitLab:
+            let baseURL = "https://gitlab.com/api/v3"
+            fatalError("GitLab server not yet implemented")
         }
         
         return server

@@ -15,12 +15,13 @@ import Result
 public enum GitService: String {
     case GitHub = "github"
     case BitBucket = "bitbucket"
-//    case GitLab = "gitlab"
+    case GitLab = "gitlab"
     
     public func prettyName() -> String {
         switch self {
         case .GitHub: return "GitHub"
         case .BitBucket: return "BitBucket"
+        case .GitLab: return "GitLab"
         }
     }
     
@@ -28,6 +29,7 @@ public enum GitService: String {
         switch self {
         case .GitHub: return "github"
         case .BitBucket: return "bitbucket"
+        case .GitLab: return "gitlab"
         }
     }
     
@@ -35,6 +37,7 @@ public enum GitService: String {
         switch self {
         case .GitHub: return "github.com"
         case .BitBucket: return "bitbucket.org"
+        case .GitLab: return "gitlab.com"
         }
     }
     
@@ -42,6 +45,7 @@ public enum GitService: String {
         switch self {
         case .GitHub: return "https://github.com/login/oauth/authorize"
         case .BitBucket: return "https://bitbucket.org/site/oauth2/authorize"
+        case .GitLab: return "https://gitlab.com/oauth/authorize"
         }
     }
     
@@ -49,6 +53,7 @@ public enum GitService: String {
         switch self {
         case .GitHub: return "https://github.com/login/oauth/access_token"
         case .BitBucket: return "https://bitbucket.org/site/oauth2/access_token"
+        case .GitLab: return "https://gitlab.com/oauth/token"
         }
     }
     
@@ -56,6 +61,7 @@ public enum GitService: String {
         switch self {
         case .GitHub: return BuildasaurKeys().gitHubAPIClientId()
         case .BitBucket: return BuildasaurKeys().bitBucketAPIClientId()
+        case .GitLab: return BuildasaurKeys().gitLabAPIClientId()
         }
     }
     
@@ -63,6 +69,7 @@ public enum GitService: String {
         switch self {
         case .GitHub: return BuildasaurKeys().gitHubAPIClientSecret()
         case .BitBucket: return BuildasaurKeys().bitBucketAPIClientSecret()
+        case .GitLab: return BuildasaurKeys().gitLabAPIClientSecret()
         }
     }
 }
