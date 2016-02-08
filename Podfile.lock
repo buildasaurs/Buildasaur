@@ -6,7 +6,7 @@ PODS:
     - Fabric (~> 1.6.3)
   - CryptoSwift (0.2.2)
   - DVR (0.2.1-snap1)
-  - ekgclient (0.3.1):
+  - ekgclient (0.3.2):
     - Alamofire (= 2.0.0-beta.3)
   - Fabric (1.6.4)
   - Ji (1.2.0):
@@ -40,7 +40,7 @@ DEPENDENCIES:
   - Crashlytics
   - CryptoSwift
   - DVR (~> 0.2.1-snap1)
-  - ekgclient (~> 0.3.1)
+  - ekgclient (~> 0.3.2)
   - Ji (~> 1.2.0)
   - KeychainAccess
   - Keys (from `Pods/CocoaPodsKeys`)
@@ -68,7 +68,7 @@ SPEC CHECKSUMS:
   Crashlytics: e4e8d02914f2608fbc7bf42b1a7af838b0db67a2
   CryptoSwift: d382228d6301c09474132417878a741c2a2e68cd
   DVR: 05cb292d3f71608e0a35afa85d475cbb56e37132
-  ekgclient: b9b0bddb882e281ced9178ead22e796619a9e9e2
+  ekgclient: 615e09c9193ea1fa1ef2850863a97a218b161aa4
   Fabric: ed41fd62173c6bdea24ab02c9d7707161eabb750
   Ji: ddebb22f9ac445db6e884b66f78ea74fb135fdb7
   KeychainAccess: 9b7e49e48277e329b1b3195e54697ed313d30acf
@@ -81,6 +81,6 @@ SPEC CHECKSUMS:
   SwiftSafe: 77ffd12b02678790bec1ef56a2d14ec5036f1fd6
   XcodeServerSDK: 34e18e12f683fec69ad0a1897d1f5447a660a927
 
-PODFILE CHECKSUM: 4d479fa3b979a6faa03462e751aa08a2b4774660
+PODFILE CHECKSUM: 47dfc44995c8dd4b0d70371531ae9e3eac1d991e
 
 COCOAPODS: 1.0.0.beta.3

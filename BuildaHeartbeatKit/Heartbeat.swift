@@ -53,6 +53,10 @@ public protocol HeartbeatManagerDelegate {
         self.stopSendingHeartbeat()
     }
     
+    public func willInstallSparkleUpdate() {
+        self.sendEvent(UpdateEvent())
+    }
+    
     private func sendEvent(event: Event) {
         
         Log.info("Sending heartbeat event \(event.jsonify())")
