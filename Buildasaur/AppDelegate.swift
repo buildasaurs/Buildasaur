@@ -34,7 +34,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var dashboardViewController: DashboardViewController?
     var dashboardWindow: NSWindow?
     var windows: Set<NSWindow> = []
-    var updater: SUUpdater!
+    var updater: SUUpdater?
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         
@@ -196,7 +196,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     //Sparkle magic
     func checkForUpdates(sender: AnyObject!) {
-        self.updater.checkForUpdates(sender)
+        self.updater?.checkForUpdates(sender)
     }
 }
 
