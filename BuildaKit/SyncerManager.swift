@@ -31,7 +31,7 @@ public class SyncerManager {
     
     public var syncers: [StandardSyncer]
     private var configTriplets: SignalProducer<[ConfigTriplet], NoError>
-    private var heartbeatManager: HeartbeatManager!
+    public var heartbeatManager: HeartbeatManager?
 
     public init(storageManager: StorageManager, factory: SyncerFactoryType, loginItem: LoginItem) {
         
@@ -67,8 +67,8 @@ public class SyncerManager {
         } else {
             Log.info("Will send anonymous heartbeat. To opt out add `\"heartbeat_opt_out\" = true` to ~/Library/Application Support/Buildasaur/Config.json")
             self.heartbeatManager = HeartbeatManager(server: "https://builda-ekg.herokuapp.com")
-            self.heartbeatManager.delegate = self
-            self.heartbeatManager.start()
+            self.heartbeatManager!.delegate = self
+            self.heartbeatManager!.start()
         }
     }
     

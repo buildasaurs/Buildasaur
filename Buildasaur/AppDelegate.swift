@@ -71,6 +71,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func setupSparkle() {
         #if RELEASE
             self.updater = SUUpdater.sharedUpdater()
+            self.updater!.delegate = self
         #endif
     }
     
@@ -188,7 +189,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         NSApp.activateIgnoringOtherApps(true)
         
-        //first window. i wish there was a nicer way (please some tell me there is)
+        //first window. i wish there was a nicer way (please someone tell me there is)
         if NSApp.windows.count < 3 {
             self.dashboardWindow?.makeKeyAndOrderFront(self)
         }
@@ -197,6 +198,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     //Sparkle magic
     func checkForUpdates(sender: AnyObject!) {
         self.updater?.checkForUpdates(sender)
+    }
+}
+
+extension AppDelegate: SUUpdaterDelegate {
+    
+    func updater(updater: SUUpdater!, willInstallUpdate item: SUAppcastItem!) {
+        self.syncerManager.heartbeatManager?.willInstallSparkleUpdate()
     }
 }
 
