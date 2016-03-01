@@ -78,9 +78,11 @@ extension WorkspaceMetadata {
         
         let scheme = NSURL(string: urlString)!.scheme
         switch scheme {
-        case "github.com":
+        case GitService.GitHub.hostname():
             return (CheckoutType.SSH, .GitHub)
-        case "bitbucket.org":
+        case GitService.EnterpriseGitHub.hostname():
+            return (CheckoutType.SSH, .EnterpriseGitHub)
+        case GitService.BitBucket.hostname():
             return (CheckoutType.SSH, .BitBucket)
         case "https":
             

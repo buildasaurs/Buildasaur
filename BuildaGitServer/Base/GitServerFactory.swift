@@ -8,6 +8,7 @@
 
 import Foundation
 import BuildaUtils
+import Keys
 
 class GitServerFactory {
     
@@ -16,6 +17,10 @@ class GitServerFactory {
         let server: SourceServerType
         
         switch service {
+        case .EnterpriseGitHub:
+            let baseURL = "https://\(BuildasaurxcodeprojKeys().enterpriseGitHubAPIPath())"
+            let endpoints = GitHubEndpoints(baseURL: baseURL, auth: auth)
+            server = GitHubServer(endpoints: endpoints, http: http)
         case .GitHub:
             let baseURL = "https://api.github.com"
             let endpoints = GitHubEndpoints(baseURL: baseURL, auth: auth)

@@ -14,11 +14,13 @@ import BuildaUtils
 class GitHubSourceTests: XCTestCase {
 
     var github: GitHubServer!
+    var enterpriseGithub: GitHubServer!
 
     override func setUp() {
         super.setUp()
 
         self.github = GitServerFactory.server(.GitHub, auth: nil) as! GitHubServer
+        self.enterpriseGithub = GitServerFactory.server(.EnterpriseGitHub, auth: nil) as! GitHubServer
     }
     
     override func tearDown() {
@@ -42,7 +44,22 @@ class GitHubSourceTests: XCTestCase {
         
         waitForExpectationsWithTimeout(10, handler: nil)
     }
+
+    func tryEnterpriseEndpoint(method: HTTP.Method, endpoint: GitHubEndpoints.Endpoint, params: [String: String]?, completion: (body: AnyObject!, error: NSError!) -> ()) {
+
+        let expect = expectationWithDescription("Waiting for url request")
+
+        let request = try! self.enterpriseGithub.endpoints.createRequest(method, endpoint: endpoint, params: params)
+
+        self.enterpriseGithub.http.sendRequest(request, completion: { (response, body, error) -> () in
     
+            completion(body: body, error: error)
+            expect.fulfill()
+        })
+
+        waitForExpectationsWithTimeout(10, handler: nil)
+    }
+
     func testGetPullRequests() {
         
         let params = [
@@ -61,7 +78,26 @@ class GitHubSourceTests: XCTestCase {
             }
         }
     }
-    
+
+//    func testEnterpriseGetPullRequests() {
+//
+//        let params = [
+//            "repo": ""
+//        ]
+//
+//        self.tryEnterpriseEndpoint(.GET, endpoint: .PullRequests, params: params) { (body, error) -> () in
+//
+//            XCTAssertNotNil(body, "Body must be non-nil")
+//            if let body = body as? NSArray {
+//                let prs: [GitHubPullRequest] = GitHubArray(body)
+//                XCTAssertGreaterThan(prs.count, 0, "We need > 0 items to test parsing")
+//                Log.verbose("Parsed PRs: \(prs)")
+//            } else {
+//                XCTFail("Body nil")
+//            }
+//        }
+//    }
+
     func testGetBranches() {
         
         let params = [
@@ -80,6 +116,25 @@ class GitHubSourceTests: XCTestCase {
             }
         }
     }
+
+//    func testEnterpriseGetBranches() {
+//
+//        let params = [
+//            "repo": ""
+//        ]
+//
+//        self.tryEnterpriseEndpoint(.GET, endpoint: .Branches, params: params) { (body, error) -> () in
+//
+//            XCTAssertNotNil(body, "Body must be non-nil")
+//            if let body = body as? NSArray {
+//                let branches: [GitHubBranch] = GitHubArray(body)
+//                XCTAssertGreaterThan(branches.count, 0, "We need > 0 items to test parsing")
+//                Log.verbose("Parsed branches: \(branches)")
+//            } else {
+//                XCTFail("Body nil")
+//            }
+//        }
+//    }
 
     //manual parsing tested here, sort of a documentation as well
     
