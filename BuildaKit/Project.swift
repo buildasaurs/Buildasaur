@@ -93,8 +93,8 @@ public class Project {
         */
         
         let serviceUrl = service.hostname().lowercaseString
-        if let githubRange = stringUrl.rangeOfString(serviceUrl, options: NSStringCompareOptions(), range: nil, locale: nil),
-            let dotGitRange = stringUrl.rangeOfString(".git", options: NSStringCompareOptions.BackwardsSearch, range: nil, locale: nil) {
+        let dotGitRange = stringUrl.rangeOfString(".git", options: NSStringCompareOptions.BackwardsSearch, range: nil, locale: nil) ?? Range(start: stringUrl.endIndex, end: stringUrl.endIndex)
+        if let githubRange = stringUrl.rangeOfString(serviceUrl, options: NSStringCompareOptions(), range: nil, locale: nil){
                 
                 let start = githubRange.endIndex.advancedBy(1)
                 let end = dotGitRange.startIndex
