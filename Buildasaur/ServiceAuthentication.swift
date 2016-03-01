@@ -66,6 +66,8 @@ class ServiceAuthenticator {
         switch service {
         case .GitHub:
             return self.getGitHubParameters()
+        case .EnterpriseGitHub:
+            return self.getEnterpriseGitHubParameters()
         case .BitBucket:
             return self.getBitBucketParameters()
 //        default:
@@ -73,6 +75,25 @@ class ServiceAuthenticator {
         }
     }
     
+    private func getEnterpriseGitHubParameters() -> ([ParamKey: String], SecretFromResponseParams) {
+        let service = GitService.EnterpriseGitHub
+        let params: [ParamKey: String] = [
+            .ConsumerId: service.serviceKey(),
+            .ConsumerSecret: service.serviceSecret(),
+            .AuthorizeUrl: service.authorizeUrl(),
+            .AccessTokenUrl: service.accessTokenUrl(),
+            .ResponseType: "code",
+            .CallbackUrl: "buildasaur://oauth-callback/github",
+            .Scope: "repo",
+            .State: generateStateWithLength(20) as String
+        ]
+        let secret: SecretFromResponseParams = {
+            //just pull out the access token, that's all we need
+            return $0["access_token"]!
+        }
+        return (params, secret)
+    }
+
     private func getGitHubParameters() -> ([ParamKey: String], SecretFromResponseParams) {
         let service = GitService.GitHub
         let params: [ParamKey: String] = [
@@ -91,7 +112,7 @@ class ServiceAuthenticator {
         }
         return (params, secret)
     }
-    
+
     private func getBitBucketParameters() -> ([ParamKey: String], SecretFromResponseParams) {
         let service = GitService.BitBucket
         let params: [ParamKey: String] = [

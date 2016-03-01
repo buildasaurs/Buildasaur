@@ -174,6 +174,13 @@ class ProjectViewController: ConfigEditViewController {
                 self.tokenTextField.stringValue = ""
             }
             self.useTokenButton.hidden = alreadyHasAuth
+        case .EnterpriseGitHub:
+            if let auth = auth where auth.type == .PersonalToken && !auth.secret.isEmpty {
+                self.tokenTextField.stringValue = auth.secret
+            } else {
+                self.tokenTextField.stringValue = ""
+            }
+            self.useTokenButton.hidden = alreadyHasAuth
         case .BitBucket:
             self.useTokenButton.hidden = true
         }

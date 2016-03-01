@@ -43,8 +43,12 @@ end
 
 private_lane :inject_dummy_credentials do
     keys = [
-      'GitHubAPIClientId', 
+      'GitHubAPIClientId',
       'GitHubAPIClientSecret',
+      'EnterpriseGitHubHostname',
+      'EnterpriseGitHubAPIPath',
+      'EnterpriseGitHubAPIClientId',
+      'EnterpriseGitHubAPIClientSecret',
       'BitBucketAPIClientId',
       'BitBucketAPIClientSecret'
     ]

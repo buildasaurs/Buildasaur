@@ -81,6 +81,4 @@ SPEC CHECKSUMS:
   SwiftSafe: 77ffd12b02678790bec1ef56a2d14ec5036f1fd6
   XcodeServerSDK: c8ab7afc40cd7eedee41ef6bc0abfd2687aff115
 
-PODFILE CHECKSUM: 6ad46ead67ccbcc642faf2bcb006f3ddabd3ccba
-
 COCOAPODS: 1.0.0.beta.4
