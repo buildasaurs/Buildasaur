@@ -18,7 +18,7 @@ class GitServerFactory {
         
         switch service {
         case .EnterpriseGitHub:
-            let baseURL = "https://\(BuildasaurxcodeprojKeys().enterpriseGitHubAPIPath())"
+            let baseURL = "https://\(BuildasaurKeys().enterpriseGitHubAPIPath())"
             let endpoints = GitHubEndpoints(baseURL: baseURL, auth: auth)
             server = GitHubServer(endpoints: endpoints, http: http)
         case .GitHub:

@@ -37,7 +37,7 @@ public enum GitService: String {
     public func hostname() -> String {
         switch self {
         case .GitHub: return "github.com"
-        case .EnterpriseGitHub: return BuildasaurxcodeprojKeys().enterpriseGitHubHostname()
+        case .EnterpriseGitHub: return BuildasaurKeys().enterpriseGitHubHostname()
         case .BitBucket: return "bitbucket.org"
         }
     }
@@ -60,17 +60,17 @@ public enum GitService: String {
     
     public func serviceKey() -> String {
         switch self {
-        case .GitHub: return BuildasaurxcodeprojKeys().gitHubAPIClientId()
-        case .EnterpriseGitHub: return BuildasaurxcodeprojKeys().enterpriseGitHubAPIClientId()
-        case .BitBucket: return BuildasaurxcodeprojKeys().bitBucketAPIClientId()
+        case .GitHub: return BuildasaurKeys().gitHubAPIClientId()
+        case .EnterpriseGitHub: return BuildasaurKeys().enterpriseGitHubAPIClientId()
+        case .BitBucket: return BuildasaurKeys().bitBucketAPIClientId()
         }
     }
     
     public func serviceSecret() -> String {
         switch self {
-        case .GitHub: return BuildasaurxcodeprojKeys().gitHubAPIClientSecret()
-        case .EnterpriseGitHub: return BuildasaurxcodeprojKeys().enterpriseGitHubAPIClientSecret()
-        case .BitBucket: return BuildasaurxcodeprojKeys().bitBucketAPIClientSecret()
+        case .GitHub: return BuildasaurKeys().gitHubAPIClientSecret()
+        case .EnterpriseGitHub: return BuildasaurKeys().enterpriseGitHubAPIClientSecret()
+        case .BitBucket: return BuildasaurKeys().bitBucketAPIClientSecret()
         }
     }
 }
