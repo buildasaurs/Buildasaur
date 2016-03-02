@@ -9,7 +9,7 @@
 import Foundation
 
 protocol GitHubType {
-    init(json: NSDictionary)
+    init(json: NSDictionary) throws
 }
 
 class GitHubEntity : GitHubType {
@@ -19,7 +19,7 @@ class GitHubEntity : GitHubType {
     let id: Int?
     
     //initializer which takes a dictionary and fills in values for recognized keys
-    required init(json: NSDictionary) {
+    required init(json: NSDictionary) throws {
         
         self.htmlUrl = json.optionalStringForKey("html_url")
         self.url = json.optionalStringForKey("url")
@@ -37,9 +37,9 @@ class GitHubEntity : GitHubType {
         return NSDictionary()
     }
     
-    class func optional<T: GitHubEntity>(json: NSDictionary?) -> T? {
+    class func optional<T: GitHubEntity>(json: NSDictionary?) throws -> T? {
         if let json = json {
-            return T(json: json)
+            return try T(json: json)
         }
         return nil
     }
@@ -47,12 +47,12 @@ class GitHubEntity : GitHubType {
 }
 
 //parse an array of dictionaries into an array of parsed entities
-func GitHubArray<T where T: GitHubType>(jsonArray: NSArray!) -> [T] {
+func GitHubArray<T where T: GitHubType>(jsonArray: NSArray!) throws -> [T] {
     
-    let array = jsonArray as! [NSDictionary]!
-    let parsed = array.map {
+    let array = jsonArray as! [NSDictionary]
+    let parsed = try array.map {
         (json: NSDictionary) -> (T) in
-        return T(json: json)
+        return try T(json: json)
     }
     return parsed
 }

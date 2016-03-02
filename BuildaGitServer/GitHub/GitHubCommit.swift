@@ -13,11 +13,11 @@ class GitHubCommit : GitHubEntity {
     
     let sha: String
 
-    required init(json: NSDictionary) {
+    required init(json: NSDictionary) throws {
         
         self.sha = json.stringForKey("sha")
         
-        super.init(json: json)
+        try super.init(json: json)
     }
 }
 

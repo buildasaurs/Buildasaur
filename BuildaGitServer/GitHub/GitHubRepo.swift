@@ -18,7 +18,7 @@ class GitHubRepo : GitHubEntity {
     
     var latestRateLimitInfo: RateLimitType?
     
-    required init(json: NSDictionary) {
+    required init(json: NSDictionary) throws {
 
         self.name = json.stringForKey("name")
         self.fullName = json.stringForKey("full_name")
@@ -31,7 +31,7 @@ class GitHubRepo : GitHubEntity {
             self.permissionsDict = NSDictionary()
         }
         
-        super.init(json: json)
+        try super.init(json: json)
     }
 }
 

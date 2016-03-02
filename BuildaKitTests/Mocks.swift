@@ -28,7 +28,7 @@ class MockGitHubServer: GitHubServer {
 
 class MockProject: Project {
     init() {
-        let path: String = __FILE__
+        let path: String = #file
         let folder = (path as NSString).stringByDeletingLastPathComponent
         let testProject = "\(folder)/TestProjects/Buildasaur-TestProject-iOS/Buildasaur-TestProject-iOS.xcworkspace"
         var config = ProjectConfig()
@@ -57,11 +57,11 @@ class MockRepo: GitHubRepo {
     }
     
     convenience init() {
-        self.init(json: MockRepo.mockDictionary())
+        try! self.init(json: MockRepo.mockDictionary())
     }
     
-    required init(json: NSDictionary) {
-        super.init(json: json)
+    required init(json: NSDictionary) throws {
+        try super.init(json: json)
     }
 }
 
@@ -77,11 +77,11 @@ class MockBranch: GitHubBranch {
     }
     
     convenience init(name: String = "master", sha: String = "1234f") {
-        self.init(json: MockBranch.mockDictionary(name, sha: sha))
+        try! self.init(json: MockBranch.mockDictionary(name, sha: sha))
     }
     
-    required init(json: NSDictionary) {
-        super.init(json: json)
+    required init(json: NSDictionary) throws {
+        try super.init(json: json)
     }
 }
 
@@ -96,11 +96,11 @@ class MockPullRequestBranch: GitHubPullRequestBranch {
     }
     
     convenience init() {
-        self.init(json: MockPullRequestBranch.mockDictionary())
+        try! self.init(json: MockPullRequestBranch.mockDictionary())
     }
     
-    required init(json: NSDictionary) {
-        super.init(json: json)
+    required init(json: NSDictionary) throws {
+        try super.init(json: json)
     }
 }
 
@@ -115,11 +115,11 @@ class MockIssue: GitHubIssue {
     }
     
     convenience init() {
-        self.init(json: MockIssue.mockDictionary())
+        try! self.init(json: MockIssue.mockDictionary())
     }
     
-    required init(json: NSDictionary) {
-        super.init(json: json)
+    required init(json: NSDictionary) throws {
+        try super.init(json: json)
     }
 }
 
@@ -148,11 +148,11 @@ class MockPullRequest: GitHubPullRequest {
     }
     
     convenience init(number: Int = 1, title: String = "PR title") {
-        self.init(json: MockPullRequest.mockDictionary(number, title: title))
+        try! self.init(json: MockPullRequest.mockDictionary(number, title: title))
     }
 
-    required init(json: NSDictionary) {
-        super.init(json: json)
+    required init(json: NSDictionary) throws {
+        try super.init(json: json)
     }
 }
 

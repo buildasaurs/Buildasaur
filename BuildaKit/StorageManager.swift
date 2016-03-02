@@ -180,7 +180,8 @@ public class StorageManager {
         let passphraseKeychain = self.passphraseKeychain
         self.projectConfigs.value = allProjects
             .map {
-                (var p: ProjectConfig) -> ProjectConfig in
+                (_p: ProjectConfig) -> ProjectConfig in
+                var p = _p
                 var auth: ProjectAuthenticator?
                 if let val = tokenKeychain.read(p.keychainKey()) {
                     auth = try? ProjectAuthenticator.fromString(val)
@@ -195,7 +196,8 @@ public class StorageManager {
         let xcsConfigKeychain = self.serverConfigKeychain
         self.serverConfigs.value = allServerConfigs
             .map {
-                (var x: XcodeServerConfig) -> XcodeServerConfig in
+                (_x: XcodeServerConfig) -> XcodeServerConfig in
+                var x = _x
                 x.password = xcsConfigKeychain.read(x.keychainKey())
                 return x
             }.dictionarifyWithKey { $0.id }
