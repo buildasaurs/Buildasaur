@@ -56,7 +56,7 @@ class GitHubStatus : GitHubEntity {
     let created: String?
     let creator: GitHubUser?
 
-    required init(json: NSDictionary) {
+    required init(json: NSDictionary) throws {
         
         self.githubState = GitHubState(rawValue: json.stringForKey("state"))!
         self.description = json.optionalStringForKey("description")
@@ -64,12 +64,12 @@ class GitHubStatus : GitHubEntity {
         self.context = json.optionalStringForKey("context")
         self.created = json.optionalStringForKey("created_at")
         if let creator = json.optionalDictionaryForKey("creator") {
-            self.creator = GitHubUser(json: creator)
+            self.creator = try GitHubUser(json: creator)
         } else {
             self.creator = nil
         }
         
-        super.init(json: json)
+        try super.init(json: json)
     }
     
     init(state: GitHubState, description: String?, targetUrl: String?, context: String?) {

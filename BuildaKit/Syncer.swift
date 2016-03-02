@@ -61,7 +61,7 @@ class Trampoline: NSObject {
     public var active: Bool {
         didSet {
             if active && !oldValue {
-                let s = Selector("jump")
+                let s = #selector(Trampoline.jump)
                 let timer = NSTimer(timeInterval: self.syncInterval, target: self.trampoline, selector: s, userInfo: nil, repeats: true)
                 self.timer = timer
                 NSRunLoop.mainRunLoop().addTimer(timer, forMode: kCFRunLoopCommonModes as String)

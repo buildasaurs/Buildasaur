@@ -13,11 +13,11 @@ class GitHubBranch : GitHubEntity {
     let name: String
     let commit: GitHubCommit
     
-    required init(json: NSDictionary) {
+    required init(json: NSDictionary) throws {
         
         self.name = json.stringForKey("name")
-        self.commit = GitHubCommit(json: json.dictionaryForKey("commit"))
-        super.init(json: json)
+        self.commit = try GitHubCommit(json: json.dictionaryForKey("commit"))
+        try super.init(json: json)
     }
 }
 

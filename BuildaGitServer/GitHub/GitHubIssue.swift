@@ -14,13 +14,13 @@ class GitHubIssue : GitHubEntity {
     let body: String
     var title: String
     
-    required init(json: NSDictionary) {
+    required init(json: NSDictionary) throws {
         
         self.number = json.intForKey("number")
         self.body = json.stringForKey("body")
         self.title = json.stringForKey("title")
         
-        super.init(json: json)
+        try super.init(json: json)
     }
 }
 

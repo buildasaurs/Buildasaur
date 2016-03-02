@@ -13,12 +13,12 @@ class GitHubComment : GitHubEntity {
     let body: String
     let author: GitHubUser
     
-    required init(json: NSDictionary) {
+    required init(json: NSDictionary) throws {
         
         self.body = json.stringForKey("body")
-        self.author = GitHubUser(json: json.dictionaryForKey("user"))
+        self.author = try GitHubUser(json: json.dictionaryForKey("user"))
 
-        super.init(json: json)
+        try super.init(json: json)
     }
 }
 

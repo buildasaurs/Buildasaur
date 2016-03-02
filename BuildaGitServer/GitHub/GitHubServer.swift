@@ -284,8 +284,9 @@ extension GitHubServer {
                 return
             }
             
-            if let body = body as? NSArray {
-                let prs: [GitHubPullRequest] = GitHubArray(body)
+            if
+                let body = body as? NSArray,
+                let prs: [GitHubPullRequest] = try? GitHubArray(body) {
                 completion(prs: prs, error: nil)
             } else {
                 completion(prs: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -310,8 +311,10 @@ extension GitHubServer {
                 return
             }
             
-            if let body = body as? NSDictionary {
-                let pr = GitHubPullRequest(json: body)
+            if
+                let body = body as? NSDictionary,
+                let pr = try? GitHubPullRequest(json: body)
+            {
                 completion(pr: pr, error: nil)
             } else {
                 completion(pr: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -334,8 +337,9 @@ extension GitHubServer {
                 return
             }
             
-            if let body = body as? NSArray {
-                let issues: [GitHubIssue] = GitHubArray(body)
+            if
+                let body = body as? NSArray,
+                let issues: [GitHubIssue] = try? GitHubArray(body) {
                 completion(issues: issues, error: nil)
             } else {
                 completion(issues: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -360,8 +364,10 @@ extension GitHubServer {
                 return
             }
             
-            if let body = body as? NSDictionary {
-                let issue = GitHubIssue(json: body)
+            if
+                let body = body as? NSDictionary,
+                let issue = try? GitHubIssue(json: body)
+            {
                 completion(issue: issue, error: nil)
             } else {
                 completion(issue: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -390,8 +396,10 @@ extension GitHubServer {
                 return
             }
             
-            if let body = body as? NSDictionary {
-                let issue = GitHubIssue(json: body)
+            if
+                let body = body as? NSDictionary,
+                let issue = try? GitHubIssue(json: body)
+            {
                 completion(issue: issue, error: nil)
             } else {
                 completion(issue: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -420,8 +428,10 @@ extension GitHubServer {
                 return
             }
             
-            if let body = body as? NSDictionary {
-                let issue = GitHubIssue(json: body)
+            if
+                let body = body as? NSDictionary,
+                let issue = try? GitHubIssue(json: body)
+            {
                 completion(issue: issue, error: nil)
             } else {
                 completion(issue: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -446,8 +456,10 @@ extension GitHubServer {
                 return
             }
             
-            if let body = body as? NSArray {
-                let statuses: [GitHubStatus] = GitHubArray(body)
+            if
+                let body = body as? NSArray,
+                let statuses: [GitHubStatus] = try? GitHubArray(body)
+            {
                 //sort them by creation date
                 let mostRecentStatus = statuses.sort({ return $0.created! > $1.created! }).first
                 completion(status: mostRecentStatus, error: nil)
@@ -475,8 +487,10 @@ extension GitHubServer {
                 return
             }
             
-            if let body = body as? NSDictionary {
-                let status = GitHubStatus(json: body)
+            if
+                let body = body as? NSDictionary,
+                let status = try? GitHubStatus(json: body)
+            {
                 completion(status: status, error: nil)
             } else {
                 completion(status: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -503,8 +517,10 @@ extension GitHubServer {
                 return
             }
             
-            if let body = body as? NSArray {
-                let comments: [GitHubComment] = GitHubArray(body)
+            if
+                let body = body as? NSArray,
+                let comments: [GitHubComment] = try? GitHubArray(body)
+            {
                 completion(comments: comments, error: nil)
             } else {
                 completion(comments: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -533,8 +549,10 @@ extension GitHubServer {
                 return
             }
             
-            if let body = body as? NSDictionary {
-                let comment = GitHubComment(json: body)
+            if
+                let body = body as? NSDictionary,
+                let comment = try? GitHubComment(json: body)
+            {
                 completion(comment: comment, error: nil)
             } else {
                 completion(comment: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -563,8 +581,10 @@ extension GitHubServer {
                 return
             }
             
-            if let body = body as? NSDictionary {
-                let comment = GitHubComment(json: body)
+            if
+                let body = body as? NSDictionary,
+                let comment = try? GitHubComment(json: body)
+            {
                 completion(comment: comment, error: nil)
             } else {
                 completion(comment: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -641,8 +661,10 @@ extension GitHubServer {
                 return
             }
             
-            if let body = body as? NSArray {
-                let branches: [GitHubBranch] = GitHubArray(body)
+            if
+                let body = body as? NSArray,
+                let branches: [GitHubBranch] = try? GitHubArray(body)
+            {
                 completion(branches: branches, error: nil)
             } else {
                 completion(branches: nil, error: Error.withInfo("Wrong body \(body)"))
@@ -667,8 +689,10 @@ extension GitHubServer {
                 return
             }
             
-            if let body = body as? NSDictionary {
-                let repository: GitHubRepo = GitHubRepo(json: body)
+            if
+                let body = body as? NSDictionary,
+                let repository: GitHubRepo = try? GitHubRepo(json: body)
+            {
                 completion(repo: repository, error: nil)
             } else {
                 completion(repo: nil, error: Error.withInfo("Wrong body \(body)"))

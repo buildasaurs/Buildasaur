@@ -13,12 +13,12 @@ class GitHubPullRequest : GitHubIssue, PullRequestType {
     let head: GitHubPullRequestBranch
     let base: GitHubPullRequestBranch
     
-    required init(json: NSDictionary) {
+    required init(json: NSDictionary) throws {
         
-        self.head = GitHubPullRequestBranch(json: json.dictionaryForKey("head"))
-        self.base = GitHubPullRequestBranch(json: json.dictionaryForKey("base"))
+        self.head = try GitHubPullRequestBranch(json: json.dictionaryForKey("head"))
+        self.base = try GitHubPullRequestBranch(json: json.dictionaryForKey("base"))
         
-        super.init(json: json)
+        try super.init(json: json)
     }
     
     var headName: String {

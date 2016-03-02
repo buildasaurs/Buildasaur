@@ -14,13 +14,13 @@ class GitHubUser : GitHubEntity {
     let realName: String?
     let avatarUrl: String?
 
-    required init(json: NSDictionary) {
+    required init(json: NSDictionary) throws {
         
         self.userName = json.stringForKey("login")
         self.realName = json.optionalStringForKey("name")
         self.avatarUrl = json.stringForKey("avatar_url")
         
-        super.init(json: json)
+        try super.init(json: json)
     }
 }
 

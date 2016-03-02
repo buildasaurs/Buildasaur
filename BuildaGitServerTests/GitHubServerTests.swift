@@ -44,17 +44,17 @@ class GitHubSourceTests: XCTestCase {
     }
     
     func testGetPullRequests() {
-        
+
         let params = [
             "repo": "czechboy0/Buildasaur-Tester"
         ]
-        
+
         self.tryEndpoint(.GET, endpoint: .PullRequests, params: params) { (body, error) -> () in
             
             XCTAssertNotNil(body, "Body must be non-nil")
             if let body = body as? NSArray {
-                let prs: [GitHubPullRequest] = GitHubArray(body)
-                XCTAssertGreaterThan(prs.count, 0, "We need > 0 items to test parsing")
+                let prs: [GitHubPullRequest]? = try? GitHubArray(body)
+                XCTAssertGreaterThan(prs?.count ?? -1, 0, "We need > 0 items to test parsing")
                 Log.verbose("Parsed PRs: \(prs)")
             } else {
                 XCTFail("Body nil")
@@ -72,8 +72,8 @@ class GitHubSourceTests: XCTestCase {
             
             XCTAssertNotNil(body, "Body must be non-nil")
             if let body = body as? NSArray {
-                let branches: [GitHubBranch] = GitHubArray(body)
-                XCTAssertGreaterThan(branches.count, 0, "We need > 0 items to test parsing")
+                let branches: [GitHubBranch]? = try? GitHubArray(body)
+                XCTAssertGreaterThan(branches?.count ?? -1, 0, "We need > 0 items to test parsing")
                 Log.verbose("Parsed branches: \(branches)")
             } else {
                 XCTFail("Body nil")
@@ -92,7 +92,7 @@ class GitHubSourceTests: XCTestCase {
             "html_url": "https://github.com/czechboy0"
         ]
         
-        let user = GitHubUser(json: dictionary)
+        let user = try! GitHubUser(json: dictionary)
         XCTAssertEqual(user.userName, "czechboy0")
         XCTAssertEqual(user.realName!, "Honza Dvorsky")
         XCTAssertEqual(user.avatarUrl!, "https://avatars.githubusercontent.com/u/2182121?v=3")
@@ -109,7 +109,7 @@ class GitHubSourceTests: XCTestCase {
             "html_url": "https://github.com/czechboy0/Buildasaur"
         ]
         
-        let repo = GitHubRepo(json: dictionary)
+        let repo = try! GitHubRepo(json: dictionary)
         XCTAssertEqual(repo.name, "Buildasaur")
         XCTAssertEqual(repo.fullName, "czechboy0/Buildasaur")
         XCTAssertEqual(repo.repoUrlHTTPS, "https://github.com/czechboy0/Buildasaur.git")
@@ -124,7 +124,7 @@ class GitHubSourceTests: XCTestCase {
             "url": "https://api.github.com/repos/czechboy0/Buildasaur/commits/08182438ed2ef3b34bd97db85f39deb60e2dcd7d"
         ]
         
-        let commit = GitHubCommit(json: dictionary)
+        let commit = try! GitHubCommit(json: dictionary)
         XCTAssertEqual(commit.sha, "08182438ed2ef3b34bd97db85f39deb60e2dcd7d")
         XCTAssertEqual(commit.url!, "https://api.github.com/repos/czechboy0/Buildasaur/commits/08182438ed2ef3b34bd97db85f39deb60e2dcd7d")
     }
@@ -140,7 +140,7 @@ class GitHubSourceTests: XCTestCase {
             "commit": commitDictionary
         ]
         
-        let branch = GitHubBranch(json: dictionary)
+        let branch = try! GitHubBranch(json: dictionary)
         XCTAssertEqual(branch.name, "master")
         XCTAssertEqual(branch.commit.sha, "08182438ed2ef3b34bd97db85f39deb60e2dcd7d")
         XCTAssertEqual(branch.commit.url!, "https://api.github.com/repos/czechboy0/Buildasaur/commits/08182438ed2ef3b34bd97db85f39deb60e2dcd7d")
@@ -174,7 +174,7 @@ class GitHubSourceTests: XCTestCase {
             ]
         ]
         
-        let prbranch = GitHubPullRequestBranch(json: dictionary)
+        let prbranch = try! GitHubPullRequestBranch(json: dictionary)
         XCTAssertEqual(prbranch.ref, "fb-loadNode")
         XCTAssertEqual(prbranch.sha, "7e45fa772565969ee801b0bdce0f560122e34610")
         XCTAssertEqual(prbranch.repo.name, "AsyncDisplayKit")

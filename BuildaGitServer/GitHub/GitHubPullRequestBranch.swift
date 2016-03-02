@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import BuildaUtils
 
 //PullRequestBranch is a special type of a branch - it also includes repo info (bc PRs can be cross repos)
 //normal branches include less information
@@ -16,13 +17,16 @@ class GitHubPullRequestBranch : GitHubEntity {
     let sha: String
     let repo: GitHubRepo
     
-    required init(json: NSDictionary) {
+    required init(json: NSDictionary) throws {
         
         self.ref = json.stringForKey("ref")
         self.sha = json.stringForKey("sha")
-        self.repo = GitHubRepo(json: json.dictionaryForKey("repo"))
+        guard let repo = json.optionalDictionaryForKey("repo") else {
+            throw Error.withInfo("PR missing information about its repository")
+        }
+        self.repo = try GitHubRepo(json: repo)
         
-        super.init(json: json)
+        try super.init(json: json)
     }
 }
 

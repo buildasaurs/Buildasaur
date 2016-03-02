@@ -366,13 +366,13 @@ extension TriggerViewController: NSTextFieldDelegate {
         let result: Bool
         switch commandSelector {
             
-        case Selector("insertNewline:"):
+        case #selector(insertNewline(_:)):
             // new line action:
             // always insert a line-break character and don’t cause the receiver to end editing
             textView.insertNewlineIgnoringFieldEditor(self)
             result = true
             
-        case Selector("insertTab:"):
+        case #selector(insertTab(_:)):
             // tab action:
             // always insert a tab character and don’t cause the receiver to end editing
             textView.insertTabIgnoringFieldEditor(self)

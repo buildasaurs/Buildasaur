@@ -26,8 +26,7 @@ class MenuItemManager : NSObject, NSMenuDelegate {
         statusItem.highlightMode = true
         
         let menu = NSMenu()
-        menu.addItemWithTitle("Open Buildasaur", action: "showMainWindow", keyEquivalent: "")
-        menu.addItemWithTitle("Quit Buildasaur", action: "terminate:", keyEquivalent: "")
+        menu.addItemWithTitle("Open Buildasaur", action: #selector(AppDelegate.showMainWindow), keyEquivalent: "")
         menu.addItem(NSMenuItem.separatorItem())
         self.firstIndexLastSyncedMenuItem = menu.numberOfItems
         
@@ -48,7 +47,7 @@ class MenuItemManager : NSObject, NSMenuDelegate {
         //this many items need to be created or destroyed
         if diffItems > 0 {
             for _ in 0..<diffItems {
-                menu.addItemWithTitle("", action: "", keyEquivalent: "")
+                menu.addItemWithTitle("", action: Selector(""), keyEquivalent: "")
             }
         } else if diffItems < 0 {
             for _ in 0..<abs(diffItems) {

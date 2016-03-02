@@ -94,7 +94,7 @@ public protocol HeartbeatManagerDelegate {
         self.initialTimer = NSTimer.scheduledTimerWithTimeInterval(
             20,
             target: self,
-            selector: "_timerFired:",
+            selector: #selector(_timerFired(_:)),
             userInfo: nil,
             repeats: false)
         
@@ -102,7 +102,7 @@ public protocol HeartbeatManagerDelegate {
         self.timer = NSTimer.scheduledTimerWithTimeInterval(
             self.interval,
             target: self,
-            selector: "_timerFired:",
+            selector: #selector(_timerFired(_:)),
             userInfo: nil,
             repeats: true)
     }
