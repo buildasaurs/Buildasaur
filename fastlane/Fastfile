@@ -34,7 +34,7 @@ end
 lane :install_cocoapods_if_needed do
   ['cocoapods', 'cocoapods-keys'].each do |g|
     begin
-      sh "test $(gem list -i #{g}) == false && gem install #{g}"
+      sh "test $(gem list -i #{g}) == false && gem install #{g} --pre"
     rescue Exception
     end
   end
