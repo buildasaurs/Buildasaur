@@ -39,8 +39,8 @@ def buildasaur_app_pods
 end
 
 def test_pods
-    # pod 'Nimble', '~> 3.0.0'
-    pod 'Nimble', :git => "https://github.com/Quick/Nimble.git", :commit => "b9256b0bdecc4ef1f659b7663dcd3aab6f43fb5f"
+    pod 'Nimble', :git => "https://github.com/Quick/Nimble.git", :commit => "1730543fcd8b7d7258a3270bb6d3118921d46f9d"
+    pod 'DVR', '~> 0.2.1-snap1'
 end
 
 target 'Buildasaur' do
@@ -54,7 +54,7 @@ target 'BuildaKit' do
 end
 
 target 'BuildaKitTests' do
-    also_xcode_pods
+    buildasaur_app_pods
     test_pods
 end
 
@@ -64,9 +64,8 @@ target 'BuildaGitServer' do
 end
 
 target 'BuildaGitServerTests' do
-    pods_for_errbody
+    buildasaur_app_pods
     test_pods
-    pod 'DVR', '~> 0.2.1-snap1'
 end
 
 target 'BuildaHeartbeatKit' do
