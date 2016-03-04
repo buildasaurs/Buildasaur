@@ -9,7 +9,6 @@
 import Foundation
 import BuildaUtils
 @testable import BuildaGitServer
-import Buildasaur
 import XcodeServerSDK
 import BuildaKit
 

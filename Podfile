@@ -64,7 +64,8 @@ target 'BuildaGitServer' do
 end
 
 target 'BuildaGitServerTests' do
-    buildasaur_app_pods
+    pods_for_errbody
+    rac
     test_pods
 end
 
