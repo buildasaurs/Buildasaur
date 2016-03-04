@@ -14,7 +14,8 @@ end
 
 lane :prebuild do
   
-  install_cocoapods_if_needed
+  # Causes problems, don't run for now
+  # install_cocoapods_if_needed
 
   # if you're not me, you need to inject your own GitHub etc app API keys.
   # but don't worry, those are only needed if you'll be using OAuth to authenticate
