@@ -14,7 +14,8 @@ end
 
 lane :prebuild do
   
-  install_cocoapods_if_needed
+  # Causes problems, don't run for now
+  # install_cocoapods_if_needed
 
   # if you're not me, you need to inject your own GitHub etc app API keys.
   # but don't worry, those are only needed if you'll be using OAuth to authenticate
@@ -34,30 +35,22 @@ end
 lane :install_cocoapods_if_needed do
   ['cocoapods', 'cocoapods-keys'].each do |g|
     begin
-      sh "test $(gem list -i #{g}) == false && gem install #{g}"
+      sh "test $(gem list -i #{g}) == false && gem install #{g} --pre"
     rescue Exception
     end
   end
 end
 
 private_lane :inject_dummy_credentials do
-    # inspired by https://github.com/artsy/eidolon/blob/master/fastlane/Fastfile
     keys = [
       'GitHubAPIClientId', 
       'GitHubAPIClientSecret',
       'BitBucketAPIClientId',
       'BitBucketAPIClientSecret'
     ]
-    commands = keys.map { |key|
-      begin
-        sh "pod keys rm #{key} Buildasaur"
-        sh "pod keys rm #{key} Buildasaur.xcodeproj"
-      rescue Exception
-      end
-
-      "pod keys set #{key} 'INSERT_YOUR_OWN_KEY_HERE' Buildasaur"
-    }.join(' ; ')
-    sh "cd .. ; #{commands}"
+    keys.each { |key|
+      ENV[key] = "FAKE_KEY"
+    }
 end
 
 lane :test do
