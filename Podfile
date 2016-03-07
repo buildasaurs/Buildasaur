@@ -3,6 +3,10 @@ plugin 'cocoapods-keys', {
   :keys => [
     "GitHubAPIClientId",
     "GitHubAPIClientSecret",
+    "EnterpriseGitHubHostname", # e.g. git.mycompany.com
+    "EnterpriseGitHubAPIPath", # e.g. git.mycompany.com/api/v1"
+    "EnterpriseGitHubAPIClientId",
+    "EnterpriseGitHubAPIClientSecret",
     "BitBucketAPIClientId",
     "BitBucketAPIClientSecret"
 ]}

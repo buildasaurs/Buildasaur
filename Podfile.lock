@@ -32,7 +32,7 @@ PODS:
   - Result (1.0.2)
   - Sparkle (1.13.1)
   - SwiftSafe (0.1)
-  - XcodeServerSDK (0.5.8):
+  - XcodeServerSDK (0.5.7):
     - BuildaUtils (~> 0.2.3)
 
 DEPENDENCIES:
@@ -79,8 +79,8 @@ SPEC CHECKSUMS:
   Result: dd3dd71af3fa2e262f1a999e14fba2c25ec14f16
   Sparkle: 2fbd47b869621d1e679c7554e3e19dda02104818
   SwiftSafe: 77ffd12b02678790bec1ef56a2d14ec5036f1fd6
-  XcodeServerSDK: c8ab7afc40cd7eedee41ef6bc0abfd2687aff115
+  XcodeServerSDK: 34e18e12f683fec69ad0a1897d1f5447a660a927
 
-PODFILE CHECKSUM: 6ad46ead67ccbcc642faf2bcb006f3ddabd3ccba
+PODFILE CHECKSUM: f5a0008b89f9c562f6615180c959387072608d13
 
 COCOAPODS: 1.0.0.beta.4
