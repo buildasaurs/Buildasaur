@@ -78,9 +78,9 @@ extension WorkspaceMetadata {
         
         let scheme = NSURL(string: urlString)!.scheme
         switch scheme {
-        case "github.com":
+        case GitService.GitHub.hostname():
             return (CheckoutType.SSH, .GitHub)
-        case "bitbucket.org":
+        case GitService.BitBucket.hostname():
             return (CheckoutType.SSH, .BitBucket)
         case "https":
             
@@ -93,7 +93,8 @@ extension WorkspaceMetadata {
             Log.error("HTTPS or SVN not yet supported, please create an issue on GitHub if you want it added (czechboy0/Buildasaur)")
             return nil
         default:
-            return nil
+            var urlPieces = urlString.split(":")
+            return (CheckoutType.SSH, .EnterpriseGitHub(host: urlPieces[0]))
         }
     }
 }
