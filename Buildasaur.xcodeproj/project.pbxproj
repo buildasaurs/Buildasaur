@@ -157,6 +157,7 @@
 		50ADEFE7D2EF4699DED04224 /* Pods_BuildaGitServer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36699A7FE0D3AFD88AD7B045 /* Pods_BuildaGitServer.framework */; };
 		56C0A05D3B3E3581DEEF4FB0 /* Pods_BuildaKitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BF6053CD3D62FC0E0D73A25 /* Pods_BuildaKitTests.framework */; };
 		78D6132977F05F7A73A1B808 /* Pods_Buildasaur.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93327F5F8E340696C059C413 /* Pods_Buildasaur.framework */; };
+		8476D4061C8F4CD000463074 /* EnterpriseGitHubSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8476D4051C8F4CD000463074 /* EnterpriseGitHubSourceTests.swift */; };
 		C36E3439B05CEFA228E45AE3 /* Pods_BuildaGitServerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C28C2D0A7294FD001BDF5B /* Pods_BuildaGitServerTests.framework */; };
 		CF8249D720271FDB033C7CF8 /* Pods_BuildaHeartbeatKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72A661282067D9AFD99D4095 /* Pods_BuildaHeartbeatKit.framework */; };
 /* End PBXBuildFile section */
@@ -399,6 +400,7 @@
 		5F760D488BD75B28665F9576 /* Pods-BuildaKit.testing.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaKit.testing.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaKit/Pods-BuildaKit.testing.xcconfig"; sourceTree = "<group>"; };
 		6358BD9D54AF08FBB17D6657 /* Pods-Buildasaur.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Buildasaur.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Buildasaur/Pods-Buildasaur.debug.xcconfig"; sourceTree = "<group>"; };
 		72A661282067D9AFD99D4095 /* Pods_BuildaHeartbeatKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BuildaHeartbeatKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8476D4051C8F4CD000463074 /* EnterpriseGitHubSourceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnterpriseGitHubSourceTests.swift; sourceTree = "<group>"; };
 		84C28C2D0A7294FD001BDF5B /* Pods_BuildaGitServerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BuildaGitServerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D9CBDB5469FB644E5584126 /* Pods-Buildasaur.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Buildasaur.release.xcconfig"; path = "Pods/Target Support Files/Pods-Buildasaur/Pods-Buildasaur.release.xcconfig"; sourceTree = "<group>"; };
 		93327F5F8E340696C059C413 /* Pods_Buildasaur.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Buildasaur.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -729,6 +731,7 @@
 				3A7577A91C593A6A0023F08C /* Data */,
 				3A7AF60F1C591FAD000FD726 /* BitBucketServerTests.swift */,
 				3A58B1581A3B96C9003E0266 /* GitHubServerTests.swift */,
+				8476D4051C8F4CD000463074 /* EnterpriseGitHubSourceTests.swift */,
 				3AAF6EF51A3CE5BA00C657FB /* Supporting Files */,
 			);
 			path = BuildaGitServerTests;
@@ -1622,6 +1625,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A7AF6101C591FAD000FD726 /* BitBucketServerTests.swift in Sources */,
+				8476D4061C8F4CD000463074 /* EnterpriseGitHubSourceTests.swift in Sources */,
 				3AAF6F0B1A3CE82B00C657FB /* GitHubServerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

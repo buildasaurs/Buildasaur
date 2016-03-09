@@ -20,6 +20,11 @@ class GitServerFactory {
             let baseURL = "https://api.github.com"
             let endpoints = GitHubEndpoints(baseURL: baseURL, auth: auth)
             server = GitHubServer(endpoints: endpoints, http: http)
+        case .GitHub, .EnterpriseGitHub:
+            //let baseURL = "https://api.\(service.hostname())"
+            let baseURL = "https://\(service.hostname())"
+            let endpoints = GitHubEndpoints(baseURL: baseURL, auth: auth)
+            server = GitHubServer(endpoints: endpoints, http: http)
         case .BitBucket:
             let baseURL = "https://api.bitbucket.org"
             let endpoints = BitBucketEndpoints(baseURL: baseURL, auth: auth)

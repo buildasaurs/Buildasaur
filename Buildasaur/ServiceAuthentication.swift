@@ -66,6 +66,8 @@ class ServiceAuthenticator {
         switch service {
         case .GitHub:
             return self.getGitHubParameters()
+        case .EnterpriseGitHub:
+            assert(false)
         case .BitBucket:
             return self.getBitBucketParameters()
 //        default:

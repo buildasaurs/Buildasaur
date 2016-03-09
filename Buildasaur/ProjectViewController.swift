@@ -115,13 +115,13 @@ class ProjectViewController: ConfigEditViewController {
             .startWithNext { [weak self] (proj, auth, forceUseToken) in
                 self?.updateServiceMeta(proj, auth: auth, userWantsTokenAuth: forceUseToken)
         }
-        combineLatest(self.tokenTextField.rac_text, self.userWantsTokenAuth.producer)
-            .startWithNext { [weak self] token, forceToken in
+        combineLatest(self.tokenTextField.rac_text, self.userWantsTokenAuth.producer, meta)
+            .startWithNext { [weak self] token, forceToken, meta in
                 if forceToken {
                     if token.isEmpty {
                         self?.authenticator.value = nil
                     } else {
-                        self?.authenticator.value = ProjectAuthenticator(service: .GitHub, username: "GIT", type: .PersonalToken, secret: token)
+                        self?.authenticator.value = ProjectAuthenticator(service: meta.service, username: "GIT", type: .PersonalToken, secret: token)
                     }
                 }
         }
@@ -166,22 +166,33 @@ class ProjectViewController: ConfigEditViewController {
         
         let alreadyHasAuth = auth != nil
 
+        var showTokenField = false
+
         switch service {
-        case .GitHub:
+        case GitService.GitHub:
             if let auth = auth where auth.type == .PersonalToken && !auth.secret.isEmpty {
                 self.tokenTextField.stringValue = auth.secret
             } else {
                 self.tokenTextField.stringValue = ""
             }
             self.useTokenButton.hidden = alreadyHasAuth
-        case .BitBucket:
+            self.loginButton.hidden = alreadyHasAuth
+            self.logoutButton.hidden = !alreadyHasAuth
+            showTokenField = userWantsTokenAuth && (auth?.type == .PersonalToken || auth == nil)
+        case GitService.EnterpriseGitHub:
+            if !alreadyHasAuth {
+                self.tokenTextField.stringValue = ""
+            }
+            self.useTokenButton.hidden = alreadyHasAuth
+            self.loginButton.hidden = true
+            self.logoutButton.hidden = true
+            showTokenField = true
+        case GitService.BitBucket:
             self.useTokenButton.hidden = true
+            self.loginButton.hidden = alreadyHasAuth
+            self.logoutButton.hidden = !alreadyHasAuth
         }
         
-        self.loginButton.hidden = alreadyHasAuth
-        self.logoutButton.hidden = !alreadyHasAuth
-        
-        let showTokenField = userWantsTokenAuth && service == .GitHub && (auth?.type == .PersonalToken || auth == nil)
         self.tokenStackView.hidden = !showTokenField
     }
     
