@@ -53,7 +53,7 @@ public enum GitService {
     public func authorizeUrl() -> String {
         switch self {
         case .GitHub: return "https://github.com/login/oauth/authorize"
-        case .EnterpriseGitHub: return "https://\(hostname())/login/oauth/authorize"
+        case .EnterpriseGitHub: assert(false)
         case .BitBucket: return "https://bitbucket.org/site/oauth2/authorize"
         }
     }
