@@ -75,7 +75,7 @@ extension ProjectAuthenticator: KeychainStringSerializable {
     }
 
     internal static func createEnterpriseService(host: String) -> GitService? {
-        guard let url = NSURL.init(string: "http://\(host)") else { return nil }
+        guard let url = NSURL(string: "http://\(host)") else { return nil }
         do {
             let response = try NSString.init(contentsOfURL: url, encoding: NSASCIIStringEncoding)
             if response.lowercaseString.containsString("github") {
