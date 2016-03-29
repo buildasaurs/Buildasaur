@@ -130,6 +130,22 @@ class GitHubSummaryBuilderTests: XCTestCase {
         expect(result.status.state) == exp_state
     }
     
+    func testPassing_withTests_withWarningsAndAnalyzerWarnings() {
+        
+        let buildResultSummary = MockBuildResultSummary(analyzerWarningCount: 10, testsCount: 99, warningCount: 2, codeCoveragePercentage: 12)
+        let integration = self.integration(.Warnings, buildResultSummary: buildResultSummary)
+        let summary = SummaryBuilder()
+        summary.statusCreator = MockGitHubServer()
+        let result = summary.buildPassing(integration)
+        
+        let exp_comment = "Result of Integration 15\n---\n*Duration*: 28 seconds\n*Result*: All 99 tests passed, but please **fix 2 warnings** and **10 analyzer warnings**.\n*Test Coverage*: 12%"
+        let exp_status = "Build passed!"
+        let exp_state = BuildState.Success
+        expect(result.comment) == exp_comment
+        expect(result.status.description) == exp_status
+        expect(result.status.state) == exp_state
+    }
+    
     func testFailingTests() {
         
         //got 99 tests but failing's just one
