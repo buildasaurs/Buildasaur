@@ -32,12 +32,21 @@ class SummaryBuilder {
         let status = self.createStatus(.Success, description: "Build passed!", targetUrl: linkToIntegration)
         
         let buildResultSummary = integration.buildResultSummary!
-        if integration.result == .Succeeded {
+        switch integration.result {
+        case .Succeeded?:
             self.appendTestsPassed(buildResultSummary)
-        } else if integration.result == .Warnings {
-            self.appendWarnings(buildResultSummary)
-        } else if integration.result == .AnalyzerWarnings {
-            self.appendAnalyzerWarnings(buildResultSummary)
+        case .Warnings?, .AnalyzerWarnings?:
+            
+            switch (buildResultSummary.warningCount, buildResultSummary.analyzerWarningCount) {
+            case (_, 0):
+                self.appendWarnings(buildResultSummary)
+            case (0, _):
+                self.appendAnalyzerWarnings(buildResultSummary)
+            default:
+                self.appendWarningsAndAnalyzerWarnings(buildResultSummary)
+            }
+            
+        default: break
         }
         
         //and code coverage
@@ -130,6 +139,14 @@ class SummaryBuilder {
         let analyzerWarningCount = buildResultSummary.analyzerWarningCount
         let testsCount = buildResultSummary.testsCount
         self.lines.append(self.resultString + "All \(testsCount) tests passed, but please **fix \(analyzerWarningCount) " + "analyzer warning".pluralizeStringIfNecessary(analyzerWarningCount) + "**.")
+    }
+    
+    func appendWarningsAndAnalyzerWarnings(buildResultSummary: BuildResultSummary) {
+        
+        let warningCount = buildResultSummary.warningCount
+        let analyzerWarningCount = buildResultSummary.analyzerWarningCount
+        let testsCount = buildResultSummary.testsCount
+        self.lines.append(self.resultString + "All \(testsCount) tests passed, but please **fix \(warningCount) " + "warning".pluralizeStringIfNecessary(warningCount) + "** and **\(analyzerWarningCount) " + "analyzer warning".pluralizeStringIfNecessary(analyzerWarningCount) + "**.")
     }
     
     func appendCodeCoverage(buildResultSummary: BuildResultSummary) {
