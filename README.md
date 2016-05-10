@@ -137,6 +137,10 @@ Version 0.8.0 adds Crashlytics, so I receive crash reports. If you prefer to opt
 ----------------
 The code for communication with Xcode Server lives in a project called [XcodeServerSDK](https://github.com/czechboy0/XcodeServerSDK).
 
+:blue_heart: Code of Conduct
+------------
+Please note that this project is released with a [Contributor Code of Conduct](./CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+
 :gift_heart: Contributing
 ------------
 Please create an issue with a description of your problem or a pull request with a fix. Or, if you just want to help out, take a look at [issues with the label "up-for-grabs"](https://github.com/czechboy0/Buildasaur/labels/up-for-grabs), comment on the issue that you're working on it and let's improve Buildasaur together! 

@@ -2,7 +2,32 @@
 
 ## [Unreleased](https://github.com/czechboy0/buildasaur/tree/HEAD)
 
-[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v1.0.0-b1...HEAD)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v1.0.0-b2...HEAD)
+
+**Fixed bugs:**
+
+- Crash when syncing Github PR from a deleted repo [\#247](https://github.com/czechboy0/Buildasaur/issues/247)
+- Buildasaur doesn't extract repo name from GitHub url that does not end in ".git" [\#244](https://github.com/czechboy0/Buildasaur/issues/244)
+
+**Closed issues:**
+
+- Analyzer warning counts in commits and email text [\#253](https://github.com/czechboy0/Buildasaur/issues/253)
+- Prebuild trigger cannot find project folder [\#252](https://github.com/czechboy0/Buildasaur/issues/252)
+- Internal Server Error \(xcssecurity\): could not read password from keychain [\#245](https://github.com/czechboy0/Buildasaur/issues/245)
+- Send heartbeat event when app gets sparkle-updated [\#236](https://github.com/czechboy0/Buildasaur/issues/236)
+- Investigate viability of integration with Swift Package Manager/Build System [\#197](https://github.com/czechboy0/Buildasaur/issues/197)
+
+**Merged pull requests:**
+
+- Include Analyzer Warning count when result is Warnings [\#254](https://github.com/czechboy0/Buildasaur/pull/254) ([czechboy0](https://github.com/czechboy0))
+- Spring cleaning \(fixed tests, project, updated cocoapods\) [\#250](https://github.com/czechboy0/Buildasaur/pull/250) ([czechboy0](https://github.com/czechboy0))
+- Updated Swift version, crash fix [\#249](https://github.com/czechboy0/Buildasaur/pull/249) ([czechboy0](https://github.com/czechboy0))
+- Buildasaur Github issue \#244 [\#246](https://github.com/czechboy0/Buildasaur/pull/246) ([lindsaylandry](https://github.com/lindsaylandry))
+- Sparkle Update Event [\#241](https://github.com/czechboy0/Buildasaur/pull/241) ([czechboy0](https://github.com/czechboy0))
+- Swift 2.2, dependencies upgraded [\#237](https://github.com/czechboy0/Buildasaur/pull/237) ([czechboy0](https://github.com/czechboy0))
+
+## [v1.0.0-b2](https://github.com/czechboy0/buildasaur/tree/v1.0.0-b2) (2016-02-04)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v1.0.0-b1...v1.0.0-b2)
 
 **Fixed bugs:**
 

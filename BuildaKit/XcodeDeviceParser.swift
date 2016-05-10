@@ -16,6 +16,7 @@ public class XcodeDeviceParser {
         case iPhoneOS = "iphoneos"
         case macOSX = "macosx"
         case watchOS = "watchos"
+        case tvOS = "appletvos"
         
         public func toPlatformType() -> DevicePlatform.PlatformType {
             switch self {
@@ -25,6 +26,8 @@ public class XcodeDeviceParser {
                 return .OSX
             case .watchOS:
                 return .watchOS
+            case .tvOS:
+                return .tvOS
             }
         }
     }

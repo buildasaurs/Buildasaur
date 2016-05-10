@@ -64,37 +64,46 @@ public struct WorkspaceMetadata {
 }
 
 extension WorkspaceMetadata {
-    
+
     internal static func parse(projectURLString: String) -> (CheckoutType, GitService)? {
-        
-        var urlString = projectURLString
-        
-        //for SSH URLs we need to remove the git@ prefix to be properly parsable
-        if urlString.hasPrefix("git@") {
-            let s = urlString.startIndex
-            let range = s ..< s.advancedBy(4)
-            urlString = urlString.stringByReplacingCharactersInRange(range, withString: "")
-        }
-        
-        let scheme = NSURL(string: urlString)!.scheme
-        switch scheme {
-        case GitService.GitHub.hostname():
-            return (CheckoutType.SSH, .GitHub)
-        case GitService.BitBucket.hostname():
-            return (CheckoutType.SSH, .BitBucket)
-        case "https":
-            
-            if urlString.hasSuffix(".git") {
-                //HTTPS git
-            } else {
-                //SVN
-            }
-            
-            Log.error("HTTPS or SVN not yet supported, please create an issue on GitHub if you want it added (czechboy0/Buildasaur)")
+        guard let url = NSURL(string: projectURLString) else {
+            Log.error("Failed to convert urlString '\(projectURLString)' to an NSURL.")
             return nil
-        default:
-            var urlPieces = urlString.split(":")
-            return (CheckoutType.SSH, .EnterpriseGitHub(host: urlPieces[0]))
         }
+
+        var checkoutType: CheckoutType?
+        var gitService: GitService?
+
+        if url.resourceSpecifier.containsString(GitService.GitHub.hostname()) {
+            gitService = .GitHub
+        } else if url.resourceSpecifier.containsString(GitService.BitBucket.hostname()) {
+            gitService = .BitBucket
+	} else if url.resourceSpecivier.containsString(GitService.EnterpriseGitHub.hostname() {
+            var urlPieces = urlString.split(":")
+	    gitService = .EnterpriseGitHub(host: urlPieces[0]))
+        } else {
+            Log.error("This git service is not yet supported.")
+        }
+
+        switch url.scheme {
+        case "":
+            // No scheme, likely to be SSH so let's check for the telltale 'git@' in the resource specifier.
+            if url.resourceSpecifier.containsString("git@") {
+                checkoutType = .SSH
+            }
+        case "ssh":
+            checkoutType = .SSH
+
+        default:
+            Log.error("The \(url.scheme) scheme is not yet supported.")
+        }
+
+        if let checkoutType = checkoutType, gitService = gitService {
+            return (checkoutType, gitService)
+        }
+
+        Log.error("Please create an issue on GitHub if you want it added (https://github.com/czechboy0/Buildasaur/issues/new)")
+        return nil
     }
+    
 }
