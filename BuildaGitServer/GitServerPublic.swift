@@ -81,6 +81,19 @@ public enum GitService {
         case .BitBucket: return BuildasaurKeys().bitBucketAPIClientSecret()
         }
     }
+
+    public static func createEnterpriseService(host: String) -> GitService? {
+        guard let url = NSURL(string: "http://\(host)") else { return nil }
+        do {
+            let response = try NSString.init(contentsOfURL: url, encoding: NSASCIIStringEncoding)
+            if response.lowercaseString.containsString("github") {
+                return GitService.EnterpriseGitHub(host: host)
+            }
+        } catch {
+            Log.error("\(error)")
+        }
+        return nil
+    }
 }
 
 public class GitServer : HTTPServer {

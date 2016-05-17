@@ -169,7 +169,7 @@ class ProjectViewController: ConfigEditViewController {
         var showTokenField = false
 
         switch service {
-        case GitService.GitHub:
+        case .GitHub:
             if let auth = auth where auth.type == .PersonalToken && !auth.secret.isEmpty {
                 self.tokenTextField.stringValue = auth.secret
             } else {
@@ -179,7 +179,7 @@ class ProjectViewController: ConfigEditViewController {
             self.loginButton.hidden = alreadyHasAuth
             self.logoutButton.hidden = !alreadyHasAuth
             showTokenField = userWantsTokenAuth && (auth?.type == .PersonalToken || auth == nil)
-        case GitService.EnterpriseGitHub:
+        case .EnterpriseGitHub:
             if !alreadyHasAuth {
                 self.tokenTextField.stringValue = ""
             }
@@ -187,7 +187,7 @@ class ProjectViewController: ConfigEditViewController {
             self.loginButton.hidden = true
             self.logoutButton.hidden = true
             showTokenField = true
-        case GitService.BitBucket:
+        case .BitBucket:
             self.useTokenButton.hidden = true
             self.loginButton.hidden = alreadyHasAuth
             self.logoutButton.hidden = !alreadyHasAuth

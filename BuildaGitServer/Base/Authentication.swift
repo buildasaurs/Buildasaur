@@ -49,7 +49,7 @@ extension ProjectAuthenticator: KeychainStringSerializable {
             service = GitService.BitBucket
         default:
             let host = comps[0]
-            guard let maybeService = createEnterpriseService(host) else {
+            guard let maybeService = GitService.createEnterpriseService(host) else {
                 throw Error.withInfo("Unsupported service: \(host)")
             }
             service = maybeService
@@ -72,17 +72,5 @@ extension ProjectAuthenticator: KeychainStringSerializable {
             self.type.rawValue,
             self.secret
             ].joinWithSeparator(":")
-    }
-
-    internal static func createEnterpriseService(host: String) -> GitService? {
-        guard let url = NSURL(string: "http://\(host)") else { return nil }
-        do {
-            let response = try NSString.init(contentsOfURL: url, encoding: NSASCIIStringEncoding)
-            if response.lowercaseString.containsString("github") {
-                return GitService.EnterpriseGitHub(host: host)
-            }
-        } catch {
-        }
-        return nil
     }
 }
