@@ -47,11 +47,11 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
         XCTAssertNotNil(actions.startNewIntegrationBot)
     }
     
-    func testFirstIntegrationPending() {
+    func testFirstIntegrationPending() throws {
         
         let (pr, bot, commit, statusCreator) = self.mockedPRAndBotAndCommit()
         let integrations = [
-            MockIntegration(number: 1, step: Integration.Step.Pending)
+            try MockIntegration(number: 1, step: Integration.Step.Pending)
         ]
         
         let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, hostname: "localhost", buildStatusCreator: statusCreator, integrations: integrations)
@@ -61,13 +61,13 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
         XCTAssertEqual(actions.statusToSet!.status.status.state, BuildState.Pending)
     }
     
-    func testMultipleIntegrationsPending() {
+    func testMultipleIntegrationsPending() throws {
         
         let (pr, bot, commit, statusCreator) = self.mockedPRAndBotAndCommit()
         let integrations = [
-            MockIntegration(number: 1, step: Integration.Step.Pending),
-            MockIntegration(number: 2, step: Integration.Step.Pending),
-            MockIntegration(number: 3, step: Integration.Step.Pending)
+            try MockIntegration(number: 1, step: Integration.Step.Pending),
+            try MockIntegration(number: 2, step: Integration.Step.Pending),
+            try MockIntegration(number: 3, step: Integration.Step.Pending)
         ]
         
         let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, hostname: "localhost", buildStatusCreator: statusCreator, integrations: integrations)
@@ -82,11 +82,11 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
         XCTAssertEqual(actions.statusToSet!.status.status.state, BuildState.Pending)
     }
     
-    func testOneIntegrationRunning() {
+    func testOneIntegrationRunning() throws {
         
         let (pr, bot, commit, statusCreator) = self.mockedPRAndBotAndCommit()
         let integrations = [
-            MockIntegration(number: 1, step: Integration.Step.Building),
+            try MockIntegration(number: 1, step: Integration.Step.Building),
         ]
         
         let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, hostname: "localhost", buildStatusCreator: statusCreator, integrations: integrations)
@@ -97,11 +97,11 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
         XCTAssertEqual(actions.statusToSet!.status.status.state, BuildState.Pending)
     }
     
-    func testOneIntegrationTestsFailed() {
+    func testOneIntegrationTestsFailed() throws {
         
         let (pr, bot, commit, statusCreator) = self.mockedPRAndBotAndCommit()
         let integrations = [
-            MockIntegration(number: 1, step: Integration.Step.Completed, sha: "head_sha", result: Integration.Result.TestFailures)
+            try MockIntegration(number: 1, step: Integration.Step.Completed, sha: "head_sha", result: Integration.Result.TestFailures)
         ]
         
         let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, hostname: "localhost", buildStatusCreator: statusCreator, integrations: integrations)
@@ -112,11 +112,11 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
         XCTAssertEqual(actions.statusToSet!.status.status.state, BuildState.Failure)
     }
     
-    func testOneIntegrationSuccess() {
+    func testOneIntegrationSuccess() throws {
         
         let (pr, bot, commit, statusCreator) = self.mockedPRAndBotAndCommit()
         let integrations = [
-            MockIntegration(number: 1, step: Integration.Step.Completed, sha: "head_sha", result: Integration.Result.Succeeded)
+            try MockIntegration(number: 1, step: Integration.Step.Completed, sha: "head_sha", result: Integration.Result.Succeeded)
         ]
         
         let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, hostname: "localhost", buildStatusCreator: statusCreator, integrations: integrations)
@@ -127,12 +127,12 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
         XCTAssertEqual(actions.statusToSet!.status.status.state, BuildState.Success)
     }
     
-    func testTwoIntegrationOneRunningOnePending() {
+    func testTwoIntegrationOneRunningOnePending() throws {
         
         let (pr, bot, commit, statusCreator) = self.mockedPRAndBotAndCommit()
         let integrations = [
-            MockIntegration(number: 1, step: Integration.Step.Building, sha: "head_sha"),
-            MockIntegration(number: 2, step: Integration.Step.Pending, sha: "head_sha")
+            try MockIntegration(number: 1, step: Integration.Step.Building, sha: "head_sha"),
+            try MockIntegration(number: 2, step: Integration.Step.Pending, sha: "head_sha")
         ]
         
         let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, hostname: "localhost", buildStatusCreator: statusCreator, integrations: integrations)
@@ -143,11 +143,11 @@ class SyncPair_PR_Bot_Tests: XCTestCase {
         XCTAssertEqual(actions.statusToSet!.status.status.state, BuildState.Pending)
     }
 
-    func testTwoIntegrationsDifferentCommits() {
+    func testTwoIntegrationsDifferentCommits() throws {
         
         let (pr, bot, commit, statusCreator) = self.mockedPRAndBotAndCommit()
         let integrations = [
-            MockIntegration(number: 1, step: Integration.Step.Building, sha: "old_head_sha"),
+            try MockIntegration(number: 1, step: Integration.Step.Building, sha: "old_head_sha"),
         ]
         
         let actions = SyncPairPRResolver().resolveActionsForCommitAndIssueWithBotIntegrations(commit, issue: pr, bot: bot, hostname: "localhost", buildStatusCreator: statusCreator, integrations: integrations)

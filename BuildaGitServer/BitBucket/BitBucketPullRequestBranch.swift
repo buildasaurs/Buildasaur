@@ -14,12 +14,12 @@ class BitBucketPullRequestBranch : BitBucketEntity {
     let commit: String
     let repo: BitBucketRepo
     
-    required init(json: NSDictionary) {
+    required init(json: NSDictionary) throws {
         
-        self.branch = json.dictionaryForKey("branch").stringForKey("name")
-        self.commit = json.dictionaryForKey("commit").stringForKey("hash")
-        self.repo = BitBucketRepo(json: json.dictionaryForKey("repository"))
+        self.branch = try json.dictionaryForKey("branch").stringForKey("name")
+        self.commit = try json.dictionaryForKey("commit").stringForKey("hash")
+        self.repo = try BitBucketRepo(json: try json.dictionaryForKey("repository"))
         
-        super.init(json: json)
+        try super.init(json: json)
     }
 }

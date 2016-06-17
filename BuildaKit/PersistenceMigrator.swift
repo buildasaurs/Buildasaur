@@ -175,17 +175,17 @@ class Migrator_v1_v2: MigratorType {
             triggers.appendContentsOf(trigWithIds)
             
             //now gather those ids
-            let triggerIds = trigWithIds.map { $0.stringForKey("id") }
+            let triggerIds = try! trigWithIds.map { try $0.stringForKey("id") }
             
             //and replace the "triggers" array in the build template with these ids
             template["triggers"] = triggerIds
         }
         
         //now save all triggers into their own folder
-        self.persistence.saveArrayIntoFolder("Triggers", items: triggers, itemFileName: { $0.stringForKey("id") }, serialize: { $0 })
+        self.persistence.saveArrayIntoFolder("Triggers", items: triggers, itemFileName: { try! $0.stringForKey("id") }, serialize: { $0 })
 
         //and save the build templates
-        self.persistence.saveArrayIntoFolder("BuildTemplates", items: mutableTemplates, itemFileName: { $0.stringForKey("id") }, serialize: { $0 })
+        self.persistence.saveArrayIntoFolder("BuildTemplates", items: mutableTemplates, itemFileName: { try! $0.stringForKey("id") }, serialize: { $0 })
     }
     
     func migrateSyncers(server: RefType?, project: RefType?, template: RefType?) {
@@ -225,9 +225,9 @@ class Migrator_v1_v2: MigratorType {
         
         //fix internal urls to be normal paths instead of the file:/// paths
         let withFixedUrls = withIds.map { project -> NSMutableDictionary in
-            project["url"] = self.fixPath(project.stringForKey("url"))
-            project["ssh_public_key_url"] = self.fixPath(project.stringForKey("ssh_public_key_url"))
-            project["ssh_private_key_url"] = self.fixPath(project.stringForKey("ssh_private_key_url"))
+            project["url"] = self.fixPath(try! project.stringForKey("url"))
+            project["ssh_public_key_url"] = self.fixPath(try! project.stringForKey("ssh_public_key_url"))
+            project["ssh_private_key_url"] = self.fixPath(try! project.stringForKey("ssh_private_key_url"))
             return project
         }
         
@@ -332,8 +332,8 @@ class Migrator_v2_v3: MigratorType {
         let renamedAuth = mutableProjects.map {
             (d: NSMutableDictionary) -> NSDictionary in
             
-            let id = d.stringForKey("id")
-            let token = d.stringForKey("github_token")
+            let id = try! d.stringForKey("id")
+            let token = try! d.stringForKey("github_token")
             let auth = ProjectAuthenticator(service: .GitHub, username: "GIT", type: .PersonalToken, secret: token)
             let formattedToken = auth.toString()
 
@@ -365,7 +365,7 @@ class Migrator_v2_v3: MigratorType {
         let withoutPasswords = mutableServers.map {
             (d: NSMutableDictionary) -> NSDictionary in
             
-            let password = d.stringForKey("password")
+            let password = try! d.stringForKey("password")
             let key = (try! XcodeServerConfig(json: d)).keychainKey()
             
             let keychain = SecurePersistence.xcodeServerPasswordKeychain()

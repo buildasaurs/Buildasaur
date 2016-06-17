@@ -20,10 +20,10 @@ class GitHubRepo : GitHubEntity {
     
     required init(json: NSDictionary) throws {
 
-        self.name = json.stringForKey("name")
-        self.fullName = json.stringForKey("full_name")
-        self.repoUrlHTTPS = json.stringForKey("clone_url")
-        self.repoUrlSSH = json.stringForKey("ssh_url")
+        self.name = try json.stringForKey("name")
+        self.fullName = try json.stringForKey("full_name")
+        self.repoUrlHTTPS = try json.stringForKey("clone_url")
+        self.repoUrlSSH = try json.stringForKey("ssh_url")
         
         if let permissions = json.optionalDictionaryForKey("permissions") {
             self.permissionsDict = permissions
