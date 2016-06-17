@@ -15,7 +15,7 @@ class GitHubCommit : GitHubEntity {
 
     required init(json: NSDictionary) throws {
         
-        self.sha = json.stringForKey("sha")
+        self.sha = try json.stringForKey("sha")
         
         try super.init(json: json)
     }

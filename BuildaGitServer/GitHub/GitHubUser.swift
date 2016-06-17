@@ -16,9 +16,9 @@ class GitHubUser : GitHubEntity {
 
     required init(json: NSDictionary) throws {
         
-        self.userName = json.stringForKey("login")
+        self.userName = try json.stringForKey("login")
         self.realName = json.optionalStringForKey("name")
-        self.avatarUrl = json.stringForKey("avatar_url")
+        self.avatarUrl = try json.stringForKey("avatar_url")
         
         try super.init(json: json)
     }
