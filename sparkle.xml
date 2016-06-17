@@ -26,5 +26,12 @@
       <pubDate>Tue, 29 Mar 2016 09:59:43 +0200</pubDate>
       <enclosure type='application/octet-stream' sparkle:version='35' sparkle:shortVersionString='1.0.0-b3' length='11867939' url='https://github.com/czechboy0/Buildasaur/releases/download/v1.0.0-b3/Buildasaur.app.zip'/>
     </item>
+    <item>
+      <title>v1.0.1 - Bugfixes, improvements</title>
+      <sparkle:minimumSystemVersion>10.11</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://honzadvorsky.com/Buildasaur/Sparkle_Release_Notes/v1.0.1.html</sparkle:releaseNotesLink>
+      <pubDate>Fri, 17 Jun 2016 16:39:37 +0200</pubDate>
+      <enclosure type='application/octet-stream' sparkle:version='36' sparkle:shortVersionString='1.0.1' length='11884914' url='https://github.com/czechboy0/Buildasaur/releases/download/v1.0.1/Buildasaur.app.zip'/>
+    </item>
   </channel>
 </rss>
