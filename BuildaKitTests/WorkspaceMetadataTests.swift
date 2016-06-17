@@ -20,7 +20,7 @@ class WorkspaceMetadataTests: XCTestCase {
         }
 
         expect(checkoutType) == expectedCheckoutType
-        expect(service) == expectedGitService
+        expect(service.type()) == expectedGitService.type()
     }
 
     // MARK: GitHub
