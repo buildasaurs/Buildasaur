@@ -16,8 +16,8 @@ class GitHubSummaryBuilderTests: XCTestCase {
     
     //MARK: utils
     
-    func integration(result: Integration.Result, buildResultSummary: BuildResultSummary) -> Integration {
-        let integration = MockIntegration(number: 15, step: .Completed, result: result, buildResultSummary: buildResultSummary)
+    func integration(result: Integration.Result, buildResultSummary: BuildResultSummary) throws -> Integration {
+        let integration = try MockIntegration(number: 15, step: .Completed, result: result, buildResultSummary: buildResultSummary)
         return integration
     }
     
@@ -29,10 +29,10 @@ class GitHubSummaryBuilderTests: XCTestCase {
     
     //MARK: tests
     
-    func testPassing_noTests_noCoverage_noLink() {
+    func testPassing_noTests_noCoverage_noLink() throws {
         
-        let buildResultSummary = MockBuildResultSummary()
-        let integration = self.integration(.Succeeded, buildResultSummary: buildResultSummary)
+        let buildResultSummary = try MockBuildResultSummary()
+        let integration = try self.integration(.Succeeded, buildResultSummary: buildResultSummary)
         let summary = SummaryBuilder()
         summary.statusCreator = MockGitHubServer()
         let result = summary.buildPassing(integration)
@@ -46,10 +46,10 @@ class GitHubSummaryBuilderTests: XCTestCase {
         expect(result.status.targetUrl).to(beNil())
     }
     
-    func testPassing_noTests_noCoverage_withLink() {
+    func testPassing_noTests_noCoverage_withLink() throws {
         
-        let buildResultSummary = MockBuildResultSummary()
-        let integration = self.integration(.Succeeded, buildResultSummary: buildResultSummary)
+        let buildResultSummary = try MockBuildResultSummary()
+        let integration = try self.integration(.Succeeded, buildResultSummary: buildResultSummary)
         let summary = SummaryBuilder()
         summary.statusCreator = MockGitHubServer()
         summary.linkBuilder = self.linkBuilder()
@@ -65,10 +65,10 @@ class GitHubSummaryBuilderTests: XCTestCase {
         expect(result.status.targetUrl) == exp_link
     }
     
-    func testPassing_noTests_withCoverage() {
+    func testPassing_noTests_withCoverage() throws {
         
-        let buildResultSummary = MockBuildResultSummary(codeCoveragePercentage: 12)
-        let integration = self.integration(.Succeeded, buildResultSummary: buildResultSummary)
+        let buildResultSummary = try MockBuildResultSummary(codeCoveragePercentage: 12)
+        let integration = try self.integration(.Succeeded, buildResultSummary: buildResultSummary)
         let summary = SummaryBuilder()
         summary.statusCreator = MockGitHubServer()
         let result = summary.buildPassing(integration)
@@ -81,11 +81,11 @@ class GitHubSummaryBuilderTests: XCTestCase {
         expect(result.status.state) == exp_state
     }
     
-    func testPassing_withTests_withCoverage() {
+    func testPassing_withTests_withCoverage() throws {
         
         //got 99 tests but failing ain't one
-        let buildResultSummary = MockBuildResultSummary(testsCount: 99, codeCoveragePercentage: 12)
-        let integration = self.integration(.Succeeded, buildResultSummary: buildResultSummary)
+        let buildResultSummary = try MockBuildResultSummary(testsCount: 99, codeCoveragePercentage: 12)
+        let integration = try self.integration(.Succeeded, buildResultSummary: buildResultSummary)
         let summary = SummaryBuilder()
         summary.statusCreator = MockGitHubServer()
         let result = summary.buildPassing(integration)
@@ -98,10 +98,10 @@ class GitHubSummaryBuilderTests: XCTestCase {
         expect(result.status.state) == exp_state
     }
     
-    func testPassing_withTests_withWarnings() {
+    func testPassing_withTests_withWarnings() throws {
         
-        let buildResultSummary = MockBuildResultSummary(testsCount: 99, warningCount: 2, codeCoveragePercentage: 12)
-        let integration = self.integration(.Warnings, buildResultSummary: buildResultSummary)
+        let buildResultSummary = try MockBuildResultSummary(testsCount: 99, warningCount: 2, codeCoveragePercentage: 12)
+        let integration = try self.integration(.Warnings, buildResultSummary: buildResultSummary)
         let summary = SummaryBuilder()
         summary.statusCreator = MockGitHubServer()
         let result = summary.buildPassing(integration)
@@ -114,10 +114,10 @@ class GitHubSummaryBuilderTests: XCTestCase {
         expect(result.status.state) == exp_state
     }
     
-    func testPassing_withTests_withAnalyzerWarnings() {
+    func testPassing_withTests_withAnalyzerWarnings() throws {
         
-        let buildResultSummary = MockBuildResultSummary(analyzerWarningCount: 3, testsCount: 99, codeCoveragePercentage: 12)
-        let integration = self.integration(.AnalyzerWarnings, buildResultSummary: buildResultSummary)
+        let buildResultSummary = try MockBuildResultSummary(analyzerWarningCount: 3, testsCount: 99, codeCoveragePercentage: 12)
+        let integration = try self.integration(.AnalyzerWarnings, buildResultSummary: buildResultSummary)
         let summary = SummaryBuilder()
         summary.statusCreator = MockGitHubServer()
         let result = summary.buildPassing(integration)
@@ -130,10 +130,10 @@ class GitHubSummaryBuilderTests: XCTestCase {
         expect(result.status.state) == exp_state
     }
     
-    func testPassing_withTests_withWarningsAndAnalyzerWarnings() {
+    func testPassing_withTests_withWarningsAndAnalyzerWarnings() throws {
         
-        let buildResultSummary = MockBuildResultSummary(analyzerWarningCount: 10, testsCount: 99, warningCount: 2, codeCoveragePercentage: 12)
-        let integration = self.integration(.Warnings, buildResultSummary: buildResultSummary)
+        let buildResultSummary = try MockBuildResultSummary(analyzerWarningCount: 10, testsCount: 99, warningCount: 2, codeCoveragePercentage: 12)
+        let integration = try self.integration(.Warnings, buildResultSummary: buildResultSummary)
         let summary = SummaryBuilder()
         summary.statusCreator = MockGitHubServer()
         let result = summary.buildPassing(integration)
@@ -146,11 +146,11 @@ class GitHubSummaryBuilderTests: XCTestCase {
         expect(result.status.state) == exp_state
     }
     
-    func testFailingTests() {
+    func testFailingTests() throws {
         
         //got 99 tests but failing's just one
-        let buildResultSummary = MockBuildResultSummary(testFailureCount: 1, testsCount: 99)
-        let integration = self.integration(.TestFailures, buildResultSummary: buildResultSummary)
+        let buildResultSummary = try MockBuildResultSummary(testFailureCount: 1, testsCount: 99)
+        let integration = try self.integration(.TestFailures, buildResultSummary: buildResultSummary)
         let summary = SummaryBuilder()
         summary.statusCreator = MockGitHubServer()
         let result = summary.buildFailingTests(integration)
@@ -163,10 +163,10 @@ class GitHubSummaryBuilderTests: XCTestCase {
         expect(result.status.state) == exp_state
     }
     
-    func testErrors() {
+    func testErrors() throws {
         
-        let buildResultSummary = MockBuildResultSummary(errorCount: 4)
-        let integration = self.integration(.BuildErrors, buildResultSummary: buildResultSummary)
+        let buildResultSummary = try MockBuildResultSummary(errorCount: 4)
+        let integration = try self.integration(.BuildErrors, buildResultSummary: buildResultSummary)
         let summary = SummaryBuilder()
         summary.statusCreator = MockGitHubServer()
         let result = summary.buildErrorredIntegration(integration)
@@ -179,10 +179,10 @@ class GitHubSummaryBuilderTests: XCTestCase {
         expect(result.status.state) == exp_state
     }
 
-    func testCanceled() {
+    func testCanceled() throws {
         
-        let buildResultSummary = MockBuildResultSummary()
-        let integration = self.integration(.Canceled, buildResultSummary: buildResultSummary)
+        let buildResultSummary = try MockBuildResultSummary()
+        let integration = try self.integration(.Canceled, buildResultSummary: buildResultSummary)
         let summary = SummaryBuilder()
         summary.statusCreator = MockGitHubServer()
         let result = summary.buildCanceledIntegration(integration)

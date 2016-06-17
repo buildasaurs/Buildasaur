@@ -12,10 +12,10 @@ class BitBucketIssue: BitBucketEntity, IssueType {
     
     let number: Int
     
-    required init(json: NSDictionary) {
+    required init(json: NSDictionary) throws {
         
-        self.number = json.intForKey("id")
+        self.number = try json.intForKey("id")
         
-        super.init(json: json)
+        try super.init(json: json)
     }
 }

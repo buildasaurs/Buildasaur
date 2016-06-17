@@ -14,14 +14,14 @@ class BitBucketPullRequest: BitBucketIssue, PullRequestType {
     let source: BitBucketPullRequestBranch
     let destination: BitBucketPullRequestBranch
     
-    required init(json: NSDictionary) {
+    required init(json: NSDictionary) throws {
         
-        self.title = json.stringForKey("title")
+        self.title = try json.stringForKey("title")
         
-        self.source = BitBucketPullRequestBranch(json: json.dictionaryForKey("source"))
-        self.destination = BitBucketPullRequestBranch(json: json.dictionaryForKey("destination"))
+        self.source = try BitBucketPullRequestBranch(json: try json.dictionaryForKey("source"))
+        self.destination = try BitBucketPullRequestBranch(json: try json.dictionaryForKey("destination"))
         
-        super.init(json: json)
+        try super.init(json: json)
     }
     
     var headName: String {

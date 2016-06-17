@@ -15,7 +15,7 @@ class GitHubComment : GitHubEntity {
     
     required init(json: NSDictionary) throws {
         
-        self.body = json.stringForKey("body")
+        self.body = try json.stringForKey("body")
         self.author = try GitHubUser(json: json.dictionaryForKey("user"))
 
         try super.init(json: json)

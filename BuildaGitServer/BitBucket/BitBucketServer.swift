@@ -58,8 +58,10 @@ extension BitBucketServer: SourceServerType {
             }
             
             if let body = body as? [NSDictionary] {
-                let prs: [BitBucketPullRequest] = BitBucketArray(body)
-                completion(prs: prs.map { $0 as PullRequestType }, error: nil)
+                let (result, error): ([BitBucketPullRequest]?, NSError?) = unthrow {
+                    return try BitBucketArray(body)
+                }
+                completion(prs: result?.map { $0 as PullRequestType }, error: error)
             } else {
                 completion(prs: nil, error: Error.withInfo("Wrong body \(body)"))
             }
@@ -81,8 +83,10 @@ extension BitBucketServer: SourceServerType {
             }
             
             if let body = body as? NSDictionary {
-                let pr = BitBucketPullRequest(json: body)
-                completion(pr: pr, error: nil)
+                let (result, error): (BitBucketPullRequest?, NSError?) = unthrow {
+                    return try BitBucketPullRequest(json: body)
+                }
+                completion(pr: result, error: error)
             } else {
                 completion(pr: nil, error: Error.withInfo("Wrong body \(body)"))
             }
@@ -104,8 +108,10 @@ extension BitBucketServer: SourceServerType {
             }
             
             if let body = body as? NSDictionary {
-                let repository = BitBucketRepo(json: body)
-                completion(repo: repository, error: nil)
+                let (result, error): (BitBucketRepo?, NSError?) = unthrow {
+                    return try BitBucketRepo(json: body)
+                }
+                completion(repo: result, error: error)
             } else {
                 completion(repo: nil, error: Error.withInfo("Wrong body \(body)"))
             }
@@ -134,8 +140,10 @@ extension BitBucketServer: SourceServerType {
             }
             
             if let body = body as? NSDictionary {
-                let status = BitBucketStatus(json: body)
-                completion(status: status, error: nil)
+                let (result, error): (BitBucketStatus?, NSError?) = unthrow {
+                    return try BitBucketStatus(json: body)
+                }
+                completion(status: result, error: error)
             } else {
                 completion(status: nil, error: Error.withInfo("Wrong body \(body)"))
             }
@@ -158,8 +166,10 @@ extension BitBucketServer: SourceServerType {
             }
             
             if let body = body as? NSDictionary {
-                let status = BitBucketStatus(json: body)
-                completion(status: status, error: nil)
+                let (result, error): (BitBucketStatus?, NSError?) = unthrow {
+                    return try BitBucketStatus(json: body)
+                }
+                completion(status: result, error: error)
             } else {
                 completion(status: nil, error: Error.withInfo("Wrong body \(body)"))
             }
@@ -185,8 +195,10 @@ extension BitBucketServer: SourceServerType {
             }
             
             if let body = body as? NSDictionary {
-                let comment = BitBucketComment(json: body)
-                completion(comment: comment, error: nil)
+                let (result, error): (BitBucketComment?, NSError?) = unthrow {
+                    return try BitBucketComment(json: body)
+                }
+                completion(comment: result, error: error)
             } else {
                 completion(comment: nil, error: Error.withInfo("Wrong body \(body)"))
             }
@@ -208,8 +220,10 @@ extension BitBucketServer: SourceServerType {
             }
             
             if let body = body as? [NSDictionary] {
-                let comments: [BitBucketComment] = BitBucketArray(body)
-                completion(comments: comments.map { $0 as CommentType }, error: nil)
+                let (result, error): ([BitBucketComment]?, NSError?) = unthrow {
+                    return try BitBucketArray(body)
+                }
+                completion(comments: result?.map { $0 as CommentType }, error: error)
             } else {
                 completion(comments: nil, error: Error.withInfo("Wrong body \(body)"))
             }
@@ -296,14 +310,18 @@ extension BitBucketServer {
                 return
             }
             
-            let payload = body as! NSDictionary
-            let accessToken = payload.stringForKey("access_token")
-            let refreshToken = payload.stringForKey("refresh_token")
-            let secret = [refreshToken, accessToken].joinWithSeparator(":")
-            
-            let newAuth = ProjectAuthenticator(service: .BitBucket, username: "GIT", type: .OAuthToken, secret: secret)
-            self.endpoints.auth.value = newAuth
-            completion(nil)
+            do {
+                let payload = body as! NSDictionary
+                let accessToken = try payload.stringForKey("access_token")
+                let refreshToken = try payload.stringForKey("refresh_token")
+                let secret = [refreshToken, accessToken].joinWithSeparator(":")
+                
+                let newAuth = ProjectAuthenticator(service: .BitBucket, username: "GIT", type: .OAuthToken, secret: secret)
+                self.endpoints.auth.value = newAuth
+                completion(nil)
+            } catch {
+                completion(error as NSError)
+            }
         }
     }
     

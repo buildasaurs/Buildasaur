@@ -22,15 +22,15 @@ class BitBucketStatus: BitBucketEntity, StatusType {
     let description: String?
     let targetUrl: String?
     
-    required init(json: NSDictionary) {
+    required init(json: NSDictionary) throws {
         
-        self.bbState = BitBucketState(rawValue: json.stringForKey("state"))!
-        self.key = json.stringForKey("key")
+        self.bbState = BitBucketState(rawValue: try json.stringForKey("state"))!
+        self.key = try json.stringForKey("key")
         self.name = json.optionalStringForKey("name")
         self.description = json.optionalStringForKey("description")
-        self.targetUrl = json.stringForKey("url")
+        self.targetUrl = try json.stringForKey("url")
         
-        super.init(json: json)
+        try super.init(json: json)
     }
     
     init(state: BitBucketState, key: String, name: String?, description: String?, url: String) {

@@ -58,7 +58,7 @@ class GitHubStatus : GitHubEntity {
 
     required init(json: NSDictionary) throws {
         
-        self.githubState = GitHubState(rawValue: json.stringForKey("state"))!
+        self.githubState = GitHubState(rawValue: try json.stringForKey("state"))!
         self.description = json.optionalStringForKey("description")
         self.targetUrl = json.optionalStringForKey("target_url")
         self.context = json.optionalStringForKey("context")

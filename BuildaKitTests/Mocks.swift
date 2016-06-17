@@ -161,8 +161,8 @@ class MockSourceControlBlueprint: SourceControlBlueprint {
         super.init(branch: "branch", projectWCCIdentifier: "wcc_id", wCCName: "wcc_name", projectName: "project_name", projectURL: "project_url", projectPath: "project_path", publicSSHKey: "SSH public", privateSSHKey: "SSH private", sshPassphrase: "SSH passphrase")
     }
 
-    required init(json: NSDictionary) {
-        super.init(json: json)
+    required init(json: NSDictionary) throws {
+        try super.init(json: json)
     }
 }
 
@@ -181,8 +181,8 @@ class MockBotConfiguration: BotConfiguration {
             sourceControlBlueprint: MockSourceControlBlueprint())
     }
 
-    required init(json: NSDictionary) {
-        super.init(json: json)
+    required init(json: NSDictionary) throws {
+        try super.init(json: json)
     }
 }
 
@@ -192,14 +192,14 @@ class MockBot: Bot {
         super.init(name: name, configuration: MockBotConfiguration())
     }
 
-    required init(json: NSDictionary) {
-        super.init(json: json)
+    required init(json: NSDictionary) throws {
+        try super.init(json: json)
     }
 }
 
 class MockIntegration: Integration {
     
-    init(number: Int = 1, step: Step = Step.Completed, sha: String = "head_sha", result: Result = Result.Succeeded, buildResultSummary: BuildResultSummary? = nil) {
+    init(number: Int = 1, step: Step = Step.Completed, sha: String = "head_sha", result: Result = Result.Succeeded, buildResultSummary: BuildResultSummary? = nil) throws {
         
         let dict = MockHelpers.loadSampleIntegration()
         dict["currentStep"] = step.rawValue
@@ -210,11 +210,11 @@ class MockIntegration: Integration {
         let d2 = d1["DVTSourceControlWorkspaceBlueprintLocationsKey"] as! NSMutableDictionary
         let d3 = d2["CEE8472CC4AB69CD27173B930EB93B6B4AA4BAFC"] as! NSMutableDictionary
         d3["DVTSourceControlLocationRevisionKey"] = sha
-        super.init(json: dict)
+        try super.init(json: dict)
     }
 
-    required init(json: NSDictionary) {
-        super.init(json: json)
+    required init(json: NSDictionary) throws {
+        try super.init(json: json)
     }
 }
 
@@ -227,7 +227,7 @@ class MockBuildResultSummary: BuildResultSummary {
         testsCount: Int = 0,
         warningCount: Int = 0,
         codeCoveragePercentage: Int = 0
-        ) {
+        ) throws {
         
             let json: NSDictionary = [
                 "analyzerWarningCount": analyzerWarningCount,
@@ -245,11 +245,11 @@ class MockBuildResultSummary: BuildResultSummary {
                 "codeCoveragePercentage": codeCoveragePercentage,
                 "codeCoveragePercentageDelta": 0
             ]
-            self.init(json: json)
+            try self.init(json: json)
     }
 
-    required init(json: NSDictionary) {
-        super.init(json: json)
+    required init(json: NSDictionary) throws {
+        try super.init(json: json)
     }
 }
 

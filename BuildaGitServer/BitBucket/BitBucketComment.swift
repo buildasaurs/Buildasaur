@@ -12,14 +12,16 @@ class BitBucketComment: BitBucketEntity, CommentType {
     
     let body: String
     
-    required init(json: NSDictionary) {
+    required init(json: NSDictionary) throws {
         
-        self.body = json
+        if let body = try json
             .optionalDictionaryForKey("content")?
-            .stringForKey("raw") ?? json.stringForKey("content")
+            .stringForKey("raw") {
+            self.body = body
+        } else {
+            self.body = try json.stringForKey("content")
+        }
         
-        super.init(json: json)
+        try super.init(json: json)
     }
-    
-    
 }
