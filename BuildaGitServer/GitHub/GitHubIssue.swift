@@ -15,11 +15,9 @@ class GitHubIssue : GitHubEntity {
     var title: String
     
     required init(json: NSDictionary) throws {
-        
-        self.number = json.intForKey("number")
-        self.body = json.stringForKey("body")
-        self.title = json.stringForKey("title")
-        
+        self.number = try json.intForKey("number")
+        self.body = json.optionalStringForKey("body") ?? ""
+        self.title = try json.stringForKey("title")
         try super.init(json: json)
     }
 }
