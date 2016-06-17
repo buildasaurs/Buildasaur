@@ -15,7 +15,7 @@ class GitHubBranch : GitHubEntity {
     
     required init(json: NSDictionary) throws {
         
-        self.name = json.stringForKey("name")
+        self.name = try json.stringForKey("name")
         self.commit = try GitHubCommit(json: json.dictionaryForKey("commit"))
         try super.init(json: json)
     }

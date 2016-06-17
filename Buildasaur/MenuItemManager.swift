@@ -47,7 +47,7 @@ class MenuItemManager : NSObject, NSMenuDelegate {
         //this many items need to be created or destroyed
         if diffItems > 0 {
             for _ in 0..<diffItems {
-                menu.addItemWithTitle("", action: Selector(""), keyEquivalent: "")
+                menu.addItemWithTitle("", action: Selector.init(), keyEquivalent: "")
             }
         } else if diffItems < 0 {
             for _ in 0..<abs(diffItems) {

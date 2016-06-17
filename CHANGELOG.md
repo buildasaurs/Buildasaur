@@ -2,7 +2,31 @@
 
 ## [Unreleased](https://github.com/czechboy0/buildasaur/tree/HEAD)
 
-[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v1.0.0-b2...HEAD)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v1.0.0-b3...HEAD)
+
+**Fixed bugs:**
+
+- Force unwrap crash in Bot.init \(JSON contains an error\) [\#274](https://github.com/czechboy0/Buildasaur/issues/274)
+
+**Closed issues:**
+
+- Question: Preference for adding a service [\#279](https://github.com/czechboy0/Buildasaur/issues/279)
+- Failed to access server, error: 404: for GitHub [\#278](https://github.com/czechboy0/Buildasaur/issues/278)
+- Wrong project after cancel when creating new syncer [\#277](https://github.com/czechboy0/Buildasaur/issues/277)
+- Private Bitbucket Repo [\#276](https://github.com/czechboy0/Buildasaur/issues/276)
+- Error: Failed to post a status ... on commit [\#273](https://github.com/czechboy0/Buildasaur/issues/273)
+- Repository maintenance not recognized [\#271](https://github.com/czechboy0/Buildasaur/issues/271)
+- Support for cleaning up older integrations? [\#269](https://github.com/czechboy0/Buildasaur/issues/269)
+- Create a Cask update fastlane action [\#229](https://github.com/czechboy0/Buildasaur/issues/229)
+
+**Merged pull requests:**
+
+- More throwing, less trapping, more fixes [\#281](https://github.com/czechboy0/Buildasaur/pull/281) ([czechboy0](https://github.com/czechboy0))
+- Added support for repo URLs prefixed with ssh:// [\#260](https://github.com/czechboy0/Buildasaur/pull/260) ([ioveracker](https://github.com/ioveracker))
+- Added ability to create syncers for tvOS projects [\#258](https://github.com/czechboy0/Buildasaur/pull/258) ([ioveracker](https://github.com/ioveracker))
+
+## [v1.0.0-b3](https://github.com/czechboy0/buildasaur/tree/v1.0.0-b3) (2016-03-29)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v1.0.0-b2...v1.0.0-b3)
 
 **Fixed bugs:**
 

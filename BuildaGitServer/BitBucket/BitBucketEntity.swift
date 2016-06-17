@@ -9,12 +9,12 @@
 import Foundation
 
 protocol BitBucketType {
-    init(json: NSDictionary)
+    init(json: NSDictionary) throws
 }
 
 class BitBucketEntity : BitBucketType {
     
-    required init(json: NSDictionary) {
+    required init(json: NSDictionary) throws {
         
         //add any common keys to be parsed here
     }
@@ -29,9 +29,9 @@ class BitBucketEntity : BitBucketType {
         return NSDictionary()
     }
     
-    class func optional<T: BitBucketEntity>(json: NSDictionary?) -> T? {
+    class func optional<T: BitBucketEntity>(json: NSDictionary?) throws -> T? {
         if let json = json {
-            return T(json: json)
+            return try T(json: json)
         }
         return nil
     }
@@ -39,11 +39,11 @@ class BitBucketEntity : BitBucketType {
 }
 
 //parse an array of dictionaries into an array of parsed entities
-func BitBucketArray<T where T: BitBucketType>(jsonArray: [NSDictionary]) -> [T] {
+func BitBucketArray<T where T: BitBucketType>(jsonArray: [NSDictionary]) throws -> [T] {
     
-    let parsed = jsonArray.map {
+    let parsed = try jsonArray.map {
         (json: NSDictionary) -> (T) in
-        return T(json: json)
+        return try T(json: json)
     }
     return parsed
 }
