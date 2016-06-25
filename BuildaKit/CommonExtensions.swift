@@ -125,6 +125,15 @@ extension NSDictionary {
     }
 }
 
+extension Dictionary {
+    
+    public mutating func merge<S: SequenceType where S.Generator.Element == (Key,Value)> (other: S) {
+        for (key, value) in other {
+            self[key] = value
+        }
+    }
+}
+
 extension Array {
     
     public func dictionarifyWithKey(key: (item: Element) -> String) -> [String: Element] {

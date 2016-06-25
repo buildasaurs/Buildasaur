@@ -156,6 +156,8 @@
 		3AED13151C52A1A300E3B7FF /* SecurePersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AED13141C52A1A300E3B7FF /* SecurePersistence.swift */; };
 		3AF090B81B1134AA0058567F /* BranchWatchingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF090B71B1134AA0058567F /* BranchWatchingViewController.swift */; };
 		3AF1B1241AAC7CA500917EF3 /* SyncerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF1B1231AAC7CA500917EF3 /* SyncerViewController.swift */; };
+		6DF2EAFA1D1C6DDF006FC52B /* SelectTriggerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF2EAF91D1C6DDF006FC52B /* SelectTriggerViewController.swift */; };
+		6DF2EB301D1EB0F0006FC52B /* ExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF2EB2F1D1EB0F0006FC52B /* ExtensionTests.swift */; };
 		775501D89C0E4D209E6EE5D0 /* Pods_BuildaGitServer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9139F7877761955F17C535E /* Pods_BuildaGitServer.framework */; };
 		785688011CDD4843009EEB72 /* WorkspaceMetadataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785688001CDD4843009EEB72 /* WorkspaceMetadataTests.swift */; };
 		D59A4C6EEE903468E69AEA81 /* Pods_BuildaKitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC43508E8A4F9D6E5ED0126 /* Pods_BuildaKitTests.framework */; };
@@ -382,6 +384,8 @@
 		4A4FCE02D4B5A180AAF85C12 /* Pods-BuildaGitServer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaGitServer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaGitServer/Pods-BuildaGitServer.debug.xcconfig"; sourceTree = "<group>"; };
 		4EC43508E8A4F9D6E5ED0126 /* Pods_BuildaKitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BuildaKitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A0C42D6343BC2A4C4C899AB /* Pods-BuildaHeartbeatKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaHeartbeatKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaHeartbeatKit/Pods-BuildaHeartbeatKit.release.xcconfig"; sourceTree = "<group>"; };
+		6DF2EAF91D1C6DDF006FC52B /* SelectTriggerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectTriggerViewController.swift; sourceTree = "<group>"; };
+		6DF2EB2F1D1EB0F0006FC52B /* ExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionTests.swift; sourceTree = "<group>"; };
 		7827BDC6B1752C193A0EAA05 /* Pods_BuildaKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BuildaKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		785688001CDD4843009EEB72 /* WorkspaceMetadataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceMetadataTests.swift; sourceTree = "<group>"; };
 		8176576B54DB918274B10F51 /* Pods-Buildasaur.testing.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Buildasaur.testing.xcconfig"; path = "Pods/Target Support Files/Pods-Buildasaur/Pods-Buildasaur.testing.xcconfig"; sourceTree = "<group>"; };
@@ -639,6 +643,7 @@
 				3ACBADDA1B5ADE1400204457 /* SyncerTests.swift */,
 				3ACBADDB1B5ADE1400204457 /* SyncPair_PR_Bot_Tests.swift */,
 				785688001CDD4843009EEB72 /* WorkspaceMetadataTests.swift */,
+				6DF2EB2F1D1EB0F0006FC52B /* ExtensionTests.swift */,
 				3A9D741E1BCBF86900DCA23C /* Migration */,
 			);
 			path = BuildaKitTests;
@@ -779,6 +784,7 @@
 				3AF1B1231AAC7CA500917EF3 /* SyncerViewController.swift */,
 				3AF090B71B1134AA0058567F /* BranchWatchingViewController.swift */,
 				3A5B04AF1AB5144700F60536 /* ManualBotManagementViewController.swift */,
+				6DF2EAF91D1C6DDF006FC52B /* SelectTriggerViewController.swift */,
 			);
 			name = Editables;
 			sourceTree = "<group>";
@@ -1460,6 +1466,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A9109BF1BC29E0A00C2AECA /* EditorViewControllerFactory.swift in Sources */,
+				6DF2EAFA1D1C6DDF006FC52B /* SelectTriggerViewController.swift in Sources */,
 				3A0FF5A01BBFDA7E00FB8051 /* RACUIExtensions.swift in Sources */,
 				3AE0AB2B1BB991AB00A52D20 /* SyncerViewModel.swift in Sources */,
 				3AAA1B761AAC504700FA1598 /* XcodeServerViewController.swift in Sources */,
@@ -1564,6 +1571,7 @@
 				3ACBADDE1B5ADE1400204457 /* SyncerTests.swift in Sources */,
 				3ACBADDF1B5ADE1400204457 /* SyncPair_PR_Bot_Tests.swift in Sources */,
 				3ACBADDC1B5ADE1400204457 /* Mocks.swift in Sources */,
+				6DF2EB301D1EB0F0006FC52B /* ExtensionTests.swift in Sources */,
 				3A9D74201BCBF87900DCA23C /* MigrationTests.swift in Sources */,
 				3A7F0CC81BC1508C0079A511 /* GeneralTests.swift in Sources */,
 			);

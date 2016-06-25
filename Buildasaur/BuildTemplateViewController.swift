@@ -519,12 +519,26 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
             triggerViewController.delegate = self
             self.triggerToEdit = nil
         }
+        else if let selectTriggerViewController = destinationController as? SelectTriggerViewController {
+            
+            selectTriggerViewController.storageManager = self.storageManager
+            selectTriggerViewController.delegate = self
+        }
         
         super.prepareForSegue(segue, sender: sender)
     }
 
     @IBAction func addTriggerButtonClicked(sender: AnyObject) {
-        self.editTrigger(nil)
+        let buttons = ["Add new", "Add existed", "Cancel"]
+        UIUtils.showAlertWithButtons("Would you like to add a new trigger or add existed one?", buttons: buttons, style: NSAlertStyle.InformationalAlertStyle, completion: { (tappedButton) -> () in
+            switch (tappedButton) {
+            case "Add new":
+                self.editTrigger(nil)
+            case "Add existed":
+                self.performSegueWithIdentifier("selectTriggers", sender: nil)
+            default: break
+            }
+        })
     }
     
     override func shouldGoNext() -> Bool {
@@ -604,8 +618,6 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
     
     @IBAction func triggerTableViewDeleteTapped(sender: AnyObject) {
         let index = self.triggersTableView.selectedRow
-        let trigger = self.triggers.value[index]
-        self.storageManager.removeTriggerConfig(trigger)
         self.triggers.value.removeAtIndex(index)
     }
     
@@ -631,13 +643,23 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
 
 extension BuildTemplateViewController: TriggerViewControllerDelegate {
     
-    func triggerViewControllerDidCancelEditingTrigger(trigger: TriggerConfig) {
-        //nothing to do
-    }
-    
-    func triggerViewControllerDidSaveTrigger(trigger: TriggerConfig) {
+    func triggerViewController(triggerViewController: NSViewController, didSaveTrigger trigger: TriggerConfig) {
         var mapped = self.triggers.value.dictionarifyWithKey { $0.id }
         mapped[trigger.id] = trigger
+        self.triggers.value = Array(mapped.values)
+        triggerViewController.dismissController(nil)
+    }
+    
+    func triggerViewController(triggerViewController: NSViewController, didCancelEditingTrigger trigger: TriggerConfig) {
+        triggerViewController.dismissController(nil)
+    }
+}
+
+extension BuildTemplateViewController: SelectTriggerViewControllerDelegate {
+    
+    func selectTriggerViewController(viewController: SelectTriggerViewController, didSelectTriggers selectedTriggers: [TriggerConfig]) {
+        var mapped = self.triggers.value.dictionarifyWithKey { $0.id }
+        mapped.merge(selectedTriggers.dictionarifyWithKey { $0.id })
         self.triggers.value = Array(mapped.values)
     }
 }
