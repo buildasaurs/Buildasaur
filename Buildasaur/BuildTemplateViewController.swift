@@ -529,12 +529,12 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
     }
 
     @IBAction func addTriggerButtonClicked(sender: AnyObject) {
-        let buttons = ["Add new", "Add existed", "Cancel"]
-        UIUtils.showAlertWithButtons("Would you like to add a new trigger or add existed one?", buttons: buttons, style: NSAlertStyle.InformationalAlertStyle, completion: { (tappedButton) -> () in
+        let buttons = ["Add new", "Add existing", "Cancel"]
+        UIUtils.showAlertWithButtons("Would you like to add a new trigger or add existing one?", buttons: buttons, style: NSAlertStyle.InformationalAlertStyle, completion: { (tappedButton) -> () in
             switch (tappedButton) {
             case "Add new":
                 self.editTrigger(nil)
-            case "Add existed":
+            case "Add existing":
                 self.performSegueWithIdentifier("selectTriggers", sender: nil)
             default: break
             }
