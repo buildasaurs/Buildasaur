@@ -1963,11 +1963,11 @@ Gw
                                     <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yyH-7f-chi">
                                         <rect key="frame" x="9" y="97" width="412" height="56"/>
                                         <subviews>
-                                            <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yp3-gn-PeT">
-                                                <rect key="frame" x="0.0" y="1" width="54" height="54"/>
+                                            <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" misplaced="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yp3-gn-PeT">
+                                                <rect key="frame" x="0.0" y="0.0" width="54" height="55"/>
                                                 <subviews>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="44T-kR-MXL">
-                                                        <rect key="frame" x="-2" y="29" width="58" height="25"/>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="749" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="44T-kR-MXL">
+                                                        <rect key="frame" x="-2" y="29" width="58" height="26"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Triggers:" id="UDU-ml-1bK">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -2080,8 +2080,8 @@ Gw
                                             </scrollView>
                                         </subviews>
                                         <constraints>
+                                            <constraint firstItem="Yp3-gn-PeT" firstAttribute="bottom" secondItem="Pzv-da-4vI" secondAttribute="bottom" id="M6p-yc-JNY"/>
                                             <constraint firstItem="Yp3-gn-PeT" firstAttribute="top" secondItem="3LH-7K-zWF" secondAttribute="top" id="cYC-wG-Uz7"/>
-                                            <constraint firstItem="Yp3-gn-PeT" firstAttribute="bottom" secondItem="3LH-7K-zWF" secondAttribute="bottom" id="ebm-OQ-UdX"/>
                                         </constraints>
                                         <visibilityPriorities>
                                             <integer value="1000"/>
@@ -2615,7 +2615,7 @@ Gw
                                             <real value="3.4028234663852886e+38"/>
                                         </customSpacing>
                                     </stackView>
-                                    <stackView distribution="fillEqually" orientation="horizontal" alignment="top" spacing="20" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" misplaced="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yy1-w8-4AT">
+                                    <stackView distribution="fillEqually" orientation="horizontal" alignment="top" spacing="20" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yy1-w8-4AT">
                                         <rect key="frame" x="95" y="0.0" width="220" height="22"/>
                                         <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IQl-Cn-uMh">
@@ -3558,7 +3558,7 @@ Gw
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="none" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" id="tI3-HF-LAH">
-                                                    <rect key="frame" x="0.0" y="0.0" width="398" height="328"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="397" height="19"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
