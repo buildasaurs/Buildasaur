@@ -14,11 +14,13 @@ import ReactiveCocoa
 import Result
 
 protocol TriggerViewControllerDelegate: class {
-    func triggerViewControllerDidCancelEditingTrigger(trigger: TriggerConfig)
-    func triggerViewControllerDidSaveTrigger(trigger: TriggerConfig)
+    func triggerViewController(triggerViewController: NSViewController, didCancelEditingTrigger trigger: TriggerConfig)
+    func triggerViewController(triggerViewController: NSViewController, didSaveTrigger trigger: TriggerConfig)
 }
 
 class TriggerViewController: NSViewController {
+    
+    static let storyboardID: String = "triggerViewController"
     
     let triggerConfig = MutableProperty<TriggerConfig!>(nil)
     var storageManager: StorageManager!
@@ -26,6 +28,8 @@ class TriggerViewController: NSViewController {
     weak var delegate: TriggerViewControllerDelegate?
     
     @IBOutlet weak var saveButton: NSButton!
+    @IBOutlet weak var cancelButton: NSButton!
+    @IBOutlet weak var closeButton: NSButton!
     @IBOutlet weak var nameTextField: NSTextField!
     @IBOutlet weak var kindPopup: NSPopUpButton!
     @IBOutlet weak var phasePopup: NSPopUpButton!
@@ -68,7 +72,7 @@ class TriggerViewController: NSViewController {
         self.setupLabels()
         self.setupConditions()
         self.setupEmailConfiguration()
-
+        
         //initial dump
         
         self.triggerConfig.producer.startWithNext { [weak self] config in
@@ -324,10 +328,7 @@ class TriggerViewController: NSViewController {
         self.storageManager.addTriggerConfig(currentTrigger)
         
         //notify delegate
-        self.delegate?.triggerViewControllerDidSaveTrigger(currentTrigger)
-        
-        //dismiss
-        self.dismissController(nil)
+        self.delegate?.triggerViewController(self, didSaveTrigger: currentTrigger)
     }
     
     @IBAction func cancelButtonClicked(sender: NSButton) {
@@ -335,8 +336,7 @@ class TriggerViewController: NSViewController {
         //in case of cancel we could never have had a valid trigger, so just
         //use the original trigger in that case. we only care about the id anyway.
         let currentTrigger = self.generatedTrigger.value ?? self.triggerConfig.value!
-        self.delegate?.triggerViewControllerDidCancelEditingTrigger(currentTrigger)
-        self.dismissController(nil)
+        self.delegate?.triggerViewController(self, didCancelEditingTrigger: currentTrigger)
     }
     
     //MARK: consts
