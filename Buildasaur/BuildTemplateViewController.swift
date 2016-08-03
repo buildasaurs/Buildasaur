@@ -451,6 +451,8 @@ class BuildTemplateViewController: ConfigEditViewController, NSTableViewDataSour
         switch platform {
         case .iOS, .iOS_Simulator:
             allowedPlatforms = Set([.iOS, .iOS_Simulator])
+        case .tvOS, .tvOS_Simulator:
+            allowedPlatforms = Set([.tvOS, .tvOS_Simulator])
         default:
             allowedPlatforms = Set([platform])
         }
