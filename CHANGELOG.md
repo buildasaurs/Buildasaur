@@ -2,7 +2,19 @@
 
 ## [Unreleased](https://github.com/czechboy0/buildasaur/tree/HEAD)
 
-[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v1.0.0-b3...HEAD)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v1.0.1...HEAD)
+
+**Closed issues:**
+
+- Trying to sync again... [\#288](https://github.com/czechboy0/Buildasaur/issues/288)
+
+**Merged pull requests:**
+
+- Enabled selection of tvOS simulators [\#286](https://github.com/czechboy0/Buildasaur/pull/286) ([ioveracker](https://github.com/ioveracker))
+- Add ability to reuse trigger in different templates; [\#285](https://github.com/czechboy0/Buildasaur/pull/285) ([Antondomashnev](https://github.com/Antondomashnev))
+
+## [v1.0.1](https://github.com/czechboy0/buildasaur/tree/v1.0.1) (2016-06-17)
+[Full Changelog](https://github.com/czechboy0/buildasaur/compare/v1.0.0-b3...v1.0.1)
 
 **Fixed bugs:**
 
