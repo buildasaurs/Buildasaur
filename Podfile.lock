@@ -32,7 +32,7 @@ PODS:
   - Result (1.0.2)
   - Sparkle (1.13.1)
   - SwiftSafe (0.1)
-  - XcodeServerSDK (0.7.0):
+  - XcodeServerSDK (0.7.1):
     - BuildaUtils (~> 0.3.2)
 
 DEPENDENCIES:
@@ -48,7 +48,7 @@ DEPENDENCIES:
   - OAuthSwift
   - ReactiveCocoa (~> 4.0.1)
   - Sparkle
-  - XcodeServerSDK (~> 0.7.0)
+  - XcodeServerSDK (~> 0.7.1)
 
 EXTERNAL SOURCES:
   Keys:
@@ -79,8 +79,8 @@ SPEC CHECKSUMS:
   Result: dd3dd71af3fa2e262f1a999e14fba2c25ec14f16
   Sparkle: 2fbd47b869621d1e679c7554e3e19dda02104818
   SwiftSafe: 77ffd12b02678790bec1ef56a2d14ec5036f1fd6
-  XcodeServerSDK: b36679face073e3b4376cee4abf811f9c165316c
+  XcodeServerSDK: 7b647f3d660a82c2d9f5baa5af81e91352006929
 
-PODFILE CHECKSUM: d1b284907bfac0932054dfe97b6a6f726a97ffca
+PODFILE CHECKSUM: c44b614c43b148af056f2b381fc709d6518dcd87
 
 COCOAPODS: 1.0.1
