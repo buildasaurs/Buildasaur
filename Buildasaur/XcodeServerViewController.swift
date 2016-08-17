@@ -28,7 +28,9 @@ class XcodeServerViewController: ConfigEditViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        BonjourUtilsTester.dumpXcodeServers()
+
         self.setup()
     }
     
