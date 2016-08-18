@@ -15,8 +15,7 @@ public class BonjourUtilsTester {
 }
 
 private protocol BonjourUtilsDelegate: class {
-    func didDiscoverXcodeServer(service: NSNetService)
-    func didRemoveXcodeServer(service: NSNetService)
+    func discoveredXcodeServers(servers: [NSNetService])
 }
 
 /* Wraps NSNetService browsing to discover Xcode Server instances.
@@ -60,8 +59,8 @@ private class BonjourUtils {
         @objc private func netServiceBrowser(browser: NSNetServiceBrowser, didRemoveService service: NSNetService, moreComing: Bool) {
             if let index = services.indexOf(service) {
                 Log.info("Removing Xcode Server Service: \(service)")
-                delegate?.didRemoveXcodeServer(service)
                 services.removeAtIndex(index)
+                delegate?.discoveredXcodeServers(services)
             }
 
             if !moreComing {
@@ -75,7 +74,7 @@ private class BonjourUtils {
             if sender.addresses?.count > 0 {
                 sender.stop()
                 Log.info("Resolved Xcode Server Service: \(sender.hostName ?? ""):\(sender.port)")
-                delegate?.didDiscoverXcodeServer(sender)
+                delegate?.discoveredXcodeServers(services)
             }
         }
         
