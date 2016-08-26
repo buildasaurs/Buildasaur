@@ -1,15 +1,13 @@
 Buildasaur
 ==========
 
-[![satellite badge](https://stlt.herokuapp.com/v1/badge/czechboy0/buildasaur/master)](https://github.com/czechboy0/buildasaur/branches)
-[![Latest Buildasaur Release](https://img.shields.io/github/release/czechboy0/buildasaur.svg)](https://github.com/czechboy0/Buildasaur/releases/latest)
+[![satellite badge](https://stlt.herokuapp.com/v1/badge/buildasaurs/buildasaur/master)](https://github.com/buildasaurs/buildasaur/branches)
+[![Latest Buildasaur Release](https://img.shields.io/github/release/buildasaurs/buildasaur.svg)](https://github.com/buildasaurs/Buildasaur/releases/latest)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://en.wikipedia.org/wiki/MIT_License)
 
-[![Blog](https://img.shields.io/badge/blog-honzadvorsky.com-green.svg)](http://honzadvorsky.com)
 [![Twitter Buildasaur](https://img.shields.io/badge/twitter-Buildasaur-green.svg)](http://twitter.com/buildasaur)
-[![Twitter Czechboy0](https://img.shields.io/badge/twitter-czechboy0-green.svg)](http://twitter.com/czechboy0)
 
-![](https://raw.githubusercontent.com/czechboy0/Buildasaur/master/Buildasaur/Images.xcassets/AppIcon.appiconset/Icon_128@2x.png)
+![](https://raw.githubusercontent.com/buildasaurs/Buildasaur/master/Buildasaur/Images.xcassets/AppIcon.appiconset/Icon_128@2x.png)
 
 > Automatic testing of your Pull Requests on GitHub and BitBucket using Xcode Server. Keep your team productive and safe. Get up and running in minutes.
 
@@ -35,11 +33,11 @@ Buildasaur runs as a background Mac app, its configuration window goes away when
 ------------------
 - GitHub
 - BitBucket
-- (are we missing yours? [Create an Issue](https://github.com/czechboy0/Buildasaur/issues) and I'll see if I can add it)
+- (are we missing yours? [Create an Issue](https://github.com/buildasaurs/Buildasaur/issues) and I'll see if I can add it)
 
 :arrow_down: Getting Buildasaur
 ------------------
-- just download the `.app` of the [latest release](https://github.com/czechboy0/Buildasaur/releases/latest), which will offer to automatically update itself as new releases become available
+- just download the `.app` of the [latest release](https://github.com/buildasaurs/Buildasaur/releases/latest), which will offer to automatically update itself as new releases become available
 - clone this repository, run `fastlane prebuild` and run it in Xcode (more work)
 
 :hammer: Requirements
@@ -54,13 +52,13 @@ Xcode Server ships in Xcode, so the server API is also dependent on the Xcode yo
 
 | Xcode | last supported |
 | :-- | :--: | :--: |
-| Xcode 7 | :white_check_mark: [latest](https://github.com/czechboy0/Buildasaur/releases/latest) |
-| Xcode 6 | :white_check_mark: [0.2.9](https://github.com/czechboy0/Buildasaur/releases/tag/v0.2.9) | 
+| Xcode 7 | :white_check_mark: [latest](https://github.com/buildasaurs/Buildasaur/releases/latest) |
+| Xcode 6 | :white_check_mark: [0.2.9](https://github.com/buildasaurs/Buildasaur/releases/tag/v0.2.9) | 
 
 :white_check_mark: Installation Steps
 ------------------
 1. [Install Xcode Server](http://honzadvorsky.com/articles/2015-08-04-xcs_tutorials_1_getting_started/)
-2. [Download](https://github.com/czechboy0/Buildasaur/releases/latest) Buildasaur
+2. [Download](https://github.com/buildasaurs/Buildasaur/releases/latest) Buildasaur
 3. Setup Buildasaur
 	- Checkout your project's repository locally over SSH
 	- Launch Buildasaur
@@ -92,7 +90,7 @@ The default workflow is as follows:
 ## :envelope: Posting Status Comments
 - Buildasaur by default posts a comment into the PR conversation when an integration finishes
 
-![](https://raw.githubusercontent.com/czechboy0/Buildasaur/master/Meta/comment.png)
+![](https://raw.githubusercontent.com/buildasaurs/Buildasaur/master/Meta/comment.png)
 
 - this can be changed in the UI with the toggle named "Post Status Comments"
 
@@ -102,17 +100,17 @@ In addition to automatic bot management with syncers, you can create bots from a
 ## :eyeglasses: Branch Watching
 All branches with open Pull Requests are automatically watched and tested. However, what if you wanted to watch a branch which does *not* have a Pull Request associated with it? Like `master`, or a release branch into which you're making final changes and want tested?
 
-Buildasaur supports that. You can select extra watched branches that will automatically be tested and their statuses will be updated on GitHub. You can see the statuses of Buildasaur's branches [here](https://github.com/czechboy0/Buildasaur/branches), for instance.
+Buildasaur supports that. You can select extra watched branches that will automatically be tested and their statuses will be updated on GitHub. You can see the statuses of Buildasaur's branches [here](https://github.com/buildasaurs/Buildasaur/branches), for instance.
 
-Enabling watched branches is a prerequisite of getting [build badges](#vertical_traffic_light-build-badges) working with [satellite](https://github.com/czechboy0/satellite).
+Enabling watched branches is a prerequisite of getting [build badges](#vertical_traffic_light-build-badges) working with [satellite](https://github.com/buildasaurs/satellite).
 
 *Note that Branch Watching is only supported for GitHub-hosted projects.*
 
 ## :vertical_traffic_light: Build Badges
-I built a tiny service called [satellite](https://github.com/czechboy0/satellite), which serves down badges based on GitHub status of a branch. And this status is automatically updated by Buildasaur when a build finishes (enable a *watched branch* in Buildasaur for whichever branch you'd like to base your badge on, usually `master`).
+I built a tiny service called [satellite](https://github.com/buildasaurs/satellite), which serves down badges based on GitHub status of a branch. And this status is automatically updated by Buildasaur when a build finishes (enable a *watched branch* in Buildasaur for whichever branch you'd like to base your badge on, usually `master`).
 
 TL;DR?
-Just add this to your README and replace `USER`, `REPO` and `BRANCH` with your info. And you'll get a build badge like this: ![](https://stlt.herokuapp.com/v1/badge/czechboy0/buildasaur/master)
+Just add this to your README and replace `USER`, `REPO` and `BRANCH` with your info. And you'll get a build badge like this: ![](https://stlt.herokuapp.com/v1/badge/buildasaurs/buildasaur/master)
 
 ```
 [![satellite badge](https://stlt.herokuapp.com/v1/badge/USER/REPO/BRANCH)](https://github.com/USER/REPO/branches)
@@ -123,7 +121,7 @@ If you don't specify a branch, *master* will be used.
 ---------------
 In order to understand how many Buildasaur instances are actively being used (which helps me to decide how much free time I should dedicate to this project), **one** anonymous heartbeat event is sent from Buildasaur every 24 hours (and one when Buildasaur is launched). There is **absolutely no information** about your projects being synced with Buildasaur (I don't care about that, that's *your* business), the event just sends a randomly generated identifier (to discern between different Buildasaur instances), the uptime of Buildasaur (to potentially detect crashes) and the number and type of running syncers.
 
-I wrote the server storing this data myself - and [it's open source](https://github.com/czechboy0/ekg), so feel free to take a peek yourself at how that's done. And take a look [here](https://github.com/czechboy0/ekgclient/blob/master/ekgclient/Event.swift#L39) to see exactly what data is being sent.
+I wrote the server storing this data myself - and [it's open source](https://github.com/buildasaurs/ekg), so feel free to take a peek yourself at how that's done. And take a look [here](https://github.com/buildasaurs/ekgclient/blob/master/ekgclient/Event.swift#L39) to see exactly what data is being sent.
 
 Despite absolutely no identifiable data being sent, if you still aren't comfortable allowing Buildasaur to send its heartbeat, add `"heartbeat_opt_out" = true` to `~/Library/Application Support/Buildasaur/Config.json`. But please keep in mind that if you do that, it will make me think fewer people are in fact using Buildasaur, which might just lead to me spending less time on improving it.
 
@@ -135,7 +133,7 @@ Version 0.8.0 adds Crashlytics, so I receive crash reports. If you prefer to opt
 
 :arrow_right_hook: Looking for Xcode Server SDK?
 ----------------
-The code for communication with Xcode Server lives in a project called [XcodeServerSDK](https://github.com/czechboy0/XcodeServerSDK).
+The code for communication with Xcode Server lives in a project called [XcodeServerSDK](https://github.com/buildasaurs/XcodeServerSDK).
 
 :blue_heart: Code of Conduct
 ------------
@@ -143,7 +141,7 @@ Please note that this project is released with a [Contributor Code of Conduct](.
 
 :gift_heart: Contributing
 ------------
-Please create an issue with a description of your problem or a pull request with a fix. Or, if you just want to help out, take a look at [issues with the label "up-for-grabs"](https://github.com/czechboy0/Buildasaur/labels/up-for-grabs), comment on the issue that you're working on it and let's improve Buildasaur together! 
+Please create an issue with a description of your problem or a pull request with a fix. Or, if you just want to help out, take a look at [issues with the label "up-for-grabs"](https://github.com/buildasaurs/Buildasaur/labels/up-for-grabs), comment on the issue that you're working on it and let's improve Buildasaur together! 
 
 :v: License
 -------
@@ -155,4 +153,4 @@ MIT
 
 :alien: Author
 ------
-Honza Dvorsky - http://honzadvorsky.com, [@czechboy0](http://twitter.com/czechboy0)
+Created by Honza Dvorsky - http://honzadvorsky.com, [@czechboy0](http://github.com/czechboy0)

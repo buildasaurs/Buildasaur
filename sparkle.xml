@@ -2,43 +2,43 @@
 <rss version='2.0' xmlns:dc='http://purl.org/dc/elements/1.1/' xmlns:sparkle='http://www.andymatuschak.org/xml-namespaces/sparkle'>
   <channel>
     <title>Buildasaur Changelog</title>
-    <link>https://raw.githubusercontent.com/czechboy0/Buildasaur/master/sparkle.xml</link>
+    <link>https://raw.githubusercontent.com/buildasaurs/Buildasaur/master/sparkle.xml</link>
     <description>Most recent changes with links to updates.</description>
     <language>en</language>
     <item>
       <title>v1.0.0-b1 - First Beta of Iris</title>
       <sparkle:minimumSystemVersion>10.11</sparkle:minimumSystemVersion>
-      <sparkle:releaseNotesLink> https://honzadvorsky.com/Buildasaur/Sparkle_Release_Notes/v1.0.0-b1.html </sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink> https://buildasaurs.github.io/Buildasaur/Sparkle_Release_Notes/v1.0.0-b1.html </sparkle:releaseNotesLink>
       <pubDate>Wed, 03 Feb 2016 17:08:34 +0000</pubDate>
-      <enclosure type='application/octet-stream' sparkle:version='33' sparkle:shortVersionString='1.0.0-b1' length='11755070' url='https://github.com/czechboy0/Buildasaur/releases/download/v1.0.0-b1/Buildasaur.app.zip'/>
+      <enclosure type='application/octet-stream' sparkle:version='33' sparkle:shortVersionString='1.0.0-b1' length='11755070' url='https://github.com/buildasaurs/Buildasaur/releases/download/v1.0.0-b1/Buildasaur.app.zip'/>
     </item>
     <item>
       <title>v1.0.0-b2 - Second Iris Beta, bugfixes, feature complete</title>
       <sparkle:minimumSystemVersion>10.11</sparkle:minimumSystemVersion>
-      <sparkle:releaseNotesLink>https://honzadvorsky.com/Buildasaur/Sparkle_Release_Notes/v1.0.0-b2.html</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>https://buildasaurs.github.io/Buildasaur/Sparkle_Release_Notes/v1.0.0-b2.html</sparkle:releaseNotesLink>
       <pubDate>Thu, 04 Feb 2016 18:21:38 +0000</pubDate>
-      <enclosure type='application/octet-stream' sparkle:version='34' sparkle:shortVersionString='1.0.0-b2' length='11915142' url='https://github.com/czechboy0/Buildasaur/releases/download/v1.0.0-b2/Buildasaur.app.zip'/>
+      <enclosure type='application/octet-stream' sparkle:version='34' sparkle:shortVersionString='1.0.0-b2' length='11915142' url='https://github.com/buildasaurs/Buildasaur/releases/download/v1.0.0-b2/Buildasaur.app.zip'/>
     </item>
     <item>
       <title>v1.0.0-b3 - Bugfixes and minor improvements</title>
       <sparkle:minimumSystemVersion>10.11</sparkle:minimumSystemVersion>
-      <sparkle:releaseNotesLink>https://honzadvorsky.com/Buildasaur/Sparkle_Release_Notes/v1.0.0-b3.html</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>https://buildasaurs.github.io/Buildasaur/Sparkle_Release_Notes/v1.0.0-b3.html</sparkle:releaseNotesLink>
       <pubDate>Tue, 29 Mar 2016 09:59:43 +0200</pubDate>
-      <enclosure type='application/octet-stream' sparkle:version='35' sparkle:shortVersionString='1.0.0-b3' length='11867939' url='https://github.com/czechboy0/Buildasaur/releases/download/v1.0.0-b3/Buildasaur.app.zip'/>
+      <enclosure type='application/octet-stream' sparkle:version='35' sparkle:shortVersionString='1.0.0-b3' length='11867939' url='https://github.com/buildasaurs/Buildasaur/releases/download/v1.0.0-b3/Buildasaur.app.zip'/>
     </item>
     <item>
       <title>v1.0.1 - Bugfixes, improvements</title>
       <sparkle:minimumSystemVersion>10.11</sparkle:minimumSystemVersion>
-      <sparkle:releaseNotesLink>https://honzadvorsky.com/Buildasaur/Sparkle_Release_Notes/v1.0.1.html</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>https://buildasaurs.github.io/Buildasaur/Sparkle_Release_Notes/v1.0.1.html</sparkle:releaseNotesLink>
       <pubDate>Fri, 17 Jun 2016 16:39:37 +0200</pubDate>
-      <enclosure type='application/octet-stream' sparkle:version='36' sparkle:shortVersionString='1.0.1' length='11884914' url='https://github.com/czechboy0/Buildasaur/releases/download/v1.0.1/Buildasaur.app.zip'/>
+      <enclosure type='application/octet-stream' sparkle:version='36' sparkle:shortVersionString='1.0.1' length='11884914' url='https://github.com/buildasaurs/Buildasaur/releases/download/v1.0.1/Buildasaur.app.zip'/>
     </item>
     <item>
       <title>v1.0.2 - Fixes</title>
       <sparkle:minimumSystemVersion>10.11</sparkle:minimumSystemVersion>
-      <sparkle:releaseNotesLink>https://honzadvorsky.com/Buildasaur/Sparkle_Release_Notes/v1.0.2.html</sparkle:releaseNotesLink>
+      <sparkle:releaseNotesLink>https://buildasaurs.github.io/Buildasaur/Sparkle_Release_Notes/v1.0.2.html</sparkle:releaseNotesLink>
       <pubDate>Fri, 12 Aug 2016 12:08:52 +0200</pubDate>
-      <enclosure type='application/octet-stream' sparkle:version='37' sparkle:shortVersionString='1.0.2' length='11912110' url='https://github.com/czechboy0/Buildasaur/releases/download/v1.0.2/Buildasaur.app.zip'/>
+      <enclosure type='application/octet-stream' sparkle:version='37' sparkle:shortVersionString='1.0.2' length='11912110' url='https://github.com/buildasaurs/Buildasaur/releases/download/v1.0.2/Buildasaur.app.zip'/>
     </item>
   </channel>
 </rss>

@@ -128,11 +128,11 @@ end
 private_lane :sparkle do |params|
 
   # Checkout the github-pages branch of buildasaur if we don't already have it
-  sh "cd .. && git clone https://github.com/czechboy0/Buildasaur.git --branch gh-pages --single-branch gh-pages" unless Dir.exists? "../gh-pages"
+  sh "cd .. && git clone https://github.com/buildasaurs/Buildasaur.git --branch gh-pages --single-branch gh-pages" unless Dir.exists? "../gh-pages"
 
   # Create release notes file
   release_notes_html = render_github_markdown(
-    context_repository: "czechboy0/Buildasaur",
+    context_repository: "buildasaurs/Buildasaur",
     api_token: ENV["GITHUB_TOKEN"],
     markdown_contents: params[:release_description]
   )
@@ -145,8 +145,8 @@ private_lane :sparkle do |params|
     sh "git commit -m 'Added the release notes for #{params[:release_version_tag]}.'"
     sh "git push"
   end
-  release_notes_html_url = "https://honzadvorsky.com/Buildasaur/Sparkle_Release_Notes/#{params[:release_version_tag]}.html"
-  app_download_url = "https://github.com/czechboy0/Buildasaur/releases/download/#{params[:release_version_tag]}/Buildasaur.app.zip"
+  release_notes_html_url = "https://buildasaurs.github.io/Buildasaur/Sparkle_Release_Notes/#{params[:release_version_tag]}.html"
+  app_download_url = "https://github.com/buildasaurs/Buildasaur/releases/download/#{params[:release_version_tag]}/Buildasaur.app.zip"
 
   UI.message "Successfully created release notes file at path #{release_notes_html_path}"
 
@@ -185,7 +185,7 @@ private_lane :github do |params|
   release_name = [version_tag, title].join(" - ")
 
   # create a new release on GitHub
-  repo_url = "czechboy0/Buildasaur"
+  repo_url = "buildasaur/Buildasaur"
   ENV["FL_GITHUB_RELEASE_API_TOKEN"] = ENV["GITHUB_TOKEN"]
   release = set_github_release(
     repository_name: repo_url,
