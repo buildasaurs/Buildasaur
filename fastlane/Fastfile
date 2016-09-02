@@ -185,7 +185,7 @@ private_lane :github do |params|
   release_name = [version_tag, title].join(" - ")
 
   # create a new release on GitHub
-  repo_url = "buildasaur/Buildasaur"
+  repo_url = "buildasaurs/Buildasaur"
   ENV["FL_GITHUB_RELEASE_API_TOKEN"] = ENV["GITHUB_TOKEN"]
   release = set_github_release(
     repository_name: repo_url,
