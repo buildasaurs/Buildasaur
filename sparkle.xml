@@ -40,5 +40,12 @@
       <pubDate>Fri, 12 Aug 2016 12:08:52 +0200</pubDate>
       <enclosure type='application/octet-stream' sparkle:version='37' sparkle:shortVersionString='1.0.2' length='11912110' url='https://github.com/buildasaurs/Buildasaur/releases/download/v1.0.2/Buildasaur.app.zip'/>
     </item>
+    <item>
+      <title>v1.0.3 - Xcode 8 Fixes</title>
+      <sparkle:minimumSystemVersion>10.11</sparkle:minimumSystemVersion>
+      <sparkle:releaseNotesLink>https://buildasaurs.github.io/Buildasaur/Sparkle_Release_Notes/v1.0.3.html</sparkle:releaseNotesLink>
+      <pubDate>Fri, 02 Sep 2016 23:36:50 +0200</pubDate>
+      <enclosure type='application/octet-stream' sparkle:version='38' sparkle:shortVersionString='1.0.3' length='11912075' url='https://github.com/buildasaurs/Buildasaur/releases/download/v1.0.3/Buildasaur.app.zip'/>
+    </item>
   </channel>
 </rss>
