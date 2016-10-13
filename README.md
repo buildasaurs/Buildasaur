@@ -5,7 +5,7 @@ Buildasaur
 [![Latest Buildasaur Release](https://img.shields.io/github/release/buildasaurs/buildasaur.svg)](https://github.com/buildasaurs/Buildasaur/releases/latest)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://en.wikipedia.org/wiki/MIT_License)
 
-[![Twitter Buildasaur](https://img.shields.io/badge/twitter-Buildasaur-green.svg)](http://twitter.com/buildasaur)
+[![Twitter Buildasaur](https://img.shields.io/badge/twitter-Buildasaur-green.svg)](http://twitter.com/buildasaur) [![Join Slack](https://img.shields.io/badge/slack-Join/Here-green.svg)](https://buildasaurs.herokuapp.com)
 
 ![](https://raw.githubusercontent.com/buildasaurs/Buildasaur/master/Buildasaur/Images.xcassets/AppIcon.appiconset/Icon_128@2x.png)
 
@@ -142,6 +142,10 @@ Please note that this project is released with a [Contributor Code of Conduct](.
 :gift_heart: Contributing
 ------------
 Please create an issue with a description of your problem or a pull request with a fix. Or, if you just want to help out, take a look at [issues with the label "up-for-grabs"](https://github.com/buildasaurs/Buildasaur/labels/up-for-grabs), comment on the issue that you're working on it and let's improve Buildasaur together! 
+
+:speech_balloon: Slack
+------------
+If you would like to be part of the `Buildasaur` community; feel free to [join our Slack Team here]( https://buildasaurs.herokuapp.com).
 
 :v: License
 -------
