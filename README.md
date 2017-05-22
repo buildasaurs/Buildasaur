@@ -51,7 +51,7 @@ Buildasaur runs as a background Mac app, its configuration window goes away when
 Xcode Server ships in Xcode, so the server API is also dependent on the Xcode you have. See the table of latest Buildasaur versions supporting each Xcode version.
 
 | Xcode | last supported |
-| :-- | :--: | :--: |
+| :-- | :--: |
 | Xcode 7 | :white_check_mark: [latest](https://github.com/buildasaurs/Buildasaur/releases/latest) |
 | Xcode 6 | :white_check_mark: [0.2.9](https://github.com/buildasaurs/Buildasaur/releases/tag/v0.2.9) | 
 
