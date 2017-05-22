@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0928E6AF8EED8E829B0F4286 /* Pods_Buildasaur.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FA09FE729BC440366D74E2E /* Pods_Buildasaur.framework */; };
 		130C2BB548050F030930B54F /* Pods_BuildaHeartbeatKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41155620B4193BDB27CD7E83 /* Pods_BuildaHeartbeatKit.framework */; };
+		14E846601D6440FB0067B990 /* BonjourUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E8465F1D6440FB0067B990 /* BonjourUtils.swift */; };
 		158554341171FBBD63B039E2 /* Pods_BuildaGitServerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F29FCDBD0B3B9740956E5206 /* Pods_BuildaGitServerTests.framework */; };
 		3A0034F01C5975C000A4ECB5 /* bitbucket_post_status.json in Resources */ = {isa = PBXBuildFile; fileRef = 3A0034EF1C5975C000A4ECB5 /* bitbucket_post_status.json */; };
 		3A0034F21C59775100A4ECB5 /* bitbucket_get_status.json in Resources */ = {isa = PBXBuildFile; fileRef = 3A0034F11C59775100A4ECB5 /* bitbucket_get_status.json */; };
@@ -227,6 +228,7 @@
 
 /* Begin PBXFileReference section */
 		105246397B31495A090CD1D1 /* Pods-BuildaKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaKit/Pods-BuildaKit.release.xcconfig"; sourceTree = "<group>"; };
+		14E8465F1D6440FB0067B990 /* BonjourUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonjourUtils.swift; sourceTree = "<group>"; };
 		2D7FAD09E7CF5F0D5E6CC526 /* Pods-BuildaHeartbeatKit.testing.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaHeartbeatKit.testing.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaHeartbeatKit/Pods-BuildaHeartbeatKit.testing.xcconfig"; sourceTree = "<group>"; };
 		38739D0E658C834537584B63 /* Pods-BuildaGitServerTests.testing.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BuildaGitServerTests.testing.xcconfig"; path = "Pods/Target Support Files/Pods-BuildaGitServerTests/Pods-BuildaGitServerTests.testing.xcconfig"; sourceTree = "<group>"; };
 		3A0034EF1C5975C000A4ECB5 /* bitbucket_post_status.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = bitbucket_post_status.json; path = Data/bitbucket_post_status.json; sourceTree = "<group>"; };
@@ -820,6 +822,7 @@
 				3ACBADE81B5ADE2A00204457 /* StorageUtils.swift */,
 				3ACBADFB1B5ADE2A00204457 /* XcodeServerSyncerUtils.swift */,
 				3AE4F6CD1BBC88450006CA1C /* RACUtils.swift */,
+				14E8465F1D6440FB0067B990 /* BonjourUtils.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -1554,6 +1557,7 @@
 				3A395B551BCF007000BB6947 /* LoginItem.swift in Sources */,
 				3A9D741D1BCBDDA200DCA23C /* PersistenceMigrator.swift in Sources */,
 				3ACBAE011B5ADE2A00204457 /* Project.swift in Sources */,
+				14E846601D6440FB0067B990 /* BonjourUtils.swift in Sources */,
 				3ACBAE0D1B5ADE2A00204457 /* SyncPair_PR_Bot.swift in Sources */,
 				3ACBAE031B5ADE2A00204457 /* StorageManager.swift in Sources */,
 				3AD5D2E81BD01EAF008DBB45 /* SummaryBuilder.swift in Sources */,
