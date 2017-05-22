@@ -58,7 +58,7 @@ public class XcodeDeviceParser {
         let folder = projectFolderUrl.URLByDeletingLastPathComponent?.path ?? "~"
         let schemeName = scheme.name
         
-        let script = "cd \"\(folder)\"; xcodebuild \(ownerArgs) -scheme \"\(schemeName)\" -showBuildSettings 2>/dev/null | egrep '^\\s*PLATFORM_NAME' | cut -d = -f 2 | uniq | xargs echo"
+        let script = "cd \"\(folder)\"; xcodebuild clean \(ownerArgs) -scheme \"\(schemeName)\" -showBuildSettings 2>/dev/null | egrep '^\\s*PLATFORM_NAME' | cut -d = -f 2 | uniq | xargs echo"
         let res = Script.runTemporaryScript(script)
         if res.terminationStatus == 0 {
             let deviceType = res.standardOutput.stripTrailingNewline()
