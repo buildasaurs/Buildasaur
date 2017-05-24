@@ -54,15 +54,15 @@ public enum GitService: String {
     
     public func serviceKey() -> String {
         switch self {
-        case .GitHub: return BuildasaurKeys().gitHubAPIClientId()
-        case .BitBucket: return BuildasaurKeys().bitBucketAPIClientId()
+        case .GitHub: return BuildasaurxcodeprojKeys().gitHubAPIClientId()
+        case .BitBucket: return BuildasaurxcodeprojKeys().bitBucketAPIClientId()
         }
     }
     
     public func serviceSecret() -> String {
         switch self {
-        case .GitHub: return BuildasaurKeys().gitHubAPIClientSecret()
-        case .BitBucket: return BuildasaurKeys().bitBucketAPIClientSecret()
+        case .GitHub: return BuildasaurxcodeprojKeys().gitHubAPIClientSecret()
+        case .BitBucket: return BuildasaurxcodeprojKeys().bitBucketAPIClientSecret()
         }
     }
 }
